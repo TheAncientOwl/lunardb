@@ -57,6 +57,8 @@ PROVIDE_EQUALITY_OPERATOR(SavePoint)
 // TODO: Provide struct fields
 PROVIDE_EQUALITY_OPERATOR(Index)
 
-// TODO: Provide struct fields(Database)
-PROVIDE_EQUALITY_OPERATOR(View)
+// TODO: Provide struct fields
+PROVIDE_EQUALITY_OPERATOR(Database)
 
+// TODO: Provide struct fields
+PROVIDE_EQUALITY_OPERATOR(View)

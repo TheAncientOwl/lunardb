@@ -8,7 +8,7 @@ void ltrim(std::string_view& str)
 {
     if (!str.empty())
     {
-        const auto begin{ str.find_first_not_of(WHITESPACE) };
+        const auto begin{ str.find_first_not_of(c_whitespace) };
 
         str = str.substr(std::min(begin, str.length()));
     }
@@ -18,7 +18,7 @@ void rtrim(std::string_view& str)
 {
     if (!str.empty())
     {
-        const auto end{ str.find_last_not_of(WHITESPACE) };
+        const auto end{ str.find_last_not_of(c_whitespace) };
 
         str = str.substr(0, end + 1);
     }

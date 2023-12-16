@@ -2,11 +2,11 @@
 
 #include <string_view>
 
-#define WHITESPACE " \n\r\t\f\v"sv
-
 namespace LunarDB::Moonlight::Utils {
 
 using namespace std::literals;
+
+constexpr auto c_whitespace = " \n\r\t\f\v"sv;
 
 void ltrim(std::string_view& str);
 void rtrim(std::string_view& str);

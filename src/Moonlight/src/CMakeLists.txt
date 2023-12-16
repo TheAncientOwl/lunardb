@@ -2,6 +2,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 add_library(LunarDB_Moonlight SHARED
     ParsedQuery.cpp
+    QueryExtractor.cpp
     Utils.cpp
 
     Parsers/CreateParser.cpp
