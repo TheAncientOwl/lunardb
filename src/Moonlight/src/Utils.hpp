@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <vector>
 
 namespace LunarDB::Moonlight::Utils {
 
@@ -14,5 +15,19 @@ void trim(std::string_view& str);
 
 bool equalsIgnoreCase(std::string_view s1, std::string_view s2);
 bool startsWithIgnoreCase(std::string_view src, std::string_view what);
+
+enum class ESplitModifier
+{
+    None = 0,
+    EscapeQuotes = 1
+};
+
+/// 
+/// @brief split a string at ','
+/// @param str string to be splitted
+/// @param modifier EscapeQuotes if quotes should be escaped using '\'
+/// @return std::vector<std::string_view> splits
+/// 
+std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier = ESplitModifier::None);
 
 } // namespace LunarDB::Moonlight::Utils

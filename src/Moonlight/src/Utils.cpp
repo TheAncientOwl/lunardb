@@ -58,4 +58,67 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
+std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier)
+{
+    std::vector<std::string_view> out{};
+
+    trim(str);
+    if (str.empty())
+    {
+        return out;
+    }
+
+    bool quoted_string{ false };
+    const auto c_end{ std::cend(str) };
+    const auto c_begin{ std::cbegin(str) };
+
+    auto word_begin{ c_begin };
+    auto word_end{ c_begin };
+
+    const auto update_output = [&out, modifier](const char* word_begin, const char* word_end) {
+        std::string_view word{ word_begin, static_cast<std::string_view::size_type>(std::distance(word_begin, word_end)) };
+        trim(word);
+
+        if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 &&
+            word.starts_with('"') && word.ends_with('"'))
+        {
+            word.remove_prefix(1);
+            word.remove_suffix(1);
+        }
+
+        if (!word.empty())
+        {
+            out.push_back(word);
+        }
+        };
+
+    while (word_end != c_end)
+    {
+        const auto current_char{ *word_end };
+        const auto prev_char{ word_end != c_begin ? *std::prev(word_end) : ' ' };
+
+        if (modifier == ESplitModifier::EscapeQuotes && current_char == '"' && prev_char != '\\')
+        {
+            quoted_string = !quoted_string;
+        }
+        else if (current_char == ',' && !quoted_string)
+        {
+            quoted_string = false;
+
+            update_output(word_begin, word_end);
+
+            word_begin = std::next(word_end);
+        }
+
+        word_end = std::next(word_end);
+    }
+
+    if (word_begin != word_end)
+    {
+        update_output(word_begin, word_end);
+    }
+
+    return out;
+}
+
 } // namespace LunarDB::Moonlight::Utils

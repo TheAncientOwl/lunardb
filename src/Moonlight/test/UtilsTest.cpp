@@ -70,4 +70,116 @@ TEST(UtilsTest, startsWithIgnoreCase)
     EXPECT_FALSE(startsWithIgnoreCase("somestr1", "ssomestr2"));
 }
 
+TEST(UtilsTest, splitAtComma01)
+{
+    const auto str = "  field1  ,  field2  ";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma02)
+{
+    const auto str = R"(  field1  ,  field2, "some string,q", field3  )";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        R"(some string,q)",
+        "field3"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma03)
+{
+    const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes", and commas"  )";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        R"(some string,q)",
+        "field3",
+        R"(some other string \"with quotes)",
+        R"(and commas")"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma04)
+{
+    const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes\", and commas"  )";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        R"(some string,q)",
+        "field3",
+        R"(some other string \"with quotes\", and commas)",
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma05)
+{
+    const auto str = R"(  field1, field2, "", field3  )";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        "field3"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma06)
+{
+    const auto str = R"(  field1, field2, "", ", field3  )";
+
+    const auto out = splitAtComma(str, ESplitModifier::EscapeQuotes);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        R"(", field3)"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
+TEST(UtilsTest, splitAtComma07)
+{
+    const auto str = R"(  field1, field2, "", ", field3  )";
+
+    const auto out = splitAtComma(str);
+
+    std::vector<std::string_view> expected = {
+        "field1",
+        "field2",
+        R"("")",
+        R"(")",
+        R"(field3)"
+    };
+
+    EXPECT_EQ(out, expected);
+}
+
 } // namespace LunarDB::Moonlight::Utils::Tests

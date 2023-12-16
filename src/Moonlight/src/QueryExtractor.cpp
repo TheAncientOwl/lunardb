@@ -1,6 +1,8 @@
 #include "QueryExtractor.hpp"
 #include "Utils.hpp"
 
+#include <stdexcept>
+
 namespace LunarDB::Moonlight::Implementation {
 
 QueryExtractor::QueryExtractor(std::string_view query)
@@ -52,8 +54,24 @@ std::vector<std::string_view> QueryExtractor::extractMultiple(std::size_t count)
 
 std::vector<std::string_view> QueryExtractor::extractList()
 {
-    // TODO: Provide implementation
-    return {};
+    if (m_data.front() != '[')
+    {
+        throw std::runtime_error("Missing '['");
+    }
+    m_data.remove_prefix(1);
+    Utils::ltrim(m_data);
+
+    const auto closed_square_bracket_pos = m_data.find_first_of(']');
+    if (closed_square_bracket_pos == std::string_view::npos)
+    {
+        throw std::runtime_error("Missing ]");
+    }
+
+    const auto list_str{ m_data.substr(0, closed_square_bracket_pos - 1) };
+    m_data.remove_prefix(closed_square_bracket_pos + 1);
+    Utils::ltrim(m_data);
+
+    return Utils::splitAtComma(list_str);
 }
 
 std::string_view QueryExtractor::extractIfCondition()
