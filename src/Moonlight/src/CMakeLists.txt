@@ -4,6 +4,7 @@ add_library(LunarDB_Moonlight SHARED
     ParsedQuery.cpp
     QueryExtractor.cpp
     Utils.cpp
+    Primitives.cpp
 
     Parsers/CreateParser.cpp
     Parsers/DropParser.cpp
