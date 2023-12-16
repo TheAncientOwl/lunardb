@@ -7,6 +7,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// TODO: provide unit tests
 TEST(InsertParserTest, dummy)
 {
     const auto query = "insert";
