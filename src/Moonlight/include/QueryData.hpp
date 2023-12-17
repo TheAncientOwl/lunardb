@@ -1,62 +1,159 @@
 #pragma once
 
+#include "Primitives.hpp"
+
 #include <string>
-#include <tuple>
+#include <optional>
+#include <vector>
 
 namespace LunarDB::Moonlight::QueryData {
 
-// TODO: Provide implementation
-struct Create {};
+struct Create
+{
+    bool is_volatile;
+    Primitives::EStructureType structure_type;
 
-// TODO: Provide implementation
-struct Drop {};
+    struct Binding
+    {
+        std::string field;
+        std::string table;
+    };
+    std::optional<std::string> structure_name;
+    std::optional<std::string> schema_name;
+    std::optional<std::vector<Binding>> bindings;
+    std::optional<bool> blended;
 
-// TODO: Provide implementation
-struct Migrate {};
+    std::optional<std::vector<std::string>> schema_names;
+    std::optional<std::string> structure_name_format;
+};
 
-// TODO: Provide implementation
-struct Truncate {};
+struct Drop
+{
+    std::string structure_name;
+    bool cascade;
+};
 
-// TODO: Provide implementation
-struct Rename {};
+struct Migrate
+{
+    std::string structure_name;
+    std::string new_schema_name;
 
-// TODO: Provide implementation
-struct Select {};
+    struct Mapping
+    {
+        std::string old_field;
+        std::string new_field;
+    };
+    std::optional<std::vector<Mapping>> mappings;
+};
 
-// TODO: Provide implementation
-struct Insert {};
+struct Truncate
+{
+    std::string structure_name;
+};
 
-// TODO: Provide implementation
-struct Update {};
+struct Rename
+{
+    Primitives::ERenameType type;
+    std::string old_name;
+    std::string new_name;
+};
 
-// TODO: Provide implementation
-struct Delete {};
+// TODO: Provide detailed implementation
+struct IfCondition
+{
+    std::string content;
+};
 
-// TODO: Provide implementation
-struct Lock {};
+struct Select
+{
+    std::vector<std::string> from;
+    IfCondition if_condition;
+    std::vector<std::string> fields;
 
-// TODO: Provide implementation
-struct Grant {};
+    struct Order
+    {
+        std::string field;
+        Primitives::EOrderType type;
+    };
+    std::optional<std::vector<Order>> order_by;
+};
 
-// TODO: Provide implementation
-struct Revoke {};
+struct Insert
+{
+    std::string into;
+    std::vector<std::string> values;
+};
 
-// TODO: Provide implementation
-struct Commit {};
+struct Update
+{
+    std::string structure_name;
+    IfCondition if_condition;
 
-// TODO: Provide implementation
-struct Rollback {};
+    struct Modify
+    {
+        std::string field;
+        std::string expression;
+    };
+    std::vector<Modify> modify;
+};
 
-// TODO: Provide implementation
-struct SavePoint {};
+struct Delete
+{
+    std::string from;
+    IfCondition if_condition;
+};
 
-// TODO: Provide implementation
-struct Index {};
+struct Lock
+{
+    std::string structure_name;
+    bool concurrency;
+};
 
-// TODO: Provide implementation
-struct Database {};
+struct Grant
+{
+    std::vector<Primitives::EUserPermissionType> permissions;
+    std::string to_user;
+    std::optional<std::string> structure_name;
+};
 
-// TODO: Provide implementation
-struct View {};
+struct Revoke
+{
+    std::vector<Primitives::EUserPermissionType> permissions;
+    std::string from_user;
+    std::optional<std::string> structure_name;
+};
+
+struct Commit
+{
+    std::optional<std::string> hash;
+};
+
+struct Rollback
+{
+    std::optional<std::string> hash;
+};
+
+struct SavePoint
+{
+    std::optional<std::string> hash;
+};
+
+struct Index
+{
+    std::string on_structure_name;
+    std::optional<std::vector<std::string>> using_fields;
+};
+
+struct Database
+{
+    Primitives::EDatabaseOperationType operation_type;
+    std::string name;
+    std::optional<std::string> backup_path;
+};
+
+struct View
+{
+    Select as_select;
+};
 
 } // namespace LunarDB::Moonlight::QueryData

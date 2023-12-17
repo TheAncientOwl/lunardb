@@ -16,7 +16,7 @@ TEST(IndexParserTest, dummy)
 
     const Index expected{};
 
-    EXPECT_EQ(out, expected) << "Expected: " << expected << "\nActual: " << out;
+    EXPECT_EQ(out, expected);
 }
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

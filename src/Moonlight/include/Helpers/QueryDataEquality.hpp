@@ -9,56 +9,128 @@ return reduce(lhs) == reduce(rhs); \
 } \
 }
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Create)
+#define FIELD(field_name) obj.field_name
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Drop)
+PROVIDE_EQUALITY_OPERATOR(Create::Binding,
+    FIELD(field),
+    FIELD(table)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Migrate)
+PROVIDE_EQUALITY_OPERATOR(Create,
+    FIELD(is_volatile),
+    FIELD(structure_type),
+    FIELD(structure_name),
+    FIELD(schema_name),
+    FIELD(bindings),
+    FIELD(blended),
+    FIELD(schema_names),
+    FIELD(structure_name_format)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Truncate)
+PROVIDE_EQUALITY_OPERATOR(Drop,
+    FIELD(structure_name),
+    FIELD(cascade)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Rename)
+PROVIDE_EQUALITY_OPERATOR(Migrate::Mapping,
+    FIELD(old_field),
+    FIELD(new_field)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Select)
+PROVIDE_EQUALITY_OPERATOR(Migrate,
+    FIELD(structure_name),
+    FIELD(new_schema_name),
+    FIELD(mappings)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Insert)
+PROVIDE_EQUALITY_OPERATOR(Truncate,
+    FIELD(structure_name)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Update)
+PROVIDE_EQUALITY_OPERATOR(Rename,
+    FIELD(type),
+    FIELD(old_name),
+    FIELD(new_name)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Delete)
+// TODO: Provide detailed implementation
+PROVIDE_EQUALITY_OPERATOR(IfCondition,
+    FIELD(content)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Lock)
+PROVIDE_EQUALITY_OPERATOR(Select::Order,
+    FIELD(field),
+    FIELD(type)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Grant)
+PROVIDE_EQUALITY_OPERATOR(Select,
+    FIELD(from),
+    FIELD(if_condition),
+    FIELD(fields),
+    FIELD(order_by)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Revoke)
+PROVIDE_EQUALITY_OPERATOR(Insert,
+    FIELD(into),
+    FIELD(values)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Commit)
+PROVIDE_EQUALITY_OPERATOR(Update::Modify,
+    FIELD(field),
+    FIELD(expression)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Rollback)
+PROVIDE_EQUALITY_OPERATOR(Update,
+    FIELD(structure_name),
+    FIELD(if_condition),
+    FIELD(modify)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(SavePoint)
+PROVIDE_EQUALITY_OPERATOR(Delete,
+    FIELD(from),
+    FIELD(if_condition)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Index)
+PROVIDE_EQUALITY_OPERATOR(Lock,
+    FIELD(structure_name),
+    FIELD(concurrency)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(Database)
+PROVIDE_EQUALITY_OPERATOR(Grant,
+    FIELD(permissions),
+    FIELD(to_user),
+    FIELD(structure_name)
+)
 
-// TODO: Provide struct fields
-PROVIDE_EQUALITY_OPERATOR(View)
+PROVIDE_EQUALITY_OPERATOR(Revoke,
+    FIELD(permissions),
+    FIELD(from_user),
+    FIELD(structure_name)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Commit,
+    FIELD(hash)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Rollback,
+    FIELD(hash)
+)
+
+PROVIDE_EQUALITY_OPERATOR(SavePoint,
+    FIELD(hash)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Index,
+    FIELD(on_structure_name),
+    FIELD(using_fields)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Database,
+    FIELD(operation_type),
+    FIELD(name),
+    FIELD(backup_path)
+)
+
+PROVIDE_EQUALITY_OPERATOR(View,
+    FIELD(as_select)
+)

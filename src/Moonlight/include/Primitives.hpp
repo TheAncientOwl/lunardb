@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <ostream>
 
 #define DEFINE_MOONLIGHT_PRIMITIVE(name, ...) \
 namespace name { \
@@ -10,6 +11,7 @@ namespace name { \
     }; \
     std::string_view toString(Literal primitive); \
     Literal toLiteral(std::string_view str); \
+    std::ostream& operator<<(std::ostream& os, const Literal& rhs); \
 } \
 using E ## name = name::Literal;
 
@@ -35,6 +37,40 @@ DEFINE_MOONLIGHT_PRIMITIVE(QueryType,
     Index = 16,
     Database = 17,
     View = 18
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(StructureType,
+    None = 0,
+    Table = 1,
+    Collection = 2
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(RenameType,
+    None = 0,
+    Structure = 1,
+    Field = 2,
+    Database = 3
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(OrderType,
+    None = 0,
+    Asc = 1,
+    Desc = 2
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(UserPermissionType,
+    None = 0,
+    Create = 1,
+    Update = 2,
+    Insert = 3,
+    Delete = 4
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
+    None = 0,
+    Create = 1,
+    Drop = 2,
+    Backup = 3
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

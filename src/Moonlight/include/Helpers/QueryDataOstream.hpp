@@ -1,133 +1,187 @@
 #include "QueryData.hpp"
 
 #include <ostream>
+#include <vector>
 
 namespace LunarDB::Moonlight::QueryData {
 
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
+{
+    if (static_cast<bool>(rhs))
+    {
+        os << *rhs;
+    }
+    else
+    {
+        os << "---";
+    }
+    return os;
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
+{
+    os << "[";
+    std::copy(rhs.begin(), rhs.end(), std::ostream_iterator<T>(os));
+    os << "]";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Create::Binding& rhs)
+{
+    return os << "{" << rhs.field << " from " << rhs.table << "}";
+}
+
 std::ostream& operator<<(std::ostream& os, const Create& rhs)
 {
-    os << "Create";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "volatile: " << std::boolalpha << rhs.is_volatile << " | "
+        << "structure_type: " << rhs.structure_type << " | "
+        << "structure_name: " << rhs.structure_name << " | "
+        << "schema_name: " << rhs.schema_name << " | "
+        << "bindings: " << rhs.bindings << " | "
+        << "blended: " << rhs.blended << " | "
+        << "schema_names: " << rhs.schema_names << " | "
+        << "structure_name_format: " << rhs.structure_name_format;
 }
 
 std::ostream& operator<<(std::ostream& os, const Drop& rhs)
 {
-    os << "Drop";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "cascade: " << std::boolalpha << rhs.cascade;
+}
+
+std::ostream& operator<<(std::ostream& os, const Migrate::Mapping& rhs)
+{
+    return os << "{" << rhs.old_field << " to " << rhs.new_field << "}";
 }
 
 std::ostream& operator<<(std::ostream& os, const Migrate& rhs)
 {
-    os << "Migrate";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "new_schema_name: " << rhs.new_schema_name << " | "
+        << "mappings: " << rhs.mappings;
 }
 
 std::ostream& operator<<(std::ostream& os, const Truncate& rhs)
 {
-    os << "Truncate";
-    // TODO: Provide actual implementation
-    return os;
+    return os << "structure_name: " << rhs.structure_name;
 }
 
 std::ostream& operator<<(std::ostream& os, const Rename& rhs)
 {
-    os << "Rename";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "type: " << rhs.type << " | "
+        << "old_name: " << rhs.old_name << " | "
+        << "new_name: " << rhs.new_name;
+}
+
+// TODO: Provide detailed implementation
+std::ostream& operator<<(std::ostream& os, const IfCondition& rhs)
+{
+    return os << rhs.content;
+}
+
+std::ostream& operator<<(std::ostream& os, const Select::Order& rhs)
+{
+    return os << "{" << rhs.field << " -> " << rhs.type << "}";
 }
 
 std::ostream& operator<<(std::ostream& os, const Select& rhs)
 {
-    os << "Select";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "from: " << rhs.from << " | "
+        << "if_condition: " << rhs.if_condition << " | "
+        << "fields: " << rhs.fields << " | "
+        << "order_by: " << rhs.order_by;
 }
 
 std::ostream& operator<<(std::ostream& os, const Insert& rhs)
 {
-    os << "Insert";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "into: " << rhs.into << " | "
+        << "values: " << rhs.values;
 }
+
+std::ostream& operator<<(std::ostream& os, const Update::Modify& rhs)
+{
+    return os << "{" << rhs.field << " => " << rhs.expression << "}";
+};
 
 std::ostream& operator<<(std::ostream& os, const Update& rhs)
 {
-    os << "Update";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "if_condition: " << rhs.if_condition << " | "
+        << "modify: " << rhs.modify;
 }
 
 std::ostream& operator<<(std::ostream& os, const Delete& rhs)
 {
-    os << "Delete";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "from: " << rhs.from << " | "
+        << "if_condition: " << rhs.if_condition;
 }
 
 std::ostream& operator<<(std::ostream& os, const Lock& rhs)
 {
-    os << "Lock";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "concurrency: " << std::boolalpha << rhs.concurrency;
 }
 
 std::ostream& operator<<(std::ostream& os, const Grant& rhs)
 {
-    os << "Grant";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "permissions: " << rhs.permissions << " | "
+        << "to_user: " << rhs.to_user << " | "
+        << "structure_name: " << rhs.structure_name;
 }
 
 std::ostream& operator<<(std::ostream& os, const Revoke& rhs)
 {
-    os << "Revoke";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "permissions: " << rhs.permissions << " | "
+        << "to_user: " << rhs.from_user << " | "
+        << "structure_name: " << rhs.structure_name;
 }
 
 std::ostream& operator<<(std::ostream& os, const Commit& rhs)
 {
-    os << "Commit";
-    // TODO: Provide actual implementation
-    return os;
+    return os << "hash: " << rhs.hash;
 }
 
 std::ostream& operator<<(std::ostream& os, const Rollback& rhs)
 {
-    os << "Rollback";
-    // TODO: Provide actual implementation
-    return os;
+    return os << "hash: " << rhs.hash;
 }
 
 std::ostream& operator<<(std::ostream& os, const SavePoint& rhs)
 {
-    os << "SavePoint";
-    // TODO: Provide actual implementation
-    return os;
+    return os << "hash: " << rhs.hash;
 }
 
 std::ostream& operator<<(std::ostream& os, const Index& rhs)
 {
-    os << "Index";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "on_structure_name: " << rhs.on_structure_name << " | "
+        << "using_fields: " << rhs.using_fields;
 }
 
 std::ostream& operator<<(std::ostream& os, const Database& rhs)
 {
-    os << "Database";
-    // TODO: Provide actual implementation
-    return os;
+    return os
+        << "operation_type: " << rhs.operation_type << " | "
+        << "name: " << rhs.name << " | "
+        << "backup_path: " << rhs.backup_path;
 }
 
 std::ostream& operator<<(std::ostream& os, const View& rhs)
 {
-    os << "View";
-    // TODO: Provide actual implementation
-    return os;
+    return os << "as_select: " << rhs.as_select;
 }
 
 } // namespace LunarDB::Moonlight::QueryData
