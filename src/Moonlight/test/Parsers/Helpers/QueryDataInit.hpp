@@ -202,9 +202,9 @@ struct RebindInit : public Rebind
 {
     using base_t = Rebind;
 
-    RebindInit& structure_name(std::string& value) { return base_t::structure_name = value, *this; }
-    RebindInit& field(std::string& value) { return base_t::field = value, *this; }
-    RebindInit& bind_structure_name(std::string& value) { return base_t::bind_structure_name = value, *this; }
+    RebindInit& structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
+    RebindInit& field(const std::string& value) { return base_t::field = value, *this; }
+    RebindInit& bind_structure_name(const std::string& value) { return base_t::bind_structure_name = value, *this; }
     RebindInit clean(const std::optional<bool>& value) { return base_t::clean = value, *this; }
 };
 
