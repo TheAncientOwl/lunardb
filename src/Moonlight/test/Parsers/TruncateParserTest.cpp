@@ -3,20 +3,58 @@
 #include "Helpers/QueryDataHelpers.hpp"
 #include "ParsedQuery.hpp"
 
+#define EXPECT_SUCCESS(query, expected) \
+    const auto out = API::ParsedQuery::from(query).get<Truncate>(); \
+    EXPECT_EQ(out, expected)
+
+#define EXPECT_FAIL(query) \
+    EXPECT_THROW(API::ParsedQuery::from(query).get<Truncate>(), std::runtime_error)
+
 namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-// TODO: provide unit tests
-TEST(TruncateParserTest, dummy)
+TEST(TruncateParserTest, success01)
 {
-    const auto query = "truncate";
+    const auto query = "truncate structure SomeStructure";
+    const auto expected = Init::TruncateInit{}
+    .structure_name("SomeStructure");
 
-    const auto out = API::ParsedQuery::from(query).get<Truncate>();
+    EXPECT_SUCCESS(query, expected);
+}
 
-    const Truncate expected{};
+TEST(TruncateParserTest, success02)
+{
+    const auto query = "truncate structure SomeStructure;";
+    const auto expected = Init::TruncateInit{}
+    .structure_name("SomeStructure");
 
-    EXPECT_EQ(out, expected);
+    EXPECT_SUCCESS(query, expected);
+}
+
+TEST(TruncateParserTest, success03)
+{
+    const auto query = "    truncate         structure   SomeStructure    ";
+    const auto expected = Init::TruncateInit{}
+    .structure_name("SomeStructure");
+
+    EXPECT_SUCCESS(query, expected);
+}
+
+TEST(TruncateParserTest, success04)
+{
+    const auto query = "    truncate         structure   SomeStructure    ;  ";
+    const auto expected = Init::TruncateInit{}
+    .structure_name("SomeStructure");
+
+    EXPECT_SUCCESS(query, expected);
+}
+
+TEST(TruncateParserTest, fail01)
+{
+    EXPECT_FAIL("truncate structure");
+    EXPECT_FAIL("truncate structure SomeStructure dadad");
+    EXPECT_FAIL("truncate SomeStructure");
 }
 
 } // namespace LunarDB::Moonlight::Implementation::Tests
