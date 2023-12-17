@@ -47,7 +47,8 @@ private: // fields;
         QueryData::SavePoint,
         QueryData::Index,
         QueryData::Database,
-        QueryData::View
+        QueryData::View,
+        QueryData::Rebind
     > m_data;
 
     template<typename>

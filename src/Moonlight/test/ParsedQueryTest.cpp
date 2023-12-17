@@ -27,6 +27,7 @@ TEST(ParsedQueryTest, makeParsedQueries)
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Index);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Database);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(View);
+    EXPECT_MAKE_PARSED_QUERY_SUCCESS(Rebind);
 }
 
 } // namespace LunarDB::Moonlight::API::Tests

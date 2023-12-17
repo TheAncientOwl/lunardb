@@ -27,6 +27,7 @@ TEST(PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Index, toLiteral(toString(EQueryType::Index)));
     EXPECT_EQ(EQueryType::Database, toLiteral(toString(EQueryType::Database)));
     EXPECT_EQ(EQueryType::View, toLiteral(toString(EQueryType::View)));
+    EXPECT_EQ(EQueryType::Rebind, toLiteral(toString(EQueryType::Rebind)));
 }
 
 TEST(PrimitivesTest, StructureType)

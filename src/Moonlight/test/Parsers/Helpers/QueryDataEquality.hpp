@@ -134,3 +134,10 @@ PROVIDE_EQUALITY_OPERATOR(Database,
 PROVIDE_EQUALITY_OPERATOR(View,
     FIELD(as_select)
 )
+
+PROVIDE_EQUALITY_OPERATOR(Rebind,
+    FIELD(structure_name),
+    FIELD(field),
+    FIELD(bind_structure_name),
+    FIELD(clean)
+)

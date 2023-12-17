@@ -24,4 +24,5 @@ add_library(LunarDB_Moonlight SHARED
     Parsers/IndexParser.cpp
     Parsers/DatabaseParser.cpp
     Parsers/ViewParser.cpp
+    Parsers/RebindParser.cpp
 )

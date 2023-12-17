@@ -37,7 +37,8 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(QueryType,
     { Literal::SavePoint, "SavePoint" },
     { Literal::Index, "Index" },
     { Literal::Database, "Database" },
-    { Literal::View, "View" }
+    { Literal::View, "View" },
+    { Literal::Rebind, "Rebind" }
 )
 
 DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(StructureType,

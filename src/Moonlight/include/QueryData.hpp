@@ -156,4 +156,12 @@ struct View
     Select as_select;
 };
 
+struct Rebind
+{
+    std::string structure_name;
+    std::string field;
+    std::string bind_structure_name;
+    std::optional<bool> clean;
+};
+
 } // namespace LunarDB::Moonlight::QueryData

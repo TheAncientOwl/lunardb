@@ -19,6 +19,20 @@ std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
     return os;
 }
 
+template<>
+std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
+{
+    if (static_cast<bool>(rhs))
+    {
+        os << std::boolalpha << *rhs;
+    }
+    else
+    {
+        os << "---";
+    }
+    return os;
+}
+
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 {
@@ -182,6 +196,15 @@ std::ostream& operator<<(std::ostream& os, const Database& rhs)
 std::ostream& operator<<(std::ostream& os, const View& rhs)
 {
     return os << "as_select: " << rhs.as_select;
+}
+
+std::ostream& operator<<(std::ostream& os, const Rebind& rhs)
+{
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "field: " << rhs.field << " | "
+        << "bind_structure_name: " << rhs.bind_structure_name << " | "
+        << "clean: " << rhs.clean;
 }
 
 } // namespace LunarDB::Moonlight::QueryData

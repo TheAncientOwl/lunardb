@@ -36,7 +36,8 @@ DEFINE_MOONLIGHT_PRIMITIVE(QueryType,
     SavePoint = 15,
     Index = 16,
     Database = 17,
-    View = 18
+    View = 18,
+    Rebind = 19
 )
 
 DEFINE_MOONLIGHT_PRIMITIVE(StructureType,
