@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "ParsedQuery.hpp"
-#include "QueryDataHelpers.hpp"
+#include "Helpers/QueryDataHelpers.hpp"
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
