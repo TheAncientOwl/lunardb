@@ -8,7 +8,7 @@ using namespace std::literals;
 
 namespace {
 
-constexpr auto c_query_prefix{ "lock" };
+constexpr auto c_query_prefix{ "set" };
 
 } // namespace
 
