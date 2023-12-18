@@ -1,4 +1,6 @@
-#include "QueryData.hpp"
+#include "QueryDataHelpers/Operators.hpp"
+
+#include <tuple>
 
 #define PROVIDE_EQUALITY_OPERATOR(Type, ...) \
 namespace LunarDB::Moonlight::QueryData { \

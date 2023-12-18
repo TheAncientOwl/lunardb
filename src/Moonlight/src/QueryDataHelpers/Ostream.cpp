@@ -1,23 +1,6 @@
-#include "QueryData.hpp"
-
-#include <ostream>
-#include <vector>
+#include "QueryDataHelpers/Operators.hpp"
 
 namespace LunarDB::Moonlight::QueryData {
-
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
-{
-    if (static_cast<bool>(rhs))
-    {
-        os << *rhs;
-    }
-    else
-    {
-        os << "---";
-    }
-    return os;
-}
 
 template<>
 std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
@@ -30,15 +13,6 @@ std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
     {
         os << "---";
     }
-    return os;
-}
-
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
-{
-    os << "[";
-    std::copy(rhs.begin(), rhs.end(), std::ostream_iterator<T>(os, ", "));
-    os << "]";
     return os;
 }
 

@@ -26,4 +26,8 @@ add_library(LunarDB_Moonlight SHARED
     Parsers/ViewParser.cpp
     Parsers/RebindParser.cpp
     Parsers/SchemaParser.cpp
+
+    QueryDataHelpers/Equality.cpp
+    QueryDataHelpers/Init.cpp
+    QueryDataHelpers/Ostream.cpp
 )
