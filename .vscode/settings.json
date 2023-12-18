@@ -52,6 +52,11 @@
     "ctime": "cpp",
     "map": "cpp",
     "set": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "chrono": "cpp",
+    "ratio": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp"
   }
 }

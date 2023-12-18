@@ -1,5 +1,5 @@
-#include "../IQueryParsers.hpp"
-#include "../Utils.hpp"
+#include "IQueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
 

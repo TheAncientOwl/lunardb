@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Helpers/QueryDataHelpers.hpp"
+#include "QueryDataHelpers/Helpers.hpp"
 #include "ParsedQuery.hpp"
 
 #define EXPECT_SUCCESS(query, expected) \
