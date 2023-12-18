@@ -182,6 +182,8 @@ std::ostream& operator<<(std::ostream& os, const Index& rhs)
 {
     return os
         << "on_structure_name: " << rhs.on_structure_name << " | "
+        << "name: " << rhs.unique << " | "
+        << "name: " << rhs.name << " | "
         << "using_fields: " << rhs.using_fields;
 }
 

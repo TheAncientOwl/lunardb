@@ -179,6 +179,8 @@ struct IndexInit : public Index
     using base_t = Index;
 
     IndexInit& on_structure_name(const std::string& value) { return base_t::on_structure_name = value, *this; }
+    IndexInit& unique(const bool& value) { return base_t::unique = value, *this; }
+    IndexInit& name(const std::optional<std::string>& value) { return base_t::name = value, *this; }
     IndexInit& using_fields(const std::optional<std::vector<std::string>>& value) { return base_t::using_fields = value, *this; }
 };
 

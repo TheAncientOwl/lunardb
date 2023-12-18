@@ -141,6 +141,8 @@ struct SavePoint
 struct Index
 {
     std::string on_structure_name;
+    bool unique;
+    std::optional<std::string> name;
     std::optional<std::vector<std::string>> using_fields;
 };
 
