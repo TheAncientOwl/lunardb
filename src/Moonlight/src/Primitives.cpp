@@ -65,7 +65,8 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(UserPermissionType,
     { Literal::Create, "Create" },
     { Literal::Update, "Update" },
     { Literal::Insert, "Insert" },
-    { Literal::Delete, "Delete" }
+    { Literal::Delete, "Delete" },
+    { Literal::Select, "Select" }
 )
 
 DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DatabaseOperationType,

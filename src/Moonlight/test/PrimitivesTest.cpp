@@ -67,6 +67,7 @@ TEST(PrimitivesTest, UserPermissionType)
     EXPECT_EQ(EUserPermissionType::Update, toLiteral(toString(EUserPermissionType::Update)));
     EXPECT_EQ(EUserPermissionType::Insert, toLiteral(toString(EUserPermissionType::Insert)));
     EXPECT_EQ(EUserPermissionType::Delete, toLiteral(toString(EUserPermissionType::Delete)));
+    EXPECT_EQ(EUserPermissionType::Select, toLiteral(toString(EUserPermissionType::Select)));
 }
 
 TEST(PrimitivesTest, DatabaseOperationType)

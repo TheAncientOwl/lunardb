@@ -64,7 +64,8 @@ DEFINE_MOONLIGHT_PRIMITIVE(UserPermissionType,
     Create = 1,
     Update = 2,
     Insert = 3,
-    Delete = 4
+    Delete = 4,
+    Select = 5
 )
 
 DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
