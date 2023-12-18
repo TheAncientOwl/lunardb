@@ -78,4 +78,22 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DatabaseOperationType,
     { Literal::Use, "Use" }
 )
 
+DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(BinaryOperator,
+    { Literal::None, "None" },
+    { Literal::Equals, "==" },
+    { Literal::GreaterThan, ">" },
+    { Literal::GreaterThanEqualTo, ">=" },
+    { Literal::LessThan, "<" },
+    { Literal::LessThanEqualTo, "<=" },
+    { Literal::In, "in" },
+    { Literal::Between, "between" },
+    { Literal::Like, "like" }
+)
+
+DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(BooleanOperator,
+    { Literal::None, "None" },
+    { Literal::And, "&&" },
+    { Literal::Or, "||" }
+)
+
 } // namespace LunarDB::Moonlight::QueryData::Primitives

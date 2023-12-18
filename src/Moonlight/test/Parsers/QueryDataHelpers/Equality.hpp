@@ -53,9 +53,20 @@ PROVIDE_EQUALITY_OPERATOR(Rename,
     FIELD(new_name)
 )
 
-// TODO: Provide detailed implementation
+PROVIDE_EQUALITY_OPERATOR(WhereClause::BinaryExpression,
+    FIELD(negated),
+    FIELD(lhs),
+    FIELD(rhs),
+    FIELD(operation)
+)
+
+PROVIDE_EQUALITY_OPERATOR(WhereClause::BooleanExpression,
+    FIELD(negated),
+    FIELD(data)
+)
+
 PROVIDE_EQUALITY_OPERATOR(WhereClause,
-    FIELD(content)
+    FIELD(expression)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Select::Order,

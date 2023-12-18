@@ -68,12 +68,29 @@ struct RenameInit : public Rename
     RenameInit& new_name(const std::string& value) { return base_t::new_name = value, *this; }
 };
 
-// TODO: Provide detailed implementation
-struct IfConditionInit : public WhereClause
+struct WhereClauseInit : public WhereClause
 {
     using base_t = WhereClause;
 
-    IfConditionInit& content(const std::string& value) { return base_t::content = value, *this; }
+    struct BinaryExpressionInit : public BinaryExpression
+    {
+        using base_t = BinaryExpression;
+
+        BinaryExpressionInit& negated(const bool& value) { return base_t::negated = value, *this; }
+        BinaryExpressionInit& lhs(const std::string& value) { return base_t::lhs = value, *this; }
+        BinaryExpressionInit& rhs(const std::string& value) { return base_t::rhs = value, *this; }
+        BinaryExpressionInit& operation(const Primitives::EBinaryOperator& value) { return base_t::operation = value, *this; }
+    };
+
+    struct BooleanExpressionInit : public BooleanExpression
+    {
+        using base_t = BooleanExpression;
+
+        BooleanExpressionInit& negated(const bool& value) { return base_t::negated = value, *this; }
+        BooleanExpressionInit& data(const std::vector<type>& value) { return base_t::data = value, *this; };
+    };
+
+    WhereClauseInit& expression(const WhereClause::BooleanExpression& value) { return base_t::expression = value, *this; }
 };
 
 struct SelectInit : public Select

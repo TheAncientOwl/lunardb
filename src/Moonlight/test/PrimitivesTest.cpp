@@ -82,4 +82,28 @@ TEST(PrimitivesTest, DatabaseOperationType)
     EXPECT_EQ(EDatabaseOperationType::Use, toLiteral(toString(EDatabaseOperationType::Use)));
 }
 
+TEST(PrimitivesTest, BinaryOperator)
+{
+    using namespace BinaryOperator;
+
+    EXPECT_EQ(EBinaryOperator::None, toLiteral(toString(EBinaryOperator::None)));
+    EXPECT_EQ(EBinaryOperator::Equals, toLiteral(toString(EBinaryOperator::Equals)));
+    EXPECT_EQ(EBinaryOperator::GreaterThan, toLiteral(toString(EBinaryOperator::GreaterThan)));
+    EXPECT_EQ(EBinaryOperator::GreaterThanEqualTo, toLiteral(toString(EBinaryOperator::GreaterThanEqualTo)));
+    EXPECT_EQ(EBinaryOperator::LessThan, toLiteral(toString(EBinaryOperator::LessThan)));
+    EXPECT_EQ(EBinaryOperator::LessThanEqualTo, toLiteral(toString(EBinaryOperator::LessThanEqualTo)));
+    EXPECT_EQ(EBinaryOperator::In, toLiteral(toString(EBinaryOperator::In)));
+    EXPECT_EQ(EBinaryOperator::Between, toLiteral(toString(EBinaryOperator::Between)));
+    EXPECT_EQ(EBinaryOperator::Like, toLiteral(toString(EBinaryOperator::Like)));
+}
+
+TEST(PrimitivesTest, BooleanOperator)
+{
+    using namespace BooleanOperator;
+
+    EXPECT_EQ(EBooleanOperator::None, toLiteral(toString(EBooleanOperator::None)));
+    EXPECT_EQ(EBooleanOperator::And, toLiteral(toString(EBooleanOperator::And)));
+    EXPECT_EQ(EBooleanOperator::Or, toLiteral(toString(EBooleanOperator::Or)));
+}
+
 } // namespace LunarDB::Moonlight::QueryData::Primitives::Tests

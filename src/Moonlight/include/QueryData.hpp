@@ -5,6 +5,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <variant>
 
 namespace LunarDB::Moonlight::QueryData {
 
@@ -58,10 +59,29 @@ struct Rename
     std::string new_name;
 };
 
-// TODO: Provide detailed implementation
 struct WhereClause
 {
-    std::string content;
+    struct BinaryExpression
+    {
+        bool negated;
+        std::string lhs;
+        std::string rhs;
+        Primitives::EBinaryOperator operation;
+    };
+
+    struct BooleanExpression
+    {
+        using type = std::variant<
+            Primitives::EBooleanOperator,
+            BinaryExpression,
+            BooleanExpression
+        >;
+
+        bool negated;
+        std::vector<type> data;
+    };
+
+    BooleanExpression expression;
 };
 
 struct Select

@@ -77,4 +77,22 @@ DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
     Use
 )
 
+DEFINE_MOONLIGHT_PRIMITIVE(BinaryOperator,
+    None = 0,
+    Equals = 1,
+    GreaterThan = 2,
+    GreaterThanEqualTo = 3,
+    LessThan = 4,
+    LessThanEqualTo = 5,
+    In = 6,
+    Between = 7,
+    Like = 8
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(BooleanOperator,
+    None = 0,
+    And = 1,
+    Or = 2
+)
+
 } // namespace LunarDB::Moonlight::QueryData::Primitives

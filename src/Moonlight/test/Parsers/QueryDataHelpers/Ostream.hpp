@@ -93,10 +93,35 @@ std::ostream& operator<<(std::ostream& os, const Rename& rhs)
         << "new_name: " << rhs.new_name;
 }
 
-// TODO: Provide detailed implementation
+
+std::ostream& operator<<(std::ostream& os, const WhereClause::BinaryExpression& rhs)
+{
+    return os
+        << (rhs.negated ? "!" : "")
+        << rhs.lhs << " "
+        << rhs.operation << " "
+        << rhs.rhs;
+}
+
+std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression::type& data)
+{
+    std::visit([&os](const auto& x) { os << x; }, data);
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression& rhs)
+{
+    os << (rhs.negated ? "!" : "") << "(";
+    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data; });
+    os << ")";
+
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const WhereClause& rhs)
 {
-    return os << rhs.content;
+    return os << rhs.expression;
 }
 
 std::ostream& operator<<(std::ostream& os, const Select::Order& rhs)
