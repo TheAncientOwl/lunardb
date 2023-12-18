@@ -54,7 +54,7 @@ PROVIDE_EQUALITY_OPERATOR(Rename,
 )
 
 // TODO: Provide detailed implementation
-PROVIDE_EQUALITY_OPERATOR(IfCondition,
+PROVIDE_EQUALITY_OPERATOR(WhereClause,
     FIELD(content)
 )
 
@@ -65,7 +65,7 @@ PROVIDE_EQUALITY_OPERATOR(Select::Order,
 
 PROVIDE_EQUALITY_OPERATOR(Select,
     FIELD(from),
-    FIELD(if_condition),
+    FIELD(where),
     FIELD(fields),
     FIELD(order_by)
 )
@@ -82,13 +82,13 @@ PROVIDE_EQUALITY_OPERATOR(Update::Modify,
 
 PROVIDE_EQUALITY_OPERATOR(Update,
     FIELD(structure_name),
-    FIELD(if_condition),
+    FIELD(where),
     FIELD(modify)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Delete,
     FIELD(from),
-    FIELD(if_condition)
+    FIELD(where)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Lock,

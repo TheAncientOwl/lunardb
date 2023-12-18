@@ -94,7 +94,7 @@ std::ostream& operator<<(std::ostream& os, const Rename& rhs)
 }
 
 // TODO: Provide detailed implementation
-std::ostream& operator<<(std::ostream& os, const IfCondition& rhs)
+std::ostream& operator<<(std::ostream& os, const WhereClause& rhs)
 {
     return os << rhs.content;
 }
@@ -108,7 +108,7 @@ std::ostream& operator<<(std::ostream& os, const Select& rhs)
 {
     return os
         << "from: " << rhs.from << " | "
-        << "if_condition: " << rhs.if_condition << " | "
+        << "where: " << rhs.where << " | "
         << "fields: " << rhs.fields << " | "
         << "order_by: " << rhs.order_by;
 }
@@ -129,7 +129,7 @@ std::ostream& operator<<(std::ostream& os, const Update& rhs)
 {
     return os
         << "structure_name: " << rhs.structure_name << " | "
-        << "if_condition: " << rhs.if_condition << " | "
+        << "where: " << rhs.where << " | "
         << "modify: " << rhs.modify;
 }
 
@@ -137,7 +137,7 @@ std::ostream& operator<<(std::ostream& os, const Delete& rhs)
 {
     return os
         << "from: " << rhs.from << " | "
-        << "if_condition: " << rhs.if_condition;
+        << "where: " << rhs.where;
 }
 
 std::ostream& operator<<(std::ostream& os, const Lock& rhs)

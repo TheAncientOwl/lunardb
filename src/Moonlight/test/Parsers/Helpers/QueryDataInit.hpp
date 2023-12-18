@@ -69,9 +69,9 @@ struct RenameInit : public Rename
 };
 
 // TODO: Provide detailed implementation
-struct IfConditionInit : public IfCondition
+struct IfConditionInit : public WhereClause
 {
-    using base_t = IfCondition;
+    using base_t = WhereClause;
 
     IfConditionInit& content(const std::string& value) { return base_t::content = value, *this; }
 };
@@ -81,7 +81,7 @@ struct SelectInit : public Select
     using base_t = Select;
 
     SelectInit& from(const std::vector<std::string>& value) { return base_t::from = value, *this; }
-    SelectInit& if_condition(const IfCondition& value) { return base_t::if_condition = value, *this; }
+    SelectInit& where(const WhereClause& value) { return base_t::where = value, *this; }
     SelectInit& fields(const std::vector<std::string>& value) { return base_t::fields = value, *this; }
 
     struct OrderInit : public Order
@@ -107,7 +107,7 @@ struct UpdateInit : public Update
     using base_t = Update;
 
     UpdateInit& structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
-    UpdateInit& if_condition(const IfCondition& value) { return base_t::if_condition = value, *this; }
+    UpdateInit& where(const WhereClause& value) { return base_t::where = value, *this; }
 
     struct ModifyInit : public Modify
     {
@@ -124,7 +124,7 @@ struct DeleteInit : public Delete
     using base_t = Delete;
 
     DeleteInit& from(const std::string& value) { return base_t::from = value, *this; }
-    DeleteInit& if_condition(const IfCondition& value) { return base_t::if_condition = value, *this; }
+    DeleteInit& where(const WhereClause& value) { return base_t::where = value, *this; }
 };
 
 struct LockInit : public Lock

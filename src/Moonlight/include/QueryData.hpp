@@ -59,7 +59,7 @@ struct Rename
 };
 
 // TODO: Provide detailed implementation
-struct IfCondition
+struct WhereClause
 {
     std::string content;
 };
@@ -67,7 +67,7 @@ struct IfCondition
 struct Select
 {
     std::vector<std::string> from;
-    IfCondition if_condition;
+    WhereClause where;
     std::vector<std::string> fields;
 
     struct Order
@@ -87,7 +87,7 @@ struct Insert
 struct Update
 {
     std::string structure_name;
-    IfCondition if_condition;
+    WhereClause where;
 
     struct Modify
     {
@@ -100,7 +100,7 @@ struct Update
 struct Delete
 {
     std::string from;
-    IfCondition if_condition;
+    WhereClause where;
 };
 
 struct Lock
