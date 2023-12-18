@@ -1,5 +1,7 @@
 #pragma once
 
+#include "QueryData.hpp"
+
 #include <string_view>
 #include <vector>
 
@@ -29,5 +31,7 @@ enum class ESplitModifier
 /// @return std::vector<std::string_view> splits
 /// 
 std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier = ESplitModifier::None);
+
+QueryData::WhereClause parseWhereClause(std::string_view where);
 
 } // namespace LunarDB::Moonlight::Utils

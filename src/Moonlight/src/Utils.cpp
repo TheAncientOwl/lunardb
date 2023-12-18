@@ -121,4 +121,13 @@ std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier 
     return out;
 }
 
+QueryData::WhereClause parseWhereClause(std::string_view where)
+{
+    QueryData::WhereClause out{};
+
+    // TODO: Provide implementation
+
+    return out;
+}
+
 } // namespace LunarDB::Moonlight::Utils
