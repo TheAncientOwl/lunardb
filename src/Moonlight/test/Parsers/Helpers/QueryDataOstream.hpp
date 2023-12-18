@@ -209,4 +209,20 @@ std::ostream& operator<<(std::ostream& os, const Rebind& rhs)
         << "clean: " << rhs.clean;
 }
 
+std::ostream& operator<<(std::ostream& os, const Schema::Field& rhs)
+{
+    return os
+        << "name: " << rhs.name << " | "
+        << "type: " << rhs.type << " | "
+        << "optional: " << std::boolalpha << rhs.optional << " | "
+        << "array: " << std::boolalpha << rhs.array;
+}
+
+std::ostream& operator<<(std::ostream& os, const Schema& rhs)
+{
+    return os
+        << "name: " << rhs.name << " | "
+        << "fields: " << rhs.fields;
+}
+
 } // namespace LunarDB::Moonlight::QueryData

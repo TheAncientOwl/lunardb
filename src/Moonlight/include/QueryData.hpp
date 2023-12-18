@@ -166,4 +166,18 @@ struct Rebind
     std::optional<bool> clean;
 };
 
+struct Schema
+{
+    struct Field
+    {
+        std::string name;
+        Primitives::EDataType type;
+        bool optional;
+        bool array;
+    };
+
+    std::string name;
+    std::vector<Field> fields;
+};
+
 } // namespace LunarDB::Moonlight::QueryData

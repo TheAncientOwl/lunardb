@@ -56,5 +56,6 @@ MAP_QUERY_DATA_TO_TYPE(Index)
 MAP_QUERY_DATA_TO_TYPE(Database)
 MAP_QUERY_DATA_TO_TYPE(View)
 MAP_QUERY_DATA_TO_TYPE(Rebind)
+MAP_QUERY_DATA_TO_TYPE(Schema)
 
 } // namespace LunarDB::Moonlight::API

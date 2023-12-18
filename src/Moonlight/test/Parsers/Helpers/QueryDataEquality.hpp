@@ -143,3 +143,15 @@ PROVIDE_EQUALITY_OPERATOR(Rebind,
     FIELD(bind_structure_name),
     FIELD(clean)
 )
+
+PROVIDE_EQUALITY_OPERATOR(Schema::Field,
+    FIELD(name),
+    FIELD(type),
+    FIELD(optional),
+    FIELD(array)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Schema,
+    FIELD(name),
+    FIELD(fields)
+)

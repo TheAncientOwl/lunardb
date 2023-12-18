@@ -59,6 +59,7 @@ PROVIDE_QUERY_PARSER(Index)
 PROVIDE_QUERY_PARSER(Database)
 PROVIDE_QUERY_PARSER(View)
 PROVIDE_QUERY_PARSER(Rebind)
+PROVIDE_QUERY_PARSER(Schema)
 
 #define QUERY_PARSERS \
     CreateParser, \
@@ -79,6 +80,7 @@ PROVIDE_QUERY_PARSER(Rebind)
     IndexParser, \
     DatabaseParser, \
     ViewParser, \
-    RebindParser
+    RebindParser, \
+    SchemaParser
 
 } // namespace LunarDB::Moonlight::Implementation

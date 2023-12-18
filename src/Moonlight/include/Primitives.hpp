@@ -37,7 +37,8 @@ DEFINE_MOONLIGHT_PRIMITIVE(QueryType,
     Index = 16,
     Database = 17,
     View = 18,
-    Rebind = 19
+    Rebind = 19,
+    Schema = 20
 )
 
 DEFINE_MOONLIGHT_PRIMITIVE(StructureType,
@@ -74,6 +75,22 @@ DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
     Drop = 2,
     Backup = 3,
     Use
+)
+
+DEFINE_MOONLIGHT_PRIMITIVE(DataType,
+    None = 0,
+    Rid = 1,
+    String = 2,
+    Boolean = 3,
+    DateTime = 4,
+    Integer = 5,
+    Integer8 = 6,
+    Integer16 = 7,
+    Integer32 = 8,
+    Integer64 = 9,
+    Float = 10,
+    Float32 = 11,
+    Float64 = 12
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

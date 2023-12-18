@@ -28,6 +28,7 @@ TEST(PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Database, toLiteral(toString(EQueryType::Database)));
     EXPECT_EQ(EQueryType::View, toLiteral(toString(EQueryType::View)));
     EXPECT_EQ(EQueryType::Rebind, toLiteral(toString(EQueryType::Rebind)));
+    EXPECT_EQ(EQueryType::Schema, toLiteral(toString(EQueryType::Schema)));
 }
 
 TEST(PrimitivesTest, StructureType)
@@ -79,6 +80,25 @@ TEST(PrimitivesTest, DatabaseOperationType)
     EXPECT_EQ(EDatabaseOperationType::Drop, toLiteral(toString(EDatabaseOperationType::Drop)));
     EXPECT_EQ(EDatabaseOperationType::Backup, toLiteral(toString(EDatabaseOperationType::Backup)));
     EXPECT_EQ(EDatabaseOperationType::Use, toLiteral(toString(EDatabaseOperationType::Use)));
+}
+
+TEST(PrimitivesTest, DataType)
+{
+    using namespace DataType;
+
+    EXPECT_EQ(EDataType::None, toLiteral(toString(EDataType::None)));
+    EXPECT_EQ(EDataType::Rid, toLiteral(toString(EDataType::Rid)));
+    EXPECT_EQ(EDataType::String, toLiteral(toString(EDataType::String)));
+    EXPECT_EQ(EDataType::Boolean, toLiteral(toString(EDataType::Boolean)));
+    EXPECT_EQ(EDataType::DateTime, toLiteral(toString(EDataType::DateTime)));
+    EXPECT_EQ(EDataType::Integer, toLiteral(toString(EDataType::Integer)));
+    EXPECT_EQ(EDataType::Integer8, toLiteral(toString(EDataType::Integer8)));
+    EXPECT_EQ(EDataType::Integer16, toLiteral(toString(EDataType::Integer16)));
+    EXPECT_EQ(EDataType::Integer32, toLiteral(toString(EDataType::Integer32)));
+    EXPECT_EQ(EDataType::Integer64, toLiteral(toString(EDataType::Integer64)));
+    EXPECT_EQ(EDataType::Float, toLiteral(toString(EDataType::Float)));
+    EXPECT_EQ(EDataType::Float32, toLiteral(toString(EDataType::Float32)));
+    EXPECT_EQ(EDataType::Float64, toLiteral(toString(EDataType::Float64)));
 }
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives::Tests

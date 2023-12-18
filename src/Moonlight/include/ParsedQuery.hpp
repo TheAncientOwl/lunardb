@@ -29,7 +29,7 @@ public: // helper
 private: // fields;
     EQueryType m_type;
 
-    std::variant<
+    std::variant <
         QueryData::Create,
         QueryData::Drop,
         QueryData::Migrate,
@@ -48,7 +48,8 @@ private: // fields;
         QueryData::Index,
         QueryData::Database,
         QueryData::View,
-        QueryData::Rebind
+        QueryData::Rebind,
+        QueryData::Schema
     > m_data;
 
     template<typename>
