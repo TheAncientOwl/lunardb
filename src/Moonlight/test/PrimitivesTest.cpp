@@ -78,6 +78,7 @@ TEST(PrimitivesTest, DatabaseOperationType)
     EXPECT_EQ(EDatabaseOperationType::Create, toLiteral(toString(EDatabaseOperationType::Create)));
     EXPECT_EQ(EDatabaseOperationType::Drop, toLiteral(toString(EDatabaseOperationType::Drop)));
     EXPECT_EQ(EDatabaseOperationType::Backup, toLiteral(toString(EDatabaseOperationType::Backup)));
+    EXPECT_EQ(EDatabaseOperationType::Use, toLiteral(toString(EDatabaseOperationType::Use)));
 }
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives::Tests

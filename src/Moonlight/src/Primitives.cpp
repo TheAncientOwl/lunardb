@@ -73,7 +73,8 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DatabaseOperationType,
     { Literal::None, "None" },
     { Literal::Create, "Create" },
     { Literal::Drop, "Drop" },
-    { Literal::Backup, "Backup" }
+    { Literal::Backup, "Backup" },
+    { Literal::Use, "Use" }
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

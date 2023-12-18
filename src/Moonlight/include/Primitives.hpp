@@ -72,7 +72,8 @@ DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
     None = 0,
     Create = 1,
     Drop = 2,
-    Backup = 3
+    Backup = 3,
+    Use
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives
