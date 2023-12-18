@@ -112,8 +112,8 @@ std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression:
 
 std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression& rhs)
 {
-    os << (rhs.negated ? "!" : "") << "(";
-    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data; });
+    os << (rhs.negated ? " !" : "") << "(";
+    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data << " "; });
     os << ")";
 
     return os;
