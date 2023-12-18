@@ -42,15 +42,6 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
     return os;
 }
 
-template<typename Key, typename Value>
-std::ostream& operator<<(std::ostream& os, const std::unordered_map<Key, Value>& rhs)
-{
-    os << "{";
-    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& pair) { os << "(" << pair.first << ": " << pair.second << "),"; });
-    os << "}";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const Create::Binding& rhs)
 {
     return os << "{" << rhs.field << " from " << rhs.table << "}";

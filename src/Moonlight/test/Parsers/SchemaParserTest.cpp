@@ -61,47 +61,46 @@ TEST(SchemaParserTest, success01_all_types)
     const auto expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
-        Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(false).array(false),
+        Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(false).array(false),
 
-            Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(true).array(false),
 
-            Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(false).array(true) })
-        .fields_to_schemas({});
+            Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(false).array(true) });
 
-        EXPECT_SUCCESS(query, expected);
+    EXPECT_SUCCESS(query, expected);
 }
 
 TEST(SchemaParserTest, success02)
@@ -124,21 +123,20 @@ TEST(SchemaParserTest, success02)
     const auto expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
-        Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(false).array(false)})
-        .fields_to_schemas({});
+        Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(false).array(false)});
 
-        EXPECT_SUCCESS(query, expected);
+    EXPECT_SUCCESS(query, expected);
 }
 
 TEST(SchemaParserTest, success03)
@@ -161,21 +159,20 @@ TEST(SchemaParserTest, success03)
     const auto expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
-        Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(true).array(false)})
-        .fields_to_schemas({});
+        Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(true).array(false)});
 
-        EXPECT_SUCCESS(query, expected);
+    EXPECT_SUCCESS(query, expected);
 }
 
 TEST(SchemaParserTest, success04)
@@ -199,42 +196,39 @@ TEST(SchemaParserTest, success04)
     const auto expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
-        Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Rid).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_2").type(Primitives::EDataType::String).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_3").type(Primitives::EDataType::Boolean).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_4").type(Primitives::EDataType::DateTime).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_5").type(Primitives::EDataType::Integer).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_6").type(Primitives::EDataType::Integer8).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_7").type(Primitives::EDataType::Integer16).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_8").type(Primitives::EDataType::Integer32).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_9").type(Primitives::EDataType::Integer64).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_10").type(Primitives::EDataType::Float).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_11").type(Primitives::EDataType::Float32).optional(false).array(true),
-            Init::SchemaInit::FieldInit{}.name("field_12").type(Primitives::EDataType::Float64).optional(false).array(true)})
-        .fields_to_schemas({});
+        Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_2").type("String").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_6").type("Integer8").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_7").type("Integer16").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_8").type("Integer32").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_9").type("Integer64").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_10").type("Float").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").optional(false).array(true),
+            Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").optional(false).array(true)});
 
-        EXPECT_SUCCESS(query, expected);
+    EXPECT_SUCCESS(query, expected);
 }
 
 TEST(SchemaParserTest, success05)
 {
     const auto query =
         "schema SomeSchema {"
-        "   field_1: SomeOtherSchema,"
-        "   field_2: SomeOtherSchema?,"
-        "   field_3: ArrayOf<SomeOtherSchema>,"
+        "   field_1: SomeOtherSchema1,"
+        "   field_2: SomeOtherSchema2?,"
+        "   field_3: ArrayOf<SomeOtherSchema3>,"
         "}";
     const auto expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
-        Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Schema).optional(false).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Schema).optional(true).array(false),
-            Init::SchemaInit::FieldInit{}.name("field_1").type(Primitives::EDataType::Schema).optional(false).array(true) })
-        .fields_to_schemas(std::unordered_map<std::string, std::string>{
-            {"field_1", "SomeOtherSchema"}, { "field_2", "SomeOtherSchema" }, { "field_3", "SomeOtherSchema" } });
+        Init::SchemaInit::FieldInit{}.name("field_1").type("SomeOtherSchema1").optional(false).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_1").type("SomeOtherSchema2").optional(true).array(false),
+            Init::SchemaInit::FieldInit{}.name("field_1").type("SomeOtherSchema3").optional(false).array(true) });
 
-        EXPECT_SUCCESS(query, expected);
+    EXPECT_SUCCESS(query, expected);
 }
 
 TEST(SchemaParserTest, fail01)

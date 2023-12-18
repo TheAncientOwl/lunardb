@@ -153,6 +153,5 @@ PROVIDE_EQUALITY_OPERATOR(Schema::Field,
 
 PROVIDE_EQUALITY_OPERATOR(Schema,
     FIELD(name),
-    FIELD(fields),
-    FIELD(fields_to_schemas)
+    FIELD(fields)
 )

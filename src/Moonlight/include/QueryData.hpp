@@ -5,7 +5,6 @@
 #include <string>
 #include <optional>
 #include <vector>
-#include <unordered_map>
 
 namespace LunarDB::Moonlight::QueryData {
 
@@ -172,14 +171,13 @@ struct Schema
     struct Field
     {
         std::string name;
-        Primitives::EDataType type;
+        std::string type;
         bool optional;
         bool array;
     };
 
     std::string name;
     std::vector<Field> fields;
-    std::optional<std::unordered_map<std::string, std::string>> fields_to_schemas;
 };
 
 } // namespace LunarDB::Moonlight::QueryData

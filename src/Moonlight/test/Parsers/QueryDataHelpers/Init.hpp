@@ -219,14 +219,13 @@ struct SchemaInit : public Schema
         using base_t = Field;
 
         FieldInit& name(const std::string& value) { return base_t::name = value, *this; }
-        FieldInit& type(const Primitives::EDataType& value) { return base_t::type = value, *this; }
+        FieldInit& type(const std::string& value) { return base_t::type = value, *this; }
         FieldInit& optional(const bool& value) { return base_t::optional, * this; };
         FieldInit& array(const bool& value) { return base_t::array, * this; };
     };
 
     SchemaInit& name(const std::string& value) { return base_t::name = value, *this; }
     SchemaInit& fields(const std::vector<Field>& value) { return base_t::fields = value, *this; }
-    SchemaInit& fields_to_schemas(const std::optional<std::unordered_map<std::string, std::string>>& value) { return base_t::fields_to_schemas, * this; }
 };
 
 } // namespace LunarDB::Moonlight::QueryData::Init

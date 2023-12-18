@@ -78,21 +78,4 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DatabaseOperationType,
     { Literal::Use, "Use" }
 )
 
-DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DataType,
-    { Literal::None, "None" },
-    { Literal::Rid, "Rid" },
-    { Literal::String, "String" },
-    { Literal::Boolean, "Boolean" },
-    { Literal::DateTime, "DateTime" },
-    { Literal::Integer, "Integer" },
-    { Literal::Integer8, "Integer8" },
-    { Literal::Integer16, "Integer16" },
-    { Literal::Integer32, "Integer32" },
-    { Literal::Integer64, "Integer64" },
-    { Literal::Float, "Float" },
-    { Literal::Float32, "Float32" },
-    { Literal::Float64, "Float64" },
-    { Literal::Schema, "Schema" }
-)
-
 } // namespace LunarDB::Moonlight::QueryData::Primitives

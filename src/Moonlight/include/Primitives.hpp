@@ -77,21 +77,4 @@ DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
     Use
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(DataType,
-    None = 0,
-    Rid = 1,
-    String = 2,
-    Boolean = 3,
-    DateTime = 4,
-    Integer = 5,
-    Integer8 = 6,
-    Integer16 = 7,
-    Integer32 = 8,
-    Integer64 = 9,
-    Float = 10,
-    Float32 = 11,
-    Float64 = 12,
-    Schema
-)
-
 } // namespace LunarDB::Moonlight::QueryData::Primitives
