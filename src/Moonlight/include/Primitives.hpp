@@ -90,7 +90,8 @@ DEFINE_MOONLIGHT_PRIMITIVE(DataType,
     Integer64 = 9,
     Float = 10,
     Float32 = 11,
-    Float64 = 12
+    Float64 = 12,
+    Schema
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

@@ -91,7 +91,8 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(DataType,
     { Literal::Integer64, "Integer64" },
     { Literal::Float, "Float" },
     { Literal::Float32, "Float32" },
-    { Literal::Float64, "Float64" }
+    { Literal::Float64, "Float64" },
+    { Literal::Schema, "Schema" }
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

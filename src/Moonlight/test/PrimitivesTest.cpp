@@ -99,6 +99,7 @@ TEST(PrimitivesTest, DataType)
     EXPECT_EQ(EDataType::Float, toLiteral(toString(EDataType::Float)));
     EXPECT_EQ(EDataType::Float32, toLiteral(toString(EDataType::Float32)));
     EXPECT_EQ(EDataType::Float64, toLiteral(toString(EDataType::Float64)));
+    EXPECT_EQ(EDataType::Schema, toLiteral(toString(EDataType::Schema)));
 }
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives::Tests

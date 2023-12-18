@@ -226,6 +226,7 @@ struct SchemaInit : public Schema
 
     SchemaInit& name(const std::string& value) { return base_t::name = value, *this; }
     SchemaInit& fields(const std::vector<Field>& value) { return base_t::fields = value, *this; }
+    SchemaInit& fields_to_schemas(const std::optional<std::unordered_map<std::string, std::string>>& value) { return base_t::fields_to_schemas, * this; }
 };
 
 } // namespace LunarDB::Moonlight::QueryData::Init

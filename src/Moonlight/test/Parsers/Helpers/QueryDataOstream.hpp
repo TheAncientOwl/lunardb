@@ -37,8 +37,17 @@ template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 {
     os << "[";
-    std::copy(rhs.begin(), rhs.end(), std::ostream_iterator<T>(os));
+    std::copy(rhs.begin(), rhs.end(), std::ostream_iterator<T>(os, ", "));
     os << "]";
+    return os;
+}
+
+template<typename Key, typename Value>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<Key, Value>& rhs)
+{
+    os << "{";
+    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& pair) { os << "(" << pair.first << ": " << pair.second << "),"; });
+    os << "}";
     return os;
 }
 
