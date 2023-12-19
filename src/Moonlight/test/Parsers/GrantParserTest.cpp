@@ -1,10 +1,5 @@
-#include <gtest/gtest.h>
+#include "Common/ParserTestIncludes.hpp"
 
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
-#include "ParsedQuery.hpp"
-
-#include "Common/Expectations.hpp"
 #define QUERY_TYPE Grant
 
 namespace LunarDB::Moonlight::Implementation::Tests {

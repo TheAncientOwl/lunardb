@@ -5,6 +5,7 @@
 #include "QueryDataHelpers/Operators.hpp"
 
 #include "Common/Expectations.hpp"
+
 #define QUERY_TYPE Create
 
 namespace LunarDB::Moonlight::Implementation::Tests {
