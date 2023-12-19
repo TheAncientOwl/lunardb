@@ -5,6 +5,7 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <unordered_map>
 #include <variant>
 
 namespace LunarDB::Moonlight::QueryData {
@@ -101,6 +102,8 @@ struct Select
 struct Insert
 {
     std::string into;
+
+    // TODO: Use json instead of plain strings.
     std::vector<std::string> values;
 };
 
