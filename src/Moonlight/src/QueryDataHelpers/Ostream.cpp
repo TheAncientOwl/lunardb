@@ -1,5 +1,20 @@
 #include "QueryDataHelpers/Operators.hpp"
 
+#define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...) \
+namespace LunarDB::Moonlight::QueryData { \
+std::ostream& operator<<(std::ostream& os, const Type& rhs) \
+{ \
+    __VA_ARGS__, std::ignore; \
+    return os; \
+} \
+}
+
+#define FIELD_SEP(field_name) os << #field_name ": " << rhs.field_name << " | "
+#define FIELD_BOOL_SEP(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name << " | "
+
+#define FIELD(field_name) os << #field_name ": " << rhs.field_name
+#define FIELD_BOOL(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name
+
 namespace LunarDB::Moonlight::QueryData {
 
 template<>
@@ -16,225 +31,166 @@ std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Create::Single::Binding& rhs)
-{
-    return os << "{" << rhs.field << " from " << rhs.table << "}";
-}
-
-std::ostream& operator<<(std::ostream& os, const Create::Single& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "schema_name: " << rhs.schema_name << " | "
-        << "bindings: " << rhs.bindings << " | "
-        << "blended: " << rhs.blended;
-}
-
-std::ostream& operator<<(std::ostream& os, const Create::Multiple& rhs)
-{
-    return os
-        << "structure_name_format: " << rhs.structure_name_format
-        << "schema_names: " << rhs.schema_names << " | ";
-
-}
-
-std::ostream& operator<<(std::ostream& os, const Create& rhs)
-{
-    return os
-        << "is_volatile: " << std::boolalpha << rhs.is_volatile << " | "
-        << "structure_type: " << rhs.structure_type << " | "
-        << "single: " << rhs.single << " | "
-        << "multiple: " << rhs.multiple;
-}
-
-std::ostream& operator<<(std::ostream& os, const Drop& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "cascade: " << std::boolalpha << rhs.cascade;
-}
-
-std::ostream& operator<<(std::ostream& os, const Migrate::Mapping& rhs)
-{
-    return os << "{" << rhs.old_field << " to " << rhs.new_field << "}";
-}
-
-std::ostream& operator<<(std::ostream& os, const Migrate& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "new_schema_name: " << rhs.new_schema_name << " | "
-        << "mappings: " << rhs.mappings;
-}
-
-std::ostream& operator<<(std::ostream& os, const Truncate& rhs)
-{
-    return os << "structure_name: " << rhs.structure_name;
-}
-
-std::ostream& operator<<(std::ostream& os, const Rename& rhs)
-{
-    return os
-        << "type: " << rhs.type << " | "
-        << "old_name: " << rhs.old_name << " | "
-        << "new_name: " << rhs.new_name;
-}
-
-
-std::ostream& operator<<(std::ostream& os, const WhereClause::BinaryExpression& rhs)
-{
-    return os
-        << (rhs.negated ? "!" : "")
-        << rhs.lhs << " "
-        << rhs.operation << " "
-        << rhs.rhs;
-}
-
-std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression::type& data)
-{
-    std::visit([&os](const auto& x) { os << x; }, data);
-
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const WhereClause::BooleanExpression& rhs)
-{
-    os << (rhs.negated ? " !" : "") << "(";
-    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data << " "; });
-    os << ")";
-
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const WhereClause& rhs)
-{
-    return os << rhs.expression;
-}
-
-std::ostream& operator<<(std::ostream& os, const Select::Order& rhs)
-{
-    return os << "{" << rhs.field << " -> " << rhs.type << "}";
-}
-
-std::ostream& operator<<(std::ostream& os, const Select& rhs)
-{
-    return os
-        << "from: " << rhs.from << " | "
-        << "where: " << rhs.where << " | "
-        << "fields: " << rhs.fields << " | "
-        << "order_by: " << rhs.order_by;
-}
-
-std::ostream& operator<<(std::ostream& os, const Insert& rhs)
-{
-    return os
-        << "into: " << rhs.into << " | "
-        << "values: " << rhs.values;
-}
-
-std::ostream& operator<<(std::ostream& os, const Update::Modify& rhs)
-{
-    return os << "{" << rhs.field << " => " << rhs.expression << "}";
-};
-
-std::ostream& operator<<(std::ostream& os, const Update& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "where: " << rhs.where << " | "
-        << "modify: " << rhs.modify;
-}
-
-std::ostream& operator<<(std::ostream& os, const Delete& rhs)
-{
-    return os
-        << "from: " << rhs.from << " | "
-        << "where: " << rhs.where;
-}
-
-std::ostream& operator<<(std::ostream& os, const Lock& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "concurrency: " << std::boolalpha << rhs.concurrency;
-}
-
-std::ostream& operator<<(std::ostream& os, const Grant& rhs)
-{
-    return os
-        << "permissions: " << rhs.permissions << " | "
-        << "to_user: " << rhs.to_user << " | "
-        << "structure_name: " << rhs.structure_name;
-}
-
-std::ostream& operator<<(std::ostream& os, const Revoke& rhs)
-{
-    return os
-        << "permissions: " << rhs.permissions << " | "
-        << "to_user: " << rhs.from_user << " | "
-        << "structure_name: " << rhs.structure_name;
-}
-
-std::ostream& operator<<(std::ostream& os, const Commit& rhs)
-{
-    return os << "hash: " << rhs.hash;
-}
-
-std::ostream& operator<<(std::ostream& os, const Rollback& rhs)
-{
-    return os << "hash: " << rhs.hash;
-}
-
-std::ostream& operator<<(std::ostream& os, const SavePoint& rhs)
-{
-    return os << "hash: " << rhs.hash;
-}
-
-std::ostream& operator<<(std::ostream& os, const Index& rhs)
-{
-    return os
-        << "on_structure_name: " << rhs.on_structure_name << " | "
-        << "name: " << rhs.unique << " | "
-        << "name: " << rhs.name << " | "
-        << "using_fields: " << rhs.using_fields;
-}
-
-std::ostream& operator<<(std::ostream& os, const Database& rhs)
-{
-    return os
-        << "operation_type: " << rhs.operation_type << " | "
-        << "name: " << rhs.name << " | "
-        << "backup_path: " << rhs.backup_path;
-}
-
-std::ostream& operator<<(std::ostream& os, const View& rhs)
-{
-    return os << "as_select: " << rhs.as_select;
-}
-
-std::ostream& operator<<(std::ostream& os, const Rebind& rhs)
-{
-    return os
-        << "structure_name: " << rhs.structure_name << " | "
-        << "field: " << rhs.field << " | "
-        << "bind_structure_name: " << rhs.bind_structure_name << " | "
-        << "clean: " << rhs.clean;
-}
-
-std::ostream& operator<<(std::ostream& os, const Schema::Field& rhs)
-{
-    return os
-        << "name: " << rhs.name << " | "
-        << "type: " << rhs.type << " | "
-        << "optional: " << std::boolalpha << rhs.optional << " | "
-        << "array: " << std::boolalpha << rhs.array;
-}
-
-std::ostream& operator<<(std::ostream& os, const Schema& rhs)
-{
-    return os
-        << "name: " << rhs.name << " | "
-        << "fields: " << rhs.fields;
-}
-
 } // namespace LunarDB::Moonlight::QueryData
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Single::Binding,
+    os << "{" << rhs.field << " from " << rhs.table << "}"
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Single,
+    FIELD_SEP(structure_name),
+    FIELD_SEP(schema_name),
+    FIELD_SEP(bindings),
+    FIELD_BOOL(blended)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Multiple,
+    FIELD_SEP(structure_name_format),
+    FIELD(schema_names)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create,
+    FIELD_BOOL_SEP(is_volatile),
+    FIELD_SEP(structure_type),
+    FIELD_SEP(single),
+    FIELD(multiple)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Drop,
+    FIELD_SEP(structure_name),
+    FIELD_BOOL(cascade)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Migrate::Mapping,
+    os << "{" << rhs.old_field << " to " << rhs.new_field << "}"
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Migrate,
+    FIELD_SEP(structure_name),
+    FIELD_SEP(new_schema_name),
+    FIELD(mappings)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Truncate,
+    FIELD(structure_name)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Rename,
+    FIELD_SEP(type),
+    FIELD_SEP(old_name),
+    FIELD(new_name)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BinaryExpression,
+    os << (rhs.negated ? "!" : "") << rhs.lhs << " " << rhs.operation << " " << rhs.rhs
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BooleanExpression::type,
+    std::visit([&os](const auto& x) { os << x; }, rhs)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BooleanExpression,
+    os << (rhs.negated ? " !" : "") << "(",
+    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data << " "; }),
+    os << ")"
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause,
+    FIELD(expression)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Select::Order,
+    os << "{" << rhs.field << " -> " << rhs.type << "}"
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Select,
+    FIELD_SEP(from),
+    FIELD_SEP(where),
+    FIELD_SEP(fields),
+    FIELD(order_by)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Insert,
+    FIELD_SEP(into),
+    FIELD(values)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Update::Modify,
+    os << "{" << rhs.field << " => " << rhs.expression << "}"
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Update,
+    FIELD_SEP(structure_name),
+    FIELD_SEP(where),
+    FIELD(modify)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Delete,
+    FIELD_SEP(from),
+    FIELD(where)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Lock,
+    FIELD_SEP(structure_name),
+    FIELD_BOOL(concurrency)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Grant,
+    FIELD_SEP(permissions),
+    FIELD_SEP(to_user),
+    FIELD(structure_name)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Revoke,
+    FIELD_SEP(permissions),
+    FIELD_SEP(from_user),
+    FIELD(structure_name)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Commit,
+    FIELD(hash)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Rollback,
+    FIELD(hash)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(SavePoint,
+    FIELD(hash)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Index,
+    FIELD_SEP(on_structure_name),
+    FIELD_BOOL_SEP(unique),
+    FIELD_SEP(name),
+    FIELD(using_fields)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Database,
+    FIELD_SEP(operation_type),
+    FIELD_SEP(name),
+    FIELD(backup_path)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(View,
+    FIELD(as_select)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Rebind,
+    FIELD_SEP(structure_name),
+    FIELD_SEP(field),
+    FIELD_SEP(bind_structure_name),
+    FIELD(clean)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema::Field,
+    FIELD(name),
+    FIELD(type),
+    FIELD_BOOL_SEP(optional),
+    FIELD_BOOL(array)
+)
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema,
+    FIELD(name),
+    FIELD(fields)
+)
