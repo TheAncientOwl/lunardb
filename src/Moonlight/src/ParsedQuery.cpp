@@ -1,7 +1,7 @@
 #include "QueryData.hpp"
 #include "ParsedQuery.hpp"
 #include "HierarchySet.hpp"
-#include "IQueryParsers.hpp"
+#include "QueryParsers.hpp"
 #include "Utils.hpp"
 
 #define MAP_QUERY_DATA_TO_TYPE(Entry) \
