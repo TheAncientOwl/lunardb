@@ -155,6 +155,7 @@ PROVIDE_EQUALITY_OPERATOR(Database,
 )
 
 PROVIDE_EQUALITY_OPERATOR(View,
+    FIELD(name),
     FIELD(as_select)
 )
 

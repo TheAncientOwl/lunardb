@@ -187,6 +187,7 @@ struct Database
 
 struct View
 {
+    std::string name;
     Select as_select;
 };
 

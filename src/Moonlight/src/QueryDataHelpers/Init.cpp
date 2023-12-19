@@ -91,6 +91,7 @@ DatabaseInit& DatabaseInit::operation_type(const Primitives::EDatabaseOperationT
 DatabaseInit& DatabaseInit::name(const std::string& value) { return base_t::name = value, *this; }
 DatabaseInit& DatabaseInit::backup_path(const std::optional<std::string>& value) { return base_t::backup_path = value, *this; }
 
+ViewInit& ViewInit::name(const std::string& value) { return base_t::name = value, *this; }
 ViewInit& ViewInit::as_select(const Select& value) { return base_t::as_select = value, *this; }
 
 RebindInit& RebindInit::structure_name(const std::string& value) { return base_t::structure_name = value, *this; }

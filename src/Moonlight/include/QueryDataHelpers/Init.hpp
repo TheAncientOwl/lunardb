@@ -227,6 +227,7 @@ struct ViewInit : public View
 {
     using base_t = View;
 
+    ViewInit& name(const std::string& name);
     ViewInit& as_select(const Select& value);
 };
 
