@@ -96,7 +96,7 @@ struct WhereClause
 
 struct Select
 {
-    std::vector<std::string> from;
+    std::string from;
     WhereClause where;
     std::vector<std::string> fields;
 

@@ -47,7 +47,7 @@ WhereClauseInit& WhereClauseInit::expression(const WhereClause::BooleanExpressio
 SelectInit::OrderInit& SelectInit::OrderInit::field(const std::string& value) { return base_t::field = value, *this; }
 SelectInit::OrderInit& SelectInit::OrderInit::type(const Primitives::EOrderType& value) { return base_t::type = value, *this; }
 
-SelectInit& SelectInit::from(const std::vector<std::string>& value) { return base_t::from = value, *this; }
+SelectInit& SelectInit::from(const std::string& value) { return base_t::from = value, *this; }
 SelectInit& SelectInit::where(const WhereClause& value) { return base_t::where = value, *this; }
 SelectInit& SelectInit::fields(const std::vector<std::string>& value) { return base_t::fields = value, *this; }
 SelectInit& SelectInit::order_by(const std::optional<std::vector<Order>>& value) { return base_t::order_by = value, *this; }

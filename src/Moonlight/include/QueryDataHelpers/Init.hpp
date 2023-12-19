@@ -110,7 +110,7 @@ struct SelectInit : public Select
 {
     using base_t = Select;
 
-    SelectInit& from(const std::vector<std::string>& value);
+    SelectInit& from(const std::string& value);
     SelectInit& where(const WhereClause& value);
     SelectInit& fields(const std::vector<std::string>& value);
 
