@@ -28,7 +28,6 @@ PROVIDE_EQUALITY_OPERATOR(Create::Single,
 PROVIDE_EQUALITY_OPERATOR(Create::Multiple,
     FIELD(structure_name_format),
     FIELD(schema_names)
-
 )
 
 PROVIDE_EQUALITY_OPERATOR(Create,
