@@ -5,11 +5,11 @@
 #include "ParsedQuery.hpp"
 
 #define EXPECT_SUCCESS(query, expected) \
-    const auto out = API::ParsedQuery::from(query).get<Delete>(); \
+    const auto out = API::ParsedQuery::from(query).get<Update>(); \
     EXPECT_EQ(out, expected)
 
 #define EXPECT_FAIL(query) \
-    EXPECT_THROW(API::ParsedQuery::from(query).get<Delete>(), std::runtime_error)
+    EXPECT_THROW(API::ParsedQuery::from(query).get<Update>(), std::runtime_error)
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
