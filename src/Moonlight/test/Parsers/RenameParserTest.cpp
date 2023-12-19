@@ -4,12 +4,8 @@
 #include "QueryDataHelpers/Operators.hpp"
 #include "ParsedQuery.hpp"
 
-#define EXPECT_SUCCESS(query, expected) \
-    const auto out = API::ParsedQuery::from(query).get<Rename>(); \
-    EXPECT_EQ(out, expected)
-
-#define EXPECT_FAIL(query) \
-    EXPECT_THROW(API::ParsedQuery::from(query).get<Rename>(), std::runtime_error)
+#include "Common/Expectations.hpp"
+#define QUERY_TYPE Rename
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 

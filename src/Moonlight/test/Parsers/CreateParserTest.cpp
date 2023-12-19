@@ -4,12 +4,8 @@
 #include "QueryDataHelpers/Init.hpp"
 #include "QueryDataHelpers/Operators.hpp"
 
-#define EXPECT_SUCCESS(query, expected) \
-    const auto out = API::ParsedQuery::from(query).get<Create>(); \
-    EXPECT_EQ(out, expected)
-
-#define EXPECT_FAIL(query) \
-    EXPECT_THROW(API::ParsedQuery::from(query).get<Create>(), std::runtime_error)
+#include "Common/Expectations.hpp"
+#define QUERY_TYPE Create
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
