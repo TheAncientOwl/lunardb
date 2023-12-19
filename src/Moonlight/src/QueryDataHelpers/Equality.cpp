@@ -13,20 +13,29 @@ return reduce(lhs) == reduce(rhs); \
 
 #define FIELD(field_name) obj.field_name
 
-PROVIDE_EQUALITY_OPERATOR(Create::Binding,
+PROVIDE_EQUALITY_OPERATOR(Create::Single::Binding,
     FIELD(field),
     FIELD(table)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Create::Single,
+    FIELD(structure_name),
+    FIELD(schema_name),
+    FIELD(bindings),
+    FIELD(blended)
+)
+
+PROVIDE_EQUALITY_OPERATOR(Create::Multiple,
+    FIELD(structure_name_format),
+    FIELD(schema_names)
+
 )
 
 PROVIDE_EQUALITY_OPERATOR(Create,
     FIELD(is_volatile),
     FIELD(structure_type),
-    FIELD(structure_name),
-    FIELD(schema_name),
-    FIELD(bindings),
-    FIELD(blended),
-    FIELD(schema_names),
-    FIELD(structure_name_format)
+    FIELD(single),
+    FIELD(multiple)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Drop,

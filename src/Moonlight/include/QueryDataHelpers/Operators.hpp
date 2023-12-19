@@ -42,7 +42,9 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 
 } // namespace LunarDB::Moonlight::QueryData
 
-DEFINE_OPERATORS(Create::Binding)
+DEFINE_OPERATORS(Create::Single::Binding)
+DEFINE_OPERATORS(Create::Single)
+DEFINE_OPERATORS(Create::Multiple)
 DEFINE_OPERATORS(Create)
 DEFINE_OPERATORS(Drop)
 DEFINE_OPERATORS(Migrate::Mapping)

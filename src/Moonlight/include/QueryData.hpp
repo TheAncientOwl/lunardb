@@ -12,21 +12,30 @@ namespace LunarDB::Moonlight::QueryData {
 
 struct Create
 {
+    struct Single
+    {
+        struct Binding
+        {
+            std::string field;
+            std::string table;
+        };
+
+        std::string structure_name;
+        std::string schema_name;
+        std::vector<Binding> bindings;
+        bool blended;
+    };
+
+    struct Multiple
+    {
+        std::string structure_name_format;
+        std::vector<std::string> schema_names;
+    };
+
     bool is_volatile;
     Primitives::EStructureType structure_type;
-
-    struct Binding
-    {
-        std::string field;
-        std::string table;
-    };
-    std::optional<std::string> structure_name;
-    std::optional<std::string> schema_name;
-    std::optional<std::vector<Binding>> bindings;
-    std::optional<bool> blended;
-
-    std::optional<std::vector<std::string>> schema_names;
-    std::optional<std::string> structure_name_format;
+    std::optional<Single> single;
+    std::optional<Multiple> multiple;
 };
 
 struct Drop

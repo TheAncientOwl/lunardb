@@ -2,17 +2,21 @@
 
 namespace LunarDB::Moonlight::QueryData::Init {
 
-CreateInit::BindingInit& CreateInit::BindingInit::field(const std::string& value) { return base_t::field = value, *this; }
-CreateInit::BindingInit& CreateInit::BindingInit::table(const std::string& value) { return base_t::table = value, *this; }
+CreateInit::SingleInit::BindingInit& CreateInit::SingleInit::BindingInit::field(const std::string& value) { return base_t::field = value, *this; }
+CreateInit::SingleInit::BindingInit& CreateInit::SingleInit::BindingInit::table(const std::string& value) { return base_t::table = value, *this; }
+
+CreateInit::SingleInit& CreateInit::SingleInit::structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
+CreateInit::SingleInit& CreateInit::SingleInit::schema_name(const std::string& value) { return base_t::schema_name = value, *this; }
+CreateInit::SingleInit& CreateInit::SingleInit::bindings(const std::vector<Create::Single::Binding>& value) { return base_t::bindings = value, *this; }
+CreateInit::SingleInit& CreateInit::SingleInit::blended(const bool& value) { return base_t::blended = value, *this; }
+
+CreateInit::MultipleInit& CreateInit::MultipleInit::structure_name_format(const std::string& value) { return base_t::structure_name_format = value, *this; }
+CreateInit::MultipleInit& CreateInit::MultipleInit::schema_names(const std::vector<std::string>& value) { return base_t::schema_names = value, *this; }
 
 CreateInit& CreateInit::is_volatile(const bool& value) { return base_t::is_volatile = value, *this; }
 CreateInit& CreateInit::structure_type(const Primitives::EStructureType& value) { return base_t::structure_type = value, *this; }
-CreateInit& CreateInit::structure_name(const std::optional<std::string>& value) { return base_t::structure_name = value, *this; }
-CreateInit& CreateInit::schema_name(const std::optional<std::string>& value) { return base_t::schema_name = value, *this; }
-CreateInit& CreateInit::bindings(const std::optional<std::vector<Binding>>& value) { return base_t::bindings = value, *this; }
-CreateInit& CreateInit::blended(const bool& value) { return base_t::blended = value, *this; }
-CreateInit& CreateInit::schema_names(const std::optional<std::vector<std::string>>& value) { return base_t::schema_names = value, *this; }
-CreateInit& CreateInit::structure_name_format(const std::optional<std::string>& value) { return base_t::structure_name_format = value, *this; }
+CreateInit& CreateInit::single(const std::optional<Create::Single>& value) { return base_t::single = value, *this; }
+CreateInit& CreateInit::multiple(const std::optional<Create::Multiple>& value) { return base_t::multiple = value, *this; }
 
 DropInit& DropInit::structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
 DropInit& DropInit::cascade(const bool& value) { return base_t::cascade = value, *this; }

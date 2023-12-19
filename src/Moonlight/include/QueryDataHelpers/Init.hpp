@@ -8,23 +8,36 @@ struct CreateInit : public Create
 {
     using base_t = Create;
 
+    struct SingleInit : public Single
+    {
+        using base_t = Single;
+
+        struct BindingInit : public Binding
+        {
+            using base_t = Binding;
+
+            BindingInit& field(const std::string& value);
+            BindingInit& table(const std::string& value);
+        };
+
+        SingleInit& structure_name(const std::string& value);
+        SingleInit& schema_name(const std::string& value);
+        SingleInit& bindings(const std::vector<Binding>& value);
+        SingleInit& blended(const bool& value);
+    };
+
+    struct MultipleInit : public Multiple
+    {
+        using base_t = Multiple;
+
+        MultipleInit& structure_name_format(const std::string& value);
+        MultipleInit& schema_names(const std::vector<std::string>& value);
+    };
+
     CreateInit& is_volatile(const bool& value);
     CreateInit& structure_type(const Primitives::EStructureType& value);
-
-    struct BindingInit : public Binding
-    {
-        using base_t = Binding;
-
-        BindingInit& field(const std::string& value);
-        BindingInit& table(const std::string& value);
-    };
-    CreateInit& structure_name(const std::optional<std::string>& value);
-    CreateInit& schema_name(const std::optional<std::string>& value);
-    CreateInit& bindings(const std::optional<std::vector<Binding>>& value);
-    CreateInit& blended(const bool& value);
-
-    CreateInit& schema_names(const std::optional<std::vector<std::string>>& value);
-    CreateInit& structure_name_format(const std::optional<std::string>& value);
+    CreateInit& single(const std::optional<Single>& value);
+    CreateInit& multiple(const std::optional<Multiple>& value);
 };
 
 struct DropInit : public Drop

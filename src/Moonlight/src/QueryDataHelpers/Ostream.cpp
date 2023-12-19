@@ -16,22 +16,35 @@ std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Create::Binding& rhs)
+std::ostream& operator<<(std::ostream& os, const Create::Single::Binding& rhs)
 {
     return os << "{" << rhs.field << " from " << rhs.table << "}";
+}
+
+std::ostream& operator<<(std::ostream& os, const Create::Single& rhs)
+{
+    return os
+        << "structure_name: " << rhs.structure_name << " | "
+        << "schema_name: " << rhs.schema_name << " | "
+        << "bindings: " << rhs.bindings << " | "
+        << "blended: " << rhs.blended;
+}
+
+std::ostream& operator<<(std::ostream& os, const Create::Multiple& rhs)
+{
+    return os
+        << "structure_name_format: " << rhs.structure_name_format
+        << "schema_names: " << rhs.schema_names << " | ";
+
 }
 
 std::ostream& operator<<(std::ostream& os, const Create& rhs)
 {
     return os
-        << "volatile: " << std::boolalpha << rhs.is_volatile << " | "
+        << "is_volatile: " << std::boolalpha << rhs.is_volatile << " | "
         << "structure_type: " << rhs.structure_type << " | "
-        << "structure_name: " << rhs.structure_name << " | "
-        << "schema_name: " << rhs.schema_name << " | "
-        << "bindings: " << rhs.bindings << " | "
-        << "blended: " << rhs.blended << " | "
-        << "schema_names: " << rhs.schema_names << " | "
-        << "structure_name_format: " << rhs.structure_name_format;
+        << "single: " << rhs.single << " | "
+        << "multiple: " << rhs.multiple;
 }
 
 std::ostream& operator<<(std::ostream& os, const Drop& rhs)
