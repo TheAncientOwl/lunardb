@@ -58,4 +58,30 @@ TEST(QueryExtractor, extractList)
     EXPECT_THROW(extractor.extractList(), std::runtime_error);
 }
 
+TEST(QueryExtractor, extractTuples)
+{
+    const auto query{ "  some \t \n words \t\t12345  " };
+    QueryExtractor extractor{ query };
+
+    const auto& [some] = extractor.extractTuple<1>();
+    EXPECT_EQ(some, "some"sv);
+    EXPECT_FALSE(extractor.empty());
+
+    const auto& [words] = extractor.extractTuple<1>();
+    EXPECT_EQ(words, "words"sv);
+    EXPECT_FALSE(extractor.empty());
+
+    const auto& [number] = extractor.extractTuple<1>();
+    EXPECT_EQ(number, "12345"sv);
+    EXPECT_TRUE(extractor.empty());
+
+    extractor = QueryExtractor{ query };
+    const auto& [_1, _2, _3, _4] = extractor.extractTuple<4>();
+    EXPECT_EQ(_1, "some"sv);
+    EXPECT_EQ(_2, "words"sv);
+    EXPECT_EQ(_3, "12345"sv);
+    EXPECT_EQ(_4, ""sv);
+    EXPECT_TRUE(extractor.empty());
+}
+
 } // namespace LunarDB::Moonlight::Implementation::Tests

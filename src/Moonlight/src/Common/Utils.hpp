@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QueryData.hpp"
+#include "Errors.hpp"
 
 #include <string_view>
 #include <vector>
