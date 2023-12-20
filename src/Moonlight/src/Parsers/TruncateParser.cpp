@@ -16,7 +16,14 @@ PROVIDE_QUERY_PARSER_IMPL(Truncate, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Truncate);
 
-    // TODO: provide implementation
+    QueryExtractor extractor{ query };
+    const auto [truncate, structure, structure_name] = extractor.extractTuple<3>();
+    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+
+    Utils::checkKeywordEquals(truncate, "truncate");
+    Utils::checkKeywordEquals(structure, "structure");
+
+    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
     RETURN_PARSED_QUERY;
 }
