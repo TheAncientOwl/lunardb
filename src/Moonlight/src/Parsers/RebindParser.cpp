@@ -16,7 +16,6 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Rebind);
 
-    QueryExtractor extractor{ query };
     const auto [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
 
     if (!extractor.empty())

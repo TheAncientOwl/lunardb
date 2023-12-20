@@ -16,7 +16,6 @@ PROVIDE_QUERY_PARSER_IMPL(Rename, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Rename);
 
-    QueryExtractor extractor{ query };
     const auto [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); };
 

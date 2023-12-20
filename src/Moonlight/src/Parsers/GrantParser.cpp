@@ -18,8 +18,6 @@ PROVIDE_QUERY_PARSER_IMPL(Grant, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Grant);
 
-    QueryExtractor extractor{ query };
-
     const auto grant = extractor.extractOne();
     Utils::checkKeywordEquals(grant, "grant");
 

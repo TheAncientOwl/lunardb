@@ -1,17 +1,18 @@
 #pragma once
 
 #include "ParsedQuery.hpp"
+#include "QueryExtractor.hpp"
 
 #define PROVIDE_QUERY_PARSER(Specialization) \
 class Specialization ## Parser : public IQueryParser { \
 public: \
     inline const char* queryPrefix() const override; \
-    API::ParsedQuery parse(std::string_view query) const override; \
+    API::ParsedQuery parse(QueryExtractor extractor) const override; \
 };
 
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
 inline const char* Specialization ## Parser::queryPrefix() const { return QueryPrefix; } \
-API::ParsedQuery Specialization ## Parser::parse(std::string_view query) const
+API::ParsedQuery Specialization ## Parser::parse(QueryExtractor extractor) const
 
 #define DECLARE_PARSED_QUERY(name, type) \
 API::ParsedQuery parsed_query = API::ParsedQuery::make<QueryData::type>(); \
@@ -26,7 +27,7 @@ class IQueryParser
 {
 public: // methods
     virtual inline const char* queryPrefix() const = 0;
-    virtual API::ParsedQuery parse(std::string_view query) const = 0;
+    virtual API::ParsedQuery parse(QueryExtractor extractor) const = 0;
 
 public:
     IQueryParser() = default;

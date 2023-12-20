@@ -18,8 +18,6 @@ PROVIDE_QUERY_PARSER_IMPL(Revoke, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Revoke);
 
-    QueryExtractor extractor{ query };
-
     const auto revoke = extractor.extractOne();
     Utils::checkKeywordEquals(revoke, "revoke");
 
