@@ -16,7 +16,16 @@ PROVIDE_QUERY_PARSER_IMPL(Rollback, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Rollback);
 
-    // TODO: provide implementation
+    QueryExtractor extractor(query);
+    const auto [rollback, hash] = extractor.extractTuple<2>();
+    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+
+    Utils::checkKeyword(rollback, "rollback");
+
+    if (!hash.empty())
+    {
+        obj.hash = hash;
+    }
 
     RETURN_PARSED_QUERY;
 }
