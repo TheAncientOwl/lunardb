@@ -57,10 +57,10 @@ TEST(RebindParserTest, success04)
 TEST(RebindParserTest, fail01)
 {
     EXPECT_FAIL("rebind SomeStructure:: someField to SomeTable");
+    EXPECT_FAIL("rebind SomeStructure:: to SomeTable");
+    EXPECT_FAIL("rebind ::someField to SomeTable");
     EXPECT_FAIL("rebind SomeStructure someField to SomeTable");
     EXPECT_FAIL("rebind SomeStructure   ::someField to SomeTable");
-    EXPECT_FAIL("rebind SomeStructure::someField to SomeTable clean");
-    EXPECT_FAIL("rebind SomeStructure::someField to SomeTable;;");
     EXPECT_FAIL("rebind SomeStructure::someField");
     EXPECT_FAIL("rebind someField to SomeTable clean");
     EXPECT_FAIL("rebind SomeStructure::someField to ");

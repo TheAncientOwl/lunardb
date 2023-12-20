@@ -16,6 +16,7 @@ std::runtime_error buildError(Args&&... args)
 std::runtime_error buildUnknownKeywordError(std::string_view keyword);
 std::runtime_error buildInvalidQueryFormatError(std::string_view query_type);
 std::runtime_error buildMissingError(std::string_view what);
+std::runtime_error buildUnknownSequenceError(std::string_view seq);
 
 void checkKeyword(std::string_view actual, std::string_view expected);
 
