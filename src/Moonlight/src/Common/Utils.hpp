@@ -7,9 +7,6 @@
 #include <string_view>
 #include <vector>
 #include <utility>
-#include <algorithm>
-#include <set>
-#include <functional>
 
 namespace LunarDB::Moonlight::Utils {
 
@@ -41,21 +38,5 @@ std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier 
 QueryData::WhereClause parseWhereClause(std::string_view where);
 
 std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
-
-template<typename T>
-std::vector<T> parseUnique(const std::vector<std::string_view>& values, std::function<T(std::string_view)> parser)
-{
-    std::set<T> set{};
-    std::transform(values.begin(), values.end(), std::inserter(set, set.begin()), parser);
-
-    std::vector<T> out{};
-    out.reserve(set.size());
-    for (auto it = set.begin(); it != set.end();)
-    {
-        out.push_back(std::move(set.extract(it++).value()));
-    }
-
-    return out;
-}
 
 } // namespace LunarDB::Moonlight::Utils

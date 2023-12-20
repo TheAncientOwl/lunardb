@@ -1,10 +1,13 @@
 #pragma once
 
-#include <string_view>
-#include <vector>
+#include <algorithm>
 #include <array>
-#include <tuple>
+#include <functional>
 #include <ranges>
+#include <set>
+#include <string_view>
+#include <tuple>
+#include <vector>
 
 namespace LunarDB::Moonlight::Implementation {
 
@@ -32,15 +35,34 @@ public:
 
     ///
     /// @brief Removes Size words from left part of query
-    /// @return tuple of Size string_views
+    /// @return Tuple of Size string_views
     ///
     template<std::size_t Size>
     decltype(auto) extractTuple();
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
+    /// @return List of words as string_views
     ///
     std::vector<std::string_view> extractList();
+
+    ///
+    /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
+    /// @tparam T Final type of list returned elements
+    /// @param parser Function string_view -> T
+    /// @return List of parsed words to T
+    ///
+    template<typename T>
+    std::vector<T> extractList(std::function<T(std::string_view)> parser);
+
+    ///
+    /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
+    /// @tparam T Final type of list returned elements
+    /// @param parser Function string_view -> T
+    /// @return List of unique parsed words to T
+    ///
+    template<typename T>
+    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser);
 
     ///
     /// @brief Self explanatory
@@ -89,6 +111,36 @@ inline decltype(auto) QueryExtractor::extractTuple()
     }
 
     return makeTuple<Size>(arr);
+}
+
+template<typename T>
+inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser)
+{
+    const auto values = extractList();
+
+    std::vector<T> out{};
+    out.reserve(values.size());
+    std::transform(values.begin(), values.end(), std::back_inserter(out), parser);
+
+    return out;
+}
+
+template<typename T>
+inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser)
+{
+    const auto values = extractList();
+
+    std::set<T> set{};
+    std::transform(values.begin(), values.end(), std::inserter(set, set.begin()), parser);
+
+    std::vector<T> out{};
+    out.reserve(set.size());
+    for (auto it = set.begin(); it != set.end();)
+    {
+        out.push_back(std::move(set.extract(it++).value()));
+    }
+
+    return out;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

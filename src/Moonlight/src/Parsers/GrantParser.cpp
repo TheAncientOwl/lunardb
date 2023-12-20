@@ -22,11 +22,9 @@ PROVIDE_QUERY_PARSER_IMPL(Grant, c_query_prefix)
     Utils::checkKeywordEquals(grant, "grant");
 
     // parse permissions
-    const auto permissions = extractor.extractList();
-    if (permissions.empty()) { throw Utils::buildMissingError("permissions"); }
-
     using namespace QueryData::Primitives;
-    obj.permissions = Utils::parseUnique<EUserPermissionType>(permissions, UserPermissionType::toLiteral);
+    obj.permissions = extractor.extractUniqueList<EUserPermissionType>(UserPermissionType::toLiteral);
+    if (obj.permissions.empty()) { throw Utils::buildMissingError("permissions"); }
 
     // parse user and structure names
     const auto [to, user_name, on, structure_name] = extractor.extractTuple<4>();
