@@ -85,16 +85,16 @@ TEST(RenameParserTest, success07)
 
 TEST(RenameParserTest, fail01)
 {
-    EXPECT_FAIL("rename structure from SomeStructure to SomeStructureNew");
+    EXPECT_FAIL("rename structure from SomeStructure to Some StructureNew");
     EXPECT_FAIL("rename structure from Some Structure to SomeStructureNew");
     EXPECT_FAIL("rename structure SomeStructure to SomeStructureNew");
     EXPECT_FAIL("rename from SomeStructure to SomeStructureNew");
 
-    EXPECT_FAIL("rename database from SomeDatabase to SomeDatabaseNew");
+    EXPECT_FAIL("rename database from SomeDatabase to Some DatabaseNew");
     EXPECT_FAIL("rename database from Some Database to SomeDatabaseNew");
     EXPECT_FAIL("rename database SomeDatabase to SomeDatabaseNew");
 
-    EXPECT_FAIL("rename field from SomeField to SomeFieldNew");
+    EXPECT_FAIL("rename field from SomeField to Some FieldNew");
     EXPECT_FAIL("rename field from SomeStructure SomeField to SomeStructure::SomeFieldNew");
     EXPECT_FAIL("rename field from SomeStructure::SomeField to SomeStructure SomeFieldNew");
     EXPECT_FAIL("rename field SomeStructure::SomeField to SomeStructure::SomeFieldNew");

@@ -19,5 +19,6 @@ std::runtime_error buildMissingError(std::string_view what);
 std::runtime_error buildUnknownSequenceError(std::string_view seq);
 
 void checkKeyword(std::string_view actual, std::string_view expected);
+std::string_view checkNotEmpty(std::string_view src, std::string_view err);
 
 } // namespace LunarDB::Moonlight::Utils

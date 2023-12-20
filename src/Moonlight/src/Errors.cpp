@@ -30,4 +30,14 @@ void checkKeyword(std::string_view actual, std::string_view expected)
     }
 }
 
+std::string_view checkNotEmpty(std::string_view src, std::string_view err)
+{
+    if (src.empty())
+    {
+        throw buildMissingError(err);
+    }
+
+    return src;
+}
+
 } // namespace LunarDB::Moonlight::Utils
