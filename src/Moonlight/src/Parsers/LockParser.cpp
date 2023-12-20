@@ -28,7 +28,18 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
     std::ignore = Utils::checkNotEmpty(state, "concurrency state (on/off)");
-    obj.concurrency = Utils::equalsIgnoreCase(state, "on");
+    if (Utils::equalsIgnoreCase(state, "on"))
+    {
+        obj.concurrency = true;
+    }
+    else if (Utils::equalsIgnoreCase(state, "off"))
+    {
+        obj.concurrency = false;
+    }
+    else
+    {
+        throw Utils::buildUnknownKeywordError(state);
+    }
 
     RETURN_PARSED_QUERY;
 }
