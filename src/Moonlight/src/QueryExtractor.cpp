@@ -39,19 +39,6 @@ std::string_view QueryExtractor::extractOne()
     }
 }
 
-std::vector<std::string_view> QueryExtractor::extractMultiple(std::size_t count)
-{
-    std::vector<std::string_view> multiple{};
-    multiple.reserve(count);
-
-    for (std::size_t i = 0; i < count; ++i)
-    {
-        multiple.emplace_back(extractOne());
-    }
-
-    return multiple;
-}
-
 std::vector<std::string_view> QueryExtractor::extractList()
 {
     if (m_data.front() != '[')

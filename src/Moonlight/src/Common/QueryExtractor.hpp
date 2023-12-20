@@ -32,9 +32,10 @@ public:
     ///
     /// @see QueryExtractor::extractOne, but multiple 
     ///
-    std::vector<std::string_view> extractMultiple(std::size_t count);
+    template<std::size_t Size>
+    std::vector<std::string_view> extractMultiple();
 
-    template<std::size_t N>
+    template<std::size_t Size>
     decltype(auto) extractTuple();
 
     ///
@@ -61,16 +62,16 @@ private:
     std::string_view m_data;
 
 private:
-    template <std::size_t N, std::size_t Index = 0>
+    template <std::size_t Size, std::size_t Index = 0>
     struct StringViewTupleGenerator
     {
-        static auto generate(const std::array<std::string_view, N>& views)
+        static auto generate(const std::array<std::string_view, Size>& views)
         {
-            if constexpr (Index < N)
+            if constexpr (Index < Size)
             {
                 return std::tuple_cat(
                     std::make_tuple(views[Index]),
-                    StringViewTupleGenerator<N, Index + 1>::generate(views)
+                    StringViewTupleGenerator<Size, Index + 1>::generate(views)
                 );
             }
             else
@@ -81,17 +82,31 @@ private:
     };
 };
 
-template<std::size_t N>
+template<std::size_t Size>
+inline std::vector<std::string_view> QueryExtractor::extractMultiple()
+{
+    std::vector<std::string_view> multiple{};
+    multiple.reserve(Size);
+
+    for (std::size_t i = 0; i < Size; ++i)
+    {
+        multiple.emplace_back(extractOne());
+    }
+
+    return multiple;
+}
+
+template<std::size_t Size>
 inline decltype(auto) QueryExtractor::extractTuple()
 {
-    std::array<std::string_view, N> parts{};
+    std::array<std::string_view, Size> parts{};
 
-    for (std::size_t i = 0; i < N; ++i)
+    for (std::size_t i = 0; i < Size; ++i)
     {
         parts[i] = extractOne();
     }
 
-    return StringViewTupleGenerator<N>::generate(parts);
+    return StringViewTupleGenerator<Size>::generate(parts);
 }
 
 } // namespace LunarDB::Moonlight::Implementation
