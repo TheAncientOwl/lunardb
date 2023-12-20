@@ -77,4 +77,10 @@ bool QueryExtractor::empty() const
     return m_data.empty();
 }
 
+void QueryExtractor::remove_prefix(std::size_t size)
+{
+    m_data.remove_prefix(size);
+    Utils::ltrim(m_data);
+}
+
 } // namespace LunarDB::Moonlight::Implementation

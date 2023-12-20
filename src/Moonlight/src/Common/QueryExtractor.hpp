@@ -59,6 +59,11 @@ public:
     ///
     bool empty() const;
 
+    ///
+    /// @brief Self explanatory
+    ///
+    void remove_prefix(std::size_t size);
+
 private:
     std::string_view m_data;
 
