@@ -186,8 +186,6 @@ struct RevokeInit : public Revoke
 struct CommitInit : public Commit
 {
     using base_t = Commit;
-
-    CommitInit& hash(const std::optional<std::string>& value);
 };
 
 struct RollbackInit : public Rollback

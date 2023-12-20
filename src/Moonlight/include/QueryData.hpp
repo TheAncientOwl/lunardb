@@ -155,10 +155,7 @@ struct Revoke
     std::optional<std::string> structure_name;
 };
 
-struct Commit
-{
-    std::optional<std::string> hash;
-};
+struct Commit {};
 
 struct Rollback
 {

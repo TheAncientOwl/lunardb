@@ -76,8 +76,6 @@ RevokeInit& RevokeInit::permissions(const std::vector<Primitives::EUserPermissio
 RevokeInit& RevokeInit::from_user(const std::string& value) { return base_t::from_user = value, *this; }
 RevokeInit& RevokeInit::structure_name(const std::optional<std::string>& value) { return base_t::structure_name = value, *this; }
 
-CommitInit& CommitInit::hash(const std::optional<std::string>& value) { return base_t::hash = value, *this; }
-
 RollbackInit& RollbackInit::hash(const std::optional<std::string>& value) { return base_t::hash = value, *this; }
 
 SavePointInit& SavePointInit::hash(const std::optional<std::string>& value) { return base_t::hash = value, *this; }

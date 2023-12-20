@@ -9,15 +9,7 @@ using namespace QueryData;
 TEST(CommitParserTest, success01)
 {
     const auto query = "commit";
-    const auto expected = Init::CommitInit{}.hash(std::nullopt);
-
-    EXPECT_SUCCESS(query, expected);
-}
-
-TEST(CommitParserTest, success02)
-{
-    const auto query = "commit;";
-    const auto expected = Init::CommitInit{}.hash(std::nullopt);
+    const auto expected = Init::CommitInit{};
 
     EXPECT_SUCCESS(query, expected);
 }
