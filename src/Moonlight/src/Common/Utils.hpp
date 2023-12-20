@@ -6,6 +6,7 @@
 
 #include <string_view>
 #include <vector>
+#include <utility>
 
 namespace LunarDB::Moonlight::Utils {
 
@@ -35,5 +36,7 @@ enum class ESplitModifier
 std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier = ESplitModifier::None);
 
 QueryData::WhereClause parseWhereClause(std::string_view where);
+
+std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
 
 } // namespace LunarDB::Moonlight::Utils

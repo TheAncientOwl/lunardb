@@ -130,4 +130,23 @@ QueryData::WhereClause parseWhereClause(std::string_view where)
     return out;
 }
 
+std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str)
+{
+    const auto first_sep_pos{ str.find_first_of(':') };
+    const auto last_sep_pos{ str.find_last_of(':') };
+
+    if (first_sep_pos == std::string_view::npos || last_sep_pos == std::string_view::npos ||
+        first_sep_pos == last_sep_pos)
+    {
+        throw buildMissingError("':' symbol in resolution operator");
+    }
+
+    if (last_sep_pos - first_sep_pos > 1)
+    {
+        throw buildUnknownSequenceError(str.substr(last_sep_pos, first_sep_pos - last_sep_pos + 1));
+    }
+
+    return std::make_pair(str.substr(0, first_sep_pos), str.substr(last_sep_pos + 1, str.length() - last_sep_pos));
+}
+
 } // namespace LunarDB::Moonlight::Utils

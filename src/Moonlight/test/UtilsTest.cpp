@@ -182,4 +182,30 @@ TEST(UtilsTest, splitAtComma07)
     EXPECT_EQ(out, expected);
 }
 
+TEST(UtilsTest, parseResolutionOperator)
+{
+    {
+        const auto [left, right] = parseResolutionOperator("String1::String2");
+        EXPECT_EQ(left, "String1"sv);
+        EXPECT_EQ(right, "String2"sv);
+    }
+
+    {
+        const auto [left, right] = parseResolutionOperator("::String2");
+        EXPECT_EQ(left, ""sv);
+        EXPECT_EQ(right, "String2"sv);
+    }
+
+    {
+        const auto [left, right] = parseResolutionOperator("String1::");
+        EXPECT_EQ(left, "String1"sv);
+        EXPECT_EQ(right, ""sv);
+    }
+
+    EXPECT_THROW({ parseResolutionOperator(""); }, std::runtime_error);
+    EXPECT_THROW({ parseResolutionOperator("String1:String2"); }, std::runtime_error);
+    EXPECT_THROW({ parseResolutionOperator("String1 String2"); }, std::runtime_error);
+    EXPECT_THROW({ parseResolutionOperator("String1:dadsd:String2"); }, std::runtime_error);
+}
+
 } // namespace LunarDB::Moonlight::Utils::Tests
