@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "database" };
 
 PROVIDE_QUERY_PARSER_IMPL(Database, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Database);
+    DECLARE_PARSED_QUERY(Database);
 
     // TODO: provide implementation
 

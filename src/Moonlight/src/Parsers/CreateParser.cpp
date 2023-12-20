@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "create" };
 
 PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Create);
+    DECLARE_PARSED_QUERY(Create);
 
     // TODO: provide implementation
 

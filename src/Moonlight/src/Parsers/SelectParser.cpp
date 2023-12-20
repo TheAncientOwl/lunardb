@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "select" };
 
 PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Select);
+    DECLARE_PARSED_QUERY(Select);
 
     // TODO: provide implementation
 

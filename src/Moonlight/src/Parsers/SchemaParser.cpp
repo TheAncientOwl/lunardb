@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "schema" };
 
 PROVIDE_QUERY_PARSER_IMPL(Schema, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Schema);
+    DECLARE_PARSED_QUERY(Schema);
 
     // TODO: provide implementation
 

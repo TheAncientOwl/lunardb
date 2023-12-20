@@ -35,7 +35,7 @@ Mapping parseMapping(std::string_view str)
 
 PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Migrate);
+    DECLARE_PARSED_QUERY(Migrate);
 
     const auto [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
 
@@ -43,20 +43,20 @@ PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
     Utils::checkKeywordEquals(structure, "structure");
     Utils::checkKeywordEquals(to, "to");
 
-    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
-    obj.new_schema_name = Utils::checkNotEmpty(schema_name, "new schema name");
+    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    out.new_schema_name = Utils::checkNotEmpty(schema_name, "new schema name");
 
     if (!using_.empty())
     {
         Utils::checkKeywordEquals(using_, "using");
 
-        obj.mappings = extractor.extractList<Mapping>(parseMapping);
+        out.mappings = extractor.extractList<Mapping>(parseMapping);
 
-        if (obj.mappings->empty()) { throw Utils::buildMissingError("mappings"); }
+        if (out.mappings->empty()) { throw Utils::buildMissingError("mappings"); }
 
         std::unordered_set<std::string> olds{};
         std::unordered_set<std::string> news{};
-        for (const auto& mapping : *obj.mappings)
+        for (const auto& mapping : *out.mappings)
         {
             const auto& handle_value = [](auto& set, const auto& value) -> void {
                 if (set.find(value) != set.end())

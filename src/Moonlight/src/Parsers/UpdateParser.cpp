@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "update" };
 
 PROVIDE_QUERY_PARSER_IMPL(Update, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Update);
+    DECLARE_PARSED_QUERY(Update);
 
     // TODO: provide implementation
 

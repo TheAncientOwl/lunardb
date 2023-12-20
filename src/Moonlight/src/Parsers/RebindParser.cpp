@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "rebind" };
 
 PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Rebind);
+    DECLARE_PARSED_QUERY(Rebind);
 
     const auto [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
 
@@ -22,11 +22,11 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
     {
         const auto clean = extractor.extractOne();
         Utils::checkKeywordEquals(clean, "clean");
-        obj.clean = true;
+        out.clean = true;
     }
     else
     {
-        obj.clean = false;
+        out.clean = false;
     }
 
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
@@ -36,9 +36,9 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
 
     const auto [structure_name, field] = Utils::parseResolutionOperator(structure_field);
 
-    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
-    obj.field = Utils::checkNotEmpty(field, "field name");
-    obj.bind_structure_name = Utils::checkNotEmpty(bind_structure_name, "rebind structure name");
+    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    out.field = Utils::checkNotEmpty(field, "field name");
+    out.bind_structure_name = Utils::checkNotEmpty(bind_structure_name, "rebind structure name");
 
     RETURN_PARSED_QUERY;
 }

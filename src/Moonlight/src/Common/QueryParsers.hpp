@@ -14,12 +14,12 @@ public: \
 inline const char* Specialization ## Parser::queryPrefix() const { return QueryPrefix; } \
 API::ParsedQuery Specialization ## Parser::parse(QueryExtractor extractor) const
 
-#define DECLARE_PARSED_QUERY(name, type) \
-API::ParsedQuery parsed_query = API::ParsedQuery::make<QueryData::type>(); \
-auto& name = parsed_query.get<QueryData::type>()
+#define DECLARE_PARSED_QUERY(type) \
+API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::type>(); \
+auto& out = out_parsed_query.get<QueryData::type>()
 
 #define RETURN_PARSED_QUERY \
-return parsed_query
+return out_parsed_query
 
 namespace LunarDB::Moonlight::Implementation {
 

@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "delete" };
 
 PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Delete);
+    DECLARE_PARSED_QUERY(Delete);
 
     // TODO: provide implementation
 

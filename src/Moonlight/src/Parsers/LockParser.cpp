@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "set" };
 
 PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Lock);
+    DECLARE_PARSED_QUERY(Lock);
 
     const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
@@ -24,16 +24,16 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     Utils::checkKeywordEquals(on, "on");
     Utils::checkKeywordEquals(structure, "structure");
 
-    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
     std::ignore = Utils::checkNotEmpty(state, "concurrency state (on/off)");
     if (Utils::equalsIgnoreCase(state, "on"))
     {
-        obj.concurrency = true;
+        out.concurrency = true;
     }
     else if (Utils::equalsIgnoreCase(state, "off"))
     {
-        obj.concurrency = false;
+        out.concurrency = false;
     }
     else
     {

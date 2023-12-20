@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "index" };
 
 PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Index);
+    DECLARE_PARSED_QUERY(Index);
 
     // TODO: provide implementation
 

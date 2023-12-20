@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "drop" };
 
 PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, Drop);
+    DECLARE_PARSED_QUERY(Drop);
 
     const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
@@ -22,16 +22,16 @@ PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
     Utils::checkKeywordEquals(drop, "drop");
     Utils::checkKeywordEquals(structure, "structure");
 
-    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
     if (cascade.empty())
     {
-        obj.cascade = false;
+        out.cascade = false;
     }
     else
     {
         Utils::checkKeywordEquals(cascade, "cascade");
-        obj.cascade = true;
+        out.cascade = true;
     }
 
     RETURN_PARSED_QUERY;

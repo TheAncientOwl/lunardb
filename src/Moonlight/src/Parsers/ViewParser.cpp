@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "view" };
 
 PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, View);
+    DECLARE_PARSED_QUERY(View);
 
     // TODO: provide implementation
 

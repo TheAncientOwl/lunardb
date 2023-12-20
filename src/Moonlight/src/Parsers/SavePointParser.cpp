@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{ "savepoint" };
 
 PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
 {
-    DECLARE_PARSED_QUERY(obj, SavePoint);
+    DECLARE_PARSED_QUERY(SavePoint);
 
     const auto [savepoint, hash] = extractor.extractTuple<2>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
@@ -23,7 +23,7 @@ PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
 
     if (!hash.empty())
     {
-        obj.hash = hash;
+        out.hash = hash;
     }
 
     RETURN_PARSED_QUERY;
