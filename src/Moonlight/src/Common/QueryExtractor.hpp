@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <tuple>
+#include <ranges>
 
 namespace LunarDB::Moonlight::Implementation {
 
@@ -63,23 +64,20 @@ private:
 
 private:
     template <std::size_t Size, std::size_t Index = 0>
-    struct StringViewTupleGenerator
+    auto makeTuple(const std::array<std::string_view, Size>& views)
     {
-        static auto generate(const std::array<std::string_view, Size>& views)
+        if constexpr (Index < Size)
         {
-            if constexpr (Index < Size)
-            {
-                return std::tuple_cat(
-                    std::make_tuple(views[Index]),
-                    StringViewTupleGenerator<Size, Index + 1>::generate(views)
-                );
-            }
-            else
-            {
-                return std::make_tuple();
-            }
+            return std::tuple_cat(
+                std::make_tuple(views[Index]),
+                makeTuple<Size, Index + 1>(views)
+            );
         }
-    };
+        else
+        {
+            return std::make_tuple();
+        }
+    }
 };
 
 template<std::size_t Size>
@@ -88,7 +86,7 @@ inline std::vector<std::string_view> QueryExtractor::extractMultiple()
     std::vector<std::string_view> multiple{};
     multiple.reserve(Size);
 
-    for (std::size_t i = 0; i < Size; ++i)
+    for (const auto _ : std::ranges::iota_view<std::size_t, std::size_t>(0, Size))
     {
         multiple.emplace_back(extractOne());
     }
@@ -99,14 +97,14 @@ inline std::vector<std::string_view> QueryExtractor::extractMultiple()
 template<std::size_t Size>
 inline decltype(auto) QueryExtractor::extractTuple()
 {
-    std::array<std::string_view, Size> parts{};
+    std::array<std::string_view, Size> arr{};
 
-    for (std::size_t i = 0; i < Size; ++i)
+    for (const auto i : std::ranges::iota_view<std::size_t, std::size_t>(0, Size))
     {
-        parts[i] = extractOne();
+        arr[i] = extractOne();
     }
 
-    return StringViewTupleGenerator<Size>::generate(parts);
+    return makeTuple<Size>(arr);
 }
 
 } // namespace LunarDB::Moonlight::Implementation
