@@ -37,13 +37,9 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
 
     const auto [structure_name, field] = Utils::parseResolutionOperator(structure_field);
 
-    if (structure_name.empty()) { throw Utils::buildMissingError("structure name"); }
-    if (field.empty()) { throw Utils::buildMissingError("field name"); }
-    if (bind_structure_name.empty()) { throw Utils::buildMissingError("rebind structure name"); }
-
-    obj.structure_name = structure_name;
-    obj.field = field;
-    obj.bind_structure_name = bind_structure_name;
+    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    obj.field = Utils::checkNotEmpty(field, "field name");
+    obj.bind_structure_name = Utils::checkNotEmpty(bind_structure_name, "rebind structure name");
 
     RETURN_PARSED_QUERY;
 }

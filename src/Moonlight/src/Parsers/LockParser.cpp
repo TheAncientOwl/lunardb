@@ -25,27 +25,10 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     Utils::checkKeyword(on, "on");
     Utils::checkKeyword(structure, "structure");
 
-    if (structure_name.empty())
-    {
-        throw Utils::buildMissingError("structure name");
-    }
-    else
-    {
-        obj.structure_name = structure_name;
-    }
+    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
-    if (state.empty())
-    {
-        throw Utils::buildMissingError("concurrency state (on/off)");
-    }
-    else if (Utils::equalsIgnoreCase(state, "on"))
-    {
-        obj.concurrency = true;
-    }
-    else
-    {
-        obj.concurrency = false;
-    }
+    std::ignore = Utils::checkNotEmpty(state, "concurrency state (on/off)");
+    obj.concurrency = Utils::equalsIgnoreCase(state, "on");
 
     RETURN_PARSED_QUERY;
 }

@@ -23,26 +23,16 @@ PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
     Utils::checkKeyword(drop, "drop");
     Utils::checkKeyword(structure, "structure");
 
-    if (structure_name.empty())
-    {
-        throw Utils::buildMissingError("structure name");
-    }
-    else
-    {
-        obj.structure_name = structure_name;
-    }
+    obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 
     if (cascade.empty())
     {
         obj.cascade = false;
     }
-    else if (Utils::equalsIgnoreCase(cascade, "cascade"))
-    {
-        obj.cascade = true;
-    }
     else
     {
-        throw Utils::buildUnknownKeywordError(cascade);
+        Utils::checkKeyword(cascade, "cascade");
+        obj.cascade = true;
     }
 
     RETURN_PARSED_QUERY;
