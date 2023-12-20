@@ -83,6 +83,13 @@ TEST(MigrateParserTest, fail01)
         "   old_field3 => new_field3"
         "];");
 
+    EXPECT_FAIL("migrate structure SomeStructure to NewSchema using ["
+        "   old_field1 => new_field1,"
+        "   old_field2 => new_field2,"
+        "   old_field3 => new_field3,"
+        "   old_field3 => new_field3"
+        "];");
+
     EXPECT_FAIL("migrate structure SomeStructure to NewSchema using "
         "   old_field1 => new_field1,"
         "   old_field2 => new_field2,"
