@@ -2,6 +2,7 @@
 
 #include "QueryData.hpp"
 #include "Errors.hpp"
+#include "QueryExtractor.hpp"
 
 #include <string_view>
 #include <vector>
