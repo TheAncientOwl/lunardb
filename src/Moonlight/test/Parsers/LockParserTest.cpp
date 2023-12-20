@@ -31,7 +31,7 @@ TEST(LockParserTest, success03)
     const auto query = "set concurrency on structure StructureName off";
     const auto expected = Init::LockInit{}
         .structure_name("StructureName")
-        .concurrency(true);
+        .concurrency(false);
 
     EXPECT_SUCCESS(query, expected);
 }
@@ -41,7 +41,7 @@ TEST(LockParserTest, success04)
     const auto query = "    set  concurrency         on      structure      \n  StructureName   off  \n;     ";
     const auto expected = Init::LockInit{}
         .structure_name("StructureName")
-        .concurrency(true);
+        .concurrency(false);
 
     EXPECT_SUCCESS(query, expected);
 }
