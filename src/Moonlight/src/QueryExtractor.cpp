@@ -61,12 +61,6 @@ std::vector<std::string_view> QueryExtractor::extractList()
     return Utils::splitAtComma(list_str);
 }
 
-std::string_view QueryExtractor::extractIfCondition()
-{
-    // TODO: Provide implementation
-    return "";
-}
-
 std::string_view QueryExtractor::data() const
 {
     return m_data;

@@ -22,27 +22,13 @@ PROVIDE_QUERY_PARSER_IMPL(Revoke, c_query_prefix)
     Utils::checkKeywordEquals(revoke, "revoke");
 
     // parse permissions
-    if (extractor.data().front() != '[') { throw Utils::buildMissingError("["); }
-
-    const auto list_end = extractor.data().find_last_of(']');
-    if (list_end == std::string_view::npos) { throw Utils::buildError("]"); }
-
-    const auto permissions = Utils::splitAtComma(extractor.data().substr(1, list_end - 1));
-
+    const auto permissions = extractor.extractList();
     if (permissions.empty()) { throw Utils::buildMissingError("permissions"); }
 
-    std::set<QueryData::Primitives::EUserPermissionType> permissions_set{};
-    std::transform(
-        permissions.begin(), permissions.end(),
-        std::inserter(permissions_set, permissions_set.begin()),
-        [](auto permission) {return QueryData::Primitives::UserPermissionType::toLiteral(permission);}
-    );
-
-    obj.permissions = std::vector<QueryData::Primitives::EUserPermissionType>{};
-    std::copy(permissions_set.begin(), permissions_set.end(), std::back_inserter(obj.permissions));
+    using namespace QueryData::Primitives;
+    obj.permissions = Utils::parseUnique<EUserPermissionType>(permissions, UserPermissionType::toLiteral);
 
     // parse user and structure names
-    extractor.remove_prefix(list_end + 1);
     const auto [from, user_name, on, structure_name] = extractor.extractTuple<4>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 

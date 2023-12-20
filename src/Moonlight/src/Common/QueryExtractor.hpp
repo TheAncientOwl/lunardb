@@ -31,11 +31,9 @@ public:
     std::string_view extractOne();
 
     ///
-    /// @see QueryExtractor::extractOne, but multiple 
+    /// @brief Removes Size words from left part of query
+    /// @return tuple of Size string_views
     ///
-    template<std::size_t Size>
-    std::vector<std::string_view> extractMultiple();
-
     template<std::size_t Size>
     decltype(auto) extractTuple();
 
@@ -43,11 +41,6 @@ public:
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     ///
     std::vector<std::string_view> extractList();
-
-    ///
-    /// @brief Self explanatory
-    ///
-    std::string_view extractIfCondition();
 
     ///
     /// @brief Self explanatory
@@ -84,20 +77,6 @@ private:
         }
     }
 };
-
-template<std::size_t Size>
-inline std::vector<std::string_view> QueryExtractor::extractMultiple()
-{
-    std::vector<std::string_view> multiple{};
-    multiple.reserve(Size);
-
-    for (const auto _ : std::ranges::iota_view<std::size_t, std::size_t>(0, Size))
-    {
-        multiple.emplace_back(extractOne());
-    }
-
-    return multiple;
-}
 
 template<std::size_t Size>
 inline decltype(auto) QueryExtractor::extractTuple()
