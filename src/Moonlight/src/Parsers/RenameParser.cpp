@@ -20,9 +20,9 @@ PROVIDE_QUERY_PARSER_IMPL(Rename, c_query_prefix)
     const auto [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); };
 
-    Utils::checkKeyword(rename, "rename");
-    Utils::checkKeyword(from, "from");
-    Utils::checkKeyword(to, "to");
+    Utils::checkKeywordEquals(rename, "rename");
+    Utils::checkKeywordEquals(from, "from");
+    Utils::checkKeywordEquals(to, "to");
 
     obj.type = QueryData::Primitives::RenameType::toLiteral(Utils::checkNotEmpty(type, "rename type"));
     obj.old_name = Utils::checkNotEmpty(old_name, "old name");

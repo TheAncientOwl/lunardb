@@ -20,10 +20,10 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeyword(set, "set");
-    Utils::checkKeyword(concurrency, "concurrency");
-    Utils::checkKeyword(on, "on");
-    Utils::checkKeyword(structure, "structure");
+    Utils::checkKeywordEquals(set, "set");
+    Utils::checkKeywordEquals(concurrency, "concurrency");
+    Utils::checkKeywordEquals(on, "on");
+    Utils::checkKeywordEquals(structure, "structure");
 
     obj.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
 

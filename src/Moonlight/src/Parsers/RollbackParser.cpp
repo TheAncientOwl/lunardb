@@ -20,7 +20,7 @@ PROVIDE_QUERY_PARSER_IMPL(Rollback, c_query_prefix)
     const auto [rollback, hash] = extractor.extractTuple<2>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeyword(rollback, "rollback");
+    Utils::checkKeywordEquals(rollback, "rollback");
 
     if (!hash.empty())
     {

@@ -20,7 +20,7 @@ PROVIDE_QUERY_PARSER_IMPL(Commit, c_query_prefix)
     const auto [commit] = extractor.extractTuple<1>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeyword(commit, "commit");
+    Utils::checkKeywordEquals(commit, "commit");
 
     RETURN_PARSED_QUERY;
 }

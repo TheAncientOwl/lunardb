@@ -22,7 +22,7 @@ std::runtime_error buildUnknownSequenceError(std::string_view seq)
     return buildError("Unknown sequence '", seq, "'");
 }
 
-void checkKeyword(std::string_view actual, std::string_view expected)
+void checkKeywordEquals(std::string_view actual, std::string_view expected)
 {
     if (!equalsIgnoreCase(expected, actual))
     {

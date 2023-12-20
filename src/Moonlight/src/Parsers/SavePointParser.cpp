@@ -20,7 +20,7 @@ PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
     const auto [savepoint, hash] = extractor.extractTuple<2>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeyword(savepoint, "savepoint");
+    Utils::checkKeywordEquals(savepoint, "savepoint");
 
     if (!hash.empty())
     {

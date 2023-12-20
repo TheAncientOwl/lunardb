@@ -22,7 +22,7 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
     if (!extractor.empty())
     {
         const auto clean = extractor.extractOne();
-        Utils::checkKeyword(clean, "clean");
+        Utils::checkKeywordEquals(clean, "clean");
         obj.clean = true;
     }
     else
@@ -32,8 +32,8 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
 
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeyword(rebind, "rebind");
-    Utils::checkKeyword(to, "to");
+    Utils::checkKeywordEquals(rebind, "rebind");
+    Utils::checkKeywordEquals(to, "to");
 
     const auto [structure_name, field] = Utils::parseResolutionOperator(structure_field);
 
