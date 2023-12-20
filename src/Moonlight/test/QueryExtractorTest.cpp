@@ -36,6 +36,20 @@ TEST(QueryExtractor, extractList)
     EXPECT_EQ(extractor.extractList(), expected);
     EXPECT_FALSE(extractor.empty());
     EXPECT_THROW(extractor.extractList(), std::runtime_error);
+
+    extractor = QueryExtractor{
+        "["
+        "   old_field1 => new_field1,"
+        "   old_field2 => new_field2,"
+        "   old_field3 => new_field3"
+        "]"
+    };
+    expected = std::vector<std::string_view>{
+        "old_field1 => new_field1"sv,
+        "old_field2 => new_field2"sv,
+        "old_field3 => new_field3"sv
+    };
+    EXPECT_EQ(extractor.extractList(), expected);
 }
 
 TEST(QueryExtractor, extractTuples)

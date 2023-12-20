@@ -54,7 +54,7 @@ std::vector<std::string_view> QueryExtractor::extractList()
         throw std::runtime_error("Missing ]");
     }
 
-    const auto list_str{ m_data.substr(0, closed_square_bracket_pos - 1) };
+    const auto list_str{ m_data.substr(0, closed_square_bracket_pos) };
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     Utils::ltrim(m_data);
 
