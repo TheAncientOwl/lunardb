@@ -1,5 +1,4 @@
 #include "QueryParsers.hpp"
-#include "QueryExtractor.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
