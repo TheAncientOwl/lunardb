@@ -15,8 +15,8 @@ constexpr auto c_query_prefix{ "drop" };
 PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Drop);
-    QueryExtractor extractor{ query };
 
+    QueryExtractor extractor{ query };
     const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 

@@ -17,7 +17,6 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     DECLARE_PARSED_QUERY(obj, Lock);
 
     QueryExtractor extractor{ query };
-
     const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 

@@ -16,8 +16,7 @@ PROVIDE_QUERY_PARSER_IMPL(Commit, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(obj, Commit);
 
-    QueryExtractor extractor(query);
-
+    QueryExtractor extractor{ query };
     const auto [commit] = extractor.extractTuple<1>();
     if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
