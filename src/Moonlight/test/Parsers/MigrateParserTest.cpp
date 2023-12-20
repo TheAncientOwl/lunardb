@@ -34,9 +34,9 @@ TEST(MigrateParserTest, success03)
         "migrate structure SomeStructure to NewSchema using ["
         "   old_field1 => new_field1,"
         "   old_field2 => new_field2,"
-        "   old_field1 => new_field1,"
         "   old_field3 => new_field3,"
-        "   old_field2 => new_field2"
+        "   old_field4 => new_field4,"
+        "   old_field5 => new_field5"
         "]";
     const auto expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
@@ -44,7 +44,9 @@ TEST(MigrateParserTest, success03)
         .mappings(std::vector<Migrate::Mapping>{
             { "old_field1", "new_field1" },
             { "old_field2", "new_field2" },
-            { "old_field3", "new_field3" }});
+            { "old_field3", "new_field3" },
+            { "old_field4", "new_field4" },
+            { "old_field5", "new_field5" }});
 
     EXPECT_SUCCESS(query, expected);
 }
