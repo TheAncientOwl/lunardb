@@ -34,12 +34,11 @@ PROVIDE_QUERY_PARSER_IMPL(Database, c_query_prefix)
 
         auto backup_path = extractor.data();
         Utils::trim(backup_path);
-        if (backup_path.front() != '"' || backup_path.back() != '"')
-        {
-            throw Utils::buildMissingError("\"");
-        }
-
-        out.backup_path = backup_path;
+        if (backup_path.empty() || backup_path.size() < 2) { throw Utils::buildMissingError("backup path"); }
+        if (backup_path.front() != '"' || backup_path.back() != '"') { throw Utils::buildMissingError("\""); }
+        backup_path.remove_prefix(1);
+        backup_path.remove_suffix(1);
+        out.backup_path = Utils::checkNotEmpty(backup_path, "backup path");
     }
     else if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
 
