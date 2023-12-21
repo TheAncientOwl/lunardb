@@ -341,7 +341,7 @@ TEST(CreateParserTest, multiple01)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Table_%Hash%")
+            .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -356,7 +356,7 @@ TEST(CreateParserTest, multiple02)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Table_%Hash%")
+            .structure_name_format("%TypeName%Table")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -371,7 +371,7 @@ TEST(CreateParserTest, multiple03)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Table_%Hash%")
+            .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -381,12 +381,12 @@ TEST(CreateParserTest, multiple04)
 {
     const auto query = R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")";
     const auto expected = Init::CreateInit{}
-        .is_volatile(false)
+        .is_volatile(true)
         .structure_type(Primitives::EStructureType::Table)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Table_%Hash%")
+            .structure_name_format("%TypeName%Table")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -401,7 +401,7 @@ TEST(CreateParserTest, multiple05)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Collection_%Hash%")
+            .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -431,7 +431,7 @@ TEST(CreateParserTest, multiple07)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
             .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
-            .structure_name_format("%TypeName%_Collection_%Hash%")
+            .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
     EXPECT_SUCCESS(query, expected);
@@ -441,7 +441,7 @@ TEST(CreateParserTest, multiple08)
 {
     const auto query = R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")";
     const auto expected = Init::CreateInit{}
-        .is_volatile(false)
+        .is_volatile(true)
         .structure_type(Primitives::EStructureType::Collection)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
@@ -459,8 +459,7 @@ TEST(CreateParserTest, singleNoBindingsFail01)
     EXPECT_FAIL("create volatile table SomeTable on SomeSchema blended");
     EXPECT_FAIL("create volatile table SomeTable SomeSchema blended");
     EXPECT_FAIL("create volatile table SomeTable SomeSchema blended");
-    EXPECT_FAIL("create volatile table SomeTable based on SomeSchema blended");
-    EXPECT_FAIL("create volatile table SomeTable based on blended");
+    EXPECT_FAIL("create volatile table based on SomeSchema blended");
     EXPECT_FAIL("create volatile table SomeTable based on Some Schema blended");
     EXPECT_FAIL("create volatile table Some Table based on SomeSchema blended");
 
@@ -469,8 +468,7 @@ TEST(CreateParserTest, singleNoBindingsFail01)
     EXPECT_FAIL("create volatile collection SomeCollection on SomeSchema blended");
     EXPECT_FAIL("create volatile collection SomeCollection SomeSchema blended");
     EXPECT_FAIL("create volatile collection SomeCollection SomeSchema blended");
-    EXPECT_FAIL("create volatile collection SomeCollection based on SomeSchema blended");
-    EXPECT_FAIL("create volatile collection SomeCollection based on blended");
+    EXPECT_FAIL("create volatile collection based on SomeSchema blended");
     EXPECT_FAIL("create volatile collection SomeCollection based on Some Schema blended");
     EXPECT_FAIL("create volatile collection Some Table based on SomeSchema blended");
 }
@@ -542,7 +540,8 @@ TEST(CreateParserTest, multipleFail01)
     EXPECT_FAIL(R"(create volatile tables [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
     EXPECT_FAIL(R"(create volatile tables from Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
     EXPECT_FAIL(R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 using format "%TypeName%Table")");
-    EXPECT_FAIL(R"(create volatile tables from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
+    EXPECT_FAIL(R"(create volatile tables from [ Schema1 Schema2, Schema3, Schema4 ] using format %TypeName%Table")");
+    EXPECT_FAIL(R"(create volatile tables from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Table)");
     EXPECT_FAIL(R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ] format "%TypeName%Table")");
     EXPECT_FAIL(R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ] using "%TypeName%Table")");
     EXPECT_FAIL(R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ] using format %TypeName%Table")");
@@ -552,7 +551,7 @@ TEST(CreateParserTest, multipleFail01)
     EXPECT_FAIL(R"(create tables [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
     EXPECT_FAIL(R"(create tables from Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
     EXPECT_FAIL(R"(create tables from [ Schema1, Schema2, Schema3, Schema4 using format "%TypeName%Table")");
-    EXPECT_FAIL(R"(create tables from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Table")");
+    EXPECT_FAIL(R"(create tables from [ Schema1 Schema2, Schema3, Schema4 ] format "%TypeName%Table")");
     EXPECT_FAIL(R"(create tables from [ Schema1, Schema2, Schema3, Schema4 ] format "%TypeName%Table")");
     EXPECT_FAIL(R"(create tables from [ Schema1, Schema2, Schema3, Schema4 ] using "%TypeName%Table")");
     EXPECT_FAIL(R"(create tables from [ Schema1, Schema2, Schema3, Schema4 ] using format %TypeName%Table")");
@@ -563,7 +562,8 @@ TEST(CreateParserTest, multipleFail01)
     EXPECT_FAIL(R"(create volatile collections [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create volatile collections from Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 using format "%TypeName%Collection")");
-    EXPECT_FAIL(R"(create volatile collections from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
+    EXPECT_FAIL(R"(create volatile collections from [ Schema1 Schema2, Schema3, Schema4 ] using format %TypeName%Collection")");
+    EXPECT_FAIL(R"(create volatile collections from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Collection)");
     EXPECT_FAIL(R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ] format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ] using "%TypeName%Collection")");
     EXPECT_FAIL(R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ] using format %TypeName%Collection")");
@@ -573,7 +573,7 @@ TEST(CreateParserTest, multipleFail01)
     EXPECT_FAIL(R"(create collections [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create collections from Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 using format "%TypeName%Collection")");
-    EXPECT_FAIL(R"(create collections from [ Schema1 Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")");
+    EXPECT_FAIL(R"(create collections from [ Schema1 Schema2, Schema3, Schema4 ] using "%TypeName%Collection")");
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] format "%TypeName%Collection")");
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] using "%TypeName%Collection")");
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] using format %TypeName%Collection")");
