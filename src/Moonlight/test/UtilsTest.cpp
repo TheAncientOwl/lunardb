@@ -70,11 +70,11 @@ TEST(UtilsTest, startsWithIgnoreCase)
     EXPECT_FALSE(startsWithIgnoreCase("somestr1", "ssomestr2"));
 }
 
-TEST(UtilsTest, splitAtChar01)
+TEST(UtilsTest, split01)
 {
     const auto str = "  field1  ,  field2  ";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -84,11 +84,11 @@ TEST(UtilsTest, splitAtChar01)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar02)
+TEST(UtilsTest, split02)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3  )";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -100,11 +100,11 @@ TEST(UtilsTest, splitAtChar02)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar03)
+TEST(UtilsTest, split03)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes", and commas"  )";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -118,11 +118,11 @@ TEST(UtilsTest, splitAtChar03)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar04)
+TEST(UtilsTest, split04)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes\", and commas"  )";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -135,11 +135,11 @@ TEST(UtilsTest, splitAtChar04)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar05)
+TEST(UtilsTest, split05)
 {
     const auto str = R"(  field1, field2, "", field3  )";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -150,11 +150,11 @@ TEST(UtilsTest, splitAtChar05)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar06)
+TEST(UtilsTest, split06)
 {
     const auto str = R"(  field1, field2, "", ", field3  )";
 
-    const auto out = splitAtChar(str, ',', ESplitModifier::EscapeQuotes);
+    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -165,11 +165,11 @@ TEST(UtilsTest, splitAtChar06)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, splitAtChar07)
+TEST(UtilsTest, split07)
 {
     const auto str = R"(  field1, field2, "", ", field3  )";
 
-    const auto out = splitAtChar(str);
+    const auto out = split(str);
 
     std::vector<std::string_view> expected = {
         "field1",

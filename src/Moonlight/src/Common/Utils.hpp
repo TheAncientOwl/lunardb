@@ -34,7 +34,7 @@ enum class ESplitModifier
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return std::vector<std::string_view> splits
 /// 
-std::vector<std::string_view> splitAtChar(std::string_view str, char sep = ',', ESplitModifier modifier = ESplitModifier::None);
+std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplitModifier modifier = ESplitModifier::None);
 
 QueryData::WhereClause parseWhereClause(std::string_view where);
 

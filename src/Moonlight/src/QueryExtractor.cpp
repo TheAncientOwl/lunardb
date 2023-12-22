@@ -58,7 +58,7 @@ std::vector<std::string_view> QueryExtractor::extractList()
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     Utils::ltrim(m_data);
 
-    return Utils::splitAtChar(list_str);
+    return Utils::split(list_str);
 }
 
 std::string_view QueryExtractor::data() const
