@@ -58,7 +58,7 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
-std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier)
+std::vector<std::string_view> splitAtChar(std::string_view str, char sep, ESplitModifier modifier)
 {
     std::vector<std::string_view> out{};
 
@@ -101,7 +101,7 @@ std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier 
         {
             quoted_string = !quoted_string;
         }
-        else if (current_char == ',' && !quoted_string)
+        else if (current_char == sep && !quoted_string)
         {
             quoted_string = false;
 

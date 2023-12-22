@@ -28,12 +28,13 @@ enum class ESplitModifier
 };
 
 /// 
-/// @brief split a string at ','
+/// @brief split a string at given char
 /// @param str string to be splitted
+/// @param sep separator
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return std::vector<std::string_view> splits
 /// 
-std::vector<std::string_view> splitAtComma(std::string_view str, ESplitModifier modifier = ESplitModifier::None);
+std::vector<std::string_view> splitAtChar(std::string_view str, char sep = ',', ESplitModifier modifier = ESplitModifier::None);
 
 QueryData::WhereClause parseWhereClause(std::string_view where);
 
