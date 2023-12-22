@@ -42,27 +42,30 @@ public:
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
+    /// @param sep List elements separator, default ','
     /// @return List of words as string_views
     ///
-    std::vector<std::string_view> extractList();
+    std::vector<std::string_view> extractList(char sep = ',');
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @tparam T Final type of list returned elements
     /// @param parser Function string_view -> T
+    /// @param sep List elements separator, default ','
     /// @return List of parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractList(std::function<T(std::string_view)> parser);
+    std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',');
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @tparam T Final type of list returned elements
     /// @param parser Function string_view -> T
+    /// @param sep List elements separator, default ','
     /// @return List of unique parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser);
+    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',');
 
     ///
     /// @brief Self explanatory
@@ -114,9 +117,9 @@ inline decltype(auto) QueryExtractor::extractTuple()
 }
 
 template<typename T>
-inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser)
+inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep)
 {
-    const auto values = extractList();
+    const auto values = extractList(sep);
 
     std::vector<T> out{};
     out.reserve(values.size());
@@ -126,9 +129,9 @@ inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_vi
 }
 
 template<typename T>
-inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser)
+inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser, char sep)
 {
-    const auto values = extractList();
+    const auto values = extractList(sep);
 
     std::set<T> set{};
     std::transform(values.begin(), values.end(), std::inserter(set, set.begin()), parser);

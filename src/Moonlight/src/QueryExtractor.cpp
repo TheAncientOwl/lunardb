@@ -39,7 +39,7 @@ std::string_view QueryExtractor::extractOne()
     }
 }
 
-std::vector<std::string_view> QueryExtractor::extractList()
+std::vector<std::string_view> QueryExtractor::extractList(char sep)
 {
     if (m_data.front() != '[')
     {
@@ -58,7 +58,7 @@ std::vector<std::string_view> QueryExtractor::extractList()
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     Utils::ltrim(m_data);
 
-    return Utils::split(list_str);
+    return Utils::split(list_str, sep);
 }
 
 std::string_view QueryExtractor::data() const
