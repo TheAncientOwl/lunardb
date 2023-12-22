@@ -7,6 +7,7 @@
 #include <set>
 #include <string_view>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 namespace LunarDB::Moonlight::Implementation {
@@ -43,29 +44,32 @@ public:
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @param sep List elements separator, default ','
+    /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of words as string_views
     ///
-    std::vector<std::string_view> extractList(char sep = ',');
+    std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @tparam T Final type of list returned elements
     /// @param parser Function string_view -> T
     /// @param sep List elements separator, default ','
+    /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',');
+    std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @tparam T Final type of list returned elements
     /// @param parser Function string_view -> T
     /// @param sep List elements separator, default ','
+    /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of unique parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',');
+    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Self explanatory
@@ -117,9 +121,9 @@ inline decltype(auto) QueryExtractor::extractTuple()
 }
 
 template<typename T>
-inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep)
+inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
 {
-    const auto values = extractList(sep);
+    const auto values = extractList(sep, bound_chars);
 
     std::vector<T> out{};
     out.reserve(values.size());
@@ -129,9 +133,9 @@ inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_vi
 }
 
 template<typename T>
-inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser, char sep)
+inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
 {
-    const auto values = extractList(sep);
+    const auto values = extractList(sep, bound_chars);
 
     std::set<T> set{};
     std::transform(values.begin(), values.end(), std::inserter(set, set.begin()), parser);

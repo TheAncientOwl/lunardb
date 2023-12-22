@@ -39,19 +39,23 @@ std::string_view QueryExtractor::extractOne()
     }
 }
 
-std::vector<std::string_view> QueryExtractor::extractList(char sep)
+std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<char, char> bound_chars)
 {
-    if (m_data.front() != '[')
+    if (m_data.front() != bound_chars.first)
     {
-        throw std::runtime_error("Missing '['");
+        std::string str{};
+        str.push_back(bound_chars.first);
+        throw Utils::buildMissingError(str);
     }
     m_data.remove_prefix(1);
     Utils::ltrim(m_data);
 
-    const auto closed_square_bracket_pos = m_data.find_first_of(']');
+    const auto closed_square_bracket_pos = m_data.find_first_of(bound_chars.second);
     if (closed_square_bracket_pos == std::string_view::npos)
     {
-        throw std::runtime_error("Missing ]");
+        std::string str{};
+        str.push_back(bound_chars.second);
+        throw Utils::buildMissingError(str);
     }
 
     const auto list_str{ m_data.substr(0, closed_square_bracket_pos) };
