@@ -202,7 +202,7 @@ struct Schema
     {
         std::string name;
         std::string type;
-        bool optional;
+        bool nullable;
         bool array;
     };
 

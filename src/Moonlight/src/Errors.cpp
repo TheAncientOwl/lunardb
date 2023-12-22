@@ -1,5 +1,7 @@
 #include "Utils.hpp"
 
+#include <regex>
+
 namespace LunarDB::Moonlight::Utils {
 
 std::runtime_error buildUnknownKeywordError(std::string_view keyword)
@@ -43,6 +45,16 @@ std::string_view checkNotEmpty(std::string_view src, std::string_view err)
     }
 
     return src;
+}
+
+void checkValidIdentifier(const std::string& src)
+{
+    static const std::regex c_identifier_regex{ R"(\w+)" };
+
+    if (!std::regex_match(src, c_identifier_regex))
+    {
+        throw buildError("Invalid identifier '", src, "'");
+    }
 }
 
 } // namespace LunarDB::Moonlight::Utils

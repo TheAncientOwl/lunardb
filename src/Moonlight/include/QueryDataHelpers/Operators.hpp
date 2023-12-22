@@ -35,7 +35,7 @@ template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 {
     os << "[";
-    std::copy(rhs.begin(), rhs.end(), std::ostream_iterator<T>(os, ", "));
+    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << "{" << val << "}, ";});
     os << "]";
     return os;
 }

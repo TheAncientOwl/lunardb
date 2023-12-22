@@ -249,7 +249,7 @@ struct SchemaInit : public Schema
 
         FieldInit& name(const std::string& value);
         FieldInit& type(const std::string& value);
-        FieldInit& optional(const bool& value);
+        FieldInit& nullable(const bool& value);
         FieldInit& array(const bool& value);
     };
 

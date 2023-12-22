@@ -167,7 +167,7 @@ PROVIDE_EQUALITY_OPERATOR(Rebind,
 PROVIDE_EQUALITY_OPERATOR(Schema::Field,
     FIELD(name),
     FIELD(type),
-    FIELD(optional),
+    FIELD(nullable),
     FIELD(array)
 )
 

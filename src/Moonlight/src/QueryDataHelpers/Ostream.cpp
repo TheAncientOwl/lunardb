@@ -185,13 +185,13 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Rebind,
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema::Field,
-    FIELD(name),
-    FIELD(type),
-    FIELD_BOOL_SEP(optional),
+    FIELD_SEP(name),
+    FIELD_SEP(type),
+    FIELD_BOOL_SEP(nullable),
     FIELD_BOOL(array)
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema,
-    FIELD(name),
+    FIELD_SEP(name),
     FIELD(fields)
 )

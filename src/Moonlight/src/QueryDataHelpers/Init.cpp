@@ -99,8 +99,8 @@ RebindInit& RebindInit::clean(const std::optional<bool>& value) { return base_t:
 
 SchemaInit::FieldInit& SchemaInit::FieldInit::name(const std::string& value) { return base_t::name = value, *this; }
 SchemaInit::FieldInit& SchemaInit::FieldInit::type(const std::string& value) { return base_t::type = value, *this; }
-SchemaInit::FieldInit& SchemaInit::FieldInit::optional(const bool& value) { return base_t::optional, * this; };
-SchemaInit::FieldInit& SchemaInit::FieldInit::array(const bool& value) { return base_t::array, * this; };
+SchemaInit::FieldInit& SchemaInit::FieldInit::nullable(const bool& value) { return base_t::nullable = value, *this; };
+SchemaInit::FieldInit& SchemaInit::FieldInit::array(const bool& value) { return base_t::array = value, *this; };
 
 SchemaInit& SchemaInit::name(const std::string& value) { return base_t::name = value, *this; }
 SchemaInit& SchemaInit::fields(const std::vector<Field>& value) { return base_t::fields = value, *this; }

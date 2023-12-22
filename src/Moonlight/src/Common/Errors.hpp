@@ -21,5 +21,6 @@ std::runtime_error buildInvalidSequenceError(std::string_view seq);
 
 void checkKeywordEquals(std::string_view actual, std::string_view expected);
 std::string_view checkNotEmpty(std::string_view src, std::string_view err);
+void checkValidIdentifier(const std::string& src);
 
 } // namespace LunarDB::Moonlight::Utils
