@@ -1,4 +1,8 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR}/Common)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../common
+    ${CMAKE_CURRENT_SOURCE_DIR}/Common
+)
 
 add_library(LunarDB_Moonlight SHARED
     ParsedQuery.cpp
@@ -32,3 +36,5 @@ add_library(LunarDB_Moonlight SHARED
     QueryDataHelpers/Init.cpp
     QueryDataHelpers/Ostream.cpp
 )
+
+target_link_libraries(LunarDB_Moonlight simdjson)
