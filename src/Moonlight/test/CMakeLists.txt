@@ -1,5 +1,5 @@
 function(create_test_executable TARGET_NAME SOURCE_FILES)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR}/../src)
     add_executable(${TARGET_NAME} ${SOURCE_FILES})
 
     target_link_libraries(${TARGET_NAME} PRIVATE
