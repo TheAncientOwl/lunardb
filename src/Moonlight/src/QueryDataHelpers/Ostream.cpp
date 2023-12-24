@@ -1,5 +1,7 @@
 #include "QueryDataHelpers/Operators.hpp"
 
+#include <iterator>
+
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...) \
 namespace LunarDB::Moonlight::QueryData { \
 std::ostream& operator<<(std::ostream& os, const Type& rhs) \
@@ -16,6 +18,51 @@ std::ostream& operator<<(std::ostream& os, const Type& rhs) \
 #define FIELD_BOOL(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name
 
 namespace LunarDB::Moonlight::QueryData {
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
+{
+    if (static_cast<bool>(rhs))
+    {
+        os << *rhs;
+    }
+    else
+    {
+        os << "---";
+    }
+    return os;
+}
+
+template<>
+std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs);
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
+{
+    os << "[";
+    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << val << ", ";});
+    os << "]";
+    return os;
+}
+
+template<typename T, typename... Ts>
+std::ostream& operator<<(std::ostream& os, const std::variant<T, Ts...>& rhs)
+{
+    std::visit([&os](auto&& arg) {os << arg;}, rhs);
+    return os;
+}
+
+template<typename Key, typename Value>
+std::ostream& operator<<(std::ostream& os, const std::map<Key, Value>& rhs)
+{
+    os << "{";
+    for (const auto& [key, value] : rhs)
+    {
+        os << key << ": " << value << ", ";
+    }
+    os << "}";
+    return os;
+}
 
 template<>
 std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
@@ -85,10 +132,6 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BinaryExpression,
     os << (rhs.negated ? "!" : "") << rhs.lhs << " " << rhs.operation << " " << rhs.rhs
 )
 
-PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BooleanExpression::type,
-    std::visit([&os](const auto& x) { os << x; }, rhs)
-)
-
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BooleanExpression,
     os << (rhs.negated ? " !" : "") << "(",
     std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data << " "; }),
@@ -110,9 +153,13 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Select,
     FIELD(order_by)
 )
 
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Insert::Object,
+    FIELD(entries)
+)
+
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Insert,
     FIELD_SEP(into),
-    FIELD(values)
+    FIELD(objects)
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Update::Modify,

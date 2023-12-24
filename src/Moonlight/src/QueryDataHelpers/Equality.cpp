@@ -91,9 +91,13 @@ PROVIDE_EQUALITY_OPERATOR(Select,
     FIELD(order_by)
 )
 
+PROVIDE_EQUALITY_OPERATOR(Insert::Object,
+    FIELD(entries)
+)
+
 PROVIDE_EQUALITY_OPERATOR(Insert,
     FIELD(into),
-    FIELD(values)
+    FIELD(objects)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Update::Modify,

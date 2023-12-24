@@ -3,44 +3,12 @@
 #include "../QueryData.hpp"
 
 #include <ostream>
-#include <iterator>
-#include <vector>
 
 #define DEFINE_OPERATORS(Type) \
 namespace LunarDB::Moonlight::QueryData { \
 bool operator==(const Type& lhs, const Type& rhs); \
 std::ostream& operator<<(std::ostream& os, const Type& rhs); \
 }
-
-namespace LunarDB::Moonlight::QueryData {
-
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
-{
-    if (static_cast<bool>(rhs))
-    {
-        os << *rhs;
-    }
-    else
-    {
-        os << "---";
-    }
-    return os;
-}
-
-template<>
-std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs);
-
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
-{
-    os << "[";
-    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << "{" << val << "}, ";});
-    os << "]";
-    return os;
-}
-
-} // namespace LunarDB::Moonlight::QueryData
 
 DEFINE_OPERATORS(Create::Single::Binding)
 DEFINE_OPERATORS(Create::Single)
@@ -56,6 +24,7 @@ DEFINE_OPERATORS(WhereClause::BooleanExpression)
 DEFINE_OPERATORS(WhereClause)
 DEFINE_OPERATORS(Select::Order)
 DEFINE_OPERATORS(Select)
+DEFINE_OPERATORS(Insert::Object)
 DEFINE_OPERATORS(Insert)
 DEFINE_OPERATORS(Update::Modify)
 DEFINE_OPERATORS(Update)

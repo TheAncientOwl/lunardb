@@ -52,8 +52,10 @@ SelectInit& SelectInit::where(const WhereClause& value) { return base_t::where =
 SelectInit& SelectInit::fields(const std::vector<std::string>& value) { return base_t::fields = value, *this; }
 SelectInit& SelectInit::order_by(const std::optional<std::vector<Order>>& value) { return base_t::order_by = value, *this; }
 
+InsertInit::ObjectInit& InsertInit::ObjectInit::entries(const std::map<std::string, type>& value) { return base_t::entries = value, *this; }
+
 InsertInit& InsertInit::into(const std::string& value) { return base_t::into = value, *this; }
-InsertInit& InsertInit::values(const std::vector<std::string>& value) { return base_t::values = value, *this; }
+InsertInit& InsertInit::objects(const std::vector<InsertInit::Object>& value) { return base_t::objects = value, *this; }
 
 UpdateInit::ModifyInit& UpdateInit::ModifyInit::field(const std::string& value) { return base_t::field = value, *this; }
 UpdateInit::ModifyInit& UpdateInit::ModifyInit::expression(const std::string& value) { return base_t::expression = value, *this; }

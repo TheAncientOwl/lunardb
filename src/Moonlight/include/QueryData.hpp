@@ -2,11 +2,11 @@
 
 #include "Primitives.hpp"
 
-#include <string>
+#include <map>
 #include <optional>
-#include <vector>
-#include <unordered_map>
+#include <string>
 #include <variant>
+#include <vector>
 
 namespace LunarDB::Moonlight::QueryData {
 
@@ -112,8 +112,19 @@ struct Insert
 {
     std::string into;
 
-    // TODO: Use json instead of plain strings.
-    std::vector<std::string> values;
+    struct Object
+    {
+        using type = std::variant<
+            std::string,
+            Object,
+            std::vector<std::string>,
+            std::vector<Object>
+        >;
+
+        std::map<std::string, type> entries;
+    };
+
+    std::vector<Object> objects;
 };
 
 struct Update

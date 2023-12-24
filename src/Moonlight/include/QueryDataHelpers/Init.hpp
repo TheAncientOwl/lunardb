@@ -128,8 +128,15 @@ struct InsertInit : public Insert
 {
     using base_t = Insert;
 
+    struct ObjectInit : public Object
+    {
+        using base_t = Object;
+
+        ObjectInit& entries(const std::map<std::string, type>& value);
+    };
+
     InsertInit& into(const std::string& value);
-    InsertInit& values(const std::vector<std::string>& value);
+    InsertInit& objects(const std::vector<Object>& value);
 };
 
 struct UpdateInit : public Update
