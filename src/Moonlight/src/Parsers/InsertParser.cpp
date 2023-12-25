@@ -1,6 +1,8 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "simdjson/simdjson.hpp"
+
 namespace LunarDB::Moonlight::Implementation {
 
 using namespace Utils;
