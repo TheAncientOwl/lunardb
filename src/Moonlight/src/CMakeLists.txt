@@ -1,5 +1,3 @@
-include_directories(Common)
-
 add_library(LunarDB_Moonlight SHARED
     ParsedQuery.cpp
     QueryExtractor.cpp

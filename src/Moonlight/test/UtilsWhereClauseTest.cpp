@@ -2,7 +2,7 @@
 
 #include "QueryDataHelpers/Init.hpp"
 #include "QueryDataHelpers/Operators.hpp"
-#include "Common/Utils.hpp"
+#include "Utils.hpp"
 #include "Primitives.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {

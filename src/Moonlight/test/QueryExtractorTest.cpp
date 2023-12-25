@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Common/QueryExtractor.hpp"
+#include "QueryExtractor.hpp"
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
