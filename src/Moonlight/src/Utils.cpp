@@ -58,7 +58,7 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
-std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier, bool remove)
+std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier)
 {
     std::string_view out{};
 
@@ -82,11 +82,8 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         {
             std::string_view word{ word_begin, static_cast<std::string_view::size_type>(std::distance(word_begin, word_end)) };
 
-            if (remove)
-            {
-                str.remove_prefix(word.length());
-                Utils::ltrim(str);
-            }
+            str.remove_prefix(word.length());
+            Utils::ltrim(str);
 
             Utils::trim(word);
 
@@ -106,7 +103,7 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
 
     if (out.empty())
     {
-        if (remove && !str.empty() && str.starts_with(','))
+        if (!str.empty() && str.starts_with(','))
         {
             str.remove_prefix(1);
             Utils::ltrim(str);
@@ -122,11 +119,8 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
             out.remove_suffix(1);
         }
 
-        if (remove)
-        {
-            str.remove_prefix(str.length());
-            Utils::ltrim(str);
-        }
+        str.remove_prefix(str.length());
+        Utils::ltrim(str);
     }
 
     return out;
