@@ -50,4 +50,7 @@ QueryData::WhereClause extractWhereClause(std::string_view& str);
 
 std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
 
+bool isValidIdentifier(const std::string& str);
+bool isValidIdentifier(std::string_view sv);
+
 } // namespace LunarDB::Moonlight::Utils

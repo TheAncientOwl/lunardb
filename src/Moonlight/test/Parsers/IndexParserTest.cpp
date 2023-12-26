@@ -6,18 +6,6 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(IndexParserTest, success01)
-{
-    const auto query = "index StructureName";
-    const auto expected = Init::IndexInit{}
-        .on_structure_name("StructureName")
-        .unique(false)
-        .name(std::nullopt)
-        .using_fields(std::nullopt);
-
-    EXPECT_SUCCESS(query, expected);
-}
-
 TEST(IndexParserTest, success02)
 {
     const auto query = "index StructureName as IndexName";
@@ -68,10 +56,11 @@ TEST(IndexParserTest, success05)
 
 TEST(IndexParserTest, fail01)
 {
+    EXPECT_FAIL("index StructureName unique");
+    EXPECT_FAIL("index StructureName");
     EXPECT_FAIL("index StructureName unique as IndexName using [  ]");
     EXPECT_FAIL("index StructureName unique as IndexName using  field1, field2, field3, field1 ]");
     EXPECT_FAIL("index StructureName unique as IndexName using [ field1, field2, field3, field1 ");
-    EXPECT_FAIL("index unique as IndexName using [ field1, field2, field3, field1 ]");
     EXPECT_FAIL("index StructureName IndexName using [ field1, field2, field3, field1 ]");
     EXPECT_FAIL("index StructureName unique IndexName using [ field1, field2, field3, field1 ]");
     EXPECT_FAIL("index StructureName unique as IndexName [ field1, field2, field3, field1 ]");
