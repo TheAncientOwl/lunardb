@@ -29,6 +29,11 @@ std::runtime_error buildInvalidSequenceError(std::string_view seq)
     return buildError("Invalid sequence '", seq, "'");
 }
 
+std::runtime_error buildParseJSONObjectError(std::string_view seq)
+{
+    return buildError("Cannot parse JSON: ", seq);
+}
+
 void checkKeywordEquals(std::string_view actual, std::string_view expected)
 {
     if (!equalsIgnoreCase(expected, actual))

@@ -18,6 +18,7 @@ std::runtime_error buildInvalidQueryFormatError(std::string_view query_type);
 std::runtime_error buildMissingError(std::string_view what);
 std::runtime_error buildUnknownSequenceError(std::string_view seq);
 std::runtime_error buildInvalidSequenceError(std::string_view seq);
+std::runtime_error buildParseJSONObjectError(std::string_view seq);
 
 void checkKeywordEquals(std::string_view actual, std::string_view expected);
 std::string_view checkNotEmpty(std::string_view src, std::string_view err);
