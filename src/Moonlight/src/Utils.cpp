@@ -58,15 +58,9 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
-std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifier modifier)
+std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier)
 {
-    std::vector<std::string_view> out{};
-
-    trim(str);
-    if (str.empty())
-    {
-        return out;
-    }
+    std::string_view out{};
 
     bool quoted_string{ false };
     const auto c_end{ std::cend(str) };
@@ -74,23 +68,6 @@ std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifi
 
     auto word_begin{ c_begin };
     auto word_end{ c_begin };
-
-    const auto update_output = [&out, modifier](const char* word_begin, const char* word_end) {
-        std::string_view word{ word_begin, static_cast<std::string_view::size_type>(std::distance(word_begin, word_end)) };
-        trim(word);
-
-        if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 &&
-            word.starts_with('"') && word.ends_with('"'))
-        {
-            word.remove_prefix(1);
-            word.remove_suffix(1);
-        }
-
-        if (!word.empty())
-        {
-            out.push_back(word);
-        }
-        };
 
     while (word_end != c_end)
     {
@@ -103,20 +80,79 @@ std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifi
         }
         else if (current_char == sep && !quoted_string)
         {
-            quoted_string = false;
+            std::string_view word{ word_begin, static_cast<std::string_view::size_type>(std::distance(word_begin, word_end)) };
 
-            update_output(word_begin, word_end);
+            str.remove_prefix(word.length());
+            Utils::ltrim(str);
 
-            word_begin = std::next(word_end);
+            Utils::trim(word);
+
+            if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 &&
+                word.starts_with('"') && word.ends_with('"'))
+            {
+                word.remove_prefix(1);
+                word.remove_suffix(1);
+            }
+
+            out = word;
+            break;
         }
 
         word_end = std::next(word_end);
     }
 
-    if (word_begin != word_end)
+    if (out.empty())
     {
-        update_output(word_begin, word_end);
+        if (!str.empty() && str.starts_with(','))
+        {
+            str.remove_prefix(1);
+            Utils::ltrim(str);
+        }
+
+        out = str;
+        Utils::trim(out);
+
+        if (modifier == ESplitModifier::EscapeQuotes && out.length() > 1 &&
+            out.starts_with('"') && out.ends_with('"'))
+        {
+            out.remove_prefix(1);
+            out.remove_suffix(1);
+        }
+
+        str.remove_prefix(str.length());
+        Utils::ltrim(str);
     }
+
+    return out;
+}
+
+std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifier modifier)
+{
+    std::vector<std::string_view> out{};
+
+    trim(str);
+    if (str.empty())
+    {
+        return out;
+    }
+
+    std::string_view word{};
+    do
+    {
+        word = extractWord(str, sep, modifier);
+        out.push_back(word);
+
+        if (!str.empty() && str.front() == sep)
+        {
+            str.remove_prefix(1);
+            Utils::ltrim(str);
+        }
+    } while (!str.empty() && !word.empty());
+
+    // if (word_begin != word_end)
+    // {
+    //     update_output(word_begin, word_end);
+    // }
 
     return out;
 }

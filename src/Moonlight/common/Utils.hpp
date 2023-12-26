@@ -36,7 +36,17 @@ enum class ESplitModifier
 /// 
 std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplitModifier modifier = ESplitModifier::None);
 
-QueryData::WhereClause parseWhereClause(std::string_view where);
+/// 
+/// @brief extract first word separated by sep char
+///        remove extracted word from given str
+/// @param str string to be extracted from
+/// @param sep separator
+/// @param modifier EscapeQuotes if quotes should be escaped using '\'
+/// @return extracted word
+/// 
+std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
+
+QueryData::WhereClause parseWhereClause(std::string_view str);
 
 std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
 
