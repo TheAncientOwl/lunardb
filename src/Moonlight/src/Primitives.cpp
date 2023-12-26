@@ -92,8 +92,8 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(BinaryOperator,
 
 DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(BooleanOperator,
     { Literal::None, "None" },
-    { Literal::And, "&&" },
-    { Literal::Or, "||" }
+    { Literal::And, "and" },
+    { Literal::Or, "or" }
 )
 
 } // namespace LunarDB::Moonlight::QueryData::Primitives

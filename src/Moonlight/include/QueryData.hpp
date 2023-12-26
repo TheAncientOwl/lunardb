@@ -73,7 +73,7 @@ struct WhereClause
 {
     struct BinaryExpression
     {
-        bool negated;
+        bool negated; // TODO: remove
         std::string lhs;
         std::string rhs;
         Primitives::EBinaryOperator operation;

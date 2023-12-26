@@ -15,7 +15,13 @@ std::runtime_error buildError(Args&&... args)
 
 std::runtime_error buildUnknownKeywordError(std::string_view keyword);
 std::runtime_error buildInvalidQueryFormatError(std::string_view query_type);
-std::runtime_error buildMissingError(std::string_view what);
+
+template<typename... Args>
+std::runtime_error buildMissingError(Args&&... args)
+{
+    return buildError("Missing ", std::forward<Args>(args)...);
+}
+
 std::runtime_error buildUnknownSequenceError(std::string_view seq);
 std::runtime_error buildInvalidSequenceError(std::string_view seq);
 std::runtime_error buildParseJSONObjectError(std::string_view seq);

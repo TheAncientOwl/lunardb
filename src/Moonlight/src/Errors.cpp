@@ -6,27 +6,22 @@ namespace LunarDB::Moonlight::Utils {
 
 std::runtime_error buildUnknownKeywordError(std::string_view keyword)
 {
-    return buildError("Unknown keyword '", keyword, "'");
+    return buildError("Unknown keyword |", keyword, "|");
 }
 
 std::runtime_error buildInvalidQueryFormatError(std::string_view query_type)
 {
-    return buildError("Invalid '", query_type, "' query format");
-}
-
-std::runtime_error buildMissingError(std::string_view what)
-{
-    return buildError("Missing ", what);
+    return buildError("Invalid |", query_type, "' query format");
 }
 
 std::runtime_error buildUnknownSequenceError(std::string_view seq)
 {
-    return buildError("Unknown sequence '", seq, "'");
+    return buildError("Unknown sequence |", seq, "|");
 }
 
 std::runtime_error buildInvalidSequenceError(std::string_view seq)
 {
-    return buildError("Invalid sequence '", seq, "'");
+    return buildError("Invalid sequence |", seq, "|");
 }
 
 std::runtime_error buildParseJSONObjectError(std::string_view seq)
@@ -38,7 +33,7 @@ void checkKeywordEquals(std::string_view actual, std::string_view expected)
 {
     if (!equalsIgnoreCase(expected, actual))
     {
-        throw buildError("Missing '", expected, "' keyword, found instead '", actual, "'");
+        throw buildError("Missing |", expected, "| keyword, found instead |", actual, "|");
     }
 }
 
@@ -58,7 +53,7 @@ void checkValidIdentifier(const std::string& src)
 
     if (!std::regex_match(src, c_identifier_regex))
     {
-        throw buildError("Invalid identifier '", src, "'");
+        throw buildError("Invalid identifier |", src, "|");
     }
 }
 

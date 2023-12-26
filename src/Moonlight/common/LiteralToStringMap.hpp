@@ -39,7 +39,9 @@ std::string_view LiteralToStringMap<Literal>::findByLiteral(Literal literal) con
         });
 
     if (it == m_data.end())
-        throw std::runtime_error("Cannot parse primitive from literal");
+    {
+        throw Utils::buildError("Cannot parse primitive from literal '", static_cast<std::uint8_t>(literal), "'");
+    }
 
     return it->second;
 }
@@ -53,7 +55,9 @@ Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
         });
 
     if (it == m_data.end())
-        throw std::runtime_error("Cannot parse primitive from string");
+    {
+        throw Utils::buildError("Cannot parse primitive from string '", str, "'");
+    }
 
     return it->first;
 }

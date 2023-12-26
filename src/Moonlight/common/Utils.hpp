@@ -44,7 +44,7 @@ std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplit
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return extracted word
 /// 
-std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
+std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None, bool remove = true);
 
 QueryData::WhereClause parseWhereClause(std::string_view str);
 
