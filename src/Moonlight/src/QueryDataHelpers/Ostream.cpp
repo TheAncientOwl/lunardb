@@ -33,9 +33,6 @@ std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
     return os;
 }
 
-template<>
-std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs);
-
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 {
@@ -154,7 +151,7 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Select,
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Insert::Object,
-    FIELD(entries)
+    os << "{ " << rhs.entries << " } "
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Insert,
