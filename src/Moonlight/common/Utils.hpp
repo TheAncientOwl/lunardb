@@ -46,7 +46,7 @@ std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplit
 /// 
 std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
 
-QueryData::WhereClause parseWhereClause(std::string_view str);
+QueryData::WhereClause extractWhereClause(std::string_view& str);
 
 std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
 

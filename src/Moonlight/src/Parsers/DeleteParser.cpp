@@ -24,7 +24,7 @@ PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
     Utils::checkKeywordEquals(structure, "structure");
 
     out.from = Utils::checkNotEmpty(structure_name, "structure name");
-    out.where = Utils::parseWhereClause(extractor.data());
+    out.where = Utils::extractWhereClause(extractor.unsafe_data());
 
     RETURN_PARSED_QUERY;
 }

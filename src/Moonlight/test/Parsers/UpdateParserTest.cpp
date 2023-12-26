@@ -54,13 +54,14 @@ TEST(UpdateParserTest, success01)
                     BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::GreaterThan).rhs("6500"),
                     BooleanOperator::And,
                     BinaryExpression{}.negated(false).lhs("profession").operation(BinaryOperator::In).rhs("[Prof1, Prof2]"),
+                    BooleanOperator::Or,
                     BinaryExpression{}.negated(false).lhs("birth_date").operation(BinaryOperator::GreaterThanEqualTo).rhs("10/20/1989")
                 })
                 })
         ))
         .modify(std::vector<Update::Modify>{
         Init::UpdateInit::ModifyInit{}.field("field1").expression("field1 * 1.5 + 2"),
-            Init::UpdateInit::ModifyInit{}.field("field2").expression(R"(field3 + "some_suffix")")
+            Init::UpdateInit::ModifyInit{}.field("field2").expression(R"(field3 + "_some_suffix")")
     });
 
     EXPECT_SUCCESS(query, expected);

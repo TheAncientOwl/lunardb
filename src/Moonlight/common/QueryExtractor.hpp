@@ -77,6 +77,13 @@ public:
     std::string_view data() const;
 
     ///
+    /// @return Reference to underlying data.
+    /// @note Before any further operations with the extractor, 
+    ///       the data should be left trimmer
+    /// 
+    std::string_view& unsafe_data();
+
+    ///
     /// @brief Self explanatory
     ///
     bool empty() const;

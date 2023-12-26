@@ -303,17 +303,16 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
     return out;
 }
 
-QueryData::WhereClause parseWhereClause(std::string_view str)
+QueryData::WhereClause extractWhereClause(std::string_view& str)
 {
     QueryData::WhereClause out{};
 
-    Implementation::QueryExtractor extractor(str);
-    const auto where = extractor.extractOne();
+    Utils::ltrim(str);
+    const auto where = extractWord(str, ' ');
     Utils::checkKeywordEquals(where, "where");
     if (str.empty()) { throw Utils::buildMissingError("where clause content"); }
 
-    auto content = extractor.data();
-    out.expression = recursiveParseBooleanExpression(content);
+    out.expression = recursiveParseBooleanExpression(str);
 
     return out;
 }

@@ -54,14 +54,16 @@ TEST(UtilsWhereClauseTest, parseWhereClauseSuccess01)
             })
     );
 
-    const auto out = Utils::parseWhereClause(where);
+    std::string_view where_sv = where;
+    const auto out = Utils::extractWhereClause(where_sv);
 
     EXPECT_EQ(out, expected);
 }
 
 TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
 {
-    EXPECT_THROW(Utils::parseWhereClause(
+    EXPECT_THROW({
+        const auto where =
         R"(     where (                                      )"
         R"(         name liske "*escu"                        )"
         R"(         and salary between 5500 and 6000         )"
@@ -74,10 +76,13 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(                and profession in [Prof1, Prof2]  )"
         R"(                or birth_date >= 10/20/1989       )"
         R"(             )                                    )"
-        R"(      )                                           )"
-    ), std::runtime_error);
+        R"(      )                                           )";
+        std::string_view where_sv = where;
+        Utils::extractWhereClause(where_sv);
+        }, std::runtime_error);
 
-    EXPECT_THROW(Utils::parseWhereClause(
+    EXPECT_THROW({
+        const auto where =
         R"(     where                                        )"
         R"(         name like "*escu"                        )"
         R"(         and salary between 5500 and 6000         )"
@@ -90,9 +95,10 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(                and profession in [Prof1, Prof2]  )"
         R"(                or birth_date >= 10/20/1989       )"
         R"(             )                                    )"
-        R"(      )                                           )"
-    ), std::runtime_error);
-
+        R"(      )                                           )";
+        std::string_view where_sv = where;
+        Utils::extractWhereClause(where_sv);
+        }, std::runtime_error);
 }
 
 } // namespace LunarDB::Moonlight::Utils::Tests

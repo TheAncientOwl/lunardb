@@ -70,6 +70,11 @@ std::string_view QueryExtractor::data() const
     return m_data;
 }
 
+std::string_view& QueryExtractor::unsafe_data()
+{
+    return m_data;
+}
+
 bool QueryExtractor::empty() const
 {
     return m_data.empty();
