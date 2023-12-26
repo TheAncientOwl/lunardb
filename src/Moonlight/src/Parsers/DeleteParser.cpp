@@ -16,7 +16,15 @@ PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(Delete);
 
-    // TODO: provide implementation
+    const auto [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
+    if (extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+
+    Utils::checkKeywordEquals(delete_, "delete");
+    Utils::checkKeywordEquals(from, "from");
+    Utils::checkKeywordEquals(structure, "structure");
+
+    out.from = Utils::checkNotEmpty(structure_name, "structure name");
+    out.where = Utils::parseWhereClause(extractor.data());
 
     RETURN_PARSED_QUERY;
 }
