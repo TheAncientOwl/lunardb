@@ -32,7 +32,7 @@ TEST(InsertParserTest, success01)
         R"(    {                                                             )"
         R"(         "salary": "4000",                                        )"
         R"(         "name": "Bob",                                           )"
-        R"(         "rank(String)" R"(): "HeadmasterSupreme",                )"
+        "          \"rank(String)\": \"HeadmasterSupreme\",                  "
         R"(         "birth_date": "09/10/1985",                              )"
         R"(         "address": {                                             )"
         R"(             "street": "Some Street",                             )"
