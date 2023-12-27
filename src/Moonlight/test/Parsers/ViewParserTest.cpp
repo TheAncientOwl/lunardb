@@ -54,6 +54,7 @@ TEST(ViewParserTest, success01)
                         BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::GreaterThan).rhs("6500"),
                         BooleanOperator::And,
                         BinaryExpression{}.negated(false).lhs("profession").operation(BinaryOperator::In).rhs("[Prof1, Prof2]"),
+                        BooleanOperator::Or,
                         BinaryExpression{}.negated(false).lhs("birth_date").operation(BinaryOperator::GreaterThanEqualTo).rhs("10/20/1989")
                     })
                     })
@@ -108,6 +109,7 @@ TEST(ViewParserTest, success02)
                         BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::GreaterThan).rhs("6500"),
                         BooleanOperator::And,
                         BinaryExpression{}.negated(false).lhs("profession").operation(BinaryOperator::In).rhs("[Prof1, Prof2]"),
+                        BooleanOperator::Or,
                         BinaryExpression{}.negated(false).lhs("birth_date").operation(BinaryOperator::GreaterThanEqualTo).rhs("10/20/1989")
                     })
                     })

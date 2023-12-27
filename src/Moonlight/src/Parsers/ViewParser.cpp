@@ -16,7 +16,15 @@ PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
 {
     DECLARE_PARSED_QUERY(View);
 
-    // TODO: provide implementation
+    const auto [view, view_name, as] = extractor.extractTuple<3>();
+
+    Utils::checkKeywordEquals(view, "view");
+    Utils::checkKeywordEquals(as, "as");
+
+    out.name = Utils::checkNotEmpty(view_name, "view name");
+
+    SelectParser select_parser{};
+    out.as_select = select_parser.parse(extractor.data()).get<QueryData::Select>();
 
     RETURN_PARSED_QUERY;
 }
