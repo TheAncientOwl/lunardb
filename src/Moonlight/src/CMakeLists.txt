@@ -1,4 +1,4 @@
-add_library(LunarDB_Moonlight SHARED
+add_library(LunarDB_Moonlight STATIC
     ParsedQuery.cpp
     QueryExtractor.cpp
     Utils.cpp
