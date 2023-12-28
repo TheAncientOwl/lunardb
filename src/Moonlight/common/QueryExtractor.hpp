@@ -124,7 +124,7 @@ inline decltype(auto) QueryExtractor::extractTuple()
 {
     std::array<std::string_view, Size> arr{};
 
-    for (const auto i : std::ranges::iota_view<std::size_t, std::size_t>(0, Size))
+    for (const auto i : std::ranges::iota_view(0u, Size))
     {
         arr[i] = extractOne();
     }
