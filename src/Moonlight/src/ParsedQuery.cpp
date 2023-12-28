@@ -4,6 +4,8 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include <algorithm>
+
 #define MAP_QUERY_DATA_TO_TYPE(Entry) \
 template<> const EQueryType \
 ParsedQuery::QueryDataToTypeMap<QueryData::Entry>::value = EQueryType::Entry;
@@ -14,19 +16,39 @@ ParsedQuery ParsedQuery::from(std::string_view query)
 {
     using namespace Implementation;
 
-    static const HierarchySet<IQueryParser, QUERY_PARSERS> s_parsers{};
+    static const std::array<ParserBundle, 20> s_parsers{
+        Create::makeParser(),
+        Drop::makeParser(),
+        Migrate::makeParser(),
+        Truncate::makeParser(),
+        Rename::makeParser(),
+        Select::makeParser(),
+        Insert::makeParser(),
+        Update::makeParser(),
+        Delete::makeParser(),
+        Lock::makeParser(),
+        Grant::makeParser(),
+        Revoke::makeParser(),
+        Commit::makeParser(),
+        Rollback::makeParser(),
+        SavePoint::makeParser(),
+        Index::makeParser(),
+        Database::makeParser(),
+        View::makeParser(),
+        Rebind::makeParser(),
+        Schema::makeParser()
+    };
 
     Utils::trim(query);
-    const auto parser_ptr = s_parsers.findIf([query](const auto& parser) -> bool {
-        return Utils::startsWithIgnoreCase(query, parser.queryPrefix());
-        });
+    const auto parser_ptr = std::find_if(std::begin(s_parsers), std::end(s_parsers),
+        [query](const auto& query_parser) { return query_parser.first(query); });
 
-    if (!parser_ptr)
+    if (parser_ptr == std::end(s_parsers))
     {
         throw std::runtime_error("Invalid query syntax");
     }
 
-    return parser_ptr->parse(query);
+    return parser_ptr->second(query);
 }
 
 EQueryType ParsedQuery::type() const

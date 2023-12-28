@@ -2,17 +2,19 @@
 
 #include "ParsedQuery.hpp"
 #include "QueryExtractor.hpp"
+#include "Utils.hpp"
 
 #define PROVIDE_QUERY_PARSER(Specialization) \
-class Specialization ## Parser : public IQueryParser { \
-public: \
-    inline const char* queryPrefix() const override; \
-    API::ParsedQuery parse(QueryExtractor extractor) const override; \
-};
+namespace Specialization { \
+ParserBundle makeParser(); \
+bool prefixMatch(std::string_view query); \
+API::ParsedQuery parse(QueryExtractor extractor); \
+}
 
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
-inline const char* Specialization ## Parser::queryPrefix() const { return QueryPrefix; } \
-API::ParsedQuery Specialization ## Parser::parse(QueryExtractor extractor) const
+ParserBundle Specialization::makeParser() { return std::make_pair(Specialization::prefixMatch, Specialization::parse); } \
+bool Specialization::prefixMatch(std::string_view query) { return Utils::startsWithIgnoreCase(query, QueryPrefix); } \
+API::ParsedQuery Specialization::parse(QueryExtractor extractor) \
 
 #define DECLARE_PARSED_QUERY(type) \
 API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::type>(); \
@@ -23,23 +25,9 @@ return out_parsed_query
 
 namespace LunarDB::Moonlight::Implementation {
 
-class IQueryParser
-{
-public: // methods
-    virtual inline const char* queryPrefix() const = 0;
-    virtual API::ParsedQuery parse(QueryExtractor extractor) const = 0;
-
-public:
-    IQueryParser() = default;
-
-    IQueryParser(const IQueryParser&) = delete;
-    IQueryParser& operator=(const IQueryParser&) = delete;
-
-    IQueryParser(IQueryParser&&) noexcept = delete;
-    IQueryParser& operator=(IQueryParser&&) noexcept = delete;
-
-    virtual ~IQueryParser() = default;
-};
+using Matcher = bool(*)(std::string_view);
+using Parser = API::ParsedQuery(*)(QueryExtractor);
+using ParserBundle = std::pair<Matcher, Parser>;
 
 PROVIDE_QUERY_PARSER(Create)
 PROVIDE_QUERY_PARSER(Drop)
@@ -61,27 +49,5 @@ PROVIDE_QUERY_PARSER(Database)
 PROVIDE_QUERY_PARSER(View)
 PROVIDE_QUERY_PARSER(Rebind)
 PROVIDE_QUERY_PARSER(Schema)
-
-#define QUERY_PARSERS \
-    CreateParser, \
-    DropParser, \
-    MigrateParser, \
-    TruncateParser, \
-    RenameParser, \
-    SelectParser, \
-    InsertParser, \
-    UpdateParser, \
-    DeleteParser, \
-    LockParser, \
-    GrantParser, \
-    RevokeParser, \
-    CommitParser, \
-    RollbackParser, \
-    SavePointParser, \
-    IndexParser, \
-    DatabaseParser, \
-    ViewParser, \
-    RebindParser, \
-    SchemaParser
 
 } // namespace LunarDB::Moonlight::Implementation
