@@ -1,6 +1,5 @@
 #include "QueryData.hpp"
 #include "ParsedQuery.hpp"
-#include "HierarchySet.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
