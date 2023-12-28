@@ -1,10 +1,4 @@
-#include <gtest/gtest.h>
-
-#include "ParsedQuery.hpp"
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
-
-#include "Common/Expectations.hpp"
+#include "QueryParserTest.hpp"
 
 #define QUERY_TYPE Create
 

@@ -1,7 +1,7 @@
-#include "QueryDataHelpers/Operators.hpp"
-
 #include <iterator>
 #include <algorithm>
+
+#include "QueryDataHelpers/Operators.hpp"
 
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...) \
 namespace LunarDB::Moonlight::QueryData { \

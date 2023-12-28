@@ -1,9 +1,9 @@
-#include "QueryData.hpp"
+#include <algorithm>
+
 #include "ParsedQuery.hpp"
+#include "QueryData.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
-
-#include <algorithm>
 
 #define MAP_QUERY_DATA_TO_TYPE(Entry) \
 template<> const EQueryType \

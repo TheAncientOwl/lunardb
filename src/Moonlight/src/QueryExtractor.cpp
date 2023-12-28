@@ -1,8 +1,8 @@
-#include "QueryExtractor.hpp"
-#include "Errors.hpp"
-#include "Utils.hpp"
-
 #include <stdexcept>
+
+#include "Errors.hpp"
+#include "QueryExtractor.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
 

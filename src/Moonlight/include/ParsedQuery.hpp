@@ -1,9 +1,9 @@
 #pragma once
 
-#include "QueryData.hpp"
-#include "Primitives.hpp"
-
 #include <variant>
+
+#include "Primitives.hpp"
+#include "QueryData.hpp"
 
 namespace LunarDB::Moonlight::API {
 

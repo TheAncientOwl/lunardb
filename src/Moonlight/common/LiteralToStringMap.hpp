@@ -2,7 +2,6 @@
 
 #include <string_view>
 #include <vector>
-#include <stdexcept>
 
 #include "Errors.hpp"
 #include "Utils.hpp"

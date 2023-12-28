@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <string_view>
 #include <ostream>
+#include <string_view>
 
 #define DEFINE_MOONLIGHT_PRIMITIVE(name, ...) \
 namespace name { \
