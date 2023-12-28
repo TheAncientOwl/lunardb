@@ -78,7 +78,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(             )                                    )"
         R"(      )                                           )";
         std::string_view where_sv = where;
-        Utils::extractWhereClause(where_sv);
+        std::ignore = Utils::extractWhereClause(where_sv);
         }, std::runtime_error);
 
     EXPECT_THROW({
@@ -97,7 +97,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(             )                                    )"
         R"(      )                                           )";
         std::string_view where_sv = where;
-        Utils::extractWhereClause(where_sv);
+        std::ignore = Utils::extractWhereClause(where_sv);
         }, std::runtime_error);
 }
 

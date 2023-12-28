@@ -49,7 +49,7 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
 
     out.fields = extractor.extractList<std::string>([](std::string_view sv) {
         auto str = std::string(sv);
-        if (!Utils::isValidIdentifier(str)) { throw Errors::buildError("Invalid field identifier provided"); }
+        Errors::assertValidIdentifier(str);
         return std::move(str);
         });
     if (out.fields.empty()) { throw Errors::buildMissingError("fields"); }

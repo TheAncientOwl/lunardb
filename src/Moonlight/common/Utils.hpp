@@ -14,13 +14,34 @@ using namespace std::literals;
 
 constexpr auto c_whitespace = " \n\r\t\f\v"sv;
 
+///
+/// @brief Left trim whitespaces from given string view
+///
 void ltrim(std::string_view& str);
+
+///
+/// @brief Right trim whitespaces from given string view
+///
 void rtrim(std::string_view& str);
+
+///
+/// @brief Fully trim whitespaces from given string view (left & right)
+///
 void trim(std::string_view& str);
 
-bool equalsIgnoreCase(std::string_view s1, std::string_view s2);
-bool startsWithIgnoreCase(std::string_view src, std::string_view what);
+///
+/// @brief Check if 's1' is the same as 's2', case insensitive
+/// 
+[[nodiscard]] bool equalsIgnoreCase(std::string_view s1, std::string_view s2);
 
+///
+/// @brief Check if 'src' starts with 'what', case insensitive
+///
+[[nodiscard]] bool startsWithIgnoreCase(std::string_view src, std::string_view what);
+
+///
+/// @brief Flag used signal escaping quoted strings
+///
 enum class ESplitModifier
 {
     None = 0,
@@ -34,7 +55,8 @@ enum class ESplitModifier
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return std::vector<std::string_view> splits
 /// 
-std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplitModifier modifier = ESplitModifier::None);
+[[nodiscard]] std::vector<std::string_view> split(std::string_view str,
+    char sep = ',', ESplitModifier modifier = ESplitModifier::None);
 
 /// 
 /// @brief extract first word separated by sep char
@@ -44,13 +66,20 @@ std::vector<std::string_view> split(std::string_view str, char sep = ',', ESplit
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return extracted word
 /// 
-std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
+[[nodiscard]] std::string_view extractWord(std::string_view& str,
+    char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
 
-QueryData::WhereClause extractWhereClause(std::string_view& str);
+///
+/// @brief Self explanatory
+/// @see QueryData::WhereClause
+///
+[[nodiscard]] QueryData::WhereClause extractWhereClause(std::string_view& str);
 
-std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
-
-bool isValidIdentifier(const std::string& str);
-bool isValidIdentifier(std::string_view sv);
+///
+/// @brief Self explanatory
+/// @param str in format "str1::str2"
+/// @return pair<str1, str2>
+///
+[[nodiscard]] std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);
 
 } // namespace LunarDB::Moonlight::Utils

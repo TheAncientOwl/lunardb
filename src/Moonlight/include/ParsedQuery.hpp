@@ -12,18 +12,33 @@ using EQueryType = QueryData::Primitives::EQueryType;
 class ParsedQuery
 {
 public: // methods
+    ///
+    /// @brief Self explanatory
+    ///
     EQueryType type() const;
 
+    ///
+    /// @brief Self explanatory
+    ///
     template<typename Data>
     Data& get();
 
+    ///
+    /// @brief Self explanatory
+    ///
     template<typename Data>
     const Data& get() const;
 
-public: // helper
+public: // helpers
+    ///
+    /// @brief Creates an empty ParsedQuery of given QueryData::Type
+    ///
     template<typename Data>
     static ParsedQuery make();
 
+    ///
+    /// @brief Creates a ParsedQuery from given string
+    /// 
     static ParsedQuery from(std::string_view query);
 
 private: // fields;
@@ -52,7 +67,11 @@ private: // fields;
         QueryData::Schema
     > m_data;
 
-    template<typename>
+    ///
+    /// @brief Used by @c ParsedQuery::make() to decide the QueryData::Type
+    /// @tparam T QueryData::Type
+    ///
+    template<typename T>
     struct QueryDataToTypeMap { static const EQueryType value; };
 };
 

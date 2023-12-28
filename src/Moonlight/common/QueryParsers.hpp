@@ -6,9 +6,9 @@
 
 #define PROVIDE_QUERY_PARSER(Specialization) \
 namespace Specialization { \
-ParserBundle makeParser(); \
-bool prefixMatch(std::string_view query); \
-API::ParsedQuery parse(QueryExtractor extractor); \
+[[nodiscard]] ParserBundle makeParser(); \
+[[nodiscard]] bool prefixMatch(std::string_view query); \
+[[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
 }
 
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \

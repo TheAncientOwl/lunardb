@@ -202,10 +202,10 @@ TEST(UtilsTest, parseResolutionOperator)
         EXPECT_EQ(right, ""sv);
     }
 
-    EXPECT_THROW({ parseResolutionOperator(""); }, std::runtime_error);
-    EXPECT_THROW({ parseResolutionOperator("String1:String2"); }, std::runtime_error);
-    EXPECT_THROW({ parseResolutionOperator("String1 String2"); }, std::runtime_error);
-    EXPECT_THROW({ parseResolutionOperator("String1:dadsd:String2"); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator(""); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:String2"); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1 String2"); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:dadsd:String2"); }, std::runtime_error);
 }
 
 } // namespace LunarDB::Moonlight::Utils::Tests

@@ -46,7 +46,7 @@ PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
 
         out.using_fields = extractor.extractUniqueList<std::string>([](std::string_view sv) {
             auto str = std::string(sv);
-            if (!Utils::isValidIdentifier(str)) { throw Errors::buildError("Invalid field identifiers found in index list"); }
+            Errors::assertValidIdentifier(str);
             return std::move(str);});
         if (out.using_fields->empty()) { throw Errors::buildMissingError("index fields"); }
     }

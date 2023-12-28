@@ -18,9 +18,7 @@ namespace LunarDB::Moonlight::Implementation {
 ///
 class QueryExtractor
 {
-private:
-
-public:
+public: // methods
     ///
     /// @brief Trims query before storing.
     ///        Also remove semicolon at the end if existing.
@@ -32,14 +30,14 @@ public:
     ///        Breaks at whitespaces.
     /// @return Word form left part of query.
     ///
-    std::string_view extractOne();
+    [[nodiscard]] std::string_view extractOne();
 
     ///
     /// @brief Removes Size words from left part of query
     /// @return Tuple of Size string_views
     ///
     template<std::size_t Size>
-    decltype(auto) extractTuple();
+    [[nodiscard]] decltype(auto) extractTuple();
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -47,7 +45,7 @@ public:
     /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of words as string_views
     ///
-    std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    [[nodiscard]] std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -58,7 +56,7 @@ public:
     /// @return List of parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    [[nodiscard]] std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -69,42 +67,46 @@ public:
     /// @return List of unique parsed words to T
     ///
     template<typename T>
-    std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    [[nodiscard]] std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
 
     ///
     /// @brief Self explanatory
     ///
-    std::string_view data() const;
+    [[nodiscard]] std::string_view data() const;
 
     ///
     /// @return Reference to underlying data.
     /// @note Before any further operations with the extractor, 
     ///       the data should be left trimmer
     /// 
-    std::string_view& unsafe_data();
+    [[nodiscard]] std::string_view& unsafe_data();
 
     ///
     /// @brief Self explanatory
     ///
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
     ///
     /// @brief Self explanatory
     ///
     void remove_prefix(std::size_t size);
 
-private:
-    std::string_view m_data;
-
-private:
+private: // helpers
+    ///
+    /// @brief Helper function to convert std::array to std::tuple
+    /// @tparam Size of the array
+    /// @tparam Index of current template iteration
+    /// @param arr array to be converted
+    /// @return tuple<elements of array>
+    ///
     template <std::size_t Size, std::size_t Index = 0>
-    auto makeTuple(const std::array<std::string_view, Size>& views)
+    [[nodiscard]] static auto makeTuple(const std::array<std::string_view, Size>& arr)
     {
         if constexpr (Index < Size)
         {
             return std::tuple_cat(
-                std::make_tuple(views[Index]),
-                makeTuple<Size, Index + 1>(views)
+                std::make_tuple(arr[Index]),
+                makeTuple<Size, Index + 1>(arr)
             );
         }
         else
@@ -112,6 +114,9 @@ private:
             return std::make_tuple();
         }
     }
+
+private: // fields
+    std::string_view m_data;
 };
 
 template<std::size_t Size>
