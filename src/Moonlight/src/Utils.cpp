@@ -82,7 +82,7 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         }
         else if (current_char == sep && !quoted_string)
         {
-            std::string_view word{ word_begin, static_cast<std::string_view::size_type>(std::distance(word_begin, word_end)) };
+            std::string_view word{ word_begin, word_end };
 
             str.remove_prefix(word.length());
             Utils::ltrim(str);
