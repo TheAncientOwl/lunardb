@@ -12,7 +12,7 @@ TEST(MigrateParserTest, success01)
     const auto expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
-        .mappings(std::nullopt);
+        .mappings({});
 
     EXPECT_SUCCESS(query, expected);
 }
@@ -23,7 +23,7 @@ TEST(MigrateParserTest, success02)
     const auto expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
-        .mappings(std::nullopt);
+        .mappings({});
 
     EXPECT_SUCCESS(query, expected);
 }

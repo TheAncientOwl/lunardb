@@ -60,7 +60,7 @@ TEST(ViewParserTest, success01)
                     })
             ))
             .fields(std::vector<std::string>{"field1", "field2", "field3", "field4"})
-            .order_by(std::nullopt)
+            .order_by({})
         );
 
     EXPECT_SUCCESS(query, expected);

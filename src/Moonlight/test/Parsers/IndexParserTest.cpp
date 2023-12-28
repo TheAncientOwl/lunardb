@@ -13,7 +13,7 @@ TEST(IndexParserTest, success02)
         .on_structure_name("StructureName")
         .unique(false)
         .name("IndexName")
-        .using_fields(std::nullopt);
+        .using_fields({});
 
     EXPECT_SUCCESS(query, expected);
 }
