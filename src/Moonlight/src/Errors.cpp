@@ -1,7 +1,7 @@
+#include <regex>
+
 #include "Errors.hpp"
 #include "Utils.hpp"
-
-#include <regex>
 
 namespace LunarDB::Moonlight::Errors {
 

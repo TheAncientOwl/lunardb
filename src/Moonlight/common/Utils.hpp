@@ -1,18 +1,14 @@
 #pragma once
 
-#include "QueryData.hpp"
-#include "Errors.hpp"
-#include "QueryExtractor.hpp"
-
 #include <string_view>
-#include <vector>
 #include <utility>
+#include <vector>
+
+#include "QueryData.hpp"
 
 namespace LunarDB::Moonlight::Utils {
 
-using namespace std::literals;
-
-constexpr auto c_whitespace = " \n\r\t\f\v"sv;
+constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
 
 ///
 /// @brief Left trim whitespaces from given string view

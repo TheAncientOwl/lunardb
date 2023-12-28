@@ -1,4 +1,4 @@
-#include "Common/ParserTestIncludes.hpp"
+#include "QueryParserTest.hpp"
 
 #define QUERY_TYPE Delete
 

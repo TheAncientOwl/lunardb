@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../QueryData.hpp"
+#include "QueryData.hpp"
 
 #include <ostream>
 

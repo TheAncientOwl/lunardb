@@ -1,8 +1,7 @@
+#include <algorithm>
+
 #include "Errors.hpp"
 #include "Utils.hpp"
-
-#include <algorithm>
-#include <regex>
 
 namespace LunarDB::Moonlight::Utils {
 
@@ -336,19 +335,6 @@ std::pair<std::string_view, std::string_view> parseResolutionOperator(std::strin
     }
 
     return std::make_pair(str.substr(0, first_sep_pos), str.substr(last_sep_pos + 1, str.length() - last_sep_pos));
-}
-
-
-bool isValidIdentifier(const std::string& str)
-{
-    static const std::regex c_identifier{ R"(\w+)" };
-    return std::regex_match(str, c_identifier);
-}
-
-bool isValidIdentifier(std::string_view sv)
-{
-    std::string str(sv);
-    return isValidIdentifier(str);
 }
 
 } // namespace LunarDB::Moonlight::Utils

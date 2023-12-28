@@ -1,11 +1,6 @@
-#include "QueryParsers.hpp"
-#include "Errors.hpp"
-#include "Utils.hpp"
+#include "QueryParser.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
-
-using namespace Utils;
-using namespace std::literals;
 
 namespace {
 
@@ -13,6 +8,8 @@ constexpr auto c_query_prefix{ "schema" };
 
 QueryData::Schema::Field parseField(std::string_view str)
 {
+    using namespace std::literals;
+
     QueryData::Schema::Field out{};
 
     const auto separator_pos = str.find_first_of(':');
