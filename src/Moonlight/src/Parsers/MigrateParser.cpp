@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include <unordered_set>
@@ -21,12 +22,12 @@ Mapping parseMapping(std::string_view str)
     QueryExtractor extractor{ str };
     const auto [old_field, arrow, new_field] = extractor.extractTuple<3>();
 
-    if (!extractor.empty()) { throw Utils::buildInvalidSequenceError(str); }
+    if (!extractor.empty()) { throw Errors::buildInvalidSequenceError(str); }
 
-    Utils::checkKeywordEquals(arrow, "=>");
+    Errors::assertKeywordEquals(arrow, "=>");
 
-    out.old_field = Utils::checkNotEmpty(old_field, "old field");
-    out.new_field = Utils::checkNotEmpty(new_field, "new field");
+    out.old_field = Errors::assertNotEmpty(old_field, "old field");
+    out.new_field = Errors::assertNotEmpty(new_field, "new field");
 
     return out;
 }
@@ -39,20 +40,20 @@ PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
 
     const auto [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
 
-    Utils::checkKeywordEquals(migrate, "migrate");
-    Utils::checkKeywordEquals(structure, "structure");
-    Utils::checkKeywordEquals(to, "to");
+    Errors::assertKeywordEquals(migrate, "migrate");
+    Errors::assertKeywordEquals(structure, "structure");
+    Errors::assertKeywordEquals(to, "to");
 
-    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
-    out.new_schema_name = Utils::checkNotEmpty(schema_name, "new schema name");
+    out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
+    out.new_schema_name = Errors::assertNotEmpty(schema_name, "new schema name");
 
     if (!using_.empty())
     {
-        Utils::checkKeywordEquals(using_, "using");
+        Errors::assertKeywordEquals(using_, "using");
 
         out.mappings = extractor.extractList<Mapping>(parseMapping);
 
-        if (out.mappings->empty()) { throw Utils::buildMissingError("mappings"); }
+        if (out.mappings->empty()) { throw Errors::buildMissingError("mappings"); }
 
         std::unordered_set<std::string_view> olds{};
         std::unordered_set<std::string_view> news{};
@@ -61,7 +62,7 @@ PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
             const auto& handle_value = [](auto& set, const auto& value) -> void {
                 if (set.find(value) != set.end())
                 {
-                    throw Utils::buildError("Found duplicate field '", value, "'");
+                    throw Errors::buildError("Found duplicate field '", value, "'");
                 }
 
                 set.insert(value);

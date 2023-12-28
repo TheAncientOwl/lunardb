@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include <unordered_set>
@@ -18,9 +19,9 @@ QueryData::Select::Order parseOrderBy(std::string_view str)
 
     QueryExtractor extractor{ str };
     const auto [field_name, mode] = extractor.extractTuple<2>();
-    if (!extractor.empty()) { throw Utils::buildError("Invalid order clause"); }
+    if (!extractor.empty()) { throw Errors::buildError("Invalid order clause"); }
 
-    out.field = Utils::checkNotEmpty(field_name, "field name");
+    out.field = Errors::assertNotEmpty(field_name, "field name");
     out.type = QueryData::Primitives::OrderType::toLiteral(mode);
 
     return out;
@@ -34,40 +35,40 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
 
     const auto [select, from, structure, structure_name] = extractor.extractTuple<4>();
 
-    Utils::checkKeywordEquals(select, "select");
-    Utils::checkKeywordEquals(from, "from");
-    Utils::checkKeywordEquals(structure, "structure");
+    Errors::assertKeywordEquals(select, "select");
+    Errors::assertKeywordEquals(from, "from");
+    Errors::assertKeywordEquals(structure, "structure");
 
-    out.from = Utils::checkNotEmpty(structure_name, "structure name");
+    out.from = Errors::assertNotEmpty(structure_name, "structure name");
 
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
     Utils::ltrim(extractor.unsafe_data());
 
     const auto [fields] = extractor.extractTuple<1>();
-    Utils::checkKeywordEquals(fields, "fields");
+    Errors::assertKeywordEquals(fields, "fields");
 
     out.fields = extractor.extractList<std::string>([](std::string_view sv) {
         auto str = std::string(sv);
-        if (!Utils::isValidIdentifier(str)) { throw Utils::buildError("Invalid field identifier provided"); }
+        if (!Utils::isValidIdentifier(str)) { throw Errors::buildError("Invalid field identifier provided"); }
         return std::move(str);
         });
-    if (out.fields.empty()) { throw Utils::buildMissingError("fields"); }
+    if (out.fields.empty()) { throw Errors::buildMissingError("fields"); }
 
     if (!extractor.empty())
     {
         const auto [order, by] = extractor.extractTuple<2>();
-        Utils::checkKeywordEquals(order, "order");
-        Utils::checkKeywordEquals(by, "by");
+        Errors::assertKeywordEquals(order, "order");
+        Errors::assertKeywordEquals(by, "by");
 
         out.order_by = extractor.extractList<QueryData::Select::Order>(parseOrderBy);
-        if (out.order_by->empty()) { throw Utils::buildMissingError("order by fields"); }
+        if (out.order_by->empty()) { throw Errors::buildMissingError("order by fields"); }
 
         std::unordered_set<std::string_view> order_fields{};
         for (const auto& order : *out.order_by)
         {
             if (order_fields.find(order.field) != order_fields.end())
             {
-                throw Utils::buildError("Field '", order.field, "' found in order clause twice");
+                throw Errors::buildError("Field '", order.field, "' found in order clause twice");
             }
             order_fields.insert(order.field);
         }

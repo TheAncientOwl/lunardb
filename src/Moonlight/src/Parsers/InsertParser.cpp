@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include "simdjson/simdjson.hpp"
@@ -34,11 +35,11 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
             }
             else
             {
-                throw Utils::buildParseJSONObjectError("Invalid array type");
+                throw Errors::buildParseJSONObjectError("Invalid array type");
             }
         }
 
-        if (strings.size() != 0 && objects.size() != 0) { throw Utils::buildParseJSONObjectError("mixed arrays are not allowed"); }
+        if (strings.size() != 0 && objects.size() != 0) { throw Errors::buildParseJSONObjectError("mixed arrays are not allowed"); }
 
         if (strings.size() != 0)
         {
@@ -50,7 +51,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
         }
         else
         {
-            throw Utils::buildMissingError("objects");
+            throw Errors::buildMissingError("objects");
         }
 
         break;
@@ -69,7 +70,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
         break;
     }
     default: {
-        throw Utils::buildParseJSONObjectError("only syntax allowed types are arrays, objects and strings");
+        throw Errors::buildParseJSONObjectError("only syntax allowed types are arrays, objects and strings");
         break;
     }
     }
@@ -80,12 +81,12 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
 std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 {
     Utils::trim(str);
-    if (str.front() != '[') { throw Utils::buildParseJSONObjectError("["); }
-    if (str.back() != ']') { throw Utils::buildParseJSONObjectError("]"); }
+    if (str.front() != '[') { throw Errors::buildParseJSONObjectError("["); }
+    if (str.back() != ']') { throw Errors::buildParseJSONObjectError("]"); }
     str.remove_prefix(1);
     str.remove_suffix(1);
     Utils::trim(str);
-    Utils::checkNotEmpty(str, "objects");
+    Errors::assertNotEmpty(str, "objects");
 
     std::vector<QueryData::Insert::Object> out{};
 
@@ -109,13 +110,13 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
             }
             else
             {
-                throw Utils::buildParseJSONObjectError("invalid object syntax");
+                throw Errors::buildParseJSONObjectError("invalid object syntax");
             }
         }
     }
     catch (const std::exception& e)
     {
-        throw Utils::buildParseJSONObjectError(e.what());
+        throw Errors::buildParseJSONObjectError(e.what());
     }
 
     return out;
@@ -129,14 +130,14 @@ PROVIDE_QUERY_PARSER_IMPL(Insert, c_query_prefix)
 
     const auto [insert, into, structure_name, objects] = extractor.extractTuple<4>();
 
-    Utils::checkKeywordEquals(insert, "insert");
-    Utils::checkKeywordEquals(into, "into");
-    Utils::checkKeywordEquals(objects, "objects");
+    Errors::assertKeywordEquals(insert, "insert");
+    Errors::assertKeywordEquals(into, "into");
+    Errors::assertKeywordEquals(objects, "objects");
 
-    out.into = Utils::checkNotEmpty(structure_name, "structure name");
+    out.into = Errors::assertNotEmpty(structure_name, "structure name");
     out.objects = parseObjects(extractor.data());
 
-    if (objects.empty()) { throw Utils::buildMissingError("objects"); }
+    if (objects.empty()) { throw Errors::buildMissingError("objects"); }
 
     RETURN_PARSED_QUERY;
 }

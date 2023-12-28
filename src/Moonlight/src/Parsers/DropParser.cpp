@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -17,12 +18,12 @@ PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
     DECLARE_PARSED_QUERY(Drop);
 
     const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
-    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeywordEquals(drop, "drop");
-    Utils::checkKeywordEquals(structure, "structure");
+    Errors::assertKeywordEquals(drop, "drop");
+    Errors::assertKeywordEquals(structure, "structure");
 
-    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
+    out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     if (cascade.empty())
     {
@@ -30,7 +31,7 @@ PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
     }
     else
     {
-        Utils::checkKeywordEquals(cascade, "cascade");
+        Errors::assertKeywordEquals(cascade, "cascade");
         out.cascade = true;
     }
 

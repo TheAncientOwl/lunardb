@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -17,13 +18,13 @@ PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
     DECLARE_PARSED_QUERY(Delete);
 
     const auto [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
-    if (extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+    if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeywordEquals(delete_, "delete");
-    Utils::checkKeywordEquals(from, "from");
-    Utils::checkKeywordEquals(structure, "structure");
+    Errors::assertKeywordEquals(delete_, "delete");
+    Errors::assertKeywordEquals(from, "from");
+    Errors::assertKeywordEquals(structure, "structure");
 
-    out.from = Utils::checkNotEmpty(structure_name, "structure name");
+    out.from = Errors::assertNotEmpty(structure_name, "structure name");
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
 
     RETURN_PARSED_QUERY;

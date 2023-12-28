@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -21,7 +22,7 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
     if (!extractor.empty())
     {
         const auto clean = extractor.extractOne();
-        Utils::checkKeywordEquals(clean, "clean");
+        Errors::assertKeywordEquals(clean, "clean");
         out.clean = true;
     }
     else
@@ -29,16 +30,16 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
         out.clean = false;
     }
 
-    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeywordEquals(rebind, "rebind");
-    Utils::checkKeywordEquals(to, "to");
+    Errors::assertKeywordEquals(rebind, "rebind");
+    Errors::assertKeywordEquals(to, "to");
 
     const auto [structure_name, field] = Utils::parseResolutionOperator(structure_field);
 
-    out.structure_name = Utils::checkNotEmpty(structure_name, "structure name");
-    out.field = Utils::checkNotEmpty(field, "field name");
-    out.bind_structure_name = Utils::checkNotEmpty(bind_structure_name, "rebind structure name");
+    out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
+    out.field = Errors::assertNotEmpty(field, "field name");
+    out.bind_structure_name = Errors::assertNotEmpty(bind_structure_name, "rebind structure name");
 
     RETURN_PARSED_QUERY;
 }

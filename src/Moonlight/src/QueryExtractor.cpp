@@ -1,4 +1,5 @@
 #include "QueryExtractor.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include <stdexcept>
@@ -45,7 +46,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
     {
         std::string str{};
         str.push_back(bound_chars.first);
-        throw Utils::buildMissingError(str);
+        throw Errors::buildMissingError(str);
     }
     m_data.remove_prefix(1);
     Utils::ltrim(m_data);
@@ -55,7 +56,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
     {
         std::string str{};
         str.push_back(bound_chars.second);
-        throw Utils::buildMissingError(str);
+        throw Errors::buildMissingError(str);
     }
 
     const auto list_str{ m_data.substr(0, closed_square_bracket_pos) };

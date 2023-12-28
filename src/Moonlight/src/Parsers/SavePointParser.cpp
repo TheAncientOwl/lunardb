@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -17,9 +18,9 @@ PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
     DECLARE_PARSED_QUERY(SavePoint);
 
     const auto [savepoint, hash] = extractor.extractTuple<2>();
-    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeywordEquals(savepoint, "savepoint");
+    Errors::assertKeywordEquals(savepoint, "savepoint");
 
     if (!hash.empty())
     {

@@ -1,3 +1,4 @@
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include <algorithm>
@@ -189,9 +190,9 @@ std::string_view In(std::string_view& str)
 
     // TODO: provide adaptation for quoted strings
 
-    if (open_square_bracked_pos == std::string_view::npos) { throw Utils::buildMissingError("'[' @ in operator list"); }
-    if (closed_square_bracked_pos == std::string_view::npos) { throw Utils::buildMissingError("']' @ in operator list"); }
-    if (open_square_bracked_pos > closed_square_bracked_pos) { throw Utils::buildError("Invalid where clause content"); }
+    if (open_square_bracked_pos == std::string_view::npos) { throw Errors::buildMissingError("'[' @ in operator list"); }
+    if (closed_square_bracked_pos == std::string_view::npos) { throw Errors::buildMissingError("']' @ in operator list"); }
+    if (open_square_bracked_pos > closed_square_bracked_pos) { throw Errors::buildError("Invalid where clause content"); }
 
     out = str.substr(0, closed_square_bracked_pos + 1);
     str.remove_prefix(closed_square_bracked_pos + 1);
@@ -212,7 +213,7 @@ std::string_view Between(std::string_view& str)
 
     auto and_ = extractWord(str, ' ', ESplitModifier::None);
     Utils::trim(and_);
-    Utils::checkKeywordEquals(and_, "and");
+    Errors::assertKeywordEquals(and_, "and");
 
     auto num2 = extractWord(str, ' ', ESplitModifier::None);
 
@@ -246,13 +247,13 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
         out.negated = false;
     }
 
-    if (str.empty()) { throw Utils::buildMissingError("part of where clause @ '", str, "'"); }
-    if (!str.starts_with('(')) { throw Utils::buildMissingError("'(' @ '", str, "'"); }
+    if (str.empty()) { throw Errors::buildMissingError("part of where clause @ '", str, "'"); }
+    if (!str.starts_with('(')) { throw Errors::buildMissingError("'(' @ '", str, "'"); }
 
     str.remove_prefix(1);
     Utils::ltrim(str);
 
-    if (str.empty()) { throw Utils::buildMissingError("part of where clause @ '", str, "'"); }
+    if (str.empty()) { throw Errors::buildMissingError("part of where clause @ '", str, "'"); }
 
     while (!str.empty())
     {
@@ -294,7 +295,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             case QueryData::Primitives::EBinaryOperator::In: { expression.rhs = ExtractBinaryOperators::In(str); break; }
             case QueryData::Primitives::EBinaryOperator::Between: { expression.rhs = ExtractBinaryOperators::Between(str); break; }
             case QueryData::Primitives::EBinaryOperator::Like: { expression.rhs = ExtractBinaryOperators::Like(str); break; }
-            default: { throw Utils::buildError("Operator not implemented, please contact developer"); break; }
+            default: { throw Errors::buildError("Operator not implemented, please contact developer"); break; }
             }
 
             out.data.push_back(std::move(expression));
@@ -310,8 +311,8 @@ QueryData::WhereClause extractWhereClause(std::string_view& str)
 
     Utils::ltrim(str);
     const auto where = extractWord(str, ' ');
-    Utils::checkKeywordEquals(where, "where");
-    if (str.empty()) { throw Utils::buildMissingError("where clause content"); }
+    Errors::assertKeywordEquals(where, "where");
+    if (str.empty()) { throw Errors::buildMissingError("where clause content"); }
 
     out.expression = recursiveParseBooleanExpression(str);
 
@@ -326,12 +327,12 @@ std::pair<std::string_view, std::string_view> parseResolutionOperator(std::strin
     if (first_sep_pos == std::string_view::npos || last_sep_pos == std::string_view::npos ||
         first_sep_pos == last_sep_pos)
     {
-        throw buildMissingError("':' symbol in resolution operator");
+        throw Errors::buildMissingError("':' symbol in resolution operator");
     }
 
     if (last_sep_pos - first_sep_pos > 1)
     {
-        throw buildUnknownSequenceError(str.substr(last_sep_pos, first_sep_pos - last_sep_pos + 1));
+        throw Errors::buildUnknownSequenceError(str.substr(last_sep_pos, first_sep_pos - last_sep_pos + 1));
     }
 
     return std::make_pair(str.substr(0, first_sep_pos), str.substr(last_sep_pos + 1, str.length() - last_sep_pos));

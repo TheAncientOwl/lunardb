@@ -18,10 +18,10 @@ PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
 
     const auto [view, view_name, as] = extractor.extractTuple<3>();
 
-    Utils::checkKeywordEquals(view, "view");
-    Utils::checkKeywordEquals(as, "as");
+    Errors::assertKeywordEquals(view, "view");
+    Errors::assertKeywordEquals(as, "as");
 
-    out.name = Utils::checkNotEmpty(view_name, "view name");
+    out.name = Errors::assertNotEmpty(view_name, "view name");
 
     out.as_select = Select::parse(extractor).get<QueryData::Select>();
 

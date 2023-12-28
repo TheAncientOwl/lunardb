@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -17,15 +18,15 @@ PROVIDE_QUERY_PARSER_IMPL(Rename, c_query_prefix)
     DECLARE_PARSED_QUERY(Rename);
 
     const auto [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
-    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); };
+    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); };
 
-    Utils::checkKeywordEquals(rename, "rename");
-    Utils::checkKeywordEquals(from, "from");
-    Utils::checkKeywordEquals(to, "to");
+    Errors::assertKeywordEquals(rename, "rename");
+    Errors::assertKeywordEquals(from, "from");
+    Errors::assertKeywordEquals(to, "to");
 
-    out.type = QueryData::Primitives::RenameType::toLiteral(Utils::checkNotEmpty(type, "rename type"));
-    out.old_name = Utils::checkNotEmpty(old_name, "old name");
-    out.new_name = Utils::checkNotEmpty(new_name, "new name");
+    out.type = QueryData::Primitives::RenameType::toLiteral(Errors::assertNotEmpty(type, "rename type"));
+    out.old_name = Errors::assertNotEmpty(old_name, "old name");
+    out.new_name = Errors::assertNotEmpty(new_name, "new name");
 
     RETURN_PARSED_QUERY;
 }

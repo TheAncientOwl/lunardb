@@ -1,8 +1,9 @@
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 #include <regex>
 
-namespace LunarDB::Moonlight::Utils {
+namespace LunarDB::Moonlight::Errors {
 
 std::runtime_error buildUnknownKeywordError(std::string_view keyword)
 {
@@ -29,15 +30,15 @@ std::runtime_error buildParseJSONObjectError(std::string_view seq)
     return buildError("Cannot parse JSON: ", seq);
 }
 
-void checkKeywordEquals(std::string_view actual, std::string_view expected)
+void assertKeywordEquals(std::string_view actual, std::string_view expected)
 {
-    if (!equalsIgnoreCase(expected, actual))
+    if (!Utils::equalsIgnoreCase(expected, actual))
     {
         throw buildError("Missing |", expected, "| keyword, found instead |", actual, "|");
     }
 }
 
-std::string_view checkNotEmpty(std::string_view src, std::string_view err)
+std::string_view assertNotEmpty(std::string_view src, std::string_view err)
 {
     if (src.empty())
     {
@@ -47,7 +48,7 @@ std::string_view checkNotEmpty(std::string_view src, std::string_view err)
     return src;
 }
 
-void checkValidIdentifier(const std::string& src)
+void assertValidIdentifier(const std::string& src)
 {
     static const std::regex c_identifier_regex{ R"(\w+)" };
 
@@ -57,4 +58,4 @@ void checkValidIdentifier(const std::string& src)
     }
 }
 
-} // namespace LunarDB::Moonlight::Utils
+} // namespace LunarDB::Moonlight::Errors

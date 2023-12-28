@@ -1,4 +1,5 @@
 #include "QueryParsers.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
@@ -17,9 +18,9 @@ PROVIDE_QUERY_PARSER_IMPL(Commit, c_query_prefix)
     DECLARE_PARSED_QUERY(Commit);
 
     const auto [commit] = extractor.extractTuple<1>();
-    if (!extractor.empty()) { throw Utils::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    Utils::checkKeywordEquals(commit, "commit");
+    Errors::assertKeywordEquals(commit, "commit");
 
     RETURN_PARSED_QUERY;
 }
