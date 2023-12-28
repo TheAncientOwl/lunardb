@@ -61,10 +61,10 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
         Errors::assertKeywordEquals(by, "by");
 
         out.order_by = extractor.extractList<QueryData::Select::Order>(parseOrderBy);
-        if (out.order_by->empty()) { throw Errors::buildMissingError("order by fields"); }
+        if (out.order_by.empty()) { throw Errors::buildMissingError("order by fields"); }
 
         std::unordered_set<std::string_view> order_fields{};
-        for (const auto& order : *out.order_by)
+        for (const auto& order : out.order_by)
         {
             if (order_fields.find(order.field) != order_fields.end())
             {

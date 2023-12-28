@@ -48,7 +48,7 @@ PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
             auto str = std::string(sv);
             Errors::assertValidIdentifier(str);
             return std::move(str);});
-        if (out.using_fields->empty()) { throw Errors::buildMissingError("index fields"); }
+        if (out.using_fields.empty()) { throw Errors::buildMissingError("index fields"); }
     }
 
     RETURN_PARSED_QUERY;

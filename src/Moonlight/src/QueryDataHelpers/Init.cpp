@@ -26,7 +26,7 @@ MigrateInit::MappingInit& MigrateInit::MappingInit::new_field(const std::string&
 
 MigrateInit& MigrateInit::structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
 MigrateInit& MigrateInit::new_schema_name(const std::string& value) { return base_t::new_schema_name = value, *this; }
-MigrateInit& MigrateInit::mappings(const std::optional<std::vector<Mapping>>& value) { return base_t::mappings = value, *this; }
+MigrateInit& MigrateInit::mappings(const std::vector<Mapping>& value) { return base_t::mappings = value, *this; }
 
 TruncateInit& TruncateInit::structure_name(const std::string& value) { return base_t::structure_name = value, *this; }
 
@@ -50,7 +50,7 @@ SelectInit::OrderInit& SelectInit::OrderInit::type(const Primitives::EOrderType&
 SelectInit& SelectInit::from(const std::string& value) { return base_t::from = value, *this; }
 SelectInit& SelectInit::where(const WhereClause& value) { return base_t::where = value, *this; }
 SelectInit& SelectInit::fields(const std::vector<std::string>& value) { return base_t::fields = value, *this; }
-SelectInit& SelectInit::order_by(const std::optional<std::vector<Order>>& value) { return base_t::order_by = value, *this; }
+SelectInit& SelectInit::order_by(const std::vector<Order>& value) { return base_t::order_by = value, *this; }
 
 InsertInit::ObjectInit& InsertInit::ObjectInit::entries(const std::map<std::string, type>& value) { return base_t::entries = value, *this; }
 
@@ -85,7 +85,7 @@ SavePointInit& SavePointInit::hash(const std::optional<std::string>& value) { re
 IndexInit& IndexInit::on_structure_name(const std::string& value) { return base_t::on_structure_name = value, *this; }
 IndexInit& IndexInit::unique(const bool& value) { return base_t::unique = value, *this; }
 IndexInit& IndexInit::name(const std::optional<std::string>& value) { return base_t::name = value, *this; }
-IndexInit& IndexInit::using_fields(const std::optional<std::vector<std::string>>& value) { return base_t::using_fields = value, *this; }
+IndexInit& IndexInit::using_fields(const std::vector<std::string>& value) { return base_t::using_fields = value, *this; }
 
 DatabaseInit& DatabaseInit::operation_type(const Primitives::EDatabaseOperationType& value) { return base_t::operation_type = value, *this; }
 DatabaseInit& DatabaseInit::name(const std::string& value) { return base_t::name = value, *this; }

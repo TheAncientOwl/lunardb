@@ -53,11 +53,11 @@ PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
 
         out.mappings = extractor.extractList<Mapping>(parseMapping);
 
-        if (out.mappings->empty()) { throw Errors::buildMissingError("mappings"); }
+        if (out.mappings.empty()) { throw Errors::buildMissingError("mappings"); }
 
         std::unordered_set<std::string_view> olds{};
         std::unordered_set<std::string_view> news{};
-        for (const auto& mapping : *out.mappings)
+        for (const auto& mapping : out.mappings)
         {
             const auto& handle_value = [](auto& set, const auto& value) -> void {
                 if (set.find(value) != set.end())

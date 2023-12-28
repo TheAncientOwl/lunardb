@@ -1,3 +1,3 @@
-add_library(simdjson SHARED
+add_library(simdjson STATIC
     simdjson.cpp
 )

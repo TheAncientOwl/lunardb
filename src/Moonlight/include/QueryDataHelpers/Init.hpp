@@ -62,7 +62,7 @@ struct MigrateInit : public Migrate
         MappingInit& old_field(const std::string& value);
         MappingInit& new_field(const std::string& value);
     };
-    MigrateInit& mappings(const std::optional<std::vector<Mapping>>& value);
+    MigrateInit& mappings(const std::vector<Mapping>& value);
 };
 
 struct TruncateInit : public Truncate
@@ -121,7 +121,7 @@ struct SelectInit : public Select
         OrderInit& field(const std::string& value);
         OrderInit& type(const Primitives::EOrderType& value);
     };
-    SelectInit& order_by(const std::optional<std::vector<Order>>& value);
+    SelectInit& order_by(const std::vector<Order>& value);
 };
 
 struct InsertInit : public Insert
@@ -216,7 +216,7 @@ struct IndexInit : public Index
     IndexInit& on_structure_name(const std::string& value);
     IndexInit& unique(const bool& value);
     IndexInit& name(const std::optional<std::string>& value);
-    IndexInit& using_fields(const std::optional<std::vector<std::string>>& value);
+    IndexInit& using_fields(const std::vector<std::string>& value);
 };
 
 struct DatabaseInit : public Database
