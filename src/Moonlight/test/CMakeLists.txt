@@ -1,5 +1,8 @@
+include(GoogleTest)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
 function(create_test_executable TARGET_NAME SOURCE_FILES)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
     add_executable(${TARGET_NAME} ${SOURCE_FILES})
 
     target_link_libraries(${TARGET_NAME} PRIVATE
@@ -8,7 +11,6 @@ function(create_test_executable TARGET_NAME SOURCE_FILES)
         LunarDB_Moonlight
     )
 
-    include(GoogleTest)
     gtest_discover_tests(${TARGET_NAME})
 endfunction()
 
