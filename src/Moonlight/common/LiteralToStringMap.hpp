@@ -10,10 +10,9 @@
 namespace LunarDB::Moonlight::Implementation {
 
 template <typename T>
-concept IsEnumeration = std::is_enum_v<T>;
+concept Enumeration = std::is_enum_v<T>;
 
-template<typename Literal>
-    requires IsEnumeration<Literal>
+template<Enumeration Literal>
 class LiteralToStringMap
 {
 public:
@@ -28,12 +27,12 @@ private:
     container m_data;
 };
 
-template<typename Literal>
+template<Enumeration Literal>
 LiteralToStringMap<Literal>::LiteralToStringMap(LiteralToStringMap<Literal>::container data)
     : m_data(std::move(data))
 {}
 
-template<typename Literal>
+template<Enumeration Literal>
 std::string_view LiteralToStringMap<Literal>::findByLiteral(Literal literal) const
 {
     const auto it = std::find_if(m_data.begin(), m_data.end(),
@@ -49,7 +48,7 @@ std::string_view LiteralToStringMap<Literal>::findByLiteral(Literal literal) con
     return it->second;
 }
 
-template<typename Literal>
+template<Enumeration Literal>
 Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
 {
     const auto it = std::find_if(m_data.begin(), m_data.end(),
