@@ -51,7 +51,7 @@ PROVIDE_QUERY_PARSER_IMPL(Update, c_query_prefix)
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
     std::unordered_set<std::string_view> modify_fields{};
-    for (const auto modify : out.modify)
+    for (const auto& modify : out.modify)
     {
         if (modify_fields.find(modify.field) != modify_fields.end())
         {
