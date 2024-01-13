@@ -4,8 +4,8 @@
 
 #include "CppExtensions/include/Errors.hpp"
 #include "ParsedQuery.hpp"
-#include "QueryData/include/Helpers/Init.hpp"
-#include "QueryData/include/Helpers/Operators.hpp"
+#include "QueryData/include/helpers/Init.hpp"
+#include "QueryData/include/helpers/Operators.hpp"
 
 ///
 /// @brief Helpers to check success/fail of parsing queries

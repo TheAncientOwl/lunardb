@@ -1,6 +1,6 @@
 #include <tuple>
 
-#include "QueryData/include/Helpers/Operators.hpp"
+#include "QueryData/include/helpers/Operators.hpp"
 
 #define PROVIDE_EQUALITY_OPERATOR(Type, ...) \
 namespace LunarDB::QueryData { \

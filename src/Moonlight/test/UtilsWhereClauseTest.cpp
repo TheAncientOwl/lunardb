@@ -2,8 +2,8 @@
 
 #include "CppExtensions/include/Errors.hpp"
 #include "QueryData/include/Primitives.hpp"
-#include "QueryData/include/Helpers/Init.hpp"
-#include "QueryData/include/Helpers/Operators.hpp"
+#include "QueryData/include/helpers/Init.hpp"
+#include "QueryData/include/helpers/Operators.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {
