@@ -4,7 +4,7 @@
 #include <ostream>
 #include <string_view>
 
-#define DEFINE_MOONLIGHT_PRIMITIVE(name, ...) \
+#define DEFINE_LUNAR_PRIMITIVE(name, ...) \
 namespace name { \
     enum class Literal : std::uint8_t \
     { \
@@ -16,9 +16,9 @@ namespace name { \
 } \
 using E ## name = name::Literal;
 
-namespace LunarDB::Moonlight::QueryData::Primitives {
+namespace LunarDB::QueryData::Primitives {
 
-DEFINE_MOONLIGHT_PRIMITIVE(QueryType,
+DEFINE_LUNAR_PRIMITIVE(QueryType,
     None = 0,
     Create = 1,
     Drop = 2,
@@ -42,26 +42,26 @@ DEFINE_MOONLIGHT_PRIMITIVE(QueryType,
     Schema = 20
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(StructureType,
+DEFINE_LUNAR_PRIMITIVE(StructureType,
     None = 0,
     Table = 1,
     Collection = 2
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(RenameType,
+DEFINE_LUNAR_PRIMITIVE(RenameType,
     None = 0,
     Structure = 1,
     Field = 2,
     Database = 3
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(OrderType,
+DEFINE_LUNAR_PRIMITIVE(OrderType,
     None = 0,
     Asc = 1,
     Desc = 2
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(UserPermissionType,
+DEFINE_LUNAR_PRIMITIVE(UserPermissionType,
     None = 0,
     Create = 1,
     Update = 2,
@@ -70,7 +70,7 @@ DEFINE_MOONLIGHT_PRIMITIVE(UserPermissionType,
     Select = 5
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
+DEFINE_LUNAR_PRIMITIVE(DatabaseOperationType,
     None = 0,
     Create = 1,
     Drop = 2,
@@ -78,7 +78,7 @@ DEFINE_MOONLIGHT_PRIMITIVE(DatabaseOperationType,
     Use
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(BinaryOperator,
+DEFINE_LUNAR_PRIMITIVE(BinaryOperator,
     None = 0,
     Equals = 1,
     GreaterThan = 2,
@@ -90,10 +90,10 @@ DEFINE_MOONLIGHT_PRIMITIVE(BinaryOperator,
     Like = 8
 )
 
-DEFINE_MOONLIGHT_PRIMITIVE(BooleanOperator,
+DEFINE_LUNAR_PRIMITIVE(BooleanOperator,
     None = 0,
     And = 1,
     Or = 2
 )
 
-} // namespace LunarDB::Moonlight::QueryData::Primitives
+} // namespace LunarDB::QueryData::Primitives

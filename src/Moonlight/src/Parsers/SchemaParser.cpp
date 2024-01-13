@@ -2,6 +2,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "schema" };
@@ -16,13 +18,13 @@ QueryData::Schema::Field parseField(std::string_view str)
     if (separator_pos == std::string_view::npos) { throw Errors::buildMissingError(":"); }
 
     auto field_name = str.substr(0, separator_pos);
-    Utils::trim(field_name);
+    StringUtils::trim(field_name);
     out.name = Errors::assertNotEmpty(field_name, "field name");
     Errors::assertValidIdentifier(out.name);
 
     auto type = str.substr(separator_pos + 1, str.length());
 
-    Utils::trim(type);
+    StringUtils::trim(type);
 
     Errors::assertNotEmpty(type, "type");
 
@@ -30,14 +32,14 @@ QueryData::Schema::Field parseField(std::string_view str)
     {
         out.nullable = true;
         type.remove_suffix(1);
-        Utils::trim(type);
+        StringUtils::trim(type);
     }
     else
     {
         out.nullable = false;
     }
 
-    if (Utils::startsWithIgnoreCase(type, "ArrayOf<"))
+    if (StringUtils::startsWithIgnoreCase(type, "ArrayOf<"))
     {
         if (type.back() == '>')
         {
@@ -59,7 +61,7 @@ QueryData::Schema::Field parseField(std::string_view str)
         out.array = false;
     }
 
-    Utils::trim(type);
+    StringUtils::trim(type);
     out.type = Errors::assertNotEmpty(type, "type");
     Errors::assertValidIdentifier(out.type);
 

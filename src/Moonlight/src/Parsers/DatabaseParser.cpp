@@ -2,6 +2,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "database" };
@@ -29,7 +31,7 @@ PROVIDE_QUERY_PARSER_IMPL(Database, c_query_prefix)
         if (extractor.empty()) { throw Errors::buildMissingError("backup path"); }
 
         auto backup_path = extractor.data();
-        Utils::trim(backup_path);
+        StringUtils::trim(backup_path);
         if (backup_path.empty() || backup_path.size() < 2) { throw Errors::buildMissingError("backup path"); }
         if (backup_path.front() != '"' || backup_path.back() != '"') { throw Errors::buildMissingError("\""); }
         backup_path.remove_prefix(1);

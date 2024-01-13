@@ -4,6 +4,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "migrate" };
@@ -31,6 +33,8 @@ Mapping parseMapping(std::string_view str)
 
 PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
 {
+    using namespace CppExtensions;
+
     DECLARE_PARSED_QUERY(Migrate);
 
     const auto [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();

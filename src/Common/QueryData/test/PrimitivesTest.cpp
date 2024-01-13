@@ -2,7 +2,7 @@
 
 #include "Primitives.hpp"
 
-namespace LunarDB::Moonlight::QueryData::Primitives::Tests {
+namespace LunarDB::QueryData::Primitives::Tests {
 
 TEST(PrimitivesTest, QueryType)
 {
@@ -106,4 +106,4 @@ TEST(PrimitivesTest, BooleanOperator)
     EXPECT_EQ(EBooleanOperator::Or, toLiteral(toString(EBooleanOperator::Or)));
 }
 
-} // namespace LunarDB::Moonlight::QueryData::Primitives::Tests
+} // namespace LunarDB::QueryData::Primitives::Tests

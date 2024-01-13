@@ -3,6 +3,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "insert" };
@@ -74,12 +76,12 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
 
 std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 {
-    Utils::trim(str);
+    StringUtils::trim(str);
     if (str.front() != '[') { throw Errors::buildParseJSONObjectError("["); }
     if (str.back() != ']') { throw Errors::buildParseJSONObjectError("]"); }
     str.remove_prefix(1);
     str.remove_suffix(1);
-    Utils::trim(str);
+    StringUtils::trim(str);
     Errors::assertNotEmpty(str, "objects");
 
     std::vector<QueryData::Insert::Object> out{};

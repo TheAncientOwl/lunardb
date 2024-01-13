@@ -3,7 +3,7 @@
 
 #include "QueryData/include/QueryData.hpp"
 
-namespace LunarDB::Moonlight::Utils {
+namespace LunarDB::CppExtensions::StringUtils {
 
 constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
 
@@ -61,4 +61,4 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
-} // namespace LunarDB::Moonlight::Utils
+} // namespace LunarDB::CppExtensions::StringUtils

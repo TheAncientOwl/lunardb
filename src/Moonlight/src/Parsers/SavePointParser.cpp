@@ -2,6 +2,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "savepoint" };

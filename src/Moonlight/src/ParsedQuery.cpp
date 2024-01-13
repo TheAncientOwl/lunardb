@@ -15,6 +15,7 @@ namespace LunarDB::Moonlight::API {
 ParsedQuery ParsedQuery::from(std::string_view query)
 {
     using namespace Implementation;
+    using namespace CppExtensions;
 
     static const std::array<ParserBundle, 20> s_parsers{
         Create::makeParser(),
@@ -39,7 +40,7 @@ ParsedQuery ParsedQuery::from(std::string_view query)
         Schema::makeParser()
     };
 
-    Utils::trim(query);
+    StringUtils::trim(query);
     const auto parser_ptr = std::find_if(std::begin(s_parsers), std::end(s_parsers),
         [query](const auto& query_parser) { return query_parser.first(query); });
 

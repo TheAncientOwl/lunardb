@@ -2,6 +2,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "index" };
@@ -19,7 +21,7 @@ PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
     out.on_structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     const auto unique_or_as = extractor.extractOne();
-    if (Utils::equalsIgnoreCase(unique_or_as, "unique"))
+    if (StringUtils::equalsIgnoreCase(unique_or_as, "unique"))
     {
         out.unique = true;
         Errors::assertKeywordEquals(extractor.extractOne(), "as");

@@ -2,6 +2,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
+using namespace CppExtensions;
+
 namespace {
 
 constexpr auto c_query_prefix{ "set" };
@@ -23,11 +25,11 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
     out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     std::ignore = Errors::assertNotEmpty(state, "concurrency state (on/off)");
-    if (Utils::equalsIgnoreCase(state, "on"))
+    if (StringUtils::equalsIgnoreCase(state, "on"))
     {
         out.concurrency = true;
     }
-    else if (Utils::equalsIgnoreCase(state, "off"))
+    else if (StringUtils::equalsIgnoreCase(state, "off"))
     {
         out.concurrency = false;
     }

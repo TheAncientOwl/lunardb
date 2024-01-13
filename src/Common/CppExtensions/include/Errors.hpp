@@ -3,7 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace LunarDB::Moonlight::Errors {
+namespace LunarDB::CppExtensions::Errors {
 
 template<typename... Args>
 [[nodiscard]] std::runtime_error buildError(Args&&... args)
@@ -30,4 +30,4 @@ void assertKeywordEquals(std::string_view actual, std::string_view expected);
 std::string_view assertNotEmpty(std::string_view src, std::string_view err);
 void assertValidIdentifier(const std::string& src);
 
-} // namespace LunarDB::Moonlight::Errors
+} // namespace LunarDB::CppExtensions::Errors

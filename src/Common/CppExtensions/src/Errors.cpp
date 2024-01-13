@@ -3,7 +3,7 @@
 #include "Errors.hpp"
 #include "StringUtils.hpp"
 
-namespace LunarDB::Moonlight::Errors {
+namespace LunarDB::CppExtensions::Errors {
 
 std::runtime_error buildUnknownKeywordError(std::string_view keyword)
 {
@@ -32,7 +32,7 @@ std::runtime_error buildParseJSONObjectError(std::string_view seq)
 
 void assertKeywordEquals(std::string_view actual, std::string_view expected)
 {
-    if (!Utils::equalsIgnoreCase(expected, actual))
+    if (!StringUtils::equalsIgnoreCase(expected, actual))
     {
         throw buildError("Missing |", expected, "| keyword, found instead |", actual, "|");
     }
@@ -58,4 +58,4 @@ void assertValidIdentifier(const std::string& src)
     }
 }
 
-} // namespace LunarDB::Moonlight::Errors
+} // namespace LunarDB::CppExtensions::Errors

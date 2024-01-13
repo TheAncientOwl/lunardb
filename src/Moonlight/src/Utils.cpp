@@ -6,6 +6,8 @@
 
 namespace LunarDB::Moonlight::Utils {
 
+using namespace CppExtensions;
+
 std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier)
 {
     std::string_view out{};
@@ -31,9 +33,9 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
             std::string_view word{ word_begin, word_end };
 
             str.remove_prefix(word.length());
-            Utils::ltrim(str);
+            StringUtils::ltrim(str);
 
-            Utils::trim(word);
+            StringUtils::trim(word);
 
             if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 &&
                 word.starts_with('"') && word.ends_with('"'))
@@ -54,11 +56,11 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         if (!str.empty() && str.starts_with(','))
         {
             str.remove_prefix(1);
-            Utils::ltrim(str);
+            StringUtils::ltrim(str);
         }
 
         out = str;
-        Utils::trim(out);
+        StringUtils::trim(out);
 
         if (modifier == ESplitModifier::EscapeQuotes && out.length() > 1 &&
             out.starts_with('"') && out.ends_with('"'))
@@ -68,7 +70,7 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         }
 
         str.remove_prefix(str.length());
-        Utils::ltrim(str);
+        StringUtils::ltrim(str);
     }
 
     return out;
@@ -78,7 +80,7 @@ std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifi
 {
     std::vector<std::string_view> out{};
 
-    trim(str);
+    StringUtils::trim(str);
     if (str.empty())
     {
         return out;
@@ -93,7 +95,7 @@ std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifi
         if (!str.empty() && str.front() == sep)
         {
             str.remove_prefix(1);
-            Utils::ltrim(str);
+            StringUtils::ltrim(str);
         }
     } while (!str.empty() && !word.empty());
 
@@ -143,8 +145,8 @@ std::string_view In(std::string_view& str)
     out = str.substr(0, closed_square_bracked_pos + 1);
     str.remove_prefix(closed_square_bracked_pos + 1);
 
-    Utils::trim(out);
-    Utils::ltrim(str);
+    StringUtils::trim(out);
+    StringUtils::ltrim(str);
 
     return out;
 }
@@ -158,15 +160,15 @@ std::string_view Between(std::string_view& str)
     auto num1 = extractWord(str, ' ', ESplitModifier::None);
 
     auto and_ = extractWord(str, ' ', ESplitModifier::None);
-    Utils::trim(and_);
+    StringUtils::trim(and_);
     Errors::assertKeywordEquals(and_, "and");
 
     auto num2 = extractWord(str, ' ', ESplitModifier::None);
 
     out = original.substr(0, original.length() - str.length());
 
-    Utils::ltrim(str);
-    Utils::trim(out);
+    StringUtils::ltrim(str);
+    StringUtils::trim(out);
 
     return out;
 }
@@ -186,7 +188,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
     {
         out.negated = true;
         str.remove_prefix(1);
-        Utils::ltrim(str);
+        StringUtils::ltrim(str);
     }
     else
     {
@@ -197,7 +199,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
     if (!str.starts_with('(')) { throw Errors::buildMissingError("'(' @ '", str, "'"); }
 
     str.remove_prefix(1);
-    Utils::ltrim(str);
+    StringUtils::ltrim(str);
 
     if (str.empty()) { throw Errors::buildMissingError("part of where clause @ '", str, "'"); }
 
@@ -206,7 +208,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
         if (str.starts_with(')'))
         {
             str.remove_prefix(1);
-            Utils::ltrim(str);
+            StringUtils::ltrim(str);
             break;
         }
 
@@ -255,7 +257,7 @@ QueryData::WhereClause extractWhereClause(std::string_view& str)
 {
     QueryData::WhereClause out{};
 
-    Utils::ltrim(str);
+    StringUtils::ltrim(str);
     const auto where = extractWord(str, ' ');
     Errors::assertKeywordEquals(where, "where");
     if (str.empty()) { throw Errors::buildMissingError("where clause content"); }
