@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "QueryData.hpp"
+#include "QueryData/include/QueryData.hpp"
 
 namespace LunarDB::Moonlight::Utils {
 

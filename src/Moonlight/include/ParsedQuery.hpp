@@ -2,8 +2,7 @@
 
 #include <variant>
 
-#include "Primitives.hpp"
-#include "QueryData.hpp"
+#include "QueryData/include/QueryData.hpp"
 
 namespace LunarDB::Moonlight::API {
 

@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 #include "LiteralToStringMap.hpp"
-#include "Primitives.hpp" 
+#include "QueryData/include/Primitives.hpp" 
 
 #define DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(name, ...) \
 namespace name { \

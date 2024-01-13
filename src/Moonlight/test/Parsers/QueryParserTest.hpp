@@ -3,8 +3,8 @@
 #include <gtest/gtest.h>
 
 #include "ParsedQuery.hpp"
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
+#include "QueryData/include/Helpers/Init.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 
 ///
 /// @brief Helpers to check success/fail of parsing queries

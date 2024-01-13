@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "ParsedQuery.hpp"
-#include "QueryData.hpp"
+#include "QueryData/include/QueryData.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 

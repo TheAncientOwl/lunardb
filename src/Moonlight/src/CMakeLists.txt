@@ -25,10 +25,9 @@ add_library(LunarDB_Moonlight STATIC
     Parsers/ViewParser.cpp
     Parsers/RebindParser.cpp
     Parsers/SchemaParser.cpp
-
-    QueryDataHelpers/Equality.cpp
-    QueryDataHelpers/Init.cpp
-    QueryDataHelpers/Ostream.cpp
 )
 
-target_link_libraries(LunarDB_Moonlight simdjson)
+target_link_libraries(LunarDB_Moonlight 
+    LunarDB_Common_QueryData
+    simdjson 
+)

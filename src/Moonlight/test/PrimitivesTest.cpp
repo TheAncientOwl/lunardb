@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <Primitives.hpp>
+#include "QueryData/include/Primitives.hpp"
 
 namespace LunarDB::Moonlight::QueryData::Primitives::Tests {
 

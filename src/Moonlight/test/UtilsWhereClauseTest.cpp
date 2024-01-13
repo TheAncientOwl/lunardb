@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Primitives.hpp"
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
+#include "QueryData/include/Primitives.hpp"
+#include "QueryData/include/Helpers/Init.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {
