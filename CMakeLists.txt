@@ -7,8 +7,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 project(LunarDB VERSION 0.1.0 LANGUAGES C CXX)
 
-include(cmake-utils/add_lunar_unit_test.cmake)
+# Custom Includes
+include(cmake-tools/macros/add_lunar_unit_test.cmake)
 
+# Common Includes
 include(FetchContent)
 
 # GoogleTest setup
