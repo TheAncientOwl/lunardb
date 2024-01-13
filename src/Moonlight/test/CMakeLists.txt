@@ -2,40 +2,148 @@ include(GoogleTest)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
-function(create_test_executable TARGET_NAME SOURCE_FILES)
-    add_executable(${TARGET_NAME} ${SOURCE_FILES})
+add_lunar_unit_test(
+    NAME ParsedQueryTest 
+    SOURCE_FILES ParsedQueryTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
 
-    target_link_libraries(${TARGET_NAME} PRIVATE
-        gtest
-        gtest_main
-        LunarDB_Moonlight
-    )
+add_lunar_unit_test(
+    NAME UtilsTest 
+    SOURCE_FILES UtilsTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
 
-    gtest_discover_tests(${TARGET_NAME})
-endfunction()
+add_lunar_unit_test(
+    NAME UtilsWhereClauseTest 
+    SOURCE_FILES UtilsWhereClauseTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
 
-create_test_executable(ParsedQueryTest ParsedQueryTest.cpp)
-create_test_executable(UtilsTest UtilsTest.cpp)
-create_test_executable(UtilsWhereClauseTest UtilsWhereClauseTest.cpp)
-create_test_executable(QueryExtractorTest QueryExtractorTest.cpp)
+add_lunar_unit_test(
+    NAME QueryExtractorTest 
+    SOURCE_FILES QueryExtractorTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
 
-create_test_executable(CreateParserTest Parsers/CreateParserTest.cpp)
-create_test_executable(DropParserTest Parsers/DropParserTest.cpp)
-create_test_executable(MigrateParserTest Parsers/MigrateParserTest.cpp)
-create_test_executable(TruncateParserTest Parsers/TruncateParserTest.cpp)
-create_test_executable(RenameParserTest Parsers/RenameParserTest.cpp)
-create_test_executable(SelectParserTest Parsers/SelectParserTest.cpp)
-create_test_executable(InsertParserTest Parsers/InsertParserTest.cpp)
-create_test_executable(UpdateParserTest Parsers/UpdateParserTest.cpp)
-create_test_executable(DeleteParserTest Parsers/DeleteParserTest.cpp)
-create_test_executable(LockParserTest Parsers/LockParserTest.cpp)
-create_test_executable(GrantParserTest Parsers/GrantParserTest.cpp)
-create_test_executable(RevokeParserTest Parsers/RevokeParserTest.cpp)
-create_test_executable(CommitParserTest Parsers/CommitParserTest.cpp)
-create_test_executable(RollbackParserTest Parsers/RollbackParserTest.cpp)
-create_test_executable(SavePointParserTest Parsers/SavePointParserTest.cpp)
-create_test_executable(IndexParserTest Parsers/IndexParserTest.cpp)
-create_test_executable(DatabaseParserTest Parsers/DatabaseParserTest.cpp)
-create_test_executable(ViewParserTest Parsers/ViewParserTest.cpp)
-create_test_executable(RebindParserTest Parsers/RebindParserTest.cpp)
-create_test_executable(SchemaParserTest Parsers/SchemaParserTest.cpp)
+
+add_lunar_unit_test(
+    NAME CreateParserTest 
+    SOURCE_FILES Parsers/CreateParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME DropParserTest 
+    SOURCE_FILES Parsers/DropParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME MigrateParserTest 
+    SOURCE_FILES Parsers/MigrateParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME TruncateParserTest 
+    SOURCE_FILES Parsers/TruncateParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME RenameParserTest 
+    SOURCE_FILES Parsers/RenameParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME SelectParserTest 
+    SOURCE_FILES Parsers/SelectParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME InsertParserTest 
+    SOURCE_FILES Parsers/InsertParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME UpdateParserTest 
+    SOURCE_FILES Parsers/UpdateParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME DeleteParserTest 
+    SOURCE_FILES Parsers/DeleteParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME LockParserTest 
+    SOURCE_FILES Parsers/LockParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME GrantParserTest 
+    SOURCE_FILES Parsers/GrantParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME RevokeParserTest 
+    SOURCE_FILES Parsers/RevokeParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME CommitParserTest 
+    SOURCE_FILES Parsers/CommitParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME RollbackParserTest 
+    SOURCE_FILES Parsers/RollbackParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME SavePointParserTest 
+    SOURCE_FILES Parsers/SavePointParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME IndexParserTest 
+    SOURCE_FILES Parsers/IndexParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME DatabaseParserTest 
+    SOURCE_FILES Parsers/DatabaseParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME ViewParserTest 
+    SOURCE_FILES Parsers/ViewParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME RebindParserTest 
+    SOURCE_FILES Parsers/RebindParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
+add_lunar_unit_test(
+    NAME SchemaParserTest 
+    SOURCE_FILES Parsers/SchemaParserTest.cpp 
+    DEPENDENCIES LunarDB_Moonlight
+)
+
