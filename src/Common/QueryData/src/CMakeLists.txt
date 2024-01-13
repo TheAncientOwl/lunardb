@@ -1,4 +1,4 @@
-add_library(LunarDB_Common_QueryData SHARED
+add_library(LunarDB_Common_QueryData STATIC
     Primitives.cpp
     Helpers/Init.cpp
     Helpers/Equality.cpp
