@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -9,6 +11,17 @@
 namespace LunarDB::CppExtensions::StringUtils {
 
 constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
+
+///
+/// @brief Creates a string from given arguments
+///
+template<typename... Args>
+[[nodiscard]] std::string stringify(Args&&... args)
+{
+    std::ostringstream oss{};
+    ((oss << std::forward<Args>(args) << ' '), ...);
+    return std::move(oss.str());
+}
 
 ///
 /// @brief Left trim whitespaces from given string view

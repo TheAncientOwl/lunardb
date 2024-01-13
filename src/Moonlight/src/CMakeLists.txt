@@ -2,6 +2,7 @@ add_library(LunarDB_Moonlight STATIC
     ParsedQuery.cpp
     QueryExtractor.cpp
     Utils.cpp
+    Errors.cpp
 
     Parsers/CreateParser.cpp
     Parsers/DropParser.cpp

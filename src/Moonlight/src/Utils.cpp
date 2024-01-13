@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "CppExtensions/include/Errors.hpp"
 #include "CppExtensions/include/StringUtils.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils {
@@ -226,7 +226,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             out.data.push_back(operator_);
             continue;
         }
-        catch (const Errors::LunarError& err)
+        catch (const Errors::ParserError& err)
         {
             QueryData::WhereClause::BinaryExpression expression{};
 

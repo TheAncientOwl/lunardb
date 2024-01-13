@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "CppExtensions/include/Errors.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {
@@ -140,10 +140,10 @@ TEST(UtilsTest, parseResolutionOperator)
         EXPECT_EQ(right, ""sv);
     }
 
-    EXPECT_THROW({ std::ignore = parseResolutionOperator(""); }, Errors::LunarError);
-    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:String2"); }, Errors::LunarError);
-    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1 String2"); }, Errors::LunarError);
-    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:dadsd:String2"); }, Errors::LunarError);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator(""); }, Errors::ParserError);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:String2"); }, Errors::ParserError);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1 String2"); }, Errors::ParserError);
+    EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:dadsd:String2"); }, Errors::ParserError);
 }
 
 } // namespace LunarDB::Moonlight::Utils::Tests

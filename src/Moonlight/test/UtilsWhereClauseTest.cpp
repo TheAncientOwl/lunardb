@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "CppExtensions/include/Errors.hpp"
+#include "Errors.hpp"
 #include "QueryData/include/Primitives.hpp"
 #include "QueryData/include/helpers/Init.hpp"
 #include "QueryData/include/helpers/Operators.hpp"
@@ -82,7 +82,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(      )                                           )";
         std::string_view where_sv = where;
         std::ignore = Utils::extractWhereClause(where_sv);
-        }, Errors::LunarError);
+        }, Errors::ParserError);
 
     EXPECT_THROW({
         const auto where =
@@ -101,7 +101,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(      )                                           )";
         std::string_view where_sv = where;
         std::ignore = Utils::extractWhereClause(where_sv);
-        }, Errors::LunarError);
+        }, Errors::ParserError);
 }
 
 } // namespace LunarDB::Moonlight::Utils::Tests

@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "CppExtensions/include/Errors.hpp"
 #include "CppExtensions/include/StringUtils.hpp"
+#include "Errors.hpp"
 #include "ParsedQuery.hpp"
 #include "QueryData/include/QueryData.hpp"
 #include "QueryParsers.hpp"

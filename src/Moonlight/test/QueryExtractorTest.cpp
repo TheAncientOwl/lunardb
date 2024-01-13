@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "CppExtensions/include/Errors.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 #include "QueryExtractor.hpp"
 
@@ -38,7 +38,7 @@ TEST(QueryExtractor, extractList)
     expected = std::vector<std::string_view>{ "word1"sv, "word2"sv };
     EXPECT_EQ(extractor.extractList(), expected);
     EXPECT_FALSE(extractor.empty());
-    EXPECT_THROW({ std::ignore = extractor.extractList(); }, Errors::LunarError);
+    EXPECT_THROW({ std::ignore = extractor.extractList(); }, Errors::ParserError);
 
     extractor = QueryExtractor{
         "["
