@@ -1,6 +1,10 @@
-#include "QueryParser.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
+
+using namespace CppExtensions;
 
 namespace {
 
@@ -10,6 +14,7 @@ constexpr auto c_query_prefix{ "commit" };
 
 PROVIDE_QUERY_PARSER_IMPL(Commit, c_query_prefix)
 {
+
     DECLARE_PARSED_QUERY(Commit);
 
     const auto [commit] = extractor.extractTuple<1>();

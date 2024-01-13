@@ -2,9 +2,10 @@
 
 #include <gtest/gtest.h>
 
+#include "CppExtensions/include/Errors.hpp"
 #include "ParsedQuery.hpp"
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
+#include "QueryData/include/Helpers/Init.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 
 ///
 /// @brief Helpers to check success/fail of parsing queries
@@ -16,4 +17,4 @@
     EXPECT_EQ(out, expected)
 
 #define EXPECT_FAIL(query) \
-    EXPECT_THROW(API::ParsedQuery::from(query).get<QUERY_TYPE>(), std::runtime_error)
+    EXPECT_THROW(API::ParsedQuery::from(query).get<QUERY_TYPE>(), CppExtensions::Errors::LunarError)

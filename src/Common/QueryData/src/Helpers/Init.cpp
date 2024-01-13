@@ -1,6 +1,6 @@
-#include "QueryDataHelpers/Init.hpp"
+#include "QueryData/include/Helpers/Init.hpp"
 
-namespace LunarDB::Moonlight::QueryData::Init {
+namespace LunarDB::QueryData::Init {
 
 CreateInit::SingleInit::BindingInit& CreateInit::SingleInit::BindingInit::field(const std::string& value) { return base_t::field = value, *this; }
 CreateInit::SingleInit::BindingInit& CreateInit::SingleInit::BindingInit::table(const std::string& value) { return base_t::table = value, *this; }
@@ -107,4 +107,4 @@ SchemaInit::FieldInit& SchemaInit::FieldInit::array(const bool& value) { return 
 SchemaInit& SchemaInit::name(const std::string& value) { return base_t::name = value, *this; }
 SchemaInit& SchemaInit::fields(const std::vector<Field>& value) { return base_t::fields = value, *this; }
 
-} // namespace LunarDB::Moonlight::QueryData::Init
+} // namespace LunarDB::QueryData::Init

@@ -1,11 +1,14 @@
 #include <gtest/gtest.h>
 
-#include "Primitives.hpp"
-#include "QueryDataHelpers/Init.hpp"
-#include "QueryDataHelpers/Operators.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryData/include/Primitives.hpp"
+#include "QueryData/include/Helpers/Init.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {
+
+using namespace CppExtensions;
 
 using Where = QueryData::Init::WhereClauseInit;
 using BooleanExpression = QueryData::Init::WhereClauseInit::BooleanExpressionInit;
@@ -79,7 +82,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(      )                                           )";
         std::string_view where_sv = where;
         std::ignore = Utils::extractWhereClause(where_sv);
-        }, std::runtime_error);
+        }, Errors::LunarError);
 
     EXPECT_THROW({
         const auto where =
@@ -98,7 +101,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
         R"(      )                                           )";
         std::string_view where_sv = where;
         std::ignore = Utils::extractWhereClause(where_sv);
-        }, std::runtime_error);
+        }, Errors::LunarError);
 }
 
 } // namespace LunarDB::Moonlight::Utils::Tests

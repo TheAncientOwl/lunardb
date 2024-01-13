@@ -1,13 +1,13 @@
 #include <cctype>
 #include <stdexcept>
 
-#include "LiteralToStringMap.hpp"
-#include "Primitives.hpp" 
+#include "CppExtensions/include/LiteralToStringMap.hpp"
+#include "QueryData/include/Primitives.hpp"
 
 #define DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(name, ...) \
 namespace name { \
     namespace Internal { \
-        const Implementation::LiteralToStringMap<Literal> map{ { \
+        const CppExtensions::DataStructures::LiteralToStringMap<Literal> map{ { \
             __VA_ARGS__ \
         } };\
     } \
@@ -16,7 +16,7 @@ namespace name { \
     std::ostream& operator<<(std::ostream& os, const Literal& rhs) { return os << toString(rhs); } \
 }
 
-namespace LunarDB::Moonlight::QueryData::Primitives {
+namespace LunarDB::QueryData::Primitives {
 
 DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(QueryType,
     { Literal::None, "None" },
@@ -96,4 +96,4 @@ DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(BooleanOperator,
     { Literal::Or, "or" }
 )
 
-} // namespace LunarDB::Moonlight::QueryData::Primitives
+} // namespace LunarDB::QueryData::Primitives

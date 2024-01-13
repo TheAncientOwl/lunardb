@@ -1,12 +1,13 @@
 #pragma once
 
+#include <algorithm>
 #include <string_view>
 #include <vector>
 
 #include "Errors.hpp"
-#include "Utils.hpp"
+#include "StringUtils.hpp"
 
-namespace LunarDB::Moonlight::Implementation {
+namespace LunarDB::CppExtensions::DataStructures {
 
 template <typename T>
 concept Enumeration = std::is_enum_v<T>;
@@ -52,7 +53,7 @@ Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
 {
     const auto it = std::find_if(m_data.begin(), m_data.end(),
         [&str](const auto& value) {
-            return Utils::equalsIgnoreCase(value.second, str);
+            return StringUtils::equalsIgnoreCase(value.second, str);
         });
 
     if (it == m_data.end())
@@ -63,4 +64,4 @@ Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
     return it->first;
 }
 
-} // namespace LunarDB::Moonlight::Implementation
+} // namespace LunarDB::CppExtensions::DataStructures

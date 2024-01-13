@@ -1,9 +1,12 @@
 #include <gtest/gtest.h>
 
+#include "CppExtensions/include/Errors.hpp"
+#include "Utils.hpp"
 #include "QueryExtractor.hpp"
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
+using namespace CppExtensions;
 using namespace std::literals;
 
 TEST(QueryExtractor, extractOne)
@@ -29,13 +32,13 @@ TEST(QueryExtractor, extractList)
     EXPECT_EQ(extractor.extractList(), expected);
     EXPECT_TRUE(extractor.empty());
     EXPECT_EQ(extractor.data(), ""sv);
-    EXPECT_THROW({ std::ignore = extractor.extractList(); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = extractor.extractList(); }, Errors::LunarError);
 
     extractor = QueryExtractor{ " [ word1, word2, ] ]" };
     expected = std::vector<std::string_view>{ "word1"sv, "word2"sv };
     EXPECT_EQ(extractor.extractList(), expected);
     EXPECT_FALSE(extractor.empty());
-    EXPECT_THROW({ std::ignore = extractor.extractList(); }, std::runtime_error);
+    EXPECT_THROW({ std::ignore = extractor.extractList(); }, Errors::LunarError);
 
     extractor = QueryExtractor{
         "["

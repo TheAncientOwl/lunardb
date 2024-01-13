@@ -1,7 +1,9 @@
 #include <algorithm>
 
+#include "CppExtensions/include/Errors.hpp"
+#include "CppExtensions/include/StringUtils.hpp"
 #include "ParsedQuery.hpp"
-#include "QueryData.hpp"
+#include "QueryData/include/QueryData.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
@@ -14,6 +16,7 @@ namespace LunarDB::Moonlight::API {
 ParsedQuery ParsedQuery::from(std::string_view query)
 {
     using namespace Implementation;
+    using namespace CppExtensions;
 
     static const std::array<ParserBundle, 20> s_parsers{
         Create::makeParser(),
@@ -38,13 +41,13 @@ ParsedQuery ParsedQuery::from(std::string_view query)
         Schema::makeParser()
     };
 
-    Utils::trim(query);
+    StringUtils::trim(query);
     const auto parser_ptr = std::find_if(std::begin(s_parsers), std::end(s_parsers),
         [query](const auto& query_parser) { return query_parser.first(query); });
 
     if (parser_ptr == std::end(s_parsers))
     {
-        throw std::runtime_error("Invalid query syntax");
+        throw Errors::buildError("Invalid query syntax");
     }
 
     return parser_ptr->second(query);

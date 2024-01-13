@@ -1,8 +1,12 @@
 #include <unordered_set>
 
-#include "QueryParser.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
+
+using namespace CppExtensions;
 
 namespace {
 
@@ -17,7 +21,7 @@ QueryData::Update::Modify parseModify(std::string_view str)
     const auto arrow = Utils::extractWord(str, ' ');
     Errors::assertKeywordEquals(arrow, "=>");
 
-    Utils::trim(str);
+    StringUtils::trim(str);
     if (str.find("=>") != std::string_view::npos) { throw Errors::buildMissingError(","); }
 
     out.expression = Errors::assertNotEmpty(str, "field expression");
@@ -41,7 +45,7 @@ PROVIDE_QUERY_PARSER_IMPL(Update, c_query_prefix)
     out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
-    Utils::ltrim(extractor.unsafe_data());
+    StringUtils::ltrim(extractor.unsafe_data());
     if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
     const auto modify = extractor.extractOne();
@@ -51,7 +55,7 @@ PROVIDE_QUERY_PARSER_IMPL(Update, c_query_prefix)
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
     std::unordered_set<std::string_view> modify_fields{};
-    for (const auto modify : out.modify)
+    for (const auto& modify : out.modify)
     {
         if (modify_fields.find(modify.field) != modify_fields.end())
         {

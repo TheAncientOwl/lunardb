@@ -1,8 +1,8 @@
 #pragma once
 
-#include "QueryData.hpp"
+#include "QueryData/include/QueryData.hpp"
 
-namespace LunarDB::Moonlight::QueryData::Init {
+namespace LunarDB::QueryData::Init {
 
 struct CreateInit : public Create
 {
@@ -264,4 +264,4 @@ struct SchemaInit : public Schema
     SchemaInit& fields(const std::vector<Field>& value);
 };
 
-} // namespace LunarDB::Moonlight::QueryData::Init
+} // namespace LunarDB::QueryData::Init

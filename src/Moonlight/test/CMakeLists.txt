@@ -18,7 +18,6 @@ create_test_executable(ParsedQueryTest ParsedQueryTest.cpp)
 create_test_executable(UtilsTest UtilsTest.cpp)
 create_test_executable(UtilsWhereClauseTest UtilsWhereClauseTest.cpp)
 create_test_executable(QueryExtractorTest QueryExtractorTest.cpp)
-create_test_executable(PrimitivesTest PrimitivesTest.cpp)
 
 create_test_executable(CreateParserTest Parsers/CreateParserTest.cpp)
 create_test_executable(DropParserTest Parsers/DropParserTest.cpp)

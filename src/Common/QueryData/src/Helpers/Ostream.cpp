@@ -1,10 +1,10 @@
 #include <iterator>
 #include <algorithm>
 
-#include "QueryDataHelpers/Operators.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...) \
-namespace LunarDB::Moonlight::QueryData { \
+namespace LunarDB::QueryData { \
 std::ostream& operator<<(std::ostream& os, const Type& rhs) \
 { \
     __VA_ARGS__, std::ignore; \
@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream& os, const Type& rhs) \
 #define FIELD(field_name) os << #field_name ": " << rhs.field_name
 #define FIELD_BOOL(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name
 
-namespace LunarDB::Moonlight::QueryData {
+namespace LunarDB::QueryData {
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
@@ -76,7 +76,7 @@ std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
     return os;
 }
 
-} // namespace LunarDB::Moonlight::QueryData
+} // namespace LunarDB::QueryData
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Single::Binding,
     os << "{" << rhs.field << " from " << rhs.table << "}"

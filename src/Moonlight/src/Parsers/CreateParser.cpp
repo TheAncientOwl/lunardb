@@ -1,8 +1,12 @@
 #include <unordered_set>
 
-#include "QueryParser.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
+
+using namespace CppExtensions;
 
 namespace {
 
@@ -44,7 +48,7 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
 
     if (!blended_or_binding.empty())
     {
-        if (Utils::equalsIgnoreCase(blended_or_binding, "blended"))
+        if (StringUtils::equalsIgnoreCase(blended_or_binding, "blended"))
         {
             out.blended = true;
         }
@@ -118,7 +122,7 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
         Errors::assertKeywordEquals(format_, "format");
 
         auto format = extractor.data();
-        Utils::trim(format);
+        StringUtils::trim(format);
         if (format.empty() || format.size() < 2) { throw Errors::buildMissingError("format"); }
         if (format.front() != '"' || format.back() != '"') { throw Errors::buildMissingError("\""); }
         format.remove_prefix(1);
@@ -133,6 +137,8 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
 PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
 {
+    using namespace CppExtensions;
+
     DECLARE_PARSED_QUERY(Create);
 
     const auto [create, any] = extractor.extractTuple<2>();
@@ -142,7 +148,7 @@ PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
     if (any.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
     std::string_view structure_type{};
-    if (Utils::equalsIgnoreCase(any, "volatile"))
+    if (StringUtils::equalsIgnoreCase(any, "volatile"))
     {
         out.is_volatile = true;
         structure_type = extractor.extractOne();
@@ -153,25 +159,25 @@ PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
         structure_type = any;
     }
 
-    if (Utils::equalsIgnoreCase(structure_type, "table"))
+    if (StringUtils::equalsIgnoreCase(structure_type, "table"))
     {
         out.structure_type = QueryData::Primitives::EStructureType::Table;
         out.single = parseSingle(extractor);
         out.multiple = std::nullopt;
     }
-    else if (Utils::equalsIgnoreCase(structure_type, "tables"))
+    else if (StringUtils::equalsIgnoreCase(structure_type, "tables"))
     {
         out.structure_type = QueryData::Primitives::EStructureType::Table;
         out.single = std::nullopt;
         out.multiple = parseMultiple(extractor);
     }
-    else if (Utils::equalsIgnoreCase(structure_type, "collection"))
+    else if (StringUtils::equalsIgnoreCase(structure_type, "collection"))
     {
         out.structure_type = QueryData::Primitives::EStructureType::Collection;
         out.single = parseSingle(extractor);
         out.multiple = std::nullopt;
     }
-    else if (Utils::equalsIgnoreCase(structure_type, "collections"))
+    else if (StringUtils::equalsIgnoreCase(structure_type, "collections"))
     {
         out.structure_type = QueryData::Primitives::EStructureType::Collection;
         out.single = std::nullopt;

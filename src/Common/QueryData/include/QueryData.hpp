@@ -8,7 +8,7 @@
 
 #include "Primitives.hpp"
 
-namespace LunarDB::Moonlight::QueryData {
+namespace LunarDB::QueryData {
 
 struct Create
 {
@@ -221,4 +221,4 @@ struct Schema
     std::vector<Field> fields;
 };
 
-} // namespace LunarDB::Moonlight::QueryData
+} // namespace LunarDB::QueryData

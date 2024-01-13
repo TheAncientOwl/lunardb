@@ -1,9 +1,9 @@
 #include <tuple>
 
-#include "QueryDataHelpers/Operators.hpp"
+#include "QueryData/include/Helpers/Operators.hpp"
 
 #define PROVIDE_EQUALITY_OPERATOR(Type, ...) \
-namespace LunarDB::Moonlight::QueryData { \
+namespace LunarDB::QueryData { \
 bool operator==(const Type& lhs, const Type& rhs) \
 { \
 const auto reduce = [](const Type& obj) { return std::tie(__VA_ARGS__); }; \

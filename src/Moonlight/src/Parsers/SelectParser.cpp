@@ -1,8 +1,13 @@
-#include "QueryParser.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 #include <unordered_set>
 
+
 namespace LunarDB::Moonlight::Implementation {
+
+using namespace CppExtensions;
 
 namespace {
 
@@ -37,7 +42,7 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
     out.from = Errors::assertNotEmpty(structure_name, "structure name");
 
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
-    Utils::ltrim(extractor.unsafe_data());
+    StringUtils::ltrim(extractor.unsafe_data());
 
     const auto [fields] = extractor.extractTuple<1>();
     Errors::assertKeywordEquals(fields, "fields");

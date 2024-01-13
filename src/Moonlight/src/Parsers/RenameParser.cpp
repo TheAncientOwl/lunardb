@@ -1,6 +1,10 @@
-#include "QueryParser.hpp"
+#include "CppExtensions/include/Errors.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
+
+using namespace CppExtensions;
 
 namespace {
 

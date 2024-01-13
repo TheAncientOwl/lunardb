@@ -1,11 +1,11 @@
 #pragma once
 
-#include "QueryData.hpp"
-
 #include <ostream>
 
+#include "QueryData/include/QueryData.hpp"
+
 #define DEFINE_OPERATORS(Type) \
-namespace LunarDB::Moonlight::QueryData { \
+namespace LunarDB::QueryData { \
 bool operator==(const Type& lhs, const Type& rhs); \
 std::ostream& operator<<(std::ostream& os, const Type& rhs); \
 }
