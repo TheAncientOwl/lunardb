@@ -14,7 +14,7 @@ QueryExtractor::QueryExtractor(std::string_view query)
 {
     StringUtils::trim(m_data);
 
-    if (m_data.back() == ';')
+    if (!m_data.empty() && m_data.back() == ';')
     {
         m_data.remove_suffix(1);
     }
@@ -45,6 +45,11 @@ std::string_view QueryExtractor::extractOne()
 
 std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<char, char> bound_chars)
 {
+    if (m_data.empty())
+    {
+        return {};
+    }
+
     if (m_data.front() != bound_chars.first)
     {
         std::string str{};

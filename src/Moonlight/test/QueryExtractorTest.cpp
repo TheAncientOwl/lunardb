@@ -32,7 +32,7 @@ TEST(QueryExtractor, extractList)
     EXPECT_EQ(extractor.extractList(), expected);
     EXPECT_TRUE(extractor.empty());
     EXPECT_EQ(extractor.data(), ""sv);
-    EXPECT_THROW({ std::ignore = extractor.extractList(); }, Errors::LunarError);
+    EXPECT_TRUE(extractor.extractList().empty());
 
     extractor = QueryExtractor{ " [ word1, word2, ] ]" };
     expected = std::vector<std::string_view>{ "word1"sv, "word2"sv };
