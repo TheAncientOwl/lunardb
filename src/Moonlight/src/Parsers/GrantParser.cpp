@@ -1,6 +1,7 @@
 #include <set>
 
-#include "QueryParser.hpp"
+#include "QueryParsers.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
 

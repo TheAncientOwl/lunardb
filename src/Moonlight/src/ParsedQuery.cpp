@@ -3,7 +3,6 @@
 #include "ParsedQuery.hpp"
 #include "QueryData/include/QueryData.hpp"
 #include "QueryParsers.hpp"
-#include "CppExtensions/include/StringUtils.hpp"
 #include "Utils.hpp"
 
 #define MAP_QUERY_DATA_TO_TYPE(Entry) \

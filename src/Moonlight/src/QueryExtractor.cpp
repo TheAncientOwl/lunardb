@@ -1,7 +1,5 @@
 #include <stdexcept>
 
-#include "CppExtensions/include/Errors.hpp"
-#include "CppExtensions/include/StringUtils.hpp"
 #include "QueryExtractor.hpp"
 #include "Utils.hpp"
 

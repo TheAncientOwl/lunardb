@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../QueryData.hpp"
-
 #include <ostream>
+
+#include "QueryData/include/QueryData.hpp"
 
 #define DEFINE_OPERATORS(Type) \
 namespace LunarDB::QueryData { \
