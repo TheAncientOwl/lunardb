@@ -1,5 +1,7 @@
 #include <algorithm>
 
+#include "CppExtensions/include/Errors.hpp"
+#include "CppExtensions/include/StringUtils.hpp"
 #include "ParsedQuery.hpp"
 #include "QueryData/include/QueryData.hpp"
 #include "QueryParsers.hpp"
@@ -45,7 +47,7 @@ ParsedQuery ParsedQuery::from(std::string_view query)
 
     if (parser_ptr == std::end(s_parsers))
     {
-        throw std::runtime_error("Invalid query syntax");
+        throw Errors::buildError("Invalid query syntax");
     }
 
     return parser_ptr->second(query);

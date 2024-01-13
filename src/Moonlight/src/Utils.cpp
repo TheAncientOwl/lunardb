@@ -226,7 +226,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             out.data.push_back(operator_);
             continue;
         }
-        catch (const std::runtime_error& err)
+        catch (const Errors::LunarError& err)
         {
             QueryData::WhereClause::BinaryExpression expression{};
 

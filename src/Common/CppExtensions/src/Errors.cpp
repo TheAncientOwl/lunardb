@@ -5,27 +5,27 @@
 
 namespace LunarDB::CppExtensions::Errors {
 
-std::runtime_error buildUnknownKeywordError(std::string_view keyword)
+LunarError buildUnknownKeywordError(std::string_view keyword)
 {
     return buildError("Unknown keyword |", keyword, "|");
 }
 
-std::runtime_error buildInvalidQueryFormatError(std::string_view query_type)
+LunarError buildInvalidQueryFormatError(std::string_view query_type)
 {
     return buildError("Invalid |", query_type, "' query format");
 }
 
-std::runtime_error buildUnknownSequenceError(std::string_view seq)
+LunarError buildUnknownSequenceError(std::string_view seq)
 {
     return buildError("Unknown sequence |", seq, "|");
 }
 
-std::runtime_error buildInvalidSequenceError(std::string_view seq)
+LunarError buildInvalidSequenceError(std::string_view seq)
 {
     return buildError("Invalid sequence |", seq, "|");
 }
 
-std::runtime_error buildParseJSONObjectError(std::string_view seq)
+LunarError buildParseJSONObjectError(std::string_view seq)
 {
     return buildError("Cannot parse JSON: ", seq);
 }

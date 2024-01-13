@@ -4,8 +4,6 @@
 #include <utility>
 #include <vector>
 
-#include "CppExtensions/include/Errors.hpp"
-#include "CppExtensions/include/StringUtils.hpp"
 #include "QueryData/include/QueryData.hpp"
 
 namespace LunarDB::Moonlight::Utils {

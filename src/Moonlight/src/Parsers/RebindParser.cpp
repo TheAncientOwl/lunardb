@@ -1,3 +1,4 @@
+#include "CppExtensions/include/Errors.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
