@@ -1,8 +1,8 @@
 #include <cctype>
 #include <stdexcept>
 
-#include "LiteralToStringMap.hpp"
-#include "QueryData/include/Primitives.hpp" 
+#include "CppExtensions/include/LiteralToStringMap.hpp"
+#include "QueryData/include/Primitives.hpp"
 
 #define DECLARE_MOONLIGHT_PRIMITIVE_CONVERTOR(name, ...) \
 namespace name { \

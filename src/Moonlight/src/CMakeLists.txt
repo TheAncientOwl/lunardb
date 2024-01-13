@@ -2,8 +2,6 @@ add_library(LunarDB_Moonlight STATIC
     ParsedQuery.cpp
     QueryExtractor.cpp
     Utils.cpp
-    Errors.cpp
-    Primitives.cpp
 
     Parsers/CreateParser.cpp
     Parsers/DropParser.cpp
@@ -29,5 +27,6 @@ add_library(LunarDB_Moonlight STATIC
 
 target_link_libraries(LunarDB_Moonlight 
     LunarDB_Common_QueryData
+    LunarDB_Common_CppExtensions
     simdjson 
 )

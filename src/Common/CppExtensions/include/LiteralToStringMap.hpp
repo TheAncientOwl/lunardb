@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Errors.hpp"
-#include "Utils.hpp"
+#include "StringUtils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
 
