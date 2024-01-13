@@ -1,7 +1,7 @@
 #include "CppExtensions/include/Errors.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
-#include "simdjson/simdjson.hpp"
+#include "simdjson/include/simdjson.hpp"
 
 namespace LunarDB::Moonlight::Implementation {
 

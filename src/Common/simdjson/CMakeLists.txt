@@ -1,3 +1,3 @@
-add_library(simdjson STATIC
-    simdjson.cpp
-)
+include_directories(include)
+
+add_subdirectory(src)
