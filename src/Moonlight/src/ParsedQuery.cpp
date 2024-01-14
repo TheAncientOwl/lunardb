@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 
 #include "CppExtensions/include/StringUtils.hpp"
 #include "Errors.hpp"

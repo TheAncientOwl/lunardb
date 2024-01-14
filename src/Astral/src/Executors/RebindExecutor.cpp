@@ -6,9 +6,10 @@ namespace name {
 
 } // namespace name
 
-PROVIDE_QUERY_EXECUTOR_IMPL(Create)
+PROVIDE_QUERY_EXECUTOR_IMPL(Rebind)
 {
-    DECLARE_QUERY_OBJECT(Create);
+    // TODO: Provide implementation
+    DECLARE_QUERY_OBJECT(Rebind);
 }
 
 } // namespace LunarDB::Astral::Implementation
