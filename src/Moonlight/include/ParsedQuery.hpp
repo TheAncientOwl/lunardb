@@ -6,15 +6,13 @@
 
 namespace LunarDB::Moonlight::API {
 
-using EQueryType = QueryData::Primitives::EQueryType;
-
 class ParsedQuery
 {
 public: // methods
     ///
     /// @brief Self explanatory
     ///
-    EQueryType type() const;
+    QueryData::Primitives::EQueryType type() const;
 
     ///
     /// @brief Self explanatory
@@ -41,7 +39,7 @@ public: // helpers
     static ParsedQuery from(std::string_view query);
 
 private: // fields;
-    EQueryType m_type;
+    QueryData::Primitives::EQueryType m_type;
 
     std::variant <
         QueryData::Create,
@@ -71,7 +69,7 @@ private: // fields;
     /// @tparam T QueryData::Type
     ///
     template<typename T>
-    struct QueryDataToTypeMap { static const EQueryType value; };
+    struct QueryDataToTypeMap { static const QueryData::Primitives::EQueryType value; };
 };
 
 template<typename Data>

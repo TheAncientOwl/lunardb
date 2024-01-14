@@ -15,7 +15,7 @@ namespace Specialization { \
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
 ParserBundle Specialization::makeParser() { return std::make_pair(Specialization::prefixMatch, Specialization::parse); } \
 bool Specialization::prefixMatch(std::string_view query) { return CppExtensions::StringUtils::startsWithIgnoreCase(query, QueryPrefix); } \
-API::ParsedQuery Specialization::parse(QueryExtractor extractor) \
+API::ParsedQuery Specialization::parse(QueryExtractor extractor)
 
 #define DECLARE_PARSED_QUERY(type) \
 API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::type>(); \

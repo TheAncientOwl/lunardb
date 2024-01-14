@@ -8,8 +8,8 @@
 #include "Utils.hpp"
 
 #define MAP_QUERY_DATA_TO_TYPE(Entry) \
-template<> const EQueryType \
-ParsedQuery::QueryDataToTypeMap<QueryData::Entry>::value = EQueryType::Entry;
+template<> const QueryData::Primitives::EQueryType \
+ParsedQuery::QueryDataToTypeMap<QueryData::Entry>::value = QueryData::Primitives::EQueryType::Entry;
 
 namespace LunarDB::Moonlight::API {
 
@@ -53,13 +53,13 @@ ParsedQuery ParsedQuery::from(std::string_view query)
     return parser_ptr->second(query);
 }
 
-EQueryType ParsedQuery::type() const
+QueryData::Primitives::EQueryType ParsedQuery::type() const
 {
     return m_type;
 }
 
 template<typename T>
-const EQueryType ParsedQuery::QueryDataToTypeMap<T>::value = EQueryType::None;
+const QueryData::Primitives::EQueryType ParsedQuery::QueryDataToTypeMap<T>::value = QueryData::Primitives::EQueryType::None;
 
 MAP_QUERY_DATA_TO_TYPE(Create)
 MAP_QUERY_DATA_TO_TYPE(Drop)

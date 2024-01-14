@@ -3,6 +3,8 @@ add_lunar_library(
 
     SOURCE_FILES
         QueryExecutor.cpp
+
+        Executors/Create.cpp
     
         DEPENDENCIES
             LunarDB_Common_QueryData

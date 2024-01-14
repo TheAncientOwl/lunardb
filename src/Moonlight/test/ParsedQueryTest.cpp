@@ -3,7 +3,7 @@
 #include "ParsedQuery.hpp"
 
 #define EXPECT_MAKE_PARSED_QUERY_SUCCESS(Type) \
-    EXPECT_EQ(API::ParsedQuery::make<QueryData::Type>().type(), API::EQueryType::Type)
+    EXPECT_EQ(API::ParsedQuery::make<QueryData::Type>().type(), QueryData::Primitives::EQueryType::Type)
 
 namespace LunarDB::Moonlight::API::Tests {
 
