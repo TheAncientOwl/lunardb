@@ -1,3 +1,4 @@
-add_library(LunarDB_Common_CppExtensions STATIC
-    StringUtils.cpp
+add_lunar_common_library(
+    NAME CppExtensions
+    SOURCE_FILES StringUtils.cpp
 )

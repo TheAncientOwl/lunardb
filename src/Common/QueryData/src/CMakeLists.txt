@@ -1,11 +1,12 @@
-add_library(LunarDB_Common_QueryData STATIC
-    Primitives.cpp
-    Helpers/Init.cpp
-    Helpers/Equality.cpp
-    Helpers/Ostream.cpp
-)
+add_lunar_common_library(
+    NAME QueryData
 
-target_link_libraries(LunarDB_Common_QueryData 
-    PRIVATE 
+    SOURCE_FILES
+        Primitives.cpp
+        Helpers/Init.cpp
+        Helpers/Equality.cpp
+        Helpers/Ostream.cpp
+        
+    DEPENDENCIES
         LunarDB_Common_CppExtensions
 )

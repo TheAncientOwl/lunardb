@@ -5,16 +5,16 @@ macro(add_lunar_unit_test)
     set(oneValueArgs NAME)
     set(multiValueArgs SOURCE_FILES DEPENDENCIES)
     
-    cmake_parse_arguments(ADD_LUNAR_UNIT_TEST "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     
-    add_executable(${ADD_LUNAR_UNIT_TEST_NAME} ${ADD_LUNAR_UNIT_TEST_SOURCE_FILES})
+    add_executable(${ARG_NAME} ${ARG_SOURCE_FILES})
 
-    target_link_libraries(${ADD_LUNAR_UNIT_TEST_NAME}
+    target_link_libraries(${ARG_NAME}
         PRIVATE
             gtest
             gtest_main
-            ${ADD_LUNAR_UNIT_TEST_DEPENDENCIES}
+            ${ARG_DEPENDENCIES}
     )
 
-    gtest_discover_tests(${ADD_LUNAR_UNIT_TEST_NAME})
+    gtest_discover_tests(${ARG_NAME})
 endmacro()
