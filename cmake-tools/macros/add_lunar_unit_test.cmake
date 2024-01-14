@@ -1,20 +1,24 @@
-include(GoogleTest)
-
 macro(add_lunar_unit_test)
+    if (NOT DEFINED TEST_SUITE_PREFIX)
+        message(FATAL_ERROR "Test suite prefix not defined")
+    endif()
+
     set(options "")
     set(oneValueArgs NAME)
     set(multiValueArgs SOURCE_FILES DEPENDENCIES)
     
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     
-    add_executable(${ARG_NAME} ${ARG_SOURCE_FILES})
+    set(TEST_NAME ${TEST_SUITE_PREFIX}_${ARG_NAME})
 
-    target_link_libraries(${ARG_NAME}
+    add_executable(${TEST_NAME} ${ARG_SOURCE_FILES})
+
+    target_link_libraries(${TEST_NAME}
         PRIVATE
             gtest
             gtest_main
             ${ARG_DEPENDENCIES}
     )
 
-    gtest_discover_tests(${ARG_NAME})
+    gtest_discover_tests(${TEST_NAME})
 endmacro()

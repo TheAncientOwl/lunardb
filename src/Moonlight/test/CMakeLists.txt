@@ -2,6 +2,8 @@ include(GoogleTest)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
+set(TEST_SUITE_PREFIX Moonlight)
+
 add_lunar_unit_test(
     NAME ParsedQueryTest 
     SOURCE_FILES ParsedQueryTest.cpp 

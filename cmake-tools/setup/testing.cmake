@@ -12,5 +12,7 @@ if(NOT googletest_POPULATED)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
+include(GoogleTest)
+
 include(CTest)
 enable_testing()
