@@ -9,7 +9,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 using namespace CppExtensions;
 using namespace std::literals;
 
-TEST(QueryExtractor, extractOne)
+TEST(Moonlight_QueryExtractor, extractOne)
 {
     auto query{ "  some \t \n words \t\t12345  " };
 
@@ -24,7 +24,7 @@ TEST(QueryExtractor, extractOne)
     EXPECT_EQ(extractor.extractOne(), ""sv);
 }
 
-TEST(QueryExtractor, extractList)
+TEST(Moonlight_QueryExtractor, extractList)
 {
     QueryExtractor extractor{ "  [ word1, word2 \t \n, word3,   word4  ]" };
 
@@ -55,7 +55,7 @@ TEST(QueryExtractor, extractList)
     EXPECT_EQ(extractor.extractList(), expected);
 }
 
-TEST(QueryExtractor, extractTuples)
+TEST(Moonlight_QueryExtractor, extractTuples)
 {
     const auto query{ "  some \t \n words \t\t12345  " };
     QueryExtractor extractor{ query };

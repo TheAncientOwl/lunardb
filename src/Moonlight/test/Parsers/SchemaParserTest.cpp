@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(SchemaParserTest, success01)
+TEST(Moonlight_SchemaParserTest, success01)
 {
     const auto query =
         "schema SomeSchema {"
@@ -42,7 +42,7 @@ TEST(SchemaParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SchemaParserTest, success02)
+TEST(Moonlight_SchemaParserTest, success02)
 {
     const auto query =
         "schema SomeSchema {"
@@ -78,7 +78,7 @@ TEST(SchemaParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SchemaParserTest, success03)
+TEST(Moonlight_SchemaParserTest, success03)
 {
     const auto query =
         "schema SomeSchema {"
@@ -115,7 +115,7 @@ TEST(SchemaParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SchemaParserTest, success04)
+TEST(Moonlight_SchemaParserTest, success04)
 {
     const auto query =
         "schema SomeSchema {"
@@ -133,7 +133,7 @@ TEST(SchemaParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SchemaParserTest, fail01)
+TEST(Moonlight_SchemaParserTest, fail01)
 {
     // missing {
     EXPECT_FAIL(

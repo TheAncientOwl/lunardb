@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(DatabaseParserTest, success01)
+TEST(Moonlight_DatabaseParserTest, success01)
 {
     const auto query = "database create SomeDatabase";
     const auto expected = Init::DatabaseInit{}
@@ -17,7 +17,7 @@ TEST(DatabaseParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success02)
+TEST(Moonlight_DatabaseParserTest, success02)
 {
     const auto query = "database create SomeDatabase;";
     const auto expected = Init::DatabaseInit{}
@@ -28,7 +28,7 @@ TEST(DatabaseParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success03)
+TEST(Moonlight_DatabaseParserTest, success03)
 {
     const auto query = "database drop SomeDatabase";
     const auto expected = Init::DatabaseInit{}
@@ -39,7 +39,7 @@ TEST(DatabaseParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success04)
+TEST(Moonlight_DatabaseParserTest, success04)
 {
     const auto query = "database drop SomeDatabase;";
     const auto expected = Init::DatabaseInit{}
@@ -50,7 +50,7 @@ TEST(DatabaseParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success05)
+TEST(Moonlight_DatabaseParserTest, success05)
 {
     const auto query = "database use SomeDatabase";
     const auto expected = Init::DatabaseInit{}
@@ -61,7 +61,7 @@ TEST(DatabaseParserTest, success05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success06)
+TEST(Moonlight_DatabaseParserTest, success06)
 {
     const auto query = "database use SomeDatabase;";
     const auto expected = Init::DatabaseInit{}
@@ -72,7 +72,7 @@ TEST(DatabaseParserTest, success06)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success07)
+TEST(Moonlight_DatabaseParserTest, success07)
 {
     const auto query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup")";
     const auto expected = Init::DatabaseInit{}
@@ -83,7 +83,7 @@ TEST(DatabaseParserTest, success07)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, success08)
+TEST(Moonlight_DatabaseParserTest, success08)
 {
     const auto query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup";)";
     const auto expected = Init::DatabaseInit{}
@@ -94,7 +94,7 @@ TEST(DatabaseParserTest, success08)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DatabaseParserTest, fail01)
+TEST(Moonlight_DatabaseParserTest, fail01)
 {
     EXPECT_FAIL(R"(database SomeDatabase;)");
 

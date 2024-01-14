@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(InsertParserTest, success01)
+TEST(Moonlight_InsertParserTest, success01)
 {
     const auto query =
         R"(insert into SomeStructure objects [                               )"
@@ -122,7 +122,7 @@ TEST(InsertParserTest, success01)
 /// @note All possible fails related to objects should be handled by json parser.
 ///       All possible fails related to Moonlight insert syntax are handlede by this test.
 ///
-TEST(InsertParserTest, fail01)
+TEST(Moonlight_InsertParserTest, fail01)
 {
     // missing '['
     EXPECT_FAIL(

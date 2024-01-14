@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(MigrateParserTest, success01)
+TEST(Moonlight_MigrateParserTest, success01)
 {
     const auto query = "migrate structure SomeStructure to NewSchema";
     const auto expected = Init::MigrateInit{}
@@ -17,7 +17,7 @@ TEST(MigrateParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(MigrateParserTest, success02)
+TEST(Moonlight_MigrateParserTest, success02)
 {
     const auto query = "migrate structure SomeStructure to NewSchema;";
     const auto expected = Init::MigrateInit{}
@@ -28,7 +28,7 @@ TEST(MigrateParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(MigrateParserTest, success03)
+TEST(Moonlight_MigrateParserTest, success03)
 {
     const auto query =
         "migrate structure SomeStructure to NewSchema using ["
@@ -51,7 +51,7 @@ TEST(MigrateParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(MigrateParserTest, success04)
+TEST(Moonlight_MigrateParserTest, success04)
 {
     const auto query =
         "migrate structure SomeStructure to NewSchema using ["
@@ -70,7 +70,7 @@ TEST(MigrateParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(MigrateParserTest, fail01)
+TEST(Moonlight_MigrateParserTest, fail01)
 {
     EXPECT_FAIL("migrate SomeStructure to NewSchema");
     EXPECT_FAIL("migrate structure to NewSchema");

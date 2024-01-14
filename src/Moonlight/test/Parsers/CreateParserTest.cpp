@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(CreateParserTest, singleNoBindingSuccess01)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess01)
 {
     const auto query = "create table SomeTable based on SomeSchema";
     const auto expected = Init::CreateInit{}
@@ -23,7 +23,7 @@ TEST(CreateParserTest, singleNoBindingSuccess01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess02)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess02)
 {
     const auto query = "create volatile table SomeTable based on SomeSchema";
     const auto expected = Init::CreateInit{}
@@ -40,7 +40,7 @@ TEST(CreateParserTest, singleNoBindingSuccess02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess03)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess03)
 {
     const auto query = "create table SomeTable based on SomeSchema blended";
     const auto expected = Init::CreateInit{}
@@ -57,7 +57,7 @@ TEST(CreateParserTest, singleNoBindingSuccess03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess04)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess04)
 {
     const auto query = "create volatile table SomeTable based on SomeSchema blended";
     const auto expected = Init::CreateInit{}
@@ -74,7 +74,7 @@ TEST(CreateParserTest, singleNoBindingSuccess04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess05)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess05)
 {
     const auto query = "create collection SomeCollection based on SomeSchema";
     const auto expected = Init::CreateInit{}
@@ -91,7 +91,7 @@ TEST(CreateParserTest, singleNoBindingSuccess05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess06)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess06)
 {
     const auto query = "create volatile collection SomeCollection based on SomeSchema";
     const auto expected = Init::CreateInit{}
@@ -108,7 +108,7 @@ TEST(CreateParserTest, singleNoBindingSuccess06)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess07)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess07)
 {
     const auto query = "create collection SomeCollection based on SomeSchema blended";
     const auto expected = Init::CreateInit{}
@@ -125,7 +125,7 @@ TEST(CreateParserTest, singleNoBindingSuccess07)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingSuccess08)
+TEST(Moonlight_CreateParserTest, singleNoBindingSuccess08)
 {
     const auto query = "create volatile collection SomeCollection based on SomeSchema blended";
     const auto expected = Init::CreateInit{}
@@ -142,7 +142,7 @@ TEST(CreateParserTest, singleNoBindingSuccess08)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess01)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess01)
 {
     const auto query =
         "create table SomeTable based on SomeSchema"
@@ -165,7 +165,7 @@ TEST(CreateParserTest, singleBindingSuccess01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess02)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess02)
 {
     const auto query =
         "create volatile table SomeTable based on SomeSchema"
@@ -188,7 +188,7 @@ TEST(CreateParserTest, singleBindingSuccess02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess03)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess03)
 {
     const auto query =
         "create table SomeTable based on SomeSchema "
@@ -211,7 +211,7 @@ TEST(CreateParserTest, singleBindingSuccess03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess04)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess04)
 {
     const auto query =
         "create volatile table SomeTable based on SomeSchema"
@@ -234,7 +234,7 @@ TEST(CreateParserTest, singleBindingSuccess04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess05)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess05)
 {
     const auto query =
         "create collection SomeCollection based on SomeSchema"
@@ -257,7 +257,7 @@ TEST(CreateParserTest, singleBindingSuccess05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess06)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess06)
 {
     const auto query =
         "create volatile collection SomeCollection based on SomeSchema"
@@ -280,7 +280,7 @@ TEST(CreateParserTest, singleBindingSuccess06)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess07)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess07)
 {
     const auto query =
         "create collection SomeCollection based on SomeSchema"
@@ -303,7 +303,7 @@ TEST(CreateParserTest, singleBindingSuccess07)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleBindingSuccess08)
+TEST(Moonlight_CreateParserTest, singleBindingSuccess08)
 {
     const auto query =
         "create volatile collection SomeCollection based on SomeSchema"
@@ -326,7 +326,7 @@ TEST(CreateParserTest, singleBindingSuccess08)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple01)
+TEST(Moonlight_CreateParserTest, multiple01)
 {
     const auto query = "create tables from [ Schema1, Schema2, Schema3, Schema4 ]";
     const auto expected = Init::CreateInit{}
@@ -341,7 +341,7 @@ TEST(CreateParserTest, multiple01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple02)
+TEST(Moonlight_CreateParserTest, multiple02)
 {
     const auto query = R"(create tables from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")";
     const auto expected = Init::CreateInit{}
@@ -356,7 +356,7 @@ TEST(CreateParserTest, multiple02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple03)
+TEST(Moonlight_CreateParserTest, multiple03)
 {
     const auto query = "create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ]";
     const auto expected = Init::CreateInit{}
@@ -371,7 +371,7 @@ TEST(CreateParserTest, multiple03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple04)
+TEST(Moonlight_CreateParserTest, multiple04)
 {
     const auto query = R"(create volatile tables from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Table")";
     const auto expected = Init::CreateInit{}
@@ -386,7 +386,7 @@ TEST(CreateParserTest, multiple04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple05)
+TEST(Moonlight_CreateParserTest, multiple05)
 {
     const auto query = "create collections from [ Schema1, Schema2, Schema3, Schema4 ]";
     const auto expected = Init::CreateInit{}
@@ -401,7 +401,7 @@ TEST(CreateParserTest, multiple05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple06)
+TEST(Moonlight_CreateParserTest, multiple06)
 {
     const auto query = R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")";
     const auto expected = Init::CreateInit{}
@@ -416,7 +416,7 @@ TEST(CreateParserTest, multiple06)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple07)
+TEST(Moonlight_CreateParserTest, multiple07)
 {
     const auto query = "create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ]";
     const auto expected = Init::CreateInit{}
@@ -431,7 +431,7 @@ TEST(CreateParserTest, multiple07)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, multiple08)
+TEST(Moonlight_CreateParserTest, multiple08)
 {
     const auto query = R"(create volatile collections from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection")";
     const auto expected = Init::CreateInit{}
@@ -446,7 +446,7 @@ TEST(CreateParserTest, multiple08)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(CreateParserTest, singleNoBindingsFail01)
+TEST(Moonlight_CreateParserTest, singleNoBindingsFail01)
 {
     EXPECT_FAIL("create volatile SomeTable based on SomeSchema blended");
     EXPECT_FAIL("create volatile table based on SomeSchema blended");
@@ -467,7 +467,7 @@ TEST(CreateParserTest, singleNoBindingsFail01)
     EXPECT_FAIL("create volatile collection Some Table based on SomeSchema blended");
 }
 
-TEST(CreateParserTest, singleBindingsFail01)
+TEST(Moonlight_CreateParserTest, singleBindingsFail01)
 {
     EXPECT_FAIL("create table SomeTable based on SomeSchema binding [ from SomeTable1, field2 from SomeTable2 ]");
     EXPECT_FAIL("create table SomeTable based on SomeSchema binding [ field1 SomeTable1, field2 from SomeTable2 ]");
@@ -526,7 +526,7 @@ TEST(CreateParserTest, singleBindingsFail01)
     EXPECT_FAIL("create collection SomeCollection based on SomeSchema binding [ field1 from SomeCollection1, SomeCollection2 ] blended");
 }
 
-TEST(CreateParserTest, multipleFail01)
+TEST(Moonlight_CreateParserTest, multipleFail01)
 {
     EXPECT_FAIL(R"(create [ Schema1, Schema2, Schema3, Schema4 ] using format)");
 

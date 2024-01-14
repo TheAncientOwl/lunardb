@@ -8,7 +8,7 @@ namespace LunarDB::CppExtensions::StringUtils::Tests {
 
 using namespace std::literals;
 
-TEST(StringUtilsTest, ltrim)
+TEST(Common_CppExtensions_StringUtilsTest, ltrim)
 {
     EXPECT_TRIM_EQ(ltrim, ""sv, "\r\r\r\t\t\t       "sv);
     EXPECT_TRIM_EQ(ltrim, ""sv, ""sv);
@@ -22,7 +22,7 @@ TEST(StringUtilsTest, ltrim)
     EXPECT_TRIM_EQ(ltrim, "some string"sv, "  \t  \v  \f  \t    \v     \t \rsome string"sv);
 }
 
-TEST(StringUtilsTest, rtrim)
+TEST(Common_CppExtensions_StringUtilsTest, rtrim)
 {
     EXPECT_TRIM_EQ(rtrim, ""sv, "\r\r\r\t\t\t       "sv);
     EXPECT_TRIM_EQ(rtrim, ""sv, ""sv);
@@ -36,7 +36,7 @@ TEST(StringUtilsTest, rtrim)
     EXPECT_TRIM_EQ(rtrim, "some string"sv, "some string  \t  \v  \f  \t    \v     \t \r"sv);
 }
 
-TEST(StringUtilsTest, trim)
+TEST(Common_CppExtensions_StringUtilsTest, trim)
 {
     EXPECT_TRIM_EQ(trim, ""sv, "\r\r\r\t\t\t       "sv);
     EXPECT_TRIM_EQ(trim, ""sv, ""sv);
@@ -50,7 +50,7 @@ TEST(StringUtilsTest, trim)
     EXPECT_TRIM_EQ(trim, "some string"sv, "  \t  \v  \f  \t    \v     \t \rsome string  \t  \v  \f  \t    \v     \t \r"sv);
 }
 
-TEST(StringUtilsTest, equalsIgnoreTest)
+TEST(Common_CppExtensions_StringUtilsTest, equalsIgnoreTest)
 {
     EXPECT_TRUE(equalsIgnoreCase("", ""));
     EXPECT_TRUE(equalsIgnoreCase("qWertYUIop", "QWErtyUIOp"));
@@ -60,7 +60,7 @@ TEST(StringUtilsTest, equalsIgnoreTest)
     EXPECT_FALSE(equalsIgnoreCase("somestr1", "somestr2"));
 }
 
-TEST(StringUtilsTest, startsWithIgnoreCase)
+TEST(Common_CppExtensions_StringUtilsTest, startsWithIgnoreCase)
 {
     EXPECT_TRUE(startsWithIgnoreCase("", ""));
     EXPECT_TRUE(startsWithIgnoreCase("qWertYUIopASDFGHJKL", "QWErtyUIOp"));

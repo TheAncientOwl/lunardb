@@ -4,7 +4,7 @@
 
 namespace LunarDB::QueryData::Primitives::Tests {
 
-TEST(PrimitivesTest, QueryType)
+TEST(Common_QueryData_PrimitivesTest, QueryType)
 {
     using namespace QueryType;
 
@@ -31,7 +31,7 @@ TEST(PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Schema, toLiteral(toString(EQueryType::Schema)));
 }
 
-TEST(PrimitivesTest, StructureType)
+TEST(Common_QueryData_PrimitivesTest, StructureType)
 {
     using namespace StructureType;
 
@@ -40,7 +40,7 @@ TEST(PrimitivesTest, StructureType)
     EXPECT_EQ(EStructureType::Collection, toLiteral(toString(EStructureType::Collection)));
 }
 
-TEST(PrimitivesTest, RenameType)
+TEST(Common_QueryData_PrimitivesTest, RenameType)
 {
     using namespace RenameType;
 
@@ -50,7 +50,7 @@ TEST(PrimitivesTest, RenameType)
     EXPECT_EQ(ERenameType::Database, toLiteral(toString(ERenameType::Database)));
 }
 
-TEST(PrimitivesTest, OrderType)
+TEST(Common_QueryData_PrimitivesTest, OrderType)
 {
     using namespace OrderType;
 
@@ -59,7 +59,7 @@ TEST(PrimitivesTest, OrderType)
     EXPECT_EQ(EOrderType::Desc, toLiteral(toString(EOrderType::Desc)));
 }
 
-TEST(PrimitivesTest, UserPermissionType)
+TEST(Common_QueryData_PrimitivesTest, UserPermissionType)
 {
     using namespace UserPermissionType;
 
@@ -71,7 +71,7 @@ TEST(PrimitivesTest, UserPermissionType)
     EXPECT_EQ(EUserPermissionType::Select, toLiteral(toString(EUserPermissionType::Select)));
 }
 
-TEST(PrimitivesTest, DatabaseOperationType)
+TEST(Common_QueryData_PrimitivesTest, DatabaseOperationType)
 {
     using namespace DatabaseOperationType;
 
@@ -82,7 +82,7 @@ TEST(PrimitivesTest, DatabaseOperationType)
     EXPECT_EQ(EDatabaseOperationType::Use, toLiteral(toString(EDatabaseOperationType::Use)));
 }
 
-TEST(PrimitivesTest, BinaryOperator)
+TEST(Common_QueryData_PrimitivesTest, BinaryOperator)
 {
     using namespace BinaryOperator;
 
@@ -97,7 +97,7 @@ TEST(PrimitivesTest, BinaryOperator)
     EXPECT_EQ(EBinaryOperator::Like, toLiteral(toString(EBinaryOperator::Like)));
 }
 
-TEST(PrimitivesTest, BooleanOperator)
+TEST(Common_QueryData_PrimitivesTest, BooleanOperator)
 {
     using namespace BooleanOperator;
 

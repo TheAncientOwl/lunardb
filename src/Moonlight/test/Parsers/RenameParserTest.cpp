@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(RenameParserTest, success01)
+TEST(Moonlight_RenameParserTest, success01)
 {
     const auto query = "rename structure from SomeStructure to SomeStructureNew";
     const auto expected = Init::RenameInit{}
@@ -17,7 +17,7 @@ TEST(RenameParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success02)
+TEST(Moonlight_RenameParserTest, success02)
 {
     const auto query = "rename structure from SomeStructure to SomeStructureNew;";
     const auto expected = Init::RenameInit{}
@@ -28,7 +28,7 @@ TEST(RenameParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success03)
+TEST(Moonlight_RenameParserTest, success03)
 {
     const auto query = "    rename      structure    from     SomeStructure         to      SomeStructureNew     ;   ";
     const auto expected = Init::RenameInit{}
@@ -39,7 +39,7 @@ TEST(RenameParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success04)
+TEST(Moonlight_RenameParserTest, success04)
 {
     const auto query = "rename database from SomeDatabase to SomeDatabaseNew";
     const auto expected = Init::RenameInit{}
@@ -50,7 +50,7 @@ TEST(RenameParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success05)
+TEST(Moonlight_RenameParserTest, success05)
 {
     const auto query = "    rename      database    from     SomeDatabase         to      SomeDatabaseNew     ;   ";
     const auto expected = Init::RenameInit{}
@@ -61,7 +61,7 @@ TEST(RenameParserTest, success05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success06)
+TEST(Moonlight_RenameParserTest, success06)
 {
     const auto query = "rename field from SomeStructure::SomeField to SomeStructure::SomeFieldNew";
     const auto expected = Init::RenameInit{}
@@ -72,7 +72,7 @@ TEST(RenameParserTest, success06)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, success07)
+TEST(Moonlight_RenameParserTest, success07)
 {
     const auto query = "    rename      field        from       SomeStructure::SomeField   to        SomeStructure::SomeFieldNew     ;";
     const auto expected = Init::RenameInit{}
@@ -83,7 +83,7 @@ TEST(RenameParserTest, success07)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RenameParserTest, fail01)
+TEST(Moonlight_RenameParserTest, fail01)
 {
     EXPECT_FAIL("rename structure from SomeStructure to Some StructureNew");
     EXPECT_FAIL("rename structure from Some Structure to SomeStructureNew");

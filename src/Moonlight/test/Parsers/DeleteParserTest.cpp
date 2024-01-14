@@ -12,7 +12,7 @@ using BinaryExpression = Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = Primitives::EBooleanOperator;
 using BinaryOperator = Primitives::EBinaryOperator;
 
-TEST(DeleteParserTest, success01)
+TEST(Moonlight_DeleteParserTest, success01)
 {
     const auto query =
         R"(delete from structure StructureName               )"
@@ -59,7 +59,7 @@ TEST(DeleteParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(DeleteParserTest, fail01)
+TEST(Moonlight_DeleteParserTest, fail01)
 {
     EXPECT_FAIL(
         R"(delete from StructureName                         )"

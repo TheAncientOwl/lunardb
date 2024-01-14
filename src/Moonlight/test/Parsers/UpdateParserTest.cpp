@@ -12,7 +12,7 @@ using BinaryExpression = Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = Primitives::EBooleanOperator;
 using BinaryOperator = Primitives::EBinaryOperator;
 
-TEST(UpdateParserTest, success01)
+TEST(Moonlight_UpdateParserTest, success01)
 {
     const auto query =
         R"(update structure StructureName                    )"
@@ -67,7 +67,7 @@ TEST(UpdateParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(UpdateParserTest, fail01)
+TEST(Moonlight_UpdateParserTest, fail01)
 {
     // same field twice
     EXPECT_FAIL(

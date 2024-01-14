@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(RebindParserTest, success01)
+TEST(Moonlight_RebindParserTest, success01)
 {
     const auto query = "rebind SomeStructure::someField to SomeTable";
     const auto expected = Init::RebindInit{}
@@ -18,7 +18,7 @@ TEST(RebindParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RebindParserTest, success02)
+TEST(Moonlight_RebindParserTest, success02)
 {
     const auto query = "rebind      SomeStructure::someField         to      SomeTable    ;   ";
     const auto expected = Init::RebindInit{}
@@ -30,7 +30,7 @@ TEST(RebindParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RebindParserTest, success03)
+TEST(Moonlight_RebindParserTest, success03)
 {
     const auto query = "rebind SomeStructure::someField to SomeTable clean";
     const auto expected = Init::RebindInit{}
@@ -42,7 +42,7 @@ TEST(RebindParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RebindParserTest, success04)
+TEST(Moonlight_RebindParserTest, success04)
 {
     const auto query = "rebind    SomeStructure::someField     to  SomeTable    clean    ;   ";
     const auto expected = Init::RebindInit{}
@@ -54,7 +54,7 @@ TEST(RebindParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RebindParserTest, fail01)
+TEST(Moonlight_RebindParserTest, fail01)
 {
     EXPECT_FAIL("rebind SomeStructure:: someField to SomeTable");
     EXPECT_FAIL("rebind SomeStructure:: to SomeTable");

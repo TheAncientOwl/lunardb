@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(LockParserTest, success01)
+TEST(Moonlight_LockParserTest, success01)
 {
     const auto query = "set concurrency on structure StructureName on";
     const auto expected = Init::LockInit{}
@@ -16,7 +16,7 @@ TEST(LockParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(LockParserTest, success02)
+TEST(Moonlight_LockParserTest, success02)
 {
     const auto query = "set concurrency     \non  structure\n StructureName on     ;";
     const auto expected = Init::LockInit{}
@@ -26,7 +26,7 @@ TEST(LockParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(LockParserTest, success03)
+TEST(Moonlight_LockParserTest, success03)
 {
     const auto query = "set concurrency on structure StructureName off";
     const auto expected = Init::LockInit{}
@@ -36,7 +36,7 @@ TEST(LockParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(LockParserTest, success04)
+TEST(Moonlight_LockParserTest, success04)
 {
     const auto query = "    set  concurrency         on      structure      \n  StructureName   off  \n;     ";
     const auto expected = Init::LockInit{}
@@ -46,7 +46,7 @@ TEST(LockParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(LockParserTest, fail01)
+TEST(Moonlight_LockParserTest, fail01)
 {
     EXPECT_FAIL("set concurrency on structure StructureName");
     EXPECT_FAIL("set concurrency on structure StructureName;");

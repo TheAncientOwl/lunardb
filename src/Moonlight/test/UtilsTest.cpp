@@ -8,7 +8,7 @@ namespace LunarDB::Moonlight::Utils::Tests {
 using namespace CppExtensions;
 using namespace std::literals;
 
-TEST(UtilsTest, split01)
+TEST(Moonlight_UtilsTest, split01)
 {
     const auto str = "  field1  ,  field2  ";
 
@@ -22,7 +22,7 @@ TEST(UtilsTest, split01)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split02)
+TEST(Moonlight_UtilsTest, split02)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3  )";
 
@@ -38,7 +38,7 @@ TEST(UtilsTest, split02)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split03)
+TEST(Moonlight_UtilsTest, split03)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes", and commas"  )";
 
@@ -56,7 +56,7 @@ TEST(UtilsTest, split03)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split04)
+TEST(Moonlight_UtilsTest, split04)
 {
     const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes\", and commas"  )";
 
@@ -73,7 +73,7 @@ TEST(UtilsTest, split04)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split05)
+TEST(Moonlight_UtilsTest, split05)
 {
     const auto str = R"(  field1, field2, "", field3  )";
 
@@ -88,7 +88,7 @@ TEST(UtilsTest, split05)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split06)
+TEST(Moonlight_UtilsTest, split06)
 {
     const auto str = R"(  field1, field2, "", ", field3  )";
 
@@ -103,7 +103,7 @@ TEST(UtilsTest, split06)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, split07)
+TEST(Moonlight_UtilsTest, split07)
 {
     const auto str = R"(  field1, field2, "", ", field3  )";
 
@@ -120,7 +120,7 @@ TEST(UtilsTest, split07)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsTest, parseResolutionOperator)
+TEST(Moonlight_UtilsTest, parseResolutionOperator)
 {
     {
         const auto [left, right] = parseResolutionOperator("String1::String2");

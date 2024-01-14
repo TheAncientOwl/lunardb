@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(TruncateParserTest, success01)
+TEST(Moonlight_TruncateParserTest, success01)
 {
     const auto query = "truncate structure SomeStructure";
     const auto expected = Init::TruncateInit{}
@@ -15,7 +15,7 @@ TEST(TruncateParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(TruncateParserTest, success02)
+TEST(Moonlight_TruncateParserTest, success02)
 {
     const auto query = "truncate structure SomeStructure;";
     const auto expected = Init::TruncateInit{}
@@ -24,7 +24,7 @@ TEST(TruncateParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(TruncateParserTest, success03)
+TEST(Moonlight_TruncateParserTest, success03)
 {
     const auto query = "    truncate         structure   SomeStructure    ";
     const auto expected = Init::TruncateInit{}
@@ -33,7 +33,7 @@ TEST(TruncateParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(TruncateParserTest, success04)
+TEST(Moonlight_TruncateParserTest, success04)
 {
     const auto query = "    truncate         structure   SomeStructure    ;  ";
     const auto expected = Init::TruncateInit{}
@@ -42,7 +42,7 @@ TEST(TruncateParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(TruncateParserTest, fail01)
+TEST(Moonlight_TruncateParserTest, fail01)
 {
     EXPECT_FAIL("truncate structure");
     EXPECT_FAIL("truncate structure SomeStructure dadad");

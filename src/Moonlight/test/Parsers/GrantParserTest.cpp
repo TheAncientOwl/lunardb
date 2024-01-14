@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(GrantParserTest, success01)
+TEST(Moonlight_GrantParserTest, success01)
 {
     const auto query = "grant [ select, create, update, insert, delete ] to UserName";
     const auto expected = Init::GrantInit{}
@@ -23,7 +23,7 @@ TEST(GrantParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(GrantParserTest, success02)
+TEST(Moonlight_GrantParserTest, success02)
 {
     const auto query = "grant    [      create,         update,      insert,    delete  ]    to         UserName    ;";
     const auto expected = Init::GrantInit{}
@@ -39,7 +39,7 @@ TEST(GrantParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(GrantParserTest, success03)
+TEST(Moonlight_GrantParserTest, success03)
 {
     const auto query = "grant    [      update,         create,      delete,    insert  ]    to         UserName    ;";
     const auto expected = Init::GrantInit{}
@@ -55,7 +55,7 @@ TEST(GrantParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(GrantParserTest, success04)
+TEST(Moonlight_GrantParserTest, success04)
 {
     const auto query = "grant [ update, insert, delete ] to UserName on SomeStructure";
     const auto expected = Init::GrantInit{}
@@ -70,7 +70,7 @@ TEST(GrantParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(GrantParserTest, success05)
+TEST(Moonlight_GrantParserTest, success05)
 {
     const auto query = "grant [ create, update, insert, create, delete, update ] to UserName on SomeStructure";
     const auto expected = Init::GrantInit{}
@@ -86,7 +86,7 @@ TEST(GrantParserTest, success05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(GrantParserTest, fail01)
+TEST(Moonlight_GrantParserTest, fail01)
 {
     EXPECT_FAIL("grant select, create, update, insert, delete ] to UserName on StructureName");
     EXPECT_FAIL("grant [ select, create, update, insert, delete to UserName on StructureName");

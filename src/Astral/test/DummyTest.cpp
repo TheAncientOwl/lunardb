@@ -2,7 +2,7 @@
 
 namespace LunarDB::Astro::Tests {
 
-TEST(DummyTest, dummy)
+TEST(Astral_DummyTest, dummy)
 {
     EXPECT_TRUE(true);
 }

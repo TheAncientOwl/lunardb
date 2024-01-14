@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(IndexParserTest, success02)
+TEST(Moonlight_IndexParserTest, success02)
 {
     const auto query = "index StructureName as IndexName";
     const auto expected = Init::IndexInit{}
@@ -18,7 +18,7 @@ TEST(IndexParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(IndexParserTest, success03)
+TEST(Moonlight_IndexParserTest, success03)
 {
     const auto query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
     const auto expected = Init::IndexInit{}
@@ -30,7 +30,7 @@ TEST(IndexParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(IndexParserTest, success04)
+TEST(Moonlight_IndexParserTest, success04)
 {
     const auto query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
     const auto expected = Init::IndexInit{}
@@ -42,7 +42,7 @@ TEST(IndexParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(IndexParserTest, success05)
+TEST(Moonlight_IndexParserTest, success05)
 {
     const auto query = "index StructureName as IndexName using [ field1, field2, field3, field1 ]";
     const auto expected = Init::IndexInit{}
@@ -54,7 +54,7 @@ TEST(IndexParserTest, success05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(IndexParserTest, fail01)
+TEST(Moonlight_IndexParserTest, fail01)
 {
     EXPECT_FAIL("index StructureName unique");
     EXPECT_FAIL("index StructureName");

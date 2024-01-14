@@ -16,7 +16,7 @@ using BinaryExpression = QueryData::Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = QueryData::Primitives::EBooleanOperator;
 using BinaryOperator = QueryData::Primitives::EBinaryOperator;
 
-TEST(UtilsWhereClauseTest, parseWhereClauseSuccess01)
+TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
 {
     const auto where =
         R"(     where (                                      )"
@@ -63,7 +63,7 @@ TEST(UtilsWhereClauseTest, parseWhereClauseSuccess01)
     EXPECT_EQ(out, expected);
 }
 
-TEST(UtilsWhereClauseTest, parseWhereClauseFail01)
+TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseFail01)
 {
     EXPECT_THROW({
         const auto where =

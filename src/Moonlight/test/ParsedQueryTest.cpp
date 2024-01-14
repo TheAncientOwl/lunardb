@@ -7,7 +7,7 @@
 
 namespace LunarDB::Moonlight::API::Tests {
 
-TEST(ParsedQueryTest, makeParsedQueries)
+TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
 {
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Create);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Drop);

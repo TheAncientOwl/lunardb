@@ -6,7 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
-TEST(RevokeParserTest, success01)
+TEST(Moonlight_RevokeParserTest, success01)
 {
     const auto query = "revoke [ select, create, update, insert, delete ] from UserName";
     const auto expected = Init::RevokeInit{}
@@ -23,7 +23,7 @@ TEST(RevokeParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RevokeParserTest, success02)
+TEST(Moonlight_RevokeParserTest, success02)
 {
     const auto query = "revoke    [      create,         update,      insert,    delete  ]    from         UserName    ;";
     const auto expected = Init::RevokeInit{}
@@ -39,7 +39,7 @@ TEST(RevokeParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RevokeParserTest, success03)
+TEST(Moonlight_RevokeParserTest, success03)
 {
     const auto query = "revoke    [      update,         create,      delete,    insert  ]    from         UserName    ;";
     const auto expected = Init::RevokeInit{}
@@ -55,7 +55,7 @@ TEST(RevokeParserTest, success03)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RevokeParserTest, success04)
+TEST(Moonlight_RevokeParserTest, success04)
 {
     const auto query = "revoke [ update, insert, delete ] from UserName on SomeStructure";
     const auto expected = Init::RevokeInit{}
@@ -70,7 +70,7 @@ TEST(RevokeParserTest, success04)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RevokeParserTest, success05)
+TEST(Moonlight_RevokeParserTest, success05)
 {
     const auto query = "revoke [ create, update, insert, create, delete, update ] from UserName on SomeStructure";
     const auto expected = Init::RevokeInit{}
@@ -86,7 +86,7 @@ TEST(RevokeParserTest, success05)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(RevokeParserTest, fail01)
+TEST(Moonlight_RevokeParserTest, fail01)
 {
     EXPECT_FAIL("revoke select, create, update, insert, delete ] from UserName on StructureName");
     EXPECT_FAIL("revoke [ select, create, update, insert, delete from UserName on StructureName");

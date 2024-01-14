@@ -12,7 +12,7 @@ using BinaryExpression = Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = Primitives::EBooleanOperator;
 using BinaryOperator = Primitives::EBinaryOperator;
 
-TEST(SelectParserTest, success01)
+TEST(Moonlight_SelectParserTest, success01)
 {
     const auto query =
         R"(select from structure StructureName                    )"
@@ -62,7 +62,7 @@ TEST(SelectParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SelectParserTest, success02)
+TEST(Moonlight_SelectParserTest, success02)
 {
     const auto query =
         R"(select from structure StructureName                    )"
@@ -117,7 +117,7 @@ TEST(SelectParserTest, success02)
     EXPECT_SUCCESS(query, expected);
 }
 
-TEST(SelectParserTest, fail01)
+TEST(Moonlight_SelectParserTest, fail01)
 {
     // missing from
     EXPECT_FAIL(
