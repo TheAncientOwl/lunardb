@@ -33,11 +33,6 @@ public: // helpers
     template<typename Data>
     static ParsedQuery make();
 
-    ///
-    /// @brief Creates a ParsedQuery from given string
-    /// 
-    static ParsedQuery from(std::string_view query);
-
 private: // fields;
     QueryData::Primitives::EQueryType m_type;
 
@@ -71,6 +66,8 @@ private: // fields;
     template<typename T>
     struct QueryDataToTypeMap { static const QueryData::Primitives::EQueryType value; };
 };
+
+ParsedQuery parseQuery(std::string_view query);
 
 template<typename Data>
 inline Data& ParsedQuery::get()

@@ -14,7 +14,7 @@ ParsedQuery::QueryDataToTypeMap<QueryData::Entry>::value = QueryData::Primitives
 
 namespace LunarDB::Moonlight::API {
 
-ParsedQuery ParsedQuery::from(std::string_view query)
+ParsedQuery parseQuery(std::string_view query)
 {
     using namespace Implementation;
     using namespace CppExtensions;
