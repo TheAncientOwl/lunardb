@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 
+#include "CppExtensions/include/StringUtils.hpp"
 #include "Errors.hpp"
 #include "QueryParser.hpp"
 #include "QueryParsers.hpp"
@@ -37,7 +38,7 @@ ParsedQuery parseQuery(std::string_view query)
 
     StringUtils::trim(query);
     const auto parser_ptr = std::find_if(std::begin(s_parsers), std::end(s_parsers),
-        [query](const auto& query_parser) { return query_parser.first(query); });
+        [query](const auto& query_parser) { return StringUtils::startsWithIgnoreCase(query, query_parser.first); });
 
     if (parser_ptr == std::end(s_parsers))
     {

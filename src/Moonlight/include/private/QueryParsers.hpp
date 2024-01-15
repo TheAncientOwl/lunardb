@@ -1,20 +1,19 @@
 #pragma once
 
+#include <string>
+#include <utility>
+
 #include "ParsedQuery.hpp"
 #include "QueryExtractor.hpp"
-#include "CppExtensions/include/StringUtils.hpp"
-#include "Utils.hpp"
 
 #define PROVIDE_QUERY_PARSER(Specialization) \
 namespace Specialization { \
 [[nodiscard]] ParserBundle makeParser(); \
-[[nodiscard]] bool prefixMatch(std::string_view query); \
 [[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
 }
 
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
-ParserBundle Specialization::makeParser() { return std::make_pair(Specialization::prefixMatch, Specialization::parse); } \
-bool Specialization::prefixMatch(std::string_view query) { return CppExtensions::StringUtils::startsWithIgnoreCase(query, QueryPrefix); } \
+ParserBundle Specialization::makeParser() { return std::make_pair(QueryPrefix, Specialization::parse); } \
 API::ParsedQuery Specialization::parse(QueryExtractor extractor)
 
 #define DECLARE_PARSED_QUERY(type) \
@@ -26,9 +25,8 @@ return out_parsed_query
 
 namespace LunarDB::Moonlight::Implementation {
 
-using Matcher = bool(*)(std::string_view);
 using Parser = API::ParsedQuery(*)(QueryExtractor);
-using ParserBundle = std::pair<Matcher, Parser>;
+using ParserBundle = std::pair<std::string, Parser>;
 
 PROVIDE_QUERY_PARSER(Create)
 PROVIDE_QUERY_PARSER(Drop)
