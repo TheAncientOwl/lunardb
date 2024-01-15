@@ -5,7 +5,7 @@
 
 namespace LunarDB::Astral::API {
 
-struct Config
+struct QueryExecutorConfig
 {
     std::string database;
 };
