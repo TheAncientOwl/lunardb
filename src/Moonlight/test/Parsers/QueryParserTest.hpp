@@ -6,6 +6,7 @@
 #include "ParsedQuery.hpp"
 #include "QueryData/include/helpers/Init.hpp"
 #include "QueryData/include/helpers/Operators.hpp"
+#include "QueryParser.hpp"
 
 ///
 /// @brief Helpers to check success/fail of parsing queries

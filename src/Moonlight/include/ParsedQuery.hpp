@@ -67,8 +67,6 @@ private: // fields;
     struct QueryDataToTypeMap { static const QueryData::Primitives::EQueryType value; };
 };
 
-ParsedQuery parseQuery(std::string_view query);
-
 template<typename Data>
 inline Data& ParsedQuery::get()
 {

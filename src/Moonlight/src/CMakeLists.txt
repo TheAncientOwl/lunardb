@@ -3,6 +3,7 @@ add_lunar_library(
 
     SOURCE_FILES
         ParsedQuery.cpp
+        QueryParser.cpp
         QueryExtractor.cpp
         Utils.cpp
         Errors.cpp
