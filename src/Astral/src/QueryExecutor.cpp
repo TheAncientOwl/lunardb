@@ -4,7 +4,7 @@
 #include "QueryExecutor.hpp"
 #include "QueryExecutors.hpp"
 
-namespace LunarDB::Astral::API::QueryExecutor {
+namespace LunarDB::Astral::API {
 
 void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const Config& config)
 {
@@ -44,4 +44,4 @@ void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const Config&
     executor_ptr->second(parsed_query, config);
 }
 
-} // namespace LunarDB::Astral::API::QueryExecutor
+} // namespace LunarDB::Astral::API
