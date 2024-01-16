@@ -9,23 +9,26 @@
 #define PROVIDE_QUERY_PARSER(Specialization) \
 namespace Specialization { \
 [[nodiscard]] ParserBundle makeParser(); \
-[[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
+[[nodiscard]] API::ParsedQuery parse(std::string query); \
 }
 
 #define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
 ParserBundle Specialization::makeParser() { return std::make_pair(QueryPrefix, Specialization::parse); } \
-API::ParsedQuery Specialization::parse(QueryExtractor extractor)
+API::ParsedQuery Specialization::parse(std::string query)
 
-#define DECLARE_PARSED_QUERY(type) \
-API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::type>(); \
-auto& out = out_parsed_query.get<QueryData::type>()
+#define DECLARE_PARSED_QUERY(Type) \
+API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::Type>(std::move(query)); \
+auto query_view = out_parsed_query.query(); \
+StringUtils::trim(query_view); \
+QueryExtractor extractor{ query_view }; \
+auto& out = out_parsed_query.get<QueryData::Type>()
 
 #define RETURN_PARSED_QUERY \
 return out_parsed_query
 
 namespace LunarDB::Moonlight::Implementation {
 
-using Parser = API::ParsedQuery(*)(QueryExtractor);
+using Parser = API::ParsedQuery(*)(std::string);
 using ParserBundle = std::pair<std::string, Parser>;
 
 PROVIDE_QUERY_PARSER(Create)

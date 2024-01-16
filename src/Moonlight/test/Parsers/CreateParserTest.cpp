@@ -334,7 +334,7 @@ TEST(Moonlight_CreateParserTest, multiple01)
         .structure_type(Primitives::EStructureType::Table)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
@@ -349,7 +349,7 @@ TEST(Moonlight_CreateParserTest, multiple02)
         .structure_type(Primitives::EStructureType::Table)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%Table")
         );
 
@@ -364,7 +364,7 @@ TEST(Moonlight_CreateParserTest, multiple03)
         .structure_type(Primitives::EStructureType::Table)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
@@ -379,7 +379,7 @@ TEST(Moonlight_CreateParserTest, multiple04)
         .structure_type(Primitives::EStructureType::Table)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%Table")
         );
 
@@ -394,7 +394,7 @@ TEST(Moonlight_CreateParserTest, multiple05)
         .structure_type(Primitives::EStructureType::Collection)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
@@ -409,7 +409,7 @@ TEST(Moonlight_CreateParserTest, multiple06)
         .structure_type(Primitives::EStructureType::Collection)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%Collection")
         );
 
@@ -424,7 +424,7 @@ TEST(Moonlight_CreateParserTest, multiple07)
         .structure_type(Primitives::EStructureType::Collection)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%_Structure_%Hash%")
         );
 
@@ -439,7 +439,7 @@ TEST(Moonlight_CreateParserTest, multiple08)
         .structure_type(Primitives::EStructureType::Collection)
         .single(std::nullopt)
         .multiple(Init::CreateInit::MultipleInit{}
-            .schema_names(std::vector<std::string>{"Schema1", "Schema2", "Schema3", "Schema4"})
+            .schema_names(std::vector<std::string_view>{"Schema1", "Schema2", "Schema3", "Schema4"})
             .structure_name_format("%TypeName%Collection")
         );
 

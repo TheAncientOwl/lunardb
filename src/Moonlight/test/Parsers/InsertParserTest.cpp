@@ -96,7 +96,7 @@ TEST(Moonlight_InsertParserTest, success01)
     obj4.entries.emplace("rank(String)", "HeadmasterSupreme");
     obj4.entries.emplace("birth_date", "09/10/1985");
     obj4.entries.emplace("address", address);
-    obj4.entries.emplace("rands", std::vector<std::string>{"1", "11", "111"});
+    obj4.entries.emplace("rands", std::vector<std::string_view>{"1", "11", "111"});
 
     auto obj = Insert::Object{};
     obj.entries.emplace("X", "1");
@@ -108,7 +108,7 @@ TEST(Moonlight_InsertParserTest, success01)
     obj5.entries.emplace("rank(String)", "HeadmasterSupreme");
     obj5.entries.emplace("birth_date", "09/10/1985");
     obj5.entries.emplace("address", address);
-    obj5.entries.emplace("rands", std::vector<std::string>{"1", "11", "111"});
+    obj5.entries.emplace("rands", std::vector<std::string_view>{"1", "11", "111"});
     obj5.entries.emplace("objs", std::vector<Insert::Object>{obj, obj});
 
     const auto expected = Init::InsertInit{}

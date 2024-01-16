@@ -22,7 +22,7 @@ QueryData::Schema::Field parseField(std::string_view str)
     auto field_name = str.substr(0, separator_pos);
     StringUtils::trim(field_name);
     out.name = Errors::assertNotEmpty(field_name, "field name");
-    Errors::assertValidIdentifier(out.name);
+    Errors::assertValidIdentifier(std::string(out.name));
 
     auto type = str.substr(separator_pos + 1, str.length());
 
@@ -65,7 +65,7 @@ QueryData::Schema::Field parseField(std::string_view str)
 
     StringUtils::trim(type);
     out.type = Errors::assertNotEmpty(type, "type");
-    Errors::assertValidIdentifier(out.type);
+    Errors::assertValidIdentifier(std::string(out.type));
 
     return out;
 }

@@ -26,15 +26,21 @@ public: // methods
     template<typename Data>
     const Data& get() const;
 
+    ///
+    /// @return raw query string 
+    ///
+    std::string_view query() const;
+
 public: // helpers
     ///
     /// @brief Creates an empty ParsedQuery of given QueryData::Type
     ///
     template<typename Data>
-    static ParsedQuery make();
+    static ParsedQuery make(std::string query);
 
 private: // fields;
     QueryData::Primitives::EQueryType m_type;
+    std::string m_query;
 
     std::variant <
         QueryData::Create,
@@ -80,13 +86,14 @@ inline const Data& ParsedQuery::get() const
 }
 
 template<typename Data>
-ParsedQuery ParsedQuery::make()
+ParsedQuery ParsedQuery::make(std::string query)
 {
-    ParsedQuery query{};
-    query.m_type = QueryDataToTypeMap<Data>::value;
-    query.m_data = Data{};
+    ParsedQuery out{};
+    out.m_type = QueryDataToTypeMap<Data>::value;
+    out.m_query = std::move(query);
+    out.m_data = Data{};
 
-    return query;
+    return out;
 }
 
 } // namespace LunarDB::Moonlight::API

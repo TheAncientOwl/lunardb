@@ -56,7 +56,7 @@ TEST(Moonlight_SelectParserTest, success01)
                 })
                 })
         ))
-        .fields(std::vector<std::string>{"field1", "field2", "field3", "field4"})
+        .fields(std::vector<std::string_view>{"field1", "field2", "field3", "field4"})
         .order_by({});
 
     EXPECT_SUCCESS(query, expected);
@@ -107,7 +107,7 @@ TEST(Moonlight_SelectParserTest, success02)
                 })
                 })
         ))
-        .fields(std::vector<std::string>{"field1", "field2", "field3", "field4"})
+        .fields(std::vector<std::string_view>{"field1", "field2", "field3", "field4"})
         .order_by(std::vector<Select::Order>{
         Init::SelectInit::OrderInit{}.field("field1").type(Primitives::EOrderType::Asc),
             Init::SelectInit::OrderInit{}.field("field2").type(Primitives::EOrderType::Desc),

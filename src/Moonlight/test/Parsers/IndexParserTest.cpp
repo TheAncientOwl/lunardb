@@ -25,7 +25,7 @@ TEST(Moonlight_IndexParserTest, success03)
         .on_structure_name("StructureName")
         .unique(true)
         .name("IndexName")
-        .using_fields(std::vector<std::string>{ "field1", "field2", "field3" });
+        .using_fields(std::vector<std::string_view>{ "field1", "field2", "field3" });
 
     EXPECT_SUCCESS(query, expected);
 }
@@ -37,7 +37,7 @@ TEST(Moonlight_IndexParserTest, success04)
         .on_structure_name("StructureName")
         .unique(true)
         .name("IndexName")
-        .using_fields(std::vector<std::string>{ "field1", "field2", "field3" });
+        .using_fields(std::vector<std::string_view>{ "field1", "field2", "field3" });
 
     EXPECT_SUCCESS(query, expected);
 }
@@ -49,7 +49,7 @@ TEST(Moonlight_IndexParserTest, success05)
         .on_structure_name("StructureName")
         .unique(false)
         .name("IndexName")
-        .using_fields(std::vector<std::string>{ "field1", "field2", "field3" });
+        .using_fields(std::vector<std::string_view>{ "field1", "field2", "field3" });
 
     EXPECT_SUCCESS(query, expected);
 }

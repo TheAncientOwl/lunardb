@@ -96,18 +96,8 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
     Errors::assertKeywordEquals(extractor.extractOne(), "from");
 
     // parse schemas
-    const auto schemas = extractor.extractList();
-    if (schemas.empty()) { throw Errors::buildMissingError("schemas"); }
-
-    std::set<std::string_view> schemas_set{};
-    std::copy(schemas.begin(), schemas.end(), std::inserter(schemas_set, schemas_set.begin()));
-
-    out.schema_names = std::vector<std::string>{};
-    out.schema_names.reserve(schemas_set.size());
-    std::transform(schemas_set.begin(), schemas_set.end(),
-        std::back_inserter(out.schema_names),
-        [](std::string_view sv) -> std::string { return std::string(sv); }
-    );
+    out.schema_names = extractor.extractUniqueList<std::string_view>([](std::string_view sv) {return sv;});
+    if (out.schema_names.empty()) { throw Errors::buildMissingError("schemas"); }
 
     // parse name format
     if (extractor.empty())

@@ -43,10 +43,10 @@ PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
         const auto using_ = extractor.extractOne();
         Errors::assertKeywordEquals(using_, "using");
 
-        out.using_fields = extractor.extractUniqueList<std::string>([](std::string_view sv) {
-            auto str = std::string(sv);
-            Errors::assertValidIdentifier(str);
-            return std::move(str);});
+        out.using_fields = extractor.extractUniqueList<std::string_view>([](std::string_view sv) {
+            Errors::assertValidIdentifier(std::string(sv));
+            return sv;
+            });
         if (out.using_fields.empty()) { throw Errors::buildMissingError("index fields"); }
     }
 

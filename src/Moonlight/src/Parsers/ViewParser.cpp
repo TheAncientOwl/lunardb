@@ -23,7 +23,7 @@ PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
 
     out.name = Errors::assertNotEmpty(view_name, "view name");
 
-    out.as_select = Select::parse(extractor).get<QueryData::Select>();
+    // out.as_select = Select::parse(extractor).get<QueryData::Select>();
 
     RETURN_PARSED_QUERY;
 }

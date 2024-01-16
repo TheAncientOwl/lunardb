@@ -14,6 +14,11 @@ QueryData::Primitives::EQueryType ParsedQuery::type() const
     return m_type;
 }
 
+std::string_view ParsedQuery::query() const
+{
+    return m_query;
+}
+
 template<typename T>
 const QueryData::Primitives::EQueryType ParsedQuery::QueryDataToTypeMap<T>::value = QueryData::Primitives::EQueryType::None;
 

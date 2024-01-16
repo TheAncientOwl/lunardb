@@ -2,11 +2,12 @@
 
 #include <map>
 #include <optional>
-#include <string>
+#include <string_view>
 #include <variant>
 #include <vector>
 
 #include "Primitives.hpp"
+#include "simdjson/include/simdjson.hpp"
 
 namespace LunarDB::QueryData {
 
@@ -16,20 +17,20 @@ struct Create
     {
         struct Binding
         {
-            std::string field;
-            std::string table;
+            std::string_view field;
+            std::string_view table;
         };
 
-        std::string structure_name;
-        std::string schema_name;
+        std::string_view structure_name;
+        std::string_view schema_name;
         std::vector<Binding> bindings;
         bool blended;
     };
 
     struct Multiple
     {
-        std::string structure_name_format;
-        std::vector<std::string> schema_names;
+        std::string_view structure_name_format;
+        std::vector<std::string_view> schema_names;
     };
 
     bool is_volatile;
@@ -40,33 +41,33 @@ struct Create
 
 struct Drop
 {
-    std::string structure_name;
+    std::string_view structure_name;
     bool cascade;
 };
 
 struct Migrate
 {
-    std::string structure_name;
-    std::string new_schema_name;
+    std::string_view structure_name;
+    std::string_view new_schema_name;
 
     struct Mapping
     {
-        std::string old_field;
-        std::string new_field;
+        std::string_view old_field;
+        std::string_view new_field;
     };
     std::vector<Mapping> mappings;
 };
 
 struct Truncate
 {
-    std::string structure_name;
+    std::string_view structure_name;
 };
 
 struct Rename
 {
     Primitives::ERenameType type;
-    std::string old_name;
-    std::string new_name;
+    std::string_view old_name;
+    std::string_view new_name;
 };
 
 struct WhereClause
@@ -74,8 +75,8 @@ struct WhereClause
     struct BinaryExpression
     {
         bool negated; // TODO: remove
-        std::string lhs;
-        std::string rhs;
+        std::string_view lhs;
+        std::string_view rhs;
         Primitives::EBinaryOperator operation;
     };
 
@@ -96,13 +97,13 @@ struct WhereClause
 
 struct Select
 {
-    std::string from;
+    std::string_view from;
     WhereClause where;
-    std::vector<std::string> fields;
+    std::vector<std::string_view> fields;
 
     struct Order
     {
-        std::string field;
+        std::string_view field;
         Primitives::EOrderType type;
     };
     std::vector<Order> order_by;
@@ -110,100 +111,107 @@ struct Select
 
 struct Insert
 {
-    std::string into;
+    std::string_view into;
 
     struct Object
     {
         using type = std::variant<
-            std::string,
+            std::string_view,
             Object,
-            std::vector<std::string>,
+            std::vector<std::string_view>,
             std::vector<Object>
         >;
 
-        std::map<std::string, type> entries;
+        std::map<std::string_view, type> entries;
+    };
+
+    struct InternalData
+    {
+        simdjson::ondemand::parser parser{};
+        simdjson::ondemand::document_stream document_stream{};
     };
 
     std::vector<Object> objects;
+    InternalData internal_data;
 };
 
 struct Update
 {
-    std::string structure_name;
+    std::string_view structure_name;
     WhereClause where;
 
     struct Modify
     {
-        std::string field;
-        std::string expression;
+        std::string_view field;
+        std::string_view expression;
     };
     std::vector<Modify> modify;
 };
 
 struct Delete
 {
-    std::string from;
+    std::string_view from;
     WhereClause where;
 };
 
 struct Lock
 {
-    std::string structure_name;
+    std::string_view structure_name;
     bool concurrency;
 };
 
 struct Grant
 {
     std::vector<Primitives::EUserPermissionType> permissions;
-    std::string to_user;
-    std::optional<std::string> structure_name;
+    std::string_view to_user;
+    std::optional<std::string_view> structure_name;
 };
 
 struct Revoke
 {
     std::vector<Primitives::EUserPermissionType> permissions;
-    std::string from_user;
-    std::optional<std::string> structure_name;
+    std::string_view from_user;
+    std::optional<std::string_view> structure_name;
 };
 
 struct Commit {};
 
 struct Rollback
 {
-    std::optional<std::string> hash;
+    std::optional<std::string_view> hash;
 };
 
 struct SavePoint
 {
-    std::optional<std::string> hash;
+    std::optional<std::string_view> hash;
 };
 
 struct Index
 {
-    std::string on_structure_name;
+    std::string_view on_structure_name;
     bool unique;
-    std::optional<std::string> name;
-    std::vector<std::string> using_fields;
+    std::optional<std::string_view> name;
+    std::vector<std::string_view> using_fields;
 };
 
 struct Database
 {
     Primitives::EDatabaseOperationType operation_type;
-    std::string name;
-    std::optional<std::string> backup_path;
+    std::string_view name;
+    std::optional<std::string_view> backup_path;
 };
 
 struct View
 {
-    std::string name;
+    std::string_view name;
     Select as_select;
 };
 
 struct Rebind
 {
-    std::string structure_name;
-    std::string field;
-    std::string bind_structure_name;
+    std::string_view structure_name;
+    std::string_view field;
+    std::string_view bind_structure_name;
     std::optional<bool> clean;
 };
 
@@ -211,13 +219,13 @@ struct Schema
 {
     struct Field
     {
-        std::string name;
-        std::string type;
+        std::string_view name;
+        std::string_view type;
         bool nullable;
         bool array;
     };
 
-    std::string name;
+    std::string_view name;
     std::vector<Field> fields;
 };
 

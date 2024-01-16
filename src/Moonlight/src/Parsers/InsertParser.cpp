@@ -18,7 +18,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
     switch (element.type())
     {
     case simdjson::ondemand::json_type::array: {
-        std::vector<std::string> strings{};
+        std::vector<std::string_view> strings{};
         std::vector<QueryData::Insert::Object> objects{};
 
         for (auto value : element.get_array())
@@ -29,7 +29,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
             }
             else if (value.type() == simdjson::ondemand::json_type::string)
             {
-                strings.push_back(std::get<std::string>(recursiveParseObject(value.value())));
+                strings.push_back(std::get<std::string_view>(recursiveParseObject(value.value())));
             }
             else
             {
@@ -76,7 +76,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
     return out;
 }
 
-std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
+std::vector<QueryData::Insert::Object> parseObjects(std::string_view str, QueryData::Insert::InternalData& internal_data)
 {
     StringUtils::trim(str);
     if (str.front() != '[') { throw Errors::buildParseJSONObjectError("["); }
@@ -90,10 +90,11 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 
     try
     {
-        simdjson::padded_string padded_str = str;
-        simdjson::ondemand::parser parser{};
-        simdjson::ondemand::document_stream docs = parser.iterate_many(padded_str);
-        for (auto doc : docs)
+        simdjson::padded_string padded_string = str;
+        internal_data.parser = simdjson::ondemand::parser{};
+        internal_data.document_stream = internal_data.parser.iterate_many(padded_string);
+
+        for (auto doc : internal_data.document_stream)
         {
             auto& obj = out.emplace_back();
 
@@ -133,7 +134,7 @@ PROVIDE_QUERY_PARSER_IMPL(Insert, c_query_prefix)
     Errors::assertKeywordEquals(objects, "objects");
 
     out.into = Errors::assertNotEmpty(structure_name, "structure name");
-    out.objects = parseObjects(extractor.data());
+    out.objects = parseObjects(extractor.data(), out.internal_data);
 
     if (objects.empty()) { throw Errors::buildMissingError("objects"); }
 

@@ -47,10 +47,9 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
     const auto [fields] = extractor.extractTuple<1>();
     Errors::assertKeywordEquals(fields, "fields");
 
-    out.fields = extractor.extractList<std::string>([](std::string_view sv) {
-        auto str = std::string(sv);
-        Errors::assertValidIdentifier(str);
-        return std::move(str);
+    out.fields = extractor.extractList<std::string_view>([](std::string_view sv) {
+        Errors::assertValidIdentifier(std::string(sv));
+        return sv;
         });
     if (out.fields.empty()) { throw Errors::buildMissingError("fields"); }
 

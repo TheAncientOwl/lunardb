@@ -9,12 +9,10 @@
 
 namespace LunarDB::Moonlight::API {
 
-ParsedQuery parseQuery(std::string_view query)
+ParsedQuery parseQuery(std::string query)
 {
     using namespace Implementation;
     using namespace CppExtensions;
-
-    StringUtils::trim(query);
 
     static const DataStructures::ItemArray<ParserBundle, 20> s_parsers{
         Create::makeParser(),
@@ -39,18 +37,20 @@ ParsedQuery parseQuery(std::string_view query)
         Schema::makeParser()
     };
 
-    const auto parser_opt = s_parsers.find_if([query](const ParserBundle& query_parser) {
-        return StringUtils::startsWithIgnoreCase(query, query_parser.first);
+    std::string_view query_view = query;
+    StringUtils::trim(query_view);
+
+    const auto parser_opt = s_parsers.find_if([query_view](const ParserBundle& query_parser) {
+        return StringUtils::startsWithIgnoreCase(query_view, query_parser.first);
         });
 
-    if (static_cast<bool>(parser_opt))
-    {
-        return parser_opt.value()(query);
-    }
-    else
+
+    if (!parser_opt.has_value())
     {
         throw Errors::buildError("Invalid query syntax");
     }
+
+    return parser_opt.value()(std::move(query));
 }
 
 } // namespace LunarDB::Moonlight::API
