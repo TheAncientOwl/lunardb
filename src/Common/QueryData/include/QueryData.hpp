@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <optional>
 #include <string_view>
 #include <variant>
@@ -125,14 +126,8 @@ struct Insert
         std::map<std::string_view, type> entries;
     };
 
-    struct InternalData
-    {
-        simdjson::ondemand::parser parser{};
-        simdjson::ondemand::document_stream document_stream{};
-    };
-
     std::vector<Object> objects;
-    InternalData internal_data;
+    std::shared_ptr<simdjson::padded_string> padded_string;
 };
 
 struct Update

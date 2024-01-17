@@ -76,7 +76,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
     return out;
 }
 
-std::vector<QueryData::Insert::Object> parseObjects(std::string_view str, QueryData::Insert::InternalData& internal_data)
+std::vector<QueryData::Insert::Object> parseObjects(std::string_view str, QueryData::Insert& query_data)
 {
     StringUtils::trim(str);
     if (str.front() != '[') { throw Errors::buildParseJSONObjectError("["); }
@@ -90,11 +90,11 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str, QueryD
 
     try
     {
-        simdjson::padded_string padded_string = str;
-        internal_data.parser = simdjson::ondemand::parser{};
-        internal_data.document_stream = internal_data.parser.iterate_many(padded_string);
+        query_data.padded_string = std::make_shared<simdjson::padded_string>(str);
+        simdjson::ondemand::parser parser{};
+        simdjson::ondemand::document_stream docs = parser.iterate_many(*query_data.padded_string);
 
-        for (auto doc : internal_data.document_stream)
+        for (auto doc : docs)
         {
             auto& obj = out.emplace_back();
 
@@ -134,7 +134,7 @@ PROVIDE_QUERY_PARSER_IMPL(Insert, c_query_prefix)
     Errors::assertKeywordEquals(objects, "objects");
 
     out.into = Errors::assertNotEmpty(structure_name, "structure name");
-    out.objects = parseObjects(extractor.data(), out.internal_data);
+    out.objects = parseObjects(extractor.data(), out);
 
     if (objects.empty()) { throw Errors::buildMissingError("objects"); }
 
