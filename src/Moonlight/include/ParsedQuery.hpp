@@ -60,7 +60,7 @@ private: // fields;
     > m_data;
 
     ///
-    /// @brief Used by @c ParsedQuery::make() to decide the QueryData::Type
+    /// @brief Used by @see ParsedQuery::make() to decide the QueryData::Type
     /// @tparam T QueryData::Type
     ///
     template<typename T>
