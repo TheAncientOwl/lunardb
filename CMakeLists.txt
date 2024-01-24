@@ -10,7 +10,6 @@ project(LunarDB VERSION 0.1.0 LANGUAGES C CXX)
 
 # CMake-Tools Includes
 include(cmake-tools/macros/add_lunar_unit_test.cmake)
-include(cmake-tools/macros/add_lunar_library_helper.cmake)
 include(cmake-tools/macros/add_lunar_library.cmake)
 include(cmake-tools/macros/add_lunar_common_library.cmake)
 

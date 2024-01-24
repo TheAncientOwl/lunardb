@@ -1,3 +1,5 @@
+include(cmake-tools/macros/private/add_lunar_library_helper.cmake)
+
 macro(add_lunar_library)
     set(options "")
     set(oneValueArgs NAME)
