@@ -1,0 +1,53 @@
+@startuml Moonlight
+
+namespace LunarDB.Moonlight.API {
+
+class ParsedQuery {
+
+    + type() const : QueryData::Primitives::EQueryType
+    + get<Data>() : Data&
+    + get<Data>() const : const Data&
+    + make<Data>() : ParsedQuery
+
+    - m_type : QueryData::Primitives::EQueryType
+    - m_data : QueryDataType
+}
+note left
+using QueryDataType = std::variant<
+    QueryData::Create,
+    QueryData::Drop,
+    QueryData::Migrate,
+    QueryData::Truncate,
+    QueryData::Rename,
+    QueryData::Select,
+    QueryData::Insert,
+    QueryData::Update,
+    QueryData::Delete,
+    QueryData::Lock,
+    QueryData::Grant,
+    QueryData::Revoke,
+    QueryData::Commit,
+    QueryData::Rollback,
+    QueryData::SavePoint,
+    QueryData::Index,
+    QueryData::Database,
+    QueryData::View,
+    QueryData::Rebind,
+    QueryData::Schema
+>;
+end note
+
+stereotype QueryParser {
+    + parseQuery(query : std::string_view) : ParsedQuery
+}
+
+stereotype Input {
+    query : string
+}
+
+Input -> QueryParser : used
+QueryParser --> ParsedQuery : returns
+
+}
+
+@enduml
