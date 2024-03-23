@@ -1,0 +1,93 @@
+@startuml Architecture
+
+left to right direction
+
+namespace LunarDB {
+
+stereotype Input {
+    + query : string
+}
+
+namespace Moonlight <<Query Parser>> {
+
+namespace API {
+
+stereotype QueryParser {
+    + parseQuery(query : std::string_view) : ParsedQuery
+}
+
+}
+
+}
+
+namespace Astral <<Query Executor>> {
+
+namespace API {
+
+stereotype QueryExecutor {
+    + executeQuery(query : ParsedQuery) : void
+}
+
+}
+
+}
+
+namespace Celestial <<Users Manager>> {
+
+namespace API {
+
+}
+
+}
+
+namespace Selenity <<Logger>> {
+
+namespace API {
+
+}
+
+}
+
+namespace BrightMoon <<Write Ahead Logger>> {
+
+namespace API {
+
+}
+
+}
+
+namespace Crescentum <<Data Manager>> {
+
+namespace API {
+
+}
+
+}
+
+namespace API <<Server?>> {
+    
+stereotype Server {
+    + run() : void
+}
+
+}
+
+Input --> LunarDB.API.Server : send to
+
+LunarDB.API.Server --> Celestial.API : Users
+LunarDB.API.Server -> Astral.API.QueryExecutor : Execute Query
+LunarDB.API.Server -> Moonlight.API.QueryParser : Parse Query
+LunarDB.API.Server --> BrightMoon.API : Crash Recovery
+LunarDB.API.Server --> Crescentum.API : Database Configs
+
+BrightMoon.API <-- Astral.API.QueryExecutor : Write Ahead Log
+Crescentum.API <-- Astral.API.QueryExecutor : Modify Data
+
+Celestial.API -> Crescentum.API : Users
+
+stereotype Global {}
+Global --> Selenity.API : use
+
+}
+
+@enduml
