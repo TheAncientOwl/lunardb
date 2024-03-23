@@ -1,0 +1,14 @@
+@startuml Rebind
+
+namespace LunarDB.QueryData {
+
+struct Rebind {
+    + structure_name : std::string
+    + field : std::string
+    + bind_structure_name : std::string
+    + clean : std::optional<bool>
+}
+
+}
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml DatabaseOperationType
+
+namespace LunarDB.QueryData.Primitives {
+
+namespace DatabaseOperationType {
+
+enum Literal {
+    None,
+    Create,
+    Drop,
+    Backup,
+    Use
+}
+
+stereotype convertor {
+    + toString(primitive: Literal) : std::string_view
+    + toLiteral(str: std::string_view) : Literal
+    + operator<<(os: std::ostream&, rhs: Literal const&) : std::ostream
+}
+
+Literal <- convertor : use
+
+}
+
+}
+@enduml

@@ -1,0 +1,13 @@
+@startuml Database
+
+namespace LunarDB.QueryData {
+
+struct Database {
+    + operation_type : Primitives::EDatabaseOperationType
+    + name : std::string
+    + backup_path : std::optional<std::string>
+}
+
+}
+
+@enduml

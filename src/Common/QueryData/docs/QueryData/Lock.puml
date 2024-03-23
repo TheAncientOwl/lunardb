@@ -1,0 +1,12 @@
+@startuml Lock
+
+namespace LunarDB.QueryData {
+
+struct Lock {
+    + structure_name : std::string
+    + concurrency : bool
+}
+
+}
+
+@enduml

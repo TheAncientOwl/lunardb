@@ -1,0 +1,21 @@
+@startuml Select
+
+namespace LunarDB.QueryData {
+
+struct Select {
+    + from : std::string
+    + where : WhereClause
+    + fields : std::vector<std::string>
+    + order_by : std::vector<Select::Order>
+}
+
+struct Select::Order {
+    + field : std::string
+    + type : Primitives::EOrderType
+}
+
+Select -* Select::Order
+
+}
+
+@enduml

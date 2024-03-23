@@ -1,0 +1,12 @@
+@startuml View
+
+namespace LunarDB.QueryData {
+
+struct View {
+    + name : std::string
+    + as_select : Select
+}
+
+}
+
+@enduml

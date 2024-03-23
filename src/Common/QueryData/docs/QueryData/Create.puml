@@ -1,0 +1,35 @@
+@startuml Create
+
+namespace LunarDB.QueryData {
+
+struct Create {
+    + is_volatile : bool
+    + structure_type : Create::Primitives::EStructureType
+    + single : std::optional<Create::Single>
+    + multiple : std::optional<Create::Multiple>
+}
+
+struct Create::Single {
+    + structure_name : std::string
+    + schema_name : std::string
+    + bindings : std::vector<Create::Single::Binding>
+    + blended : bool
+}
+
+struct Create::Multiple {
+    + structure_name_format : std::string
+    + schema_names : std::vector<std::string>
+}
+
+struct Create::Single::Binding {
+    + field : std::string
+    + table : std::string
+}
+
+Create --* Create::Single
+Create --* Create::Multiple
+Create::Single --* Create::Single::Binding 
+
+}
+
+@enduml

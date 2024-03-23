@@ -1,0 +1,42 @@
+@startuml QueryType
+
+namespace LunarDB.QueryData.Primitives {
+
+namespace QueryType {
+
+enum Literal {
+    None,
+    Create,
+    Drop,
+    Migrate,
+    Truncate,
+    Rename,
+    Select,
+    Insert,
+    Update,
+    Delete,
+    Lock,
+    Grant,
+    Revoke,
+    Commit,
+    Rollback,
+    SavePoint,
+    Index,
+    Database,
+    View,
+    Rebind,
+    Schema
+}
+
+stereotype convertor {
+    + toString(primitive: Literal) : std::string_view
+    + toLiteral(str: std::string_view) : Literal
+    + operator<<(os: std::ostream&, rhs: Literal const&) : std::ostream
+}
+
+Literal <- convertor : use
+
+}
+
+}
+@enduml

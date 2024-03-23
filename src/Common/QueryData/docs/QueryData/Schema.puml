@@ -1,0 +1,21 @@
+@startuml Schema
+
+namespace LunarDB.QueryData {
+
+struct Schema {
+    + name : std::string
+    + fields : std::vector<Schema::Field>
+}
+
+struct Schema::Field {
+    + name : std::string
+    + type : std::string
+    + nullable : bool
+    + array : bool
+}
+
+Schema -* Schema::Field
+
+}
+
+@enduml

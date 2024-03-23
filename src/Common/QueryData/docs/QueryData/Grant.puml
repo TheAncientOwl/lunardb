@@ -1,0 +1,13 @@
+@startuml Grant
+
+namespace LunarDB.QueryData {
+
+struct Grant {
+    + permissions : std::vector<Primitives::EUserPermissionType>
+    + to_user : std::string
+    + structure_name : std::optional<std::string>
+}
+
+}
+
+@enduml

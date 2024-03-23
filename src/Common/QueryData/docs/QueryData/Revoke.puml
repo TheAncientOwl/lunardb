@@ -1,0 +1,13 @@
+@startuml Revoke
+
+namespace LunarDB.QueryData {
+
+struct Revoke {
+    + permissions : std::vector<Primitives::EUserPermissionType>
+    + from_user : std::string
+    + structure_name : std::optional<std::string>
+}
+
+}
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml Drop
+
+namespace LunarDB.QueryData {
+
+struct Drop {
+    + structure_name : std::string
+    + cascade : bool
+}
+
+}
+
+@enduml

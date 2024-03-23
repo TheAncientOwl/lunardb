@@ -1,0 +1,24 @@
+@startuml BooleanOperator
+
+namespace LunarDB.QueryData.Primitives {
+
+namespace BooleanOperator {
+
+enum Literal {
+    None,
+    And,
+    Or
+}
+
+stereotype convertor {
+    + toString(primitive: Literal) : std::string_view
+    + toLiteral(str: std::string_view) : Literal
+    + operator<<(os: std::ostream&, rhs: Literal const&) : std::ostream
+}
+
+Literal <- convertor : use
+
+}
+
+}
+@enduml

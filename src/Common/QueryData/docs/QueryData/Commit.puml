@@ -1,0 +1,11 @@
+@startuml Commit
+
+namespace LunarDB.QueryData {
+
+struct Commit {
+    
+}
+
+}
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml Migrate
+
+namespace LunarDB.QueryData {
+
+struct Migrate {
+    + structure_name : std::string
+    + new_schema_name : std::string
+    + mappings : std::vector<Migrate::Mapping>
+}
+
+struct Migrate::Mapping {
+    + old_field : std::string
+    + new_field : std::string
+}
+
+Migrate -* Migrate::Mapping
+
+}
+
+@enduml

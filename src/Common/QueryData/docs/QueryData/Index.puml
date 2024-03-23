@@ -1,0 +1,14 @@
+@startuml Index
+
+namespace LunarDB.QueryData {
+
+struct Index {
+    + on_structure_name : std::string
+    + unique : bool
+    + name : std::optional<std::string>
+    + using_fields : std::vector<std::string>
+}
+
+}
+
+@enduml

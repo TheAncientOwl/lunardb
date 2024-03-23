@@ -1,0 +1,30 @@
+@startuml BinaryOperator
+
+namespace LunarDB.QueryData.Primitives {
+
+namespace BinaryOperator {
+
+enum Literal {
+    None,
+    Equals,
+    GreaterThan,
+    GreaterThanEqualTo,
+    LessThan,
+    LessThanEqualTo,
+    In,
+    Between,
+    Like
+}
+
+stereotype convertor {
+    + toString(primitive: Literal) : std::string_view
+    + toLiteral(str: std::string_view) : Literal
+    + operator<<(os: std::ostream&, rhs: Literal const&) : std::ostream
+}
+
+convertor -> Literal : use
+
+}
+
+}
+@enduml

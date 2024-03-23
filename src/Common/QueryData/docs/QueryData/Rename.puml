@@ -1,0 +1,13 @@
+@startuml Rename
+
+namespace LunarDB.QueryData {
+
+struct Rename {
+    + type : Primitives::ERenameType
+    + old_name : std::string
+    + new_name : std::string
+}
+
+}
+
+@enduml

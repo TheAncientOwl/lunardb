@@ -1,0 +1,11 @@
+@startuml Truncate
+
+namespace LunarDB.QueryData {
+
+struct Truncate {
+    + structure_name : std::string
+}
+
+}
+
+@enduml

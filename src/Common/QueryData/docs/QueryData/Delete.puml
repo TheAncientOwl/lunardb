@@ -1,0 +1,12 @@
+@startuml Delete
+
+namespace LunarDB.QueryData {
+
+struct Delete {
+    + from : std::string
+    + where : WhereClause
+}
+
+}
+
+@enduml

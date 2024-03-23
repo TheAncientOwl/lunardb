@@ -1,0 +1,11 @@
+@startuml Rollback
+
+namespace LunarDB.QueryData {
+
+struct Rollback {
+    + hash : std::optional<std::string>
+}
+
+}
+
+@enduml

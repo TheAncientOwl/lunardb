@@ -1,0 +1,11 @@
+@startuml SavePoint
+
+namespace LunarDB.QueryData {
+
+struct SavePoint {
+    + hash : std::optional<std::string>
+}
+
+}
+
+@enduml

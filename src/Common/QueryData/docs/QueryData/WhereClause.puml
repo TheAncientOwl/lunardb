@@ -1,0 +1,43 @@
+@startuml WhereClause
+
+namespace LunarDB.QueryData {
+
+struct WhereClause {
+    + expression : WhereClause::BooleanExpression
+}
+
+struct WhereClause::BooleanExpression {
+    + negated : bool
+    + data : std::vector<type>
+}
+note left
+using type = std::variant<
+    Primitives::EBooleanOperator,
+    WhereClause::BinaryExpression,
+    WhereClause::BooleanExpression
+>
+end note
+
+struct WhereClause::BinaryExpression {
+    + negated : bool
+    + lhs : std::string
+    + rhs : std::string
+    + operation : Primitives::EBinaryOperator
+}
+
+namespace Primitives {
+
+enum BooleanOperator {
+    ...
+}
+
+}
+
+WhereClause --* WhereClause::BooleanExpression
+WhereClause::BooleanExpression --* WhereClause::BinaryExpression
+WhereClause::BooleanExpression -* WhereClause::BooleanExpression
+WhereClause::BooleanExpression --* BooleanOperator
+
+}
+
+@enduml

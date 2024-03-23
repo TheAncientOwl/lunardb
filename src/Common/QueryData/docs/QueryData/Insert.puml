@@ -1,0 +1,26 @@
+@startuml Insert
+
+namespace LunarDB.QueryData {
+
+struct Insert {
+    + into : std::string
+    + objects : std::vector<Insert::Object>
+}
+
+note right
+using type = std::variant<
+    std::string,
+    Insert::Object,
+    std::vector<std::string>,
+    std::vector<Insert::Object>
+>;
+end note
+struct Insert::Object {
+    + entries : std::map<std::string, type>
+}
+
+Insert --* Insert::Object
+
+}
+
+@enduml

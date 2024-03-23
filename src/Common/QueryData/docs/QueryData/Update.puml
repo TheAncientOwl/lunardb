@@ -1,0 +1,20 @@
+@startuml Update
+
+namespace LunarDB.QueryData {
+
+struct Update {
+    + structure_name : std::string
+    + where : WhereClause
+    + modify : std::vector<Update::Modify>
+}
+
+struct Update::Modify {
+    + field : std::string
+    + expression : std::string
+}
+
+Update -* Update::Modify
+
+}
+
+@enduml
