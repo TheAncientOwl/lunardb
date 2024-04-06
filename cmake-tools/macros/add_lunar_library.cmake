@@ -1,17 +1,13 @@
-include(cmake-tools/macros/private/add_lunar_library_helper.cmake)
-
 macro(add_lunar_library)
     set(options "")
-    set(oneValueArgs NAME)
+    set(oneValueArgs NAME TYPE)
     set(multiValueArgs SOURCE_FILES DEPENDENCIES)
 
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    add_lunar_library_helper(
-        PREFIX LunarDB_
-        NAME ${ARG_NAME}
-        TYPE STATIC
-        SOURCE_FILES ${ARG_SOURCE_FILES}
-        DEPENDENCIES ${ARG_DEPENDENCIES}
-    )
+    set(LIBRARY_NAME LunarDB_${ARG_PREFIX}${ARG_NAME})
+
+    add_library(${LIBRARY_NAME} ${ARG_TYPE} ${ARG_SOURCE_FILES})
+
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${ARG_DEPENDENCIES})
 endmacro()

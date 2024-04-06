@@ -1,4 +1,4 @@
-add_lunar_common_library(
-    NAME CppExtensions
+add_lunar_library(
+    NAME Common_CppExtensions
     SOURCE_FILES StringUtils.cpp
 )

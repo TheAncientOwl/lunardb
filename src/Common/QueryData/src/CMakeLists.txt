@@ -1,5 +1,5 @@
-add_lunar_common_library(
-    NAME QueryData
+add_lunar_library(
+    NAME Common_QueryData
 
     SOURCE_FILES
         Primitives.cpp
