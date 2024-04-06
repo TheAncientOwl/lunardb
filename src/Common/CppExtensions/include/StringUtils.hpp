@@ -6,8 +6,6 @@
 #include <utility>
 #include <vector>
 
-#include "QueryData/include/QueryData.hpp"
-
 namespace LunarDB::CppExtensions::StringUtils {
 
 constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };

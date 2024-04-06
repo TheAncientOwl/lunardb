@@ -1,7 +1,6 @@
+#include <cctype>
 #include <string_view>
 #include <utility>
-
-#include "QueryData/include/QueryData.hpp"
 
 namespace LunarDB::CppExtensions::StringUtils {
 
@@ -42,7 +41,7 @@ bool equalsIgnoreCase(std::string_view s1, std::string_view s2)
 
     for (std::size_t i = 0, length = s1.length(); i < length; i++)
     {
-        if (toupper(s1[i]) != toupper(s2[i]))
+        if (std::toupper(s1[i]) != std::toupper(s2[i]))
         {
             return false;
         }

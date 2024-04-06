@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "Common/CppExtensions/include/LiteralToStringMap.hpp"
 
 namespace LunarDB::CppExtensions::DataStructures {
