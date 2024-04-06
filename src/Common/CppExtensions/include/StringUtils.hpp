@@ -16,12 +16,7 @@ constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
 /// @brief Creates a string from given arguments
 ///
 template<typename... Args>
-[[nodiscard]] std::string stringify(Args&&... args)
-{
-    std::ostringstream oss{};
-    ((oss << std::forward<Args>(args) << ' '), ...);
-    return std::move(oss.str());
-}
+[[nodiscard]] std::string stringify(Args&&... args);
 
 ///
 /// @brief Left trim whitespaces from given string view
@@ -49,3 +44,5 @@ void trim(std::string_view& str);
 [[nodiscard]] bool startsWithIgnoreCase(std::string_view src, std::string_view what);
 
 } // namespace LunarDB::CppExtensions::StringUtils
+
+#include "Common/CppExtensions/include/private/StringUtils.inl"
