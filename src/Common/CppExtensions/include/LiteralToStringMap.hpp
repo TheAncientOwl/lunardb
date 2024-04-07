@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "StringUtils.hpp"
+#include "Common/CppExtensions/StringUtils.hpp"
 
 namespace LunarDB::CppExtensions::DataStructures {
 
