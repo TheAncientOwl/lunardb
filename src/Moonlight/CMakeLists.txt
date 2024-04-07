@@ -6,6 +6,8 @@ add_lunar_library(
         include/QueryParser.hpp
         include/ParsedQuery.hpp
 
+        include/private/ParsedQuery.inl
+
     PRIVATE_DEPENDENCIES
         LunarDB_Common_QueryData
         LunarDB_Common_CppExtensions
@@ -41,4 +43,6 @@ add_lunar_library(
 
 )
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_MOONLIGHT_TESTS)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+endif()

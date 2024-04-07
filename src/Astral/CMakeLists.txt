@@ -35,4 +35,6 @@ add_lunar_library(
         src/Executors/SchemaExecutor.cpp
 )
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_ASTRAL_TESTS)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+endif()

@@ -20,4 +20,6 @@ add_lunar_library(
         src/helpers/Ostream.cpp
 )
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_QUERY_DATA_TESTS)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+endif()

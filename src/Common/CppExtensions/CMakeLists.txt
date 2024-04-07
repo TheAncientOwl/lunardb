@@ -15,4 +15,6 @@ add_lunar_library(
         src/StringUtils.cpp
 )
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
+endif()
