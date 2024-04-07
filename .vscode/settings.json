@@ -75,6 +75,8 @@
     "format": "cpp",
     "ranges": "cpp",
     "condition_variable": "cpp",
-    "mutex": "cpp"
-  }
+    "mutex": "cpp",
+    "xstring": "cpp"
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }
