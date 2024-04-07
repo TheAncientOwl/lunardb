@@ -6,8 +6,6 @@ add_lunar_library(
         include/QueryParser.hpp
         include/ParsedQuery.hpp
 
-        include/private/ParsedQuery.inl
-
     PRIVATE_DEPENDENCIES
         LunarDB_Common_QueryData
         LunarDB_Common_CppExtensions
