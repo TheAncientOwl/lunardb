@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Moonlight/include/ParsedQuery.hpp"
-#include "Astral/include/QueryExecutorConfig.hpp"
+#include "Moonlight/ParsedQuery.hpp"
+#include "Astral/QueryExecutorConfig.hpp"
 
 #define PROVIDE_QUERY_EXECUTOR(Specialization) \
 namespace Specialization { \

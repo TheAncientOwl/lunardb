@@ -4,8 +4,8 @@
 
 #include "Errors.hpp"
 #include "ParsedQuery.hpp"
-#include "QueryData/include/helpers/Init.hpp"
-#include "QueryData/include/helpers/Operators.hpp"
+#include "Common/QueryData/helpers/Init.hpp"
+#include "Common/QueryData/helpers/Operators.hpp"
 #include "QueryParser.hpp"
 
 ///

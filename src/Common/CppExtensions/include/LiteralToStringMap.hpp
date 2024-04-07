@@ -29,4 +29,4 @@ private: // fields
 
 } // namespace LunarDB::CppExtensions::DataStructures
 
-#include "Common/CppExtensions/include/private/LiteralToStringMap.inl"
+#include "Common/CppExtensions/private/LiteralToStringMap.inl"

@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "CppExtensions/include/StringUtils.hpp"
+#include "Common/CppExtensions/StringUtils.hpp"
 #include "Errors.hpp"
 #include "Utils.hpp"
 

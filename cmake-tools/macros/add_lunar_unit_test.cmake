@@ -13,6 +13,12 @@ macro(add_lunar_unit_test)
 
     add_executable(${TEST_NAME} ${ARG_SOURCE_FILES})
 
+    target_include_directories(${TEST_NAME}
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${BUILD_INCLUDE_DIR}
+    )
+    
     target_link_libraries(${TEST_NAME}
         PRIVATE
             gtest

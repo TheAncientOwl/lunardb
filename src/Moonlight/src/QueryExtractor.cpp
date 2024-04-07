@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "CppExtensions/include/StringUtils.hpp"
+#include "Common/CppExtensions/StringUtils.hpp"
 #include "Errors.hpp"
 #include "QueryExtractor.hpp"
 #include "Utils.hpp"
@@ -24,7 +24,7 @@ QueryExtractor::QueryExtractor(std::string_view query)
 
 std::string_view QueryExtractor::extractOne()
 {
-    const auto whitespace_pos = m_data.find_first_of(StringUtils::c_whitespace);
+    const auto whitespace_pos = m_data.find_first_of(StringUtils::whitespace());
 
     if (whitespace_pos == std::string_view::npos)
     {

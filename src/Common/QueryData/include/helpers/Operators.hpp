@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "QueryData/include/QueryData.hpp"
+#include "Common/QueryData/QueryData.hpp"
 
 #define DEFINE_OPERATORS(Type) \
 namespace LunarDB::QueryData { \

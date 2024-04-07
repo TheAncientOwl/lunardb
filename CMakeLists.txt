@@ -8,13 +8,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 project(LunarDB VERSION 0.1.0 LANGUAGES C CXX)
 
-# CMake-Tools Includes
 include(cmake-tools/macros/add_lunar_unit_test.cmake)
 include(cmake-tools/macros/add_lunar_library.cmake)
-
 include(cmake-tools/setup/testing.cmake)
 
-# Setup project files
+set(BUILD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/include)
+
 add_subdirectory(src)
 
 add_executable(LunarDB src/driver.cpp)

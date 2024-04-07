@@ -1,4 +1,4 @@
-#include "QueryData/include/helpers/Init.hpp"
+#include "Common/QueryData/helpers/Init.hpp"
 
 namespace LunarDB::QueryData::Init {
 

@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <array>
 
-#include "CppExtensions/include/ItemArray.hpp"
-#include "CppExtensions/include/StringUtils.hpp"
+#include "Common/CppExtensions/ItemArray.hpp"
+#include "Common/CppExtensions/StringUtils.hpp"
 #include "Errors.hpp"
 #include "QueryParser.hpp"
 #include "QueryParsers.hpp"

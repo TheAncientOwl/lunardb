@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "Common/CppExtensions/include/LiteralToStringMap.hpp"
+#include "Common/CppExtensions/LiteralToStringMap.hpp"
 
 namespace LunarDB::CppExtensions::DataStructures {
 

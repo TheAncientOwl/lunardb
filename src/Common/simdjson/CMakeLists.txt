@@ -1,3 +1,10 @@
-include_directories(include)
+add_lunar_library(
+    NAME Common_Simdjson
+    INCLUDE_PATH Common/Simdjson
 
-add_subdirectory(src)
+    API_HEADER_FILES
+        include/simdjson.hpp
+
+    SOURCE_FILES
+        src/simdjson.cpp
+)

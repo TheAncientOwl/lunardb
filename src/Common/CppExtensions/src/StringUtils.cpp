@@ -2,15 +2,15 @@
 #include <string_view>
 #include <utility>
 
-namespace LunarDB::CppExtensions::StringUtils {
+#include "Common/CppExtensions/StringUtils.hpp"
 
-constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
+namespace LunarDB::CppExtensions::StringUtils {
 
 void ltrim(std::string_view& str)
 {
     if (!str.empty())
     {
-        const auto begin{ str.find_first_not_of(c_whitespace) };
+        const auto begin{ str.find_first_not_of(whitespace()) };
 
         str = str.substr(std::min(begin, str.length()));
     }
@@ -20,7 +20,7 @@ void rtrim(std::string_view& str)
 {
     if (!str.empty())
     {
-        const auto end{ str.find_last_not_of(c_whitespace) };
+        const auto end{ str.find_last_not_of(whitespace()) };
 
         str = str.substr(0, end + 1);
     }

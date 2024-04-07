@@ -31,4 +31,4 @@ private: // fields
 
 } // namespace LunarDB::CppExtensions::DataStructures
 
-#include "Common/CppExtensions/include/private/ItemArray.inl"
+#include "Common/CppExtensions/private/ItemArray.inl"

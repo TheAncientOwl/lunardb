@@ -8,7 +8,10 @@
 
 namespace LunarDB::CppExtensions::StringUtils {
 
-constexpr auto c_whitespace = std::string_view{ " \n\r\t\f\v" };
+///
+/// @return Stringview of all possible whitespace characters
+///
+inline constexpr std::string_view whitespace() noexcept;
 
 ///
 /// @brief Creates a string from given arguments
@@ -43,4 +46,4 @@ void trim(std::string_view& str);
 
 } // namespace LunarDB::CppExtensions::StringUtils
 
-#include "Common/CppExtensions/include/private/StringUtils.inl"
+#include "Common/CppExtensions/private/StringUtils.inl"

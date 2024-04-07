@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <array>
 
-#include "CppExtensions/include/ItemArray.hpp"
+#include "Common/CppExtensions/ItemArray.hpp"
 #include "QueryExecutor.hpp"
 #include "QueryExecutors.hpp"
 

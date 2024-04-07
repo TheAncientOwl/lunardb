@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "StringUtils.hpp"
+#include "Common/CppExtensions/StringUtils.hpp"
 
 #define EXPECT_TRIM_EQ(func, trimmed, not_trimmed) { auto str = not_trimmed; func(str); EXPECT_EQ(trimmed, str); }
 
