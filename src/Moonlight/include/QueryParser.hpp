@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ParsedQuery.hpp"
+#include "Moonlight/ParsedQuery.hpp"
 
 namespace LunarDB::Moonlight::API {
 
