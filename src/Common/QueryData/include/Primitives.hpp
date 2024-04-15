@@ -1,20 +1,6 @@
 #pragma once
 
-#include <cstdint>
-#include <ostream>
-#include <string_view>
-
-#define DEFINE_LUNAR_PRIMITIVE(name, ...) \
-namespace name { \
-    enum class Literal : std::uint8_t \
-    { \
-        __VA_ARGS__ \
-    }; \
-    std::string_view toString(Literal primitive); \
-    Literal toLiteral(std::string_view str); \
-    std::ostream& operator<<(std::ostream& os, const Literal& rhs); \
-} \
-using E ## name = name::Literal;
+#include "Common/CppExtensions/DefinePrimitive.hpp"
 
 namespace LunarDB::QueryData::Primitives {
 

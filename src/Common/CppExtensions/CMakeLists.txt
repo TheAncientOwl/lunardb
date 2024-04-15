@@ -3,6 +3,7 @@ add_lunar_library(
     INCLUDE_PATH Common/CppExtensions
 
     API_HEADER_FILES
+        include/DefinePrimitive.hpp
         include/ItemArray.hpp
         include/LiteralToStringMap.hpp
         include/StringUtils.hpp
