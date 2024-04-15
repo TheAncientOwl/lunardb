@@ -1,10 +1,14 @@
 {
   "cmake.configureSettings": {
-    "LUNAR_ENABLE_TESTING": false,
-    "LUNAR_BUILD_MOONLIGHT_TESTS": false,
-    "LUNAR_BUILD_ASTRAL_TESTS": false,
-    "LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS": false,
-    "LUNAR_BUILD_COMMON_QUERY_DATA_TESTS": false
+    "LUNAR_ENABLE_TESTING": true,
+    "LUNAR_BUILD_ASTRAL_TESTS": true,
+    "LUNAR_BUILD_BRIGHTMOON_TESTS": true,
+    "LUNAR_BUILD_CELESTIAL_TESTS": true,
+    "LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS": true,
+    "LUNAR_BUILD_COMMON_QUERY_DATA_TESTS": true,
+    "LUNAR_BUILD_CRESCENTUM_TESTS": true,
+    "LUNAR_BUILD_MOONLIGHT_TESTS": true,
+    "LUNAR_BUILD_SELENITY_TESTS": true
   },
   "files.associations": {
     "*.rmd": "markdown",
