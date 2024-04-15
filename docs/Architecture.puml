@@ -41,7 +41,7 @@ namespace API {
 
 }
 
-namespace Selenity <<Logger>> {
+namespace Crescentum <<Logger>> {
 
 namespace API {
 
@@ -57,7 +57,7 @@ namespace API {
 
 }
 
-namespace Crescentum <<Data Manager>> {
+namespace Selenity <<Data Manager>> {
 
 namespace API {
 
@@ -79,15 +79,15 @@ LunarDB.API.Server --> Celestial.API : Users
 LunarDB.API.Server -> Astral.API.QueryExecutor : Execute Query
 LunarDB.API.Server -> Moonlight.API.QueryParser : Parse Query
 LunarDB.API.Server --> BrightMoon.API : Crash Recovery
-LunarDB.API.Server --> Crescentum.API : Database Configs
+LunarDB.API.Server --> Selenity.API : Database Configs
 
 BrightMoon.API <-- Astral.API.QueryExecutor : Write Ahead Log
-Crescentum.API <-- Astral.API.QueryExecutor : Modify Data
+Selenity.API <-- Astral.API.QueryExecutor : Modify Data
 
-Celestial.API -> Crescentum.API : Users
+Celestial.API -> Selenity.API : Users
 
 stereotype Global {}
-Global --> Selenity.API : use
+Global --> Crescentum.API : use
 
 }
 
