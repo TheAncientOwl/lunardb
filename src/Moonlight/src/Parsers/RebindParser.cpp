@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "rebind" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
+API::ParsedQuery Rebind::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Rebind);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Rebind>();
+    auto& out = out_parsed_query.get<QueryData::Rebind>();
 
     const auto [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
 
@@ -40,7 +41,7 @@ PROVIDE_QUERY_PARSER_IMPL(Rebind, c_query_prefix)
     out.field = Errors::assertNotEmpty(field, "field name");
     out.bind_structure_name = Errors::assertNotEmpty(bind_structure_name, "rebind structure name");
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "truncate" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Truncate, c_query_prefix)
+API::ParsedQuery Truncate::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Truncate);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Truncate>();
+    auto& out = out_parsed_query.get<QueryData::Truncate>();
 
     const auto [truncate, structure, structure_name] = extractor.extractTuple<3>();
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -24,7 +25,7 @@ PROVIDE_QUERY_PARSER_IMPL(Truncate, c_query_prefix)
 
     out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

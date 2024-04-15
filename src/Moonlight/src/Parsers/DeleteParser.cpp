@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "delete" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
+API::ParsedQuery Delete::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Delete);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Delete>();
+    auto& out = out_parsed_query.get<QueryData::Delete>();
 
     const auto [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
     if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -26,7 +27,7 @@ PROVIDE_QUERY_PARSER_IMPL(Delete, c_query_prefix)
     out.from = Errors::assertNotEmpty(structure_name, "structure name");
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

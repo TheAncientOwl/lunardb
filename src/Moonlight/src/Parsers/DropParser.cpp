@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "drop" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
+API::ParsedQuery Drop::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Drop);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Drop>();
+    auto& out = out_parsed_query.get<QueryData::Drop>();
 
     const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -34,7 +35,7 @@ PROVIDE_QUERY_PARSER_IMPL(Drop, c_query_prefix)
         out.cascade = true;
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

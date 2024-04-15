@@ -54,3 +54,31 @@ ParsedQuery parseQuery(std::string_view query)
 }
 
 } // namespace LunarDB::Moonlight::API
+
+#define PROVIDE_PARSER_BUNLDER(Specialization, QueryPrefix) \
+ParserBundle Specialization::makeParser() { return std::make_pair(QueryPrefix, Specialization::parse); }
+
+namespace LunarDB::Moonlight::Implementation {
+
+PROVIDE_PARSER_BUNLDER(Create, "create")
+PROVIDE_PARSER_BUNLDER(Drop, "drop")
+PROVIDE_PARSER_BUNLDER(Migrate, "migrate")
+PROVIDE_PARSER_BUNLDER(Truncate, "truncate")
+PROVIDE_PARSER_BUNLDER(Rename, "rename")
+PROVIDE_PARSER_BUNLDER(Select, "select")
+PROVIDE_PARSER_BUNLDER(Insert, "insert")
+PROVIDE_PARSER_BUNLDER(Update, "update")
+PROVIDE_PARSER_BUNLDER(Delete, "delete")
+PROVIDE_PARSER_BUNLDER(Lock, "set")
+PROVIDE_PARSER_BUNLDER(Grant, "grant")
+PROVIDE_PARSER_BUNLDER(Revoke, "revoke")
+PROVIDE_PARSER_BUNLDER(Commit, "commit")
+PROVIDE_PARSER_BUNLDER(Rollback, "rollback")
+PROVIDE_PARSER_BUNLDER(SavePoint, "savepoint")
+PROVIDE_PARSER_BUNLDER(Index, "index")
+PROVIDE_PARSER_BUNLDER(Database, "database")
+PROVIDE_PARSER_BUNLDER(View, "view")
+PROVIDE_PARSER_BUNLDER(Rebind, "rebind")
+PROVIDE_PARSER_BUNLDER(Schema, "schema")
+
+} // namespace LunarDB::Moonlight::Implementation

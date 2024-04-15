@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "set" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
+API::ParsedQuery Lock::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Lock);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Lock>();
+    auto& out = out_parsed_query.get<QueryData::Lock>();
 
     const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -40,7 +41,7 @@ PROVIDE_QUERY_PARSER_IMPL(Lock, c_query_prefix)
         throw Errors::buildUnknownKeywordError(state);
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

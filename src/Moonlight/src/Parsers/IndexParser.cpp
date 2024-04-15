@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "index" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
+API::ParsedQuery Index::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Index);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Index>();
+    auto& out = out_parsed_query.get<QueryData::Index>();
 
     const auto [index, structure_name] = extractor.extractTuple<2>();
 
@@ -50,7 +51,7 @@ PROVIDE_QUERY_PARSER_IMPL(Index, c_query_prefix)
         if (out.using_fields.empty()) { throw Errors::buildMissingError("index fields"); }
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

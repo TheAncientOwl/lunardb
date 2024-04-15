@@ -80,7 +80,8 @@
     "ranges": "cpp",
     "condition_variable": "cpp",
     "mutex": "cpp",
-    "xstring": "cpp"
+    "xstring": "cpp",
+    "any": "cpp"
   },
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

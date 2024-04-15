@@ -72,9 +72,10 @@ QueryData::Schema::Field parseField(std::string_view str)
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Schema, c_query_prefix)
+API::ParsedQuery Schema::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Schema);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Schema>();
+    auto& out = out_parsed_query.get<QueryData::Schema>();
 
     const auto [schema, schema_name] = extractor.extractTuple<2>();
     if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -86,7 +87,7 @@ PROVIDE_QUERY_PARSER_IMPL(Schema, c_query_prefix)
 
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

@@ -33,11 +33,10 @@ Mapping parseMapping(std::string_view str)
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
+API::ParsedQuery Migrate::parse(QueryExtractor extractor)
 {
-    using namespace CppExtensions;
-
-    DECLARE_PARSED_QUERY(Migrate);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Migrate>();
+    auto& out = out_parsed_query.get<QueryData::Migrate>();
 
     const auto [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
 
@@ -74,7 +73,7 @@ PROVIDE_QUERY_PARSER_IMPL(Migrate, c_query_prefix)
         }
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

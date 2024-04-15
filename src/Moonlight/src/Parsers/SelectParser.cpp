@@ -29,9 +29,10 @@ QueryData::Select::Order parseOrderBy(std::string_view str)
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
+API::ParsedQuery Select::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Select);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Select>();
+    auto& out = out_parsed_query.get<QueryData::Select>();
 
     const auto [select, from, structure, structure_name] = extractor.extractTuple<4>();
 
@@ -74,7 +75,7 @@ PROVIDE_QUERY_PARSER_IMPL(Select, c_query_prefix)
         }
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

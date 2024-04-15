@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "savepoint" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
+API::ParsedQuery SavePoint::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(SavePoint);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::SavePoint>();
+    auto& out = out_parsed_query.get<QueryData::SavePoint>();
 
     const auto [savepoint, hash] = extractor.extractTuple<2>();
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
@@ -26,7 +27,7 @@ PROVIDE_QUERY_PARSER_IMPL(SavePoint, c_query_prefix)
         out.hash = hash;
     }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

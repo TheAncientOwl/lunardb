@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "view" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
+API::ParsedQuery View::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(View);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::View>();
+    auto& out = out_parsed_query.get<QueryData::View>();
 
     const auto [view, view_name, as] = extractor.extractTuple<3>();
 
@@ -25,7 +26,7 @@ PROVIDE_QUERY_PARSER_IMPL(View, c_query_prefix)
 
     out.as_select = Select::parse(extractor).get<QueryData::Select>();
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

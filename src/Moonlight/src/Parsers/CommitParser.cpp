@@ -12,17 +12,16 @@ constexpr auto c_query_prefix{ "commit" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Commit, c_query_prefix)
+API::ParsedQuery Commit::parse(QueryExtractor extractor)
 {
-
-    DECLARE_PARSED_QUERY(Commit);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Commit>();
 
     const auto [commit] = extractor.extractTuple<1>();
     if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
     Errors::assertKeywordEquals(commit, "commit");
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

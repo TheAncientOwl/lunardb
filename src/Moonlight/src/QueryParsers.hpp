@@ -12,17 +12,6 @@ namespace Specialization { \
 [[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
 }
 
-#define PROVIDE_QUERY_PARSER_IMPL(Specialization, QueryPrefix) \
-ParserBundle Specialization::makeParser() { return std::make_pair(QueryPrefix, Specialization::parse); } \
-API::ParsedQuery Specialization::parse(QueryExtractor extractor)
-
-#define DECLARE_PARSED_QUERY(type) \
-API::ParsedQuery out_parsed_query = API::ParsedQuery::make<QueryData::type>(); \
-auto& out = out_parsed_query.get<QueryData::type>()
-
-#define RETURN_PARSED_QUERY \
-return out_parsed_query
-
 namespace LunarDB::Moonlight::Implementation {
 
 using Parser = API::ParsedQuery(*)(QueryExtractor);

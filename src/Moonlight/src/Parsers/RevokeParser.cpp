@@ -14,9 +14,10 @@ constexpr auto c_query_prefix{ "revoke" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Revoke, c_query_prefix)
+API::ParsedQuery Revoke::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Revoke);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Revoke>();
+    auto& out = out_parsed_query.get<QueryData::Revoke>();
 
     const auto revoke = extractor.extractOne();
     Errors::assertKeywordEquals(revoke, "revoke");
@@ -40,7 +41,8 @@ PROVIDE_QUERY_PARSER_IMPL(Revoke, c_query_prefix)
     }
 
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
+
 }
 
 } // namespace LunarDB::Moonlight::Implementation

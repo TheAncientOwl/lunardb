@@ -14,9 +14,10 @@ constexpr auto c_query_prefix{ "grant" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Grant, c_query_prefix)
+API::ParsedQuery Grant::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Grant);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Grant>();
+    auto& out = out_parsed_query.get<QueryData::Grant>();
 
     const auto grant = extractor.extractOne();
     Errors::assertKeywordEquals(grant, "grant");
@@ -39,8 +40,7 @@ PROVIDE_QUERY_PARSER_IMPL(Grant, c_query_prefix)
         out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
     }
 
-
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

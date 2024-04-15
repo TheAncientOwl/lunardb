@@ -12,9 +12,10 @@ constexpr auto c_query_prefix{ "database" };
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Database, c_query_prefix)
+API::ParsedQuery Database::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Database);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Database>();
+    auto& out = out_parsed_query.get<QueryData::Database>();
 
     const auto [database, operation, database_name, to, disk] = extractor.extractTuple<5>();
 
@@ -42,7 +43,7 @@ PROVIDE_QUERY_PARSER_IMPL(Database, c_query_prefix)
     }
     else if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

@@ -135,11 +135,10 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
+API::ParsedQuery Create::parse(QueryExtractor extractor)
 {
-    using namespace CppExtensions;
-
-    DECLARE_PARSED_QUERY(Create);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Create>();
+    auto& out = out_parsed_query.get<QueryData::Create>();
 
     const auto [create, any] = extractor.extractTuple<2>();
 
@@ -185,7 +184,7 @@ PROVIDE_QUERY_PARSER_IMPL(Create, c_query_prefix)
     }
     else { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation

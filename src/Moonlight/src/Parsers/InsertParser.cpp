@@ -122,9 +122,10 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 
 } // namespace
 
-PROVIDE_QUERY_PARSER_IMPL(Insert, c_query_prefix)
+API::ParsedQuery Insert::parse(QueryExtractor extractor)
 {
-    DECLARE_PARSED_QUERY(Insert);
+    auto out_parsed_query = API::ParsedQuery::make<QueryData::Insert>();
+    auto& out = out_parsed_query.get<QueryData::Insert>();
 
     const auto [insert, into, structure_name, objects] = extractor.extractTuple<4>();
 
@@ -137,7 +138,7 @@ PROVIDE_QUERY_PARSER_IMPL(Insert, c_query_prefix)
 
     if (objects.empty()) { throw Errors::buildMissingError("objects"); }
 
-    RETURN_PARSED_QUERY;
+    return out_parsed_query;
 }
 
 } // namespace LunarDB::Moonlight::Implementation
