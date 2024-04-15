@@ -12,7 +12,7 @@ include(cmake-tools/macros/add_lunar_unit_test.cmake)
 include(cmake-tools/macros/add_lunar_library.cmake)
 include(cmake-tools/setup/testing.cmake)
 
-set(BUILD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/include)
+set(LUNAR_BUILD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/include)
 
 add_subdirectory(src)
 
