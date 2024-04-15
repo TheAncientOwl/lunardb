@@ -1,4 +1,5 @@
 @startuml Architecture
+!theme crt-amber
 
 left to right direction
 

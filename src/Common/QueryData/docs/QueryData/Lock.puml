@@ -1,4 +1,5 @@
 @startuml Lock
+!theme crt-amber
 
 namespace LunarDB.QueryData {
 

@@ -1,4 +1,5 @@
 @startuml Moonlight
+!theme crt-amber
 
 namespace LunarDB.Moonlight.API {
 
