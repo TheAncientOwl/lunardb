@@ -9,13 +9,6 @@ namespace Specialization { \
 void execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config); \
 }
 
-#define PROVIDE_QUERY_EXECUTOR_IMPL(Specialization) \
-ExecutorBundle Specialization::makeExecutor() { return std::make_pair(QueryData::Primitives::EQueryType::Specialization, Specialization::execute); } \
-void Specialization::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
-
-#define DECLARE_QUERY_OBJECT(type) \
-const auto& query = parsed_query.get<QueryData::type>();
-
 namespace LunarDB::Astral::Implementation {
 
 using Executor = void(*)(const Moonlight::API::ParsedQuery&, const Astral::API::QueryExecutorConfig&);

@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-PROVIDE_QUERY_EXECUTOR_IMPL(Delete)
+void Delete::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
 {
     // TODO: Provide implementation
-    DECLARE_QUERY_OBJECT(Delete);
+    const auto& query = parsed_query.get<QueryData::Delete>();
 }
 
 } // namespace LunarDB::Astral::Implementation

@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-PROVIDE_QUERY_EXECUTOR_IMPL(Lock)
+void Lock::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
 {
     // TODO: Provide implementation
-    DECLARE_QUERY_OBJECT(Lock);
+    const auto& query = parsed_query.get<QueryData::Lock>();
 }
 
 } // namespace LunarDB::Astral::Implementation

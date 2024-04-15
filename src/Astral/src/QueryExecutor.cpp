@@ -50,3 +50,31 @@ void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const QueryEx
 }
 
 } // namespace LunarDB::Astral::API
+
+#define PROVIDE_EXECUTOR_BUNDLER(Specialization) \
+ExecutorBundle Specialization::makeExecutor() { return std::make_pair(QueryData::Primitives::EQueryType::Specialization, Specialization::execute); }
+
+namespace LunarDB::Astral::Implementation {
+
+PROVIDE_EXECUTOR_BUNDLER(Create)
+PROVIDE_EXECUTOR_BUNDLER(Drop)
+PROVIDE_EXECUTOR_BUNDLER(Migrate)
+PROVIDE_EXECUTOR_BUNDLER(Truncate)
+PROVIDE_EXECUTOR_BUNDLER(Rename)
+PROVIDE_EXECUTOR_BUNDLER(Select)
+PROVIDE_EXECUTOR_BUNDLER(Insert)
+PROVIDE_EXECUTOR_BUNDLER(Update)
+PROVIDE_EXECUTOR_BUNDLER(Delete)
+PROVIDE_EXECUTOR_BUNDLER(Lock)
+PROVIDE_EXECUTOR_BUNDLER(Grant)
+PROVIDE_EXECUTOR_BUNDLER(Revoke)
+PROVIDE_EXECUTOR_BUNDLER(Commit)
+PROVIDE_EXECUTOR_BUNDLER(Rollback)
+PROVIDE_EXECUTOR_BUNDLER(SavePoint)
+PROVIDE_EXECUTOR_BUNDLER(Index)
+PROVIDE_EXECUTOR_BUNDLER(Database)
+PROVIDE_EXECUTOR_BUNDLER(View)
+PROVIDE_EXECUTOR_BUNDLER(Rebind)
+PROVIDE_EXECUTOR_BUNDLER(Schema)
+
+} // namespace LunarDB::Astral::Implementation

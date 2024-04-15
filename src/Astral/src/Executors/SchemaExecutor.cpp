@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-PROVIDE_QUERY_EXECUTOR_IMPL(Schema)
+void Schema::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
 {
     // TODO: Provide implementation
-    DECLARE_QUERY_OBJECT(Schema);
+    const auto& query = parsed_query.get<QueryData::Schema>();
 }
 
 } // namespace LunarDB::Astral::Implementation

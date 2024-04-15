@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-PROVIDE_QUERY_EXECUTOR_IMPL(Truncate)
+void Truncate::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
 {
     // TODO: Provide implementation
-    DECLARE_QUERY_OBJECT(Truncate);
+    const auto& query = parsed_query.get<QueryData::Truncate>();
 }
 
 } // namespace LunarDB::Astral::Implementation
