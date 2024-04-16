@@ -6,3 +6,10 @@ add_lunar_unit_test(
     DEPENDENCIES 
         LunarDB_Common_QueryData
 )
+
+add_lunar_unit_test(
+    NAME BinaryIOTest
+    SOURCE_FILES test/BinaryIOTest.cpp
+    DEPENDENCIES 
+        LunarDB_Common_CppExtensions
+)
