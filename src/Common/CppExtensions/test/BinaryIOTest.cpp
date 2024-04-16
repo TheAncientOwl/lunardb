@@ -26,6 +26,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint8_t)
     deserialize(in, in_value);
     in.close();
 
+    std::remove(c_temp_file);
+
     EXPECT_EQ(out_value, in_value);
 }
 
@@ -42,6 +44,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint16_t)
     std::uint16_t in_value{};
     deserialize(in, in_value);
     in.close();
+
+    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }
@@ -60,6 +64,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint32_t)
     deserialize(in, in_value);
     in.close();
 
+    std::remove(c_temp_file);
+
     EXPECT_EQ(out_value, in_value);
 }
 
@@ -76,6 +82,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint64_t)
     std::uint64_t in_value{};
     deserialize(in, in_value);
     in.close();
+
+    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }
@@ -94,6 +102,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int8_t)
     deserialize(in, in_value);
     in.close();
 
+    std::remove(c_temp_file);
+
     EXPECT_EQ(out_value, in_value);
 }
 
@@ -110,6 +120,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int16_t)
     std::int16_t in_value{};
     deserialize(in, in_value);
     in.close();
+
+    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }
@@ -128,6 +140,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int32_t)
     deserialize(in, in_value);
     in.close();
 
+    std::remove(c_temp_file);
+
     EXPECT_EQ(out_value, in_value);
 }
 
@@ -144,6 +158,8 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
     std::int64_t in_value{};
     deserialize(in, in_value);
     in.close();
+
+    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }
