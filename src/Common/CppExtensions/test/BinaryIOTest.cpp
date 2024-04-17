@@ -164,6 +164,25 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
     EXPECT_EQ(out_value, in_value);
 }
 
+TEST(Common_CppExtensions_BinaryIOTest, std_size_t)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const std::size_t out_value{ 42312312 };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    std::size_t in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
 TEST(Common_CppExtensions_BinaryIOTest, char)
 {
     static constexpr auto c_temp_file{ TEMP_FILE };
@@ -232,6 +251,47 @@ TEST(Common_CppExtensions_BinaryIOTest, double)
 
     std::ifstream in{ c_temp_file, std::ios::binary };
     double in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_string)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const std::string out_value{ "some string no idea    \t\t\n " };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    std::string in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const std::string_view out_value{ "some string_view no idea    \t\t\n " };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    std::string_view in_value_sv{};
+    EXPECT_THROW({ deserialize(in, in_value_sv); }, std::logic_error);
+
+    std::string in_value{};
     deserialize(in, in_value);
     in.close();
 

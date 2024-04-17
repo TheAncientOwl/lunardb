@@ -4,6 +4,8 @@
 #include <tuple>
 #include <cstddef>
 #include <cstdint>
+#include <string>
+#include <string_view>
 
 #define PROVIDE_IMPL_FOR_PODS(MACRO) \
 MACRO(std::int8_t) \
@@ -19,8 +21,13 @@ MACRO(bool) \
 MACRO(float) \
 MACRO(double)
 
+#define PROVIDE_IMPL_FOR_OBJECTS(MACRO) \
+MACRO(std::string) \
+MACRO(std::string_view)
+
 #define PROVIDE_IMPL_FOR(MACRO) \
-PROVIDE_IMPL_FOR_PODS(MACRO)
+PROVIDE_IMPL_FOR_PODS(MACRO) \
+PROVIDE_IMPL_FOR_OBJECTS(MACRO)
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Common {
 
