@@ -164,4 +164,80 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
     EXPECT_EQ(out_value, in_value);
 }
 
+TEST(Common_CppExtensions_BinaryIOTest, char)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const char out_value{ 'c' };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    char in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, bool)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const bool out_value{ true };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    bool in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, float)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const float out_value{ true };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    float in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, double)
+{
+    static constexpr auto c_temp_file{ TEMP_FILE };
+
+    std::ofstream out{ c_temp_file, std::ios::binary };
+    const double out_value{ true };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{ c_temp_file, std::ios::binary };
+    double in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Tests

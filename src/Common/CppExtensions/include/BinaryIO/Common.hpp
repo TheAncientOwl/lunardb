@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#define PROVIDE_IMPL_FOR(MACRO) \
+#define PROVIDE_IMPL_FOR_PODS(MACRO) \
 MACRO(std::int8_t) \
 MACRO(std::int16_t) \
 MACRO(std::int32_t) \
@@ -14,6 +14,13 @@ MACRO(std::uint8_t) \
 MACRO(std::uint16_t) \
 MACRO(std::uint32_t) \
 MACRO(std::uint64_t) \
+MACRO(char) \
+MACRO(bool) \
+MACRO(float) \
+MACRO(double)
+
+#define PROVIDE_IMPL_FOR(MACRO) \
+PROVIDE_IMPL_FOR_PODS(MACRO)
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Common {
 

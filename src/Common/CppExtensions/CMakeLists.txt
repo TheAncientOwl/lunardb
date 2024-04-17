@@ -21,6 +21,7 @@ add_lunar_library(
         src/StringUtils.cpp
 
         src/BinaryIO/Deserializer.cpp
+        src/BinaryIO/PODCommon.cpp
         src/BinaryIO/Serializer.cpp
 )
 
