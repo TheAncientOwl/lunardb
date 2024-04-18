@@ -16,7 +16,7 @@ API::ParsedQuery Commit::parse(QueryExtractor extractor)
 {
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Commit>();
 
-    const auto [commit] = extractor.extractTuple<1>();
+    auto const [commit] = extractor.extractTuple<1>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

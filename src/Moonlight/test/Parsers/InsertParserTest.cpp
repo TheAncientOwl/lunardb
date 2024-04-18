@@ -9,7 +9,7 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_InsertParserTest, success01)
 {
-    const auto query =
+    auto const query =
         R"(insert into SomeStructure objects [                               )"
         R"(    {                                                             )"
         R"(         "salary": "4000",                                        )"
@@ -112,7 +112,7 @@ TEST(Moonlight_InsertParserTest, success01)
     obj5.entries.emplace("rands", std::vector<std::string>{"1", "11", "111"});
     obj5.entries.emplace("objs", std::vector<Insert::Object>{obj, obj});
 
-    const auto expected = Init::InsertInit{}
+    auto const expected = Init::InsertInit{}
         .into("SomeStructure")
         .objects(objects);
 

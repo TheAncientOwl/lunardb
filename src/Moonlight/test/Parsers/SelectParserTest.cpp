@@ -15,7 +15,7 @@ using BinaryOperator = Primitives::EBinaryOperator;
 // clang-format off
 TEST(Moonlight_SelectParserTest, success01)
 {
-    const auto query =
+    auto const query =
         R"(select from structure StructureName                    )"
         R"(     where (                                           )"
         R"(         name like "*escu"                             )"
@@ -32,7 +32,7 @@ TEST(Moonlight_SelectParserTest, success01)
         R"(      )                                                )"
         R"(     fields [ field1, field2, field3, field4 ]         )";
 
-    const auto expected = Init::SelectInit{}
+    auto const expected = Init::SelectInit{}
         .from("StructureName")
         .where(Where{}.expression(
             BooleanExpression{}
@@ -65,7 +65,7 @@ TEST(Moonlight_SelectParserTest, success01)
 
 TEST(Moonlight_SelectParserTest, success02)
 {
-    const auto query =
+    auto const query =
         R"(select from structure StructureName                    )"
         R"(     where (                                           )"
         R"(         name like "*escu"                             )"
@@ -83,7 +83,7 @@ TEST(Moonlight_SelectParserTest, success02)
         R"(     fields [ field1, field2, field3, field4 ]         )"
         R"(     order by [ field1 asc, field2 desc, field3 asc ]  )";
 
-    const auto expected = Init::SelectInit{}
+    auto const expected = Init::SelectInit{}
         .from("StructureName")
         .where(Where{}.expression(
             BooleanExpression{}

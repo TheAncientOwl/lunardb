@@ -9,32 +9,32 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_SavePointParserTest, success01)
 {
-    const auto query = "savepoint";
-    const auto expected = Init::SavePointInit{}.hash(std::nullopt);
+    auto const query = "savepoint";
+    auto const expected = Init::SavePointInit{}.hash(std::nullopt);
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_SavePointParserTest, success02)
 {
-    const auto query = "savepoint;";
-    const auto expected = Init::SavePointInit{}.hash(std::nullopt);
+    auto const query = "savepoint;";
+    auto const expected = Init::SavePointInit{}.hash(std::nullopt);
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_SavePointParserTest, success03)
 {
-    const auto query = "savepoint a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e";
-    const auto expected = Init::SavePointInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
+    auto const query = "savepoint a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e";
+    auto const expected = Init::SavePointInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_SavePointParserTest, success04)
 {
-    const auto query = "savepoint a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e;";
-    const auto expected = Init::SavePointInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
+    auto const query = "savepoint a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e;";
+    auto const expected = Init::SavePointInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
 
     EXPECT_SUCCESS(query, expected);
 }

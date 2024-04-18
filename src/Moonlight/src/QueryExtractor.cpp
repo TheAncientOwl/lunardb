@@ -23,18 +23,18 @@ QueryExtractor::QueryExtractor(std::string_view query) : m_data(query)
 
 std::string_view QueryExtractor::extractOne()
 {
-    const auto whitespace_pos = m_data.find_first_of(StringUtils::whitespace());
+    auto const whitespace_pos = m_data.find_first_of(StringUtils::whitespace());
 
     if (whitespace_pos == std::string_view::npos)
     {
-        const auto one{m_data};
+        auto const one{m_data};
         m_data.remove_prefix(m_data.size());
 
         return one;
     }
     else
     {
-        const auto one{m_data.substr(0, whitespace_pos)};
+        auto const one{m_data.substr(0, whitespace_pos)};
         m_data.remove_prefix(whitespace_pos);
         StringUtils::ltrim(m_data);
 
@@ -58,7 +58,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
     m_data.remove_prefix(1);
     StringUtils::ltrim(m_data);
 
-    const auto closed_square_bracket_pos = m_data.find_first_of(bound_chars.second);
+    auto const closed_square_bracket_pos = m_data.find_first_of(bound_chars.second);
     if (closed_square_bracket_pos == std::string_view::npos)
     {
         std::string str{};
@@ -66,7 +66,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
         throw Errors::buildMissingError(str);
     }
 
-    const auto list_str{m_data.substr(0, closed_square_bracket_pos)};
+    auto const list_str{m_data.substr(0, closed_square_bracket_pos)};
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     StringUtils::ltrim(m_data);
 

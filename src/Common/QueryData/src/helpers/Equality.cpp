@@ -4,9 +4,9 @@
 
 #define PROVIDE_EQUALITY_OPERATOR(Type, ...)                                       \
     namespace LunarDB::QueryData {                                                 \
-    bool operator==(const Type& lhs, const Type& rhs)                              \
+    bool operator==(Type const& lhs, Type const& rhs)                              \
     {                                                                              \
-        const auto reduce = [](const Type& obj) { return std::tie(__VA_ARGS__); }; \
+        auto const reduce = [](Type const& obj) { return std::tie(__VA_ARGS__); }; \
         return reduce(lhs) == reduce(rhs);                                         \
     }                                                                              \
     }

@@ -17,7 +17,7 @@ API::ParsedQuery Drop::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Drop>();
     auto& out = out_parsed_query.get<QueryData::Drop>();
 
-    const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
+    auto const [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

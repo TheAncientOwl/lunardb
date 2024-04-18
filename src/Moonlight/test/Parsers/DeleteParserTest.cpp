@@ -15,7 +15,7 @@ using BinaryOperator = Primitives::EBinaryOperator;
 // clang-format off
 TEST(Moonlight_DeleteParserTest, success01)
 {
-    const auto query =
+    auto const query =
         R"(delete from structure StructureName               )"
         R"(     where (                                      )"
         R"(         name like "*escu"                        )"
@@ -31,7 +31,7 @@ TEST(Moonlight_DeleteParserTest, success01)
         R"(             )                                    )"
         R"(      )                                           )";
 
-    const auto expected = Init::DeleteInit{}
+    auto const expected = Init::DeleteInit{}
         .from("StructureName")
         .where(Where{}.expression(
             BooleanExpression{}

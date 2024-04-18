@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_RebindParserTest, success01)
 {
-    const auto query = "rebind SomeStructure::someField to SomeTable";
-    const auto expected = Init::RebindInit{}
+    auto const query = "rebind SomeStructure::someField to SomeTable";
+    auto const expected = Init::RebindInit{}
         .structure_name("SomeStructure")
         .field("someField")
         .bind_structure_name("SomeTable")
@@ -21,8 +21,8 @@ TEST(Moonlight_RebindParserTest, success01)
 
 TEST(Moonlight_RebindParserTest, success02)
 {
-    const auto query = "rebind      SomeStructure::someField         to      SomeTable    ;   ";
-    const auto expected = Init::RebindInit{}
+    auto const query = "rebind      SomeStructure::someField         to      SomeTable    ;   ";
+    auto const expected = Init::RebindInit{}
         .structure_name("SomeStructure")
         .field("someField")
         .bind_structure_name("SomeTable")
@@ -33,8 +33,8 @@ TEST(Moonlight_RebindParserTest, success02)
 
 TEST(Moonlight_RebindParserTest, success03)
 {
-    const auto query = "rebind SomeStructure::someField to SomeTable clean";
-    const auto expected = Init::RebindInit{}
+    auto const query = "rebind SomeStructure::someField to SomeTable clean";
+    auto const expected = Init::RebindInit{}
         .structure_name("SomeStructure")
         .field("someField")
         .bind_structure_name("SomeTable")
@@ -45,8 +45,8 @@ TEST(Moonlight_RebindParserTest, success03)
 
 TEST(Moonlight_RebindParserTest, success04)
 {
-    const auto query = "rebind    SomeStructure::someField     to  SomeTable    clean    ;   ";
-    const auto expected = Init::RebindInit{}
+    auto const query = "rebind    SomeStructure::someField     to  SomeTable    clean    ;   ";
+    auto const expected = Init::RebindInit{}
         .structure_name("SomeStructure")
         .field("someField")
         .bind_structure_name("SomeTable")

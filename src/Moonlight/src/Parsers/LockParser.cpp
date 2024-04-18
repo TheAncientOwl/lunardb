@@ -17,7 +17,7 @@ API::ParsedQuery Lock::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Lock>();
     auto& out = out_parsed_query.get<QueryData::Lock>();
 
-    const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
+    auto const [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

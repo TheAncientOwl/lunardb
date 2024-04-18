@@ -20,7 +20,7 @@ Binding parseBinding(std::string_view str)
 
     QueryExtractor extractor{str};
 
-    const auto [field, from, table] = extractor.extractTuple<3>();
+    auto const [field, from, table] = extractor.extractTuple<3>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidSequenceError(str);
@@ -41,7 +41,7 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
 {
     QueryData::Create::Single out{};
 
-    const auto [structure_name, based, on, schema_name, blended_or_binding] = extractor.extractTuple<5>();
+    auto const [structure_name, based, on, schema_name, blended_or_binding] = extractor.extractTuple<5>();
 
     Errors::assertKeywordEquals(based, "based");
     Errors::assertKeywordEquals(on, "on");
@@ -67,7 +67,7 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
             }
 
             std::unordered_set<std::string_view> fields{};
-            for (const auto& binding : out.bindings)
+            for (auto const& binding : out.bindings)
             {
                 if (fields.find(binding.field) != fields.end())
                 {
@@ -79,7 +79,7 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
             out.blended = false;
             if (!extractor.empty())
             {
-                const auto blended = extractor.extractOne();
+                auto const blended = extractor.extractOne();
                 if (!extractor.empty())
                 {
                     throw Errors::buildInvalidQueryFormatError(c_query_prefix);
@@ -108,7 +108,7 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
     Errors::assertKeywordEquals(extractor.extractOne(), "from");
 
     // parse schemas
-    const auto schemas = extractor.extractList();
+    auto const schemas = extractor.extractList();
     if (schemas.empty())
     {
         throw Errors::buildMissingError("schemas");
@@ -131,7 +131,7 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
     }
     else
     {
-        const auto [using_, format_] = extractor.extractTuple<2>();
+        auto const [using_, format_] = extractor.extractTuple<2>();
 
         Errors::assertKeywordEquals(using_, "using");
         Errors::assertKeywordEquals(format_, "format");
@@ -161,7 +161,7 @@ API::ParsedQuery Create::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Create>();
     auto& out = out_parsed_query.get<QueryData::Create>();
 
-    const auto [create, any] = extractor.extractTuple<2>();
+    auto const [create, any] = extractor.extractTuple<2>();
 
     Errors::assertKeywordEquals(create, "create");
 

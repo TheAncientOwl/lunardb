@@ -15,7 +15,7 @@ using BinaryOperator = Primitives::EBinaryOperator;
 // clang-format off
 TEST(Moonlight_ViewParserTest, success01)
 {
-    const auto query =
+    auto const query =
         R"(view ViewName as select from structure StructureName   )"
         R"(     where (                                           )"
         R"(         name like "*escu"                             )"
@@ -32,7 +32,7 @@ TEST(Moonlight_ViewParserTest, success01)
         R"(      )                                                )"
         R"(     fields [ field1, field2, field3, field4 ]         )";
 
-    const auto expected = Init::ViewInit{}
+    auto const expected = Init::ViewInit{}
         .name("ViewName")
         .as_select(
             Init::SelectInit{}
@@ -69,7 +69,7 @@ TEST(Moonlight_ViewParserTest, success01)
 
 TEST(Moonlight_ViewParserTest, success02)
 {
-    const auto query =
+    auto const query =
         R"(view ViewName as select from structure StructureName   )"
         R"(     where (                                           )"
         R"(         name like "*escu"                             )"
@@ -87,7 +87,7 @@ TEST(Moonlight_ViewParserTest, success02)
         R"(     fields [ field1, field2, field3, field4 ]         )"
         R"(     order by [ field1 asc, field2 desc, field3 asc ]  )";
 
-    const auto expected = Init::ViewInit{}
+    auto const expected = Init::ViewInit{}
         .name("ViewName")
         .as_select(
             Init::SelectInit{}

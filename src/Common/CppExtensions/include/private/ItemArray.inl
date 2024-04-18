@@ -14,7 +14,7 @@ template <Item Data, std::size_t Size>
 template <typename Callable>
 std::optional<typename Data::second_type> ItemArray<Data, Size>::find_if(Callable&& callable) const
 {
-    const auto it = std::find_if(std::cbegin(m_data), std::cend(m_data), callable);
+    auto const it = std::find_if(std::cbegin(m_data), std::cend(m_data), callable);
 
     if (it == std::cend(m_data))
     {

@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_TruncateParserTest, success01)
 {
-    const auto query = "truncate structure SomeStructure";
-    const auto expected = Init::TruncateInit{}
+    auto const query = "truncate structure SomeStructure";
+    auto const expected = Init::TruncateInit{}
     .structure_name("SomeStructure");
 
     EXPECT_SUCCESS(query, expected);
@@ -18,8 +18,8 @@ TEST(Moonlight_TruncateParserTest, success01)
 
 TEST(Moonlight_TruncateParserTest, success02)
 {
-    const auto query = "truncate structure SomeStructure;";
-    const auto expected = Init::TruncateInit{}
+    auto const query = "truncate structure SomeStructure;";
+    auto const expected = Init::TruncateInit{}
     .structure_name("SomeStructure");
 
     EXPECT_SUCCESS(query, expected);
@@ -27,8 +27,8 @@ TEST(Moonlight_TruncateParserTest, success02)
 
 TEST(Moonlight_TruncateParserTest, success03)
 {
-    const auto query = "    truncate         structure   SomeStructure    ";
-    const auto expected = Init::TruncateInit{}
+    auto const query = "    truncate         structure   SomeStructure    ";
+    auto const expected = Init::TruncateInit{}
     .structure_name("SomeStructure");
 
     EXPECT_SUCCESS(query, expected);
@@ -36,8 +36,8 @@ TEST(Moonlight_TruncateParserTest, success03)
 
 TEST(Moonlight_TruncateParserTest, success04)
 {
-    const auto query = "    truncate         structure   SomeStructure    ;  ";
-    const auto expected = Init::TruncateInit{}
+    auto const query = "    truncate         structure   SomeStructure    ;  ";
+    auto const expected = Init::TruncateInit{}
     .structure_name("SomeStructure");
 
     EXPECT_SUCCESS(query, expected);

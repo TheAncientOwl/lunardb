@@ -16,69 +16,69 @@ struct CreateInit : public Create
         {
             using base_t = Binding;
 
-            BindingInit& field(const std::string& value);
-            BindingInit& table(const std::string& value);
+            BindingInit& field(std::string const& value);
+            BindingInit& table(std::string const& value);
         };
 
-        SingleInit& structure_name(const std::string& value);
-        SingleInit& schema_name(const std::string& value);
-        SingleInit& bindings(const std::vector<Binding>& value);
-        SingleInit& blended(const bool& value);
+        SingleInit& structure_name(std::string const& value);
+        SingleInit& schema_name(std::string const& value);
+        SingleInit& bindings(std::vector<Binding> const& value);
+        SingleInit& blended(bool const& value);
     };
 
     struct MultipleInit : public Multiple
     {
         using base_t = Multiple;
 
-        MultipleInit& structure_name_format(const std::string& value);
-        MultipleInit& schema_names(const std::vector<std::string>& value);
+        MultipleInit& structure_name_format(std::string const& value);
+        MultipleInit& schema_names(std::vector<std::string> const& value);
     };
 
-    CreateInit& is_volatile(const bool& value);
-    CreateInit& structure_type(const Primitives::EStructureType& value);
-    CreateInit& single(const std::optional<Single>& value);
-    CreateInit& multiple(const std::optional<Multiple>& value);
+    CreateInit& is_volatile(bool const& value);
+    CreateInit& structure_type(Primitives::EStructureType const& value);
+    CreateInit& single(std::optional<Single> const& value);
+    CreateInit& multiple(std::optional<Multiple> const& value);
 };
 
 struct DropInit : public Drop
 {
     using base_t = Drop;
 
-    DropInit& structure_name(const std::string& value);
-    DropInit& cascade(const bool& value);
+    DropInit& structure_name(std::string const& value);
+    DropInit& cascade(bool const& value);
 };
 
 struct MigrateInit : public Migrate
 {
     using base_t = Migrate;
 
-    MigrateInit& structure_name(const std::string& value);
-    MigrateInit& new_schema_name(const std::string& value);
+    MigrateInit& structure_name(std::string const& value);
+    MigrateInit& new_schema_name(std::string const& value);
 
     struct MappingInit : public Mapping
     {
         using base_t = Mapping;
 
-        MappingInit& old_field(const std::string& value);
-        MappingInit& new_field(const std::string& value);
+        MappingInit& old_field(std::string const& value);
+        MappingInit& new_field(std::string const& value);
     };
-    MigrateInit& mappings(const std::vector<Mapping>& value);
+    MigrateInit& mappings(std::vector<Mapping> const& value);
 };
 
 struct TruncateInit : public Truncate
 {
     using base_t = Truncate;
 
-    TruncateInit& structure_name(const std::string& value);
+    TruncateInit& structure_name(std::string const& value);
 };
 
 struct RenameInit : public Rename
 {
     using base_t = Rename;
 
-    RenameInit& type(const Primitives::ERenameType& value);
-    RenameInit& old_name(const std::string& value);
-    RenameInit& new_name(const std::string& value);
+    RenameInit& type(Primitives::ERenameType const& value);
+    RenameInit& old_name(std::string const& value);
+    RenameInit& new_name(std::string const& value);
 };
 
 struct WhereClauseInit : public WhereClause
@@ -89,39 +89,39 @@ struct WhereClauseInit : public WhereClause
     {
         using base_t = BinaryExpression;
 
-        BinaryExpressionInit& negated(const bool& value);
-        BinaryExpressionInit& lhs(const std::string& value);
-        BinaryExpressionInit& rhs(const std::string& value);
-        BinaryExpressionInit& operation(const Primitives::EBinaryOperator& value);
+        BinaryExpressionInit& negated(bool const& value);
+        BinaryExpressionInit& lhs(std::string const& value);
+        BinaryExpressionInit& rhs(std::string const& value);
+        BinaryExpressionInit& operation(Primitives::EBinaryOperator const& value);
     };
 
     struct BooleanExpressionInit : public BooleanExpression
     {
         using base_t = BooleanExpression;
 
-        BooleanExpressionInit& negated(const bool& value);
-        BooleanExpressionInit& data(const std::vector<type>& value);
+        BooleanExpressionInit& negated(bool const& value);
+        BooleanExpressionInit& data(std::vector<type> const& value);
     };
 
-    WhereClauseInit& expression(const WhereClause::BooleanExpression& value);
+    WhereClauseInit& expression(WhereClause::BooleanExpression const& value);
 };
 
 struct SelectInit : public Select
 {
     using base_t = Select;
 
-    SelectInit& from(const std::string& value);
-    SelectInit& where(const WhereClause& value);
-    SelectInit& fields(const std::vector<std::string>& value);
+    SelectInit& from(std::string const& value);
+    SelectInit& where(WhereClause const& value);
+    SelectInit& fields(std::vector<std::string> const& value);
 
     struct OrderInit : public Order
     {
         using base_t = Order;
 
-        OrderInit& field(const std::string& value);
-        OrderInit& type(const Primitives::EOrderType& value);
+        OrderInit& field(std::string const& value);
+        OrderInit& type(Primitives::EOrderType const& value);
     };
-    SelectInit& order_by(const std::vector<Order>& value);
+    SelectInit& order_by(std::vector<Order> const& value);
 };
 
 struct InsertInit : public Insert
@@ -132,62 +132,62 @@ struct InsertInit : public Insert
     {
         using base_t = Object;
 
-        ObjectInit& entries(const std::map<std::string, type>& value);
+        ObjectInit& entries(std::map<std::string, type> const& value);
     };
 
-    InsertInit& into(const std::string& value);
-    InsertInit& objects(const std::vector<Object>& value);
+    InsertInit& into(std::string const& value);
+    InsertInit& objects(std::vector<Object> const& value);
 };
 
 struct UpdateInit : public Update
 {
     using base_t = Update;
 
-    UpdateInit& structure_name(const std::string& value);
-    UpdateInit& where(const WhereClause& value);
+    UpdateInit& structure_name(std::string const& value);
+    UpdateInit& where(WhereClause const& value);
 
     struct ModifyInit : public Modify
     {
         using base_t = Modify;
 
-        ModifyInit& field(const std::string& value);
-        ModifyInit& expression(const std::string& value);
+        ModifyInit& field(std::string const& value);
+        ModifyInit& expression(std::string const& value);
     };
-    UpdateInit& modify(const std::vector<Modify>& value);
+    UpdateInit& modify(std::vector<Modify> const& value);
 };
 
 struct DeleteInit : public Delete
 {
     using base_t = Delete;
 
-    DeleteInit& from(const std::string& value);
-    DeleteInit& where(const WhereClause& value);
+    DeleteInit& from(std::string const& value);
+    DeleteInit& where(WhereClause const& value);
 };
 
 struct LockInit : public Lock
 {
     using base_t = Lock;
 
-    LockInit& structure_name(const std::string& value);
-    LockInit& concurrency(const bool& value);
+    LockInit& structure_name(std::string const& value);
+    LockInit& concurrency(bool const& value);
 };
 
 struct GrantInit : public Grant
 {
     using base_t = Grant;
 
-    GrantInit& permissions(const std::vector<Primitives::EUserPermissionType>& value);
-    GrantInit& to_user(const std::string& value);
-    GrantInit& structure_name(const std::optional<std::string>& value);
+    GrantInit& permissions(std::vector<Primitives::EUserPermissionType> const& value);
+    GrantInit& to_user(std::string const& value);
+    GrantInit& structure_name(std::optional<std::string> const& value);
 };
 
 struct RevokeInit : public Revoke
 {
     using base_t = Revoke;
 
-    RevokeInit& permissions(const std::vector<Primitives::EUserPermissionType>& value);
-    RevokeInit& from_user(const std::string& value);
-    RevokeInit& structure_name(const std::optional<std::string>& value);
+    RevokeInit& permissions(std::vector<Primitives::EUserPermissionType> const& value);
+    RevokeInit& from_user(std::string const& value);
+    RevokeInit& structure_name(std::optional<std::string> const& value);
 };
 
 struct CommitInit : public Commit
@@ -199,24 +199,24 @@ struct RollbackInit : public Rollback
 {
     using base_t = Rollback;
 
-    RollbackInit& hash(const std::optional<std::string>& value);
+    RollbackInit& hash(std::optional<std::string> const& value);
 };
 
 struct SavePointInit : public SavePoint
 {
     using base_t = SavePoint;
 
-    SavePointInit& hash(const std::optional<std::string>& value);
+    SavePointInit& hash(std::optional<std::string> const& value);
 };
 
 struct IndexInit : public Index
 {
     using base_t = Index;
 
-    IndexInit& on_structure_name(const std::string& value);
-    IndexInit& unique(const bool& value);
-    IndexInit& name(const std::optional<std::string>& value);
-    IndexInit& using_fields(const std::vector<std::string>& value);
+    IndexInit& on_structure_name(std::string const& value);
+    IndexInit& unique(bool const& value);
+    IndexInit& name(std::optional<std::string> const& value);
+    IndexInit& using_fields(std::vector<std::string> const& value);
 };
 
 struct DatabaseInit : public Database
@@ -224,26 +224,26 @@ struct DatabaseInit : public Database
     using base_t = Database;
 
     DatabaseInit& operation_type(const Primitives::EDatabaseOperationType& value);
-    DatabaseInit& name(const std::string& value);
-    DatabaseInit& backup_path(const std::optional<std::string>& value);
+    DatabaseInit& name(std::string const& value);
+    DatabaseInit& backup_path(std::optional<std::string> const& value);
 };
 
 struct ViewInit : public View
 {
     using base_t = View;
 
-    ViewInit& name(const std::string& name);
-    ViewInit& as_select(const Select& value);
+    ViewInit& name(std::string const& name);
+    ViewInit& as_select(Select const& value);
 };
 
 struct RebindInit : public Rebind
 {
     using base_t = Rebind;
 
-    RebindInit& structure_name(const std::string& value);
-    RebindInit& field(const std::string& value);
-    RebindInit& bind_structure_name(const std::string& value);
-    RebindInit& clean(const std::optional<bool>& value);
+    RebindInit& structure_name(std::string const& value);
+    RebindInit& field(std::string const& value);
+    RebindInit& bind_structure_name(std::string const& value);
+    RebindInit& clean(std::optional<bool>& value);
 };
 
 struct SchemaInit : public Schema
@@ -254,14 +254,14 @@ struct SchemaInit : public Schema
     {
         using base_t = Field;
 
-        FieldInit& name(const std::string& value);
-        FieldInit& type(const std::string& value);
-        FieldInit& nullable(const bool& value);
-        FieldInit& array(const bool& value);
+        FieldInit& name(std::string const& value);
+        FieldInit& type(std::string const& value);
+        FieldInit& nullable(bool const& value);
+        FieldInit& array(bool const& value);
     };
 
-    SchemaInit& name(const std::string& value);
-    SchemaInit& fields(const std::vector<Field>& value);
+    SchemaInit& name(std::string const& value);
+    SchemaInit& fields(std::vector<Field> const& value);
 };
 
 } // namespace LunarDB::QueryData::Init

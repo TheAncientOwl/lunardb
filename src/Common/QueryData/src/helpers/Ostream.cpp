@@ -5,7 +5,7 @@
 
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...)              \
     namespace LunarDB::QueryData {                              \
-    std::ostream& operator<<(std::ostream& os, const Type& rhs) \
+    std::ostream& operator<<(std::ostream& os, Type const& rhs) \
     {                                                           \
         __VA_ARGS__, std::ignore;                               \
         return os;                                              \
@@ -21,7 +21,7 @@
 namespace LunarDB::QueryData {
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
+std::ostream& operator<<(std::ostream& os, std::optional<T> const& rhs)
 {
     if (static_cast<bool>(rhs))
     {
@@ -35,26 +35,26 @@ std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
+std::ostream& operator<<(std::ostream& os, std::vector<T> const& rhs)
 {
     os << "[";
-    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << val << ", "; });
+    std::for_each(rhs.begin(), rhs.end(), [&os](auto const& val) { os << val << ", "; });
     os << "]";
     return os;
 }
 
 template <typename T, typename... Ts>
-std::ostream& operator<<(std::ostream& os, const std::variant<T, Ts...>& rhs)
+std::ostream& operator<<(std::ostream& os, std::variant<T, Ts...> const& rhs)
 {
     std::visit([&os](auto&& arg) { os << arg; }, rhs);
     return os;
 }
 
 template <typename Key, typename Value>
-std::ostream& operator<<(std::ostream& os, const std::map<Key, Value>& rhs)
+std::ostream& operator<<(std::ostream& os, std::map<Key, Value> const& rhs)
 {
     os << "{";
-    for (const auto& [key, value] : rhs)
+    for (auto const& [key, value] : rhs)
     {
         os << key << ": " << value << ", ";
     }
@@ -63,7 +63,7 @@ std::ostream& operator<<(std::ostream& os, const std::map<Key, Value>& rhs)
 }
 
 template <>
-std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
+std::ostream& operator<<(std::ostream& os, std::optional<bool> const& rhs)
 {
     if (static_cast<bool>(rhs))
     {
@@ -133,7 +133,7 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BinaryExpression,
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(WhereClause::BooleanExpression,
     os << (rhs.negated ? " !" : "") << "(",
-    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](const auto& data) { os << data << " "; }),
+    std::for_each(rhs.data.begin(), rhs.data.end(), [&os](auto const& data) { os << data << " "; }),
     os << ")"
 )
 

@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_LockParserTest, success01)
 {
-    const auto query = "set concurrency on structure StructureName on";
-    const auto expected = Init::LockInit{}
+    auto const query = "set concurrency on structure StructureName on";
+    auto const expected = Init::LockInit{}
         .structure_name("StructureName")
         .concurrency(true);
 
@@ -19,8 +19,8 @@ TEST(Moonlight_LockParserTest, success01)
 
 TEST(Moonlight_LockParserTest, success02)
 {
-    const auto query = "set concurrency     \non  structure\n StructureName on     ;";
-    const auto expected = Init::LockInit{}
+    auto const query = "set concurrency     \non  structure\n StructureName on     ;";
+    auto const expected = Init::LockInit{}
         .structure_name("StructureName")
         .concurrency(true);
 
@@ -29,8 +29,8 @@ TEST(Moonlight_LockParserTest, success02)
 
 TEST(Moonlight_LockParserTest, success03)
 {
-    const auto query = "set concurrency on structure StructureName off";
-    const auto expected = Init::LockInit{}
+    auto const query = "set concurrency on structure StructureName off";
+    auto const expected = Init::LockInit{}
         .structure_name("StructureName")
         .concurrency(false);
 
@@ -39,8 +39,8 @@ TEST(Moonlight_LockParserTest, success03)
 
 TEST(Moonlight_LockParserTest, success04)
 {
-    const auto query = "    set  concurrency         on      structure      \n  StructureName   off  \n;     ";
-    const auto expected = Init::LockInit{}
+    auto const query = "    set  concurrency         on      structure      \n  StructureName   off  \n;     ";
+    auto const expected = Init::LockInit{}
         .structure_name("StructureName")
         .concurrency(false);
 

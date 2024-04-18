@@ -15,7 +15,7 @@ using BinaryOperator = Primitives::EBinaryOperator;
 // clang-format off
 TEST(Moonlight_UpdateParserTest, success01)
 {
-    const auto query =
+    auto const query =
         R"(update structure StructureName                    )"
         R"(     where (                                      )"
         R"(         name like "*escu"                        )"
@@ -35,7 +35,7 @@ TEST(Moonlight_UpdateParserTest, success01)
         R"(         field2 => field3 + "_some_suffix"        )"
         R"(     ]                                            )";
 
-    const auto expected = Init::UpdateInit{}
+    auto const expected = Init::UpdateInit{}
         .structure_name("StructureName")
         .where(Where{}.expression(
             BooleanExpression{}

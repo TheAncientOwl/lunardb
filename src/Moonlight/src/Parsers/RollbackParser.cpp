@@ -17,7 +17,7 @@ API::ParsedQuery Rollback::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Rollback>();
     auto& out = out_parsed_query.get<QueryData::Rollback>();
 
-    const auto [rollback, hash] = extractor.extractTuple<2>();
+    auto const [rollback, hash] = extractor.extractTuple<2>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

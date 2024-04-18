@@ -24,7 +24,7 @@ public: // methods
     /// @brief Self explanatory
     ///
     template <typename Data>
-    const Data& get() const;
+    Data const& get() const;
 
 public: // helpers
     ///
@@ -77,7 +77,7 @@ inline Data& ParsedQuery::get()
 }
 
 template <typename Data>
-inline const Data& ParsedQuery::get() const
+inline Data const& ParsedQuery::get() const
 {
     return std::get<Data>(m_data);
 }

@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_DatabaseParserTest, success01)
 {
-    const auto query = "database create SomeDatabase";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database create SomeDatabase";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Create)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -20,8 +20,8 @@ TEST(Moonlight_DatabaseParserTest, success01)
 
 TEST(Moonlight_DatabaseParserTest, success02)
 {
-    const auto query = "database create SomeDatabase;";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database create SomeDatabase;";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Create)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -31,8 +31,8 @@ TEST(Moonlight_DatabaseParserTest, success02)
 
 TEST(Moonlight_DatabaseParserTest, success03)
 {
-    const auto query = "database drop SomeDatabase";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database drop SomeDatabase";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Drop)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -42,8 +42,8 @@ TEST(Moonlight_DatabaseParserTest, success03)
 
 TEST(Moonlight_DatabaseParserTest, success04)
 {
-    const auto query = "database drop SomeDatabase;";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database drop SomeDatabase;";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Drop)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -53,8 +53,8 @@ TEST(Moonlight_DatabaseParserTest, success04)
 
 TEST(Moonlight_DatabaseParserTest, success05)
 {
-    const auto query = "database use SomeDatabase";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database use SomeDatabase";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Use)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -64,8 +64,8 @@ TEST(Moonlight_DatabaseParserTest, success05)
 
 TEST(Moonlight_DatabaseParserTest, success06)
 {
-    const auto query = "database use SomeDatabase;";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = "database use SomeDatabase;";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Use)
         .name("SomeDatabase")
         .backup_path(std::nullopt);
@@ -75,8 +75,8 @@ TEST(Moonlight_DatabaseParserTest, success06)
 
 TEST(Moonlight_DatabaseParserTest, success07)
 {
-    const auto query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup")";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup")";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Backup)
         .name("SomeDatabase")
         .backup_path(R"(/home/user/lunardb-backup)");
@@ -86,8 +86,8 @@ TEST(Moonlight_DatabaseParserTest, success07)
 
 TEST(Moonlight_DatabaseParserTest, success08)
 {
-    const auto query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup";)";
-    const auto expected = Init::DatabaseInit{}
+    auto const query = R"(database backup SomeDatabase to disk "/home/user/lunardb-backup";)";
+    auto const expected = Init::DatabaseInit{}
         .operation_type(Primitives::EDatabaseOperationType::Backup)
         .name("SomeDatabase")
         .backup_path(R"(/home/user/lunardb-backup)");

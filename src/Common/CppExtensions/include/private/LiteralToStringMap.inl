@@ -15,8 +15,8 @@ template <Enumeration Literal>
 std::string_view LiteralToStringMap<Literal>::findByLiteral(Literal literal) const
 {
     // clang-format off
-    const auto it = std::find_if(m_data.begin(), m_data.end(),
-        [literal](const auto& value) {
+    auto const it = std::find_if(m_data.begin(), m_data.end(),
+        [literal](auto const& value) {
             return value.first == literal;
         });
     // clang-format on
@@ -34,8 +34,8 @@ template <Enumeration Literal>
 Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
 {
     // clang-format off
-    const auto it = std::find_if(m_data.begin(), m_data.end(),
-        [&str](const auto& value) {
+    auto const it = std::find_if(m_data.begin(), m_data.end(),
+        [&str](auto const& value) {
             return StringUtils::equalsIgnoreCase(value.second, str);
         });
     // clang-format on

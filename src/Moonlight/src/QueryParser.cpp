@@ -23,7 +23,7 @@ ParsedQuery parseQuery(std::string_view query)
         Commit::makeParser(),   Rollback::makeParser(), SavePoint::makeParser(), Index::makeParser(),
         Database::makeParser(), View::makeParser(),     Rebind::makeParser(),    Schema::makeParser()};
 
-    const auto parser_opt = s_parsers.find_if([query](const ParserBundle& query_parser) {
+    auto const parser_opt = s_parsers.find_if([query](ParserBundle const& query_parser) {
         return StringUtils::startsWithIgnoreCase(query, query_parser.first);
     });
 

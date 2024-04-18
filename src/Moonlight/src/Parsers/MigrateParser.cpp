@@ -19,7 +19,7 @@ Mapping parseMapping(std::string_view str)
     Mapping out{};
 
     QueryExtractor extractor{str};
-    const auto [old_field, arrow, new_field] = extractor.extractTuple<3>();
+    auto const [old_field, arrow, new_field] = extractor.extractTuple<3>();
 
     if (!extractor.empty())
     {
@@ -41,7 +41,7 @@ API::ParsedQuery Migrate::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Migrate>();
     auto& out = out_parsed_query.get<QueryData::Migrate>();
 
-    const auto [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
+    auto const [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
 
     Errors::assertKeywordEquals(migrate, "migrate");
     Errors::assertKeywordEquals(structure, "structure");
@@ -63,9 +63,9 @@ API::ParsedQuery Migrate::parse(QueryExtractor extractor)
 
         std::unordered_set<std::string_view> olds{};
         std::unordered_set<std::string_view> news{};
-        for (const auto& mapping : out.mappings)
+        for (auto const& mapping : out.mappings)
         {
-            const auto& handle_value = [](auto& set, const auto& value) -> void {
+            auto const& handle_value = [](auto& set, auto const& value) -> void {
                 if (set.find(value) != set.end())
                 {
                     throw Errors::buildError("Found duplicate field '", value, "'");

@@ -28,6 +28,6 @@ template <typename... Args>
 
 void assertKeywordEquals(std::string_view actual, std::string_view expected);
 std::string_view assertNotEmpty(std::string_view src, std::string_view err);
-void assertValidIdentifier(const std::string& src);
+void assertValidIdentifier(std::string const& src);
 
 } // namespace LunarDB::Moonlight::Errors

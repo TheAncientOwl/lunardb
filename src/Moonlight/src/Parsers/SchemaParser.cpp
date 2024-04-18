@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "schema" };
+constexpr auto c_query_prefix{"schema"};
 
 QueryData::Schema::Field parseField(std::string_view str)
 {
@@ -16,8 +16,11 @@ QueryData::Schema::Field parseField(std::string_view str)
 
     QueryData::Schema::Field out{};
 
-    const auto separator_pos = str.find_first_of(':');
-    if (separator_pos == std::string_view::npos) { throw Errors::buildMissingError(":"); }
+    auto const separator_pos = str.find_first_of(':');
+    if (separator_pos == std::string_view::npos)
+    {
+        throw Errors::buildMissingError(":");
+    }
 
     auto field_name = str.substr(0, separator_pos);
     StringUtils::trim(field_name);
@@ -77,15 +80,21 @@ API::ParsedQuery Schema::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Schema>();
     auto& out = out_parsed_query.get<QueryData::Schema>();
 
-    const auto [schema, schema_name] = extractor.extractTuple<2>();
-    if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    auto const [schema, schema_name] = extractor.extractTuple<2>();
+    if (extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(schema, "schema");
 
     out.name = Errors::assertNotEmpty(schema_name, "schema name");
     out.fields = extractor.extractList<QueryData::Schema::Field>(parseField, ';', std::make_pair('{', '}'));
 
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     return out_parsed_query;
 }

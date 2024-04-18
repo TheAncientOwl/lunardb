@@ -14,8 +14,8 @@
 ///
 
 #define EXPECT_SUCCESS(query, expected)                          \
-    const auto parsed_query = Moonlight::API::parseQuery(query); \
-    const auto& out = parsed_query.get<QUERY_TYPE>();            \
+    auto const parsed_query = Moonlight::API::parseQuery(query); \
+    auto const& out = parsed_query.get<QUERY_TYPE>();            \
     EXPECT_EQ(out, expected)
 
 #define EXPECT_FAIL(query) \

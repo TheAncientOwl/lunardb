@@ -17,13 +17,13 @@ API::ParsedQuery Index::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Index>();
     auto& out = out_parsed_query.get<QueryData::Index>();
 
-    const auto [index, structure_name] = extractor.extractTuple<2>();
+    auto const [index, structure_name] = extractor.extractTuple<2>();
 
     Errors::assertKeywordEquals(index, "index");
 
     out.on_structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
-    const auto unique_or_as = extractor.extractOne();
+    auto const unique_or_as = extractor.extractOne();
     if (StringUtils::equalsIgnoreCase(unique_or_as, "unique"))
     {
         out.unique = true;
@@ -35,12 +35,12 @@ API::ParsedQuery Index::parse(QueryExtractor extractor)
         Errors::assertKeywordEquals(unique_or_as, "as");
     }
 
-    const auto index_name = extractor.extractOne();
+    auto const index_name = extractor.extractOne();
     out.name = Errors::assertNotEmpty(index_name, "index name");
 
     if (!extractor.empty())
     {
-        const auto using_ = extractor.extractOne();
+        auto const using_ = extractor.extractOne();
         Errors::assertKeywordEquals(using_, "using");
 
         out.using_fields = extractor.extractUniqueList<std::string>([](std::string_view sv) {

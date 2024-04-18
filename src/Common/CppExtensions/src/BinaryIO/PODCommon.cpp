@@ -3,7 +3,7 @@
 #define PROVIDE_POD_SERIALIZER_FOR(type)                             \
     namespace Serializer {                                           \
     template <>                                                      \
-    void serializeImpl(std::ostream& os, const type& obj)            \
+    void serializeImpl(std::ostream& os, type const& obj)            \
     {                                                                \
         os.write(reinterpret_cast<const char*>(&obj), sizeof(type)); \
     }                                                                \

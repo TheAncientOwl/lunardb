@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_CommitParserTest, success01)
 {
-    const auto query = "commit";
-    const auto expected = Init::CommitInit{};
+    auto const query = "commit";
+    auto const expected = Init::CommitInit{};
 
     EXPECT_SUCCESS(query, expected);
 }

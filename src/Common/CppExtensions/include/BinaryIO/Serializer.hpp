@@ -4,17 +4,17 @@
 
 #define SERIALIZE_IMPL(type) \
     template <>              \
-    void serializeImpl(std::ostream& os, const type& obj);
+    void serializeImpl(std::ostream& os, type const& obj);
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 
 template <typename T>
-void serializeImpl(std::ostream& os, const T& obj) = delete;
+void serializeImpl(std::ostream& os, T const& obj) = delete;
 
 PROVIDE_IMPL_FOR(SERIALIZE_IMPL);
 
 template <std::size_t Index, typename... Args>
-void serializeTupleElements(const std::tuple<Args...>&);
+void serializeTupleElements(std::tuple<Args...> const&);
 
 template <typename T>
 concept HasSerializeImpl = requires(std::ostream& os, T obj) {
@@ -23,7 +23,7 @@ concept HasSerializeImpl = requires(std::ostream& os, T obj) {
 
 template <typename T>
     requires HasSerializeImpl<T> || Common::HasMakeTuple<T>
-void serialize(std::ostream& os, const T& obj)
+void serialize(std::ostream& os, T const& obj)
 {
     if constexpr (Common::HasMakeTuple<T>)
     {
@@ -36,7 +36,7 @@ void serialize(std::ostream& os, const T& obj)
 }
 
 template <std::size_t Index, typename... Args>
-void serializeTupleElements(const std::tuple<Args...>& tuple)
+void serializeTupleElements(std::tuple<Args...> const& tuple)
 {
     if constexpr (Index < sizeof...(Args))
     {

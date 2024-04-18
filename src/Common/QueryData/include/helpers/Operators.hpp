@@ -6,7 +6,7 @@
 
 #define DEFINE_OPERATORS(Type)                                   \
     namespace LunarDB::QueryData {                               \
-    bool operator==(const Type& lhs, const Type& rhs);           \
+    bool operator==(Type const& lhs, Type const& rhs);           \
     std::ostream& operator<<(std::ostream& os, const Type& rhs); \
     }
 

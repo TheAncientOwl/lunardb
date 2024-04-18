@@ -18,7 +18,7 @@ QueryData::Update::Modify parseModify(std::string_view str)
 
     out.field = Errors::assertNotEmpty(Utils::extractWord(str, ' '), "field name");
 
-    const auto arrow = Utils::extractWord(str, ' ');
+    auto const arrow = Utils::extractWord(str, ' ');
     Errors::assertKeywordEquals(arrow, "=>");
 
     StringUtils::trim(str);
@@ -39,7 +39,7 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Update>();
     auto& out = out_parsed_query.get<QueryData::Update>();
 
-    const auto [update, structure, structure_name] = extractor.extractTuple<3>();
+    auto const [update, structure, structure_name] = extractor.extractTuple<3>();
     if (extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);
@@ -57,7 +57,7 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);
     }
 
-    const auto modify = extractor.extractOne();
+    auto const modify = extractor.extractOne();
     Errors::assertKeywordEquals(modify, "modify");
 
     out.modify = extractor.extractList<QueryData::Update::Modify>(parseModify);
@@ -67,7 +67,7 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     }
 
     std::unordered_set<std::string_view> modify_fields{};
-    for (const auto& modify : out.modify)
+    for (auto const& modify : out.modify)
     {
         if (modify_fields.find(modify.field) != modify_fields.end())
         {

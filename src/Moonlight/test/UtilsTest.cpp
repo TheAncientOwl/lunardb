@@ -11,9 +11,9 @@ using namespace std::literals;
 // clang-format off
 TEST(Moonlight_UtilsTest, split01)
 {
-    const auto str = "  field1  ,  field2  ";
+    auto const str = "  field1  ,  field2  ";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -25,9 +25,9 @@ TEST(Moonlight_UtilsTest, split01)
 
 TEST(Moonlight_UtilsTest, split02)
 {
-    const auto str = R"(  field1  ,  field2, "some string,q", field3  )";
+    auto const str = R"(  field1  ,  field2, "some string,q", field3  )";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -41,9 +41,9 @@ TEST(Moonlight_UtilsTest, split02)
 
 TEST(Moonlight_UtilsTest, split03)
 {
-    const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes", and commas"  )";
+    auto const str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes", and commas"  )";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -59,9 +59,9 @@ TEST(Moonlight_UtilsTest, split03)
 
 TEST(Moonlight_UtilsTest, split04)
 {
-    const auto str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes\", and commas"  )";
+    auto const str = R"(  field1  ,  field2, "some string,q", field3, "some other string \"with quotes\", and commas"  )";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -76,9 +76,9 @@ TEST(Moonlight_UtilsTest, split04)
 
 TEST(Moonlight_UtilsTest, split05)
 {
-    const auto str = R"(  field1, field2, "", field3  )";
+    auto const str = R"(  field1, field2, "", field3  )";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -91,9 +91,9 @@ TEST(Moonlight_UtilsTest, split05)
 
 TEST(Moonlight_UtilsTest, split06)
 {
-    const auto str = R"(  field1, field2, "", ", field3  )";
+    auto const str = R"(  field1, field2, "", ", field3  )";
 
-    const auto out = split(str, ',', ESplitModifier::EscapeQuotes);
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -106,9 +106,9 @@ TEST(Moonlight_UtilsTest, split06)
 
 TEST(Moonlight_UtilsTest, split07)
 {
-    const auto str = R"(  field1, field2, "", ", field3  )";
+    auto const str = R"(  field1, field2, "", ", field3  )";
 
-    const auto out = split(str);
+    auto const out = split(str);
 
     std::vector<std::string_view> expected = {
         "field1",
@@ -124,19 +124,19 @@ TEST(Moonlight_UtilsTest, split07)
 TEST(Moonlight_UtilsTest, parseResolutionOperator)
 {
     {
-        const auto [left, right] = parseResolutionOperator("String1::String2");
+        auto const [left, right] = parseResolutionOperator("String1::String2");
         EXPECT_EQ(left, "String1"sv);
         EXPECT_EQ(right, "String2"sv);
     }
 
     {
-        const auto [left, right] = parseResolutionOperator("::String2");
+        auto const [left, right] = parseResolutionOperator("::String2");
         EXPECT_EQ(left, ""sv);
         EXPECT_EQ(right, "String2"sv);
     }
 
     {
-        const auto [left, right] = parseResolutionOperator("String1::");
+        auto const [left, right] = parseResolutionOperator("String1::");
         EXPECT_EQ(left, "String1"sv);
         EXPECT_EQ(right, ""sv);
     }

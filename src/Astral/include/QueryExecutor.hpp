@@ -5,6 +5,6 @@
 
 namespace LunarDB::Astral::API {
 
-void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const QueryExecutorConfig& config);
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, QueryExecutorConfig const& config);
 
 } // namespace LunarDB::Astral::API

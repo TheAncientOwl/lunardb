@@ -17,7 +17,7 @@ API::ParsedQuery Delete::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Delete>();
     auto& out = out_parsed_query.get<QueryData::Delete>();
 
-    const auto [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
+    auto const [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
     if (extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

@@ -19,7 +19,7 @@ API::ParsedQuery Revoke::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Revoke>();
     auto& out = out_parsed_query.get<QueryData::Revoke>();
 
-    const auto revoke = extractor.extractOne();
+    auto const revoke = extractor.extractOne();
     Errors::assertKeywordEquals(revoke, "revoke");
 
     // parse permissions
@@ -31,7 +31,7 @@ API::ParsedQuery Revoke::parse(QueryExtractor extractor)
     }
 
     // parse user and structure names
-    const auto [from, user_name, on, structure_name] = extractor.extractTuple<4>();
+    auto const [from, user_name, on, structure_name] = extractor.extractTuple<4>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

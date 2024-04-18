@@ -9,7 +9,7 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_SchemaParserTest, success01)
 {
-    const auto query =
+    auto const query =
         "schema SomeSchema {"
         "   field_1 : Rid;"
         "   field_2 : String;"
@@ -24,7 +24,7 @@ TEST(Moonlight_SchemaParserTest, success01)
         "   field_11: Float32;"
         "   field_12: Float64;"
         "}";
-    const auto expected = Init::SchemaInit{}
+    auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").nullable(false).array(false),
@@ -45,7 +45,7 @@ TEST(Moonlight_SchemaParserTest, success01)
 
 TEST(Moonlight_SchemaParserTest, success02)
 {
-    const auto query =
+    auto const query =
         "schema SomeSchema {"
         "   field_opt_1 : Rid?;"
         "   field_opt_2 : String?;"
@@ -60,7 +60,7 @@ TEST(Moonlight_SchemaParserTest, success02)
         "   field_opt_11: Float32?;"
         "   field_opt_12: Float64?;"
         "}";
-    const auto expected = Init::SchemaInit{}
+    auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_opt_1").type("Rid").nullable(true).array(false),
@@ -81,7 +81,7 @@ TEST(Moonlight_SchemaParserTest, success02)
 
 TEST(Moonlight_SchemaParserTest, success03)
 {
-    const auto query =
+    auto const query =
         "schema SomeSchema {"
         "   field_arr_1 : ArrayOf<Rid>;"
         "   field_arr_2 : ArrayOf<String>;"
@@ -97,7 +97,7 @@ TEST(Moonlight_SchemaParserTest, success03)
         "   field_arr_12: ArrayOf<Float64>;"
         " "
         "}";
-    const auto expected = Init::SchemaInit{}
+    auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_arr_1").type("Rid").nullable(false).array(true),
@@ -118,13 +118,13 @@ TEST(Moonlight_SchemaParserTest, success03)
 
 TEST(Moonlight_SchemaParserTest, success04)
 {
-    const auto query =
+    auto const query =
         "schema SomeSchema {"
         "   field_1: SomeOtherSchema1;"
         "   field_2: SomeOtherSchema2?;"
         "   field_3: ArrayOf<SomeOtherSchema3>;"
         "}";
-    const auto expected = Init::SchemaInit{}
+    auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
         .fields(std::vector<Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_1").type("SomeOtherSchema1").nullable(false).array(false),

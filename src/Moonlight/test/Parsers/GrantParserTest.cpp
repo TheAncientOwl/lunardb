@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_GrantParserTest, success01)
 {
-    const auto query = "grant [ select, create, update, insert, delete ] to UserName";
-    const auto expected = Init::GrantInit{}
+    auto const query = "grant [ select, create, update, insert, delete ] to UserName";
+    auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
@@ -26,8 +26,8 @@ TEST(Moonlight_GrantParserTest, success01)
 
 TEST(Moonlight_GrantParserTest, success02)
 {
-    const auto query = "grant    [      create,         update,      insert,    delete  ]    to         UserName    ;";
-    const auto expected = Init::GrantInit{}
+    auto const query = "grant    [      create,         update,      insert,    delete  ]    to         UserName    ;";
+    auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
@@ -42,8 +42,8 @@ TEST(Moonlight_GrantParserTest, success02)
 
 TEST(Moonlight_GrantParserTest, success03)
 {
-    const auto query = "grant    [      update,         create,      delete,    insert  ]    to         UserName    ;";
-    const auto expected = Init::GrantInit{}
+    auto const query = "grant    [      update,         create,      delete,    insert  ]    to         UserName    ;";
+    auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
@@ -58,8 +58,8 @@ TEST(Moonlight_GrantParserTest, success03)
 
 TEST(Moonlight_GrantParserTest, success04)
 {
-    const auto query = "grant [ update, insert, delete ] to UserName on SomeStructure";
-    const auto expected = Init::GrantInit{}
+    auto const query = "grant [ update, insert, delete ] to UserName on SomeStructure";
+    auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
@@ -73,8 +73,8 @@ TEST(Moonlight_GrantParserTest, success04)
 
 TEST(Moonlight_GrantParserTest, success05)
 {
-    const auto query = "grant [ create, update, insert, create, delete, update ] to UserName on SomeStructure";
-    const auto expected = Init::GrantInit{}
+    auto const query = "grant [ create, update, insert, create, delete, update ] to UserName on SomeStructure";
+    auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,

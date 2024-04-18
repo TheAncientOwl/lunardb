@@ -17,7 +17,7 @@ API::ParsedQuery Truncate::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Truncate>();
     auto& out = out_parsed_query.get<QueryData::Truncate>();
 
-    const auto [truncate, structure, structure_name] = extractor.extractTuple<3>();
+    auto const [truncate, structure, structure_name] = extractor.extractTuple<3>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

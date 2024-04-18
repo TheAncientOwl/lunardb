@@ -19,7 +19,7 @@ using BinaryOperator = QueryData::Primitives::EBinaryOperator;
 // clang-format off
 TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
 {
-    const auto where =
+    auto const where =
         R"(     where (                                      )"
         R"(         name like "*escu"                        )"
         R"(         and salary between 5500 and 6000         )"
@@ -34,7 +34,7 @@ TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
         R"(             )                                    )"
         R"(      )                                           )";
 
-    const auto expected = Where{}.expression(
+    auto const expected = Where{}.expression(
         BooleanExpression{}
         .negated(false)
         .data({
@@ -59,7 +59,7 @@ TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
     );
 
     std::string_view where_sv = where;
-    const auto out = Utils::extractWhereClause(where_sv);
+    auto const out = Utils::extractWhereClause(where_sv);
 
     EXPECT_EQ(out, expected);
 }
@@ -67,7 +67,7 @@ TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
 TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseFail01)
 {
     EXPECT_THROW({
-        const auto where =
+        auto const where =
         R"(     where (                                      )"
         R"(         name liske "*escu"                        )"
         R"(         and salary between 5500 and 6000         )"
@@ -86,7 +86,7 @@ TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseFail01)
         }, Errors::ParserError);
 
     EXPECT_THROW({
-        const auto where =
+        auto const where =
         R"(     where                                        )"
         R"(         name like "*escu"                        )"
         R"(         and salary between 5500 and 6000         )"

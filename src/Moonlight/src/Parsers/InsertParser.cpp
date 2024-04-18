@@ -121,7 +121,7 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
             }
         }
     }
-    catch (const std::exception& e)
+    catch (std::exception const& e)
     {
         throw Errors::buildParseJSONObjectError(e.what());
     }
@@ -136,7 +136,7 @@ API::ParsedQuery Insert::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Insert>();
     auto& out = out_parsed_query.get<QueryData::Insert>();
 
-    const auto [insert, into, structure_name, objects] = extractor.extractTuple<4>();
+    auto const [insert, into, structure_name, objects] = extractor.extractTuple<4>();
 
     Errors::assertKeywordEquals(insert, "insert");
     Errors::assertKeywordEquals(into, "into");

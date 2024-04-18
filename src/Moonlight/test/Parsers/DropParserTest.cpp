@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_DropParserTest, success01)
 {
-    const auto query = "drop structure SomeStructure";
-    const auto expected = Init::DropInit{}
+    auto const query = "drop structure SomeStructure";
+    auto const expected = Init::DropInit{}
         .structure_name("SomeStructure")
         .cascade(false);
 
@@ -19,8 +19,8 @@ TEST(Moonlight_DropParserTest, success01)
 
 TEST(Moonlight_DropParserTest, success02)
 {
-    const auto query = "         drop structure SomeStructure    ;   ";
-    const auto expected = Init::DropInit{}
+    auto const query = "         drop structure SomeStructure    ;   ";
+    auto const expected = Init::DropInit{}
         .structure_name("SomeStructure")
         .cascade(false);
 
@@ -29,8 +29,8 @@ TEST(Moonlight_DropParserTest, success02)
 
 TEST(Moonlight_DropParserTest, success03)
 {
-    const auto query = "drop structure SomeStructure cascade";
-    const auto expected = Init::DropInit{}
+    auto const query = "drop structure SomeStructure cascade";
+    auto const expected = Init::DropInit{}
         .structure_name("SomeStructure")
         .cascade(true);
 
@@ -39,8 +39,8 @@ TEST(Moonlight_DropParserTest, success03)
 
 TEST(Moonlight_DropParserTest, success04)
 {
-    const auto query = "  drop   structure   SomeStructure   cascade    ; ";
-    const auto expected = Init::DropInit{}
+    auto const query = "  drop   structure   SomeStructure   cascade    ; ";
+    auto const expected = Init::DropInit{}
         .structure_name("SomeStructure")
         .cascade(true);
 

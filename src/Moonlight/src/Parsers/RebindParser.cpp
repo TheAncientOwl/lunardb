@@ -17,11 +17,11 @@ API::ParsedQuery Rebind::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Rebind>();
     auto& out = out_parsed_query.get<QueryData::Rebind>();
 
-    const auto [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
+    auto const [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
 
     if (!extractor.empty())
     {
-        const auto clean = extractor.extractOne();
+        auto const clean = extractor.extractOne();
         Errors::assertKeywordEquals(clean, "clean");
         out.clean = true;
     }
@@ -38,7 +38,7 @@ API::ParsedQuery Rebind::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(rebind, "rebind");
     Errors::assertKeywordEquals(to, "to");
 
-    const auto [structure_name, field] = Utils::parseResolutionOperator(structure_field);
+    auto const [structure_name, field] = Utils::parseResolutionOperator(structure_field);
 
     out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
     out.field = Errors::assertNotEmpty(field, "field name");

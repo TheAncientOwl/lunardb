@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_IndexParserTest, success02)
 {
-    const auto query = "index StructureName as IndexName";
-    const auto expected = Init::IndexInit{}
+    auto const query = "index StructureName as IndexName";
+    auto const expected = Init::IndexInit{}
         .on_structure_name("StructureName")
         .unique(false)
         .name("IndexName")
@@ -21,8 +21,8 @@ TEST(Moonlight_IndexParserTest, success02)
 
 TEST(Moonlight_IndexParserTest, success03)
 {
-    const auto query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
-    const auto expected = Init::IndexInit{}
+    auto const query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
+    auto const expected = Init::IndexInit{}
         .on_structure_name("StructureName")
         .unique(true)
         .name("IndexName")
@@ -33,8 +33,8 @@ TEST(Moonlight_IndexParserTest, success03)
 
 TEST(Moonlight_IndexParserTest, success04)
 {
-    const auto query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
-    const auto expected = Init::IndexInit{}
+    auto const query = "index StructureName unique as IndexName using [ field1, field2, field3, field1 ]";
+    auto const expected = Init::IndexInit{}
         .on_structure_name("StructureName")
         .unique(true)
         .name("IndexName")
@@ -45,8 +45,8 @@ TEST(Moonlight_IndexParserTest, success04)
 
 TEST(Moonlight_IndexParserTest, success05)
 {
-    const auto query = "index StructureName as IndexName using [ field1, field2, field3, field1 ]";
-    const auto expected = Init::IndexInit{}
+    auto const query = "index StructureName as IndexName using [ field1, field2, field3, field1 ]";
+    auto const expected = Init::IndexInit{}
         .on_structure_name("StructureName")
         .unique(false)
         .name("IndexName")

@@ -9,32 +9,32 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_RollbackParserTest, success01)
 {
-    const auto query = "rollback";
-    const auto expected = Init::RollbackInit{}.hash(std::nullopt);
+    auto const query = "rollback";
+    auto const expected = Init::RollbackInit{}.hash(std::nullopt);
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_RollbackParserTest, success02)
 {
-    const auto query = "rollback;";
-    const auto expected = Init::RollbackInit{}.hash(std::nullopt);
+    auto const query = "rollback;";
+    auto const expected = Init::RollbackInit{}.hash(std::nullopt);
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_RollbackParserTest, success03)
 {
-    const auto query = "rollback a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e";
-    const auto expected = Init::RollbackInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
+    auto const query = "rollback a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e";
+    auto const expected = Init::RollbackInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_RollbackParserTest, success04)
 {
-    const auto query = "rollback a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e;";
-    const auto expected = Init::RollbackInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
+    auto const query = "rollback a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e;";
+    auto const expected = Init::RollbackInit{}.hash("a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e");
 
     EXPECT_SUCCESS(query, expected);
 }

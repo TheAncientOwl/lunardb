@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_RenameParserTest, success01)
 {
-    const auto query = "rename structure from SomeStructure to SomeStructureNew";
-    const auto expected = Init::RenameInit{}
+    auto const query = "rename structure from SomeStructure to SomeStructureNew";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Structure)
         .old_name("SomeStructure")
         .new_name("SomeStructureNew");
@@ -20,8 +20,8 @@ TEST(Moonlight_RenameParserTest, success01)
 
 TEST(Moonlight_RenameParserTest, success02)
 {
-    const auto query = "rename structure from SomeStructure to SomeStructureNew;";
-    const auto expected = Init::RenameInit{}
+    auto const query = "rename structure from SomeStructure to SomeStructureNew;";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Structure)
         .old_name("SomeStructure")
         .new_name("SomeStructureNew");
@@ -31,8 +31,8 @@ TEST(Moonlight_RenameParserTest, success02)
 
 TEST(Moonlight_RenameParserTest, success03)
 {
-    const auto query = "    rename      structure    from     SomeStructure         to      SomeStructureNew     ;   ";
-    const auto expected = Init::RenameInit{}
+    auto const query = "    rename      structure    from     SomeStructure         to      SomeStructureNew     ;   ";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Structure)
         .old_name("SomeStructure")
         .new_name("SomeStructureNew");
@@ -42,8 +42,8 @@ TEST(Moonlight_RenameParserTest, success03)
 
 TEST(Moonlight_RenameParserTest, success04)
 {
-    const auto query = "rename database from SomeDatabase to SomeDatabaseNew";
-    const auto expected = Init::RenameInit{}
+    auto const query = "rename database from SomeDatabase to SomeDatabaseNew";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Database)
         .old_name("SomeDatabase")
         .new_name("SomeDatabaseNew");
@@ -53,8 +53,8 @@ TEST(Moonlight_RenameParserTest, success04)
 
 TEST(Moonlight_RenameParserTest, success05)
 {
-    const auto query = "    rename      database    from     SomeDatabase         to      SomeDatabaseNew     ;   ";
-    const auto expected = Init::RenameInit{}
+    auto const query = "    rename      database    from     SomeDatabase         to      SomeDatabaseNew     ;   ";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Database)
         .old_name("SomeDatabase")
         .new_name("SomeDatabaseNew");
@@ -64,8 +64,8 @@ TEST(Moonlight_RenameParserTest, success05)
 
 TEST(Moonlight_RenameParserTest, success06)
 {
-    const auto query = "rename field from SomeStructure::SomeField to SomeStructure::SomeFieldNew";
-    const auto expected = Init::RenameInit{}
+    auto const query = "rename field from SomeStructure::SomeField to SomeStructure::SomeFieldNew";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Field)
         .old_name("SomeStructure::SomeField")
         .new_name("SomeStructure::SomeFieldNew");
@@ -75,8 +75,8 @@ TEST(Moonlight_RenameParserTest, success06)
 
 TEST(Moonlight_RenameParserTest, success07)
 {
-    const auto query = "    rename      field        from       SomeStructure::SomeField   to        SomeStructure::SomeFieldNew     ;";
-    const auto expected = Init::RenameInit{}
+    auto const query = "    rename      field        from       SomeStructure::SomeField   to        SomeStructure::SomeFieldNew     ;";
+    auto const expected = Init::RenameInit{}
         .type(Primitives::ERenameType::Field)
         .old_name("SomeStructure::SomeField")
         .new_name("SomeStructure::SomeFieldNew");

@@ -106,7 +106,7 @@ private: // helpers
     /// @return tuple<elements of array>
     ///
     template <std::size_t Size, std::size_t Index = 0>
-    [[nodiscard]] static auto makeTuple(const std::array<std::string_view, Size>& arr)
+    [[nodiscard]] static auto makeTuple(std::array<std::string_view, Size> const& arr)
     {
         if constexpr (Index < Size)
         {
@@ -127,7 +127,7 @@ inline decltype(auto) QueryExtractor::extractTuple()
 {
     std::array<std::string_view, Size> arr{};
 
-    for (const auto i : std::ranges::iota_view{0u, Size})
+    for (auto const i : std::ranges::iota_view{0u, Size})
     {
         arr[i] = extractOne();
     }
@@ -138,7 +138,7 @@ inline decltype(auto) QueryExtractor::extractTuple()
 template <typename T>
 inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
 {
-    const auto values = extractList(sep, bound_chars);
+    auto const values = extractList(sep, bound_chars);
 
     std::vector<T> out{};
     out.reserve(values.size());
@@ -153,7 +153,7 @@ inline std::vector<T> QueryExtractor::extractUniqueList(
     char sep,
     std::pair<char, char> bound_chars)
 {
-    const auto values = extractList(sep, bound_chars);
+    auto const values = extractList(sep, bound_chars);
 
     std::set<T> set{};
     std::transform(values.begin(), values.end(), std::inserter(set, set.begin()), parser);

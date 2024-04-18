@@ -49,7 +49,7 @@ std::string_view assertNotEmpty(std::string_view src, std::string_view err)
     return src;
 }
 
-void assertValidIdentifier(const std::string& src)
+void assertValidIdentifier(std::string const& src)
 {
     static const std::regex c_identifier_regex{R"(\w+)"};
 

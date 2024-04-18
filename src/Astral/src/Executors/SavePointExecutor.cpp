@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-void SavePoint::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
+void SavePoint::execute(Moonlight::API::ParsedQuery const& parsed_query, Astral::API::QueryExecutorConfig const& config)
 {
     // TODO: Provide implementation
-    const auto& query = parsed_query.get<QueryData::SavePoint>();
+    auto const& query = parsed_query.get<QueryData::SavePoint>();
 }
 
 } // namespace LunarDB::Astral::Implementation

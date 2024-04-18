@@ -13,16 +13,16 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
     std::string_view out{};
 
     bool quoted_string{false};
-    const auto c_end{std::cend(str)};
-    const auto c_begin{std::cbegin(str)};
+    auto const c_end{std::cend(str)};
+    auto const c_begin{std::cbegin(str)};
 
     auto word_begin{c_begin};
     auto word_end{c_begin};
 
     while (word_end != c_end)
     {
-        const auto current_char{*word_end};
-        const auto prev_char{word_end != c_begin ? *std::prev(word_end) : ' '};
+        auto const current_char{*word_end};
+        auto const prev_char{word_end != c_begin ? *std::prev(word_end) : ' '};
 
         if (modifier == ESplitModifier::EscapeQuotes && current_char == '"' && prev_char != '\\')
         {
@@ -132,8 +132,8 @@ std::string_view In(std::string_view& str)
 {
     std::string_view out{};
 
-    const auto open_square_bracked_pos = str.find_first_of('[');
-    const auto closed_square_bracked_pos = str.find_first_of(']');
+    auto const open_square_bracked_pos = str.find_first_of('[');
+    auto const closed_square_bracked_pos = str.find_first_of(']');
 
     // TODO: provide adaptation for quoted strings
 
@@ -235,7 +235,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             continue;
         }
 
-        const auto word = extractWord(str, ' ', ESplitModifier::EscapeQuotes);
+        auto const word = extractWord(str, ' ', ESplitModifier::EscapeQuotes);
 
         try
         {
@@ -243,7 +243,7 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             out.data.push_back(operator_);
             continue;
         }
-        catch (const Errors::ParserError& err)
+        catch (Errors::ParserError const& err)
         {
             QueryData::WhereClause::BinaryExpression expression{};
 
@@ -303,7 +303,7 @@ QueryData::WhereClause extractWhereClause(std::string_view& str)
     QueryData::WhereClause out{};
 
     StringUtils::ltrim(str);
-    const auto where = extractWord(str, ' ');
+    auto const where = extractWord(str, ' ');
     Errors::assertKeywordEquals(where, "where");
     if (str.empty())
     {
@@ -317,8 +317,8 @@ QueryData::WhereClause extractWhereClause(std::string_view& str)
 
 std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str)
 {
-    const auto first_sep_pos{str.find_first_of(':')};
-    const auto last_sep_pos{str.find_last_of(':')};
+    auto const first_sep_pos{str.find_first_of(':')};
+    auto const last_sep_pos{str.find_last_of(':')};
 
     if (first_sep_pos == std::string_view::npos || last_sep_pos == std::string_view::npos || first_sep_pos == last_sep_pos)
     {

@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "view" };
+constexpr auto c_query_prefix{"view"};
 
 } // namespace
 
@@ -17,7 +17,7 @@ API::ParsedQuery View::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::View>();
     auto& out = out_parsed_query.get<QueryData::View>();
 
-    const auto [view, view_name, as] = extractor.extractTuple<3>();
+    auto const [view, view_name, as] = extractor.extractTuple<3>();
 
     Errors::assertKeywordEquals(view, "view");
     Errors::assertKeywordEquals(as, "as");

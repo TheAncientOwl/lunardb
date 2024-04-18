@@ -9,8 +9,8 @@ using namespace QueryData;
 // clang-format off
 TEST(Moonlight_MigrateParserTest, success01)
 {
-    const auto query = "migrate structure SomeStructure to NewSchema";
-    const auto expected = Init::MigrateInit{}
+    auto const query = "migrate structure SomeStructure to NewSchema";
+    auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
         .mappings({});
@@ -20,8 +20,8 @@ TEST(Moonlight_MigrateParserTest, success01)
 
 TEST(Moonlight_MigrateParserTest, success02)
 {
-    const auto query = "migrate structure SomeStructure to NewSchema;";
-    const auto expected = Init::MigrateInit{}
+    auto const query = "migrate structure SomeStructure to NewSchema;";
+    auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
         .mappings({});
@@ -31,7 +31,7 @@ TEST(Moonlight_MigrateParserTest, success02)
 
 TEST(Moonlight_MigrateParserTest, success03)
 {
-    const auto query =
+    auto const query =
         "migrate structure SomeStructure to NewSchema using ["
         "   old_field1 => new_field1,"
         "   old_field2 => new_field2,"
@@ -39,7 +39,7 @@ TEST(Moonlight_MigrateParserTest, success03)
         "   old_field4 => new_field4,"
         "   old_field5 => new_field5"
         "]";
-    const auto expected = Init::MigrateInit{}
+    auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
         .mappings(std::vector<Migrate::Mapping>{
@@ -54,13 +54,13 @@ TEST(Moonlight_MigrateParserTest, success03)
 
 TEST(Moonlight_MigrateParserTest, success04)
 {
-    const auto query =
+    auto const query =
         "migrate structure SomeStructure to NewSchema using ["
         "   old_field1 => new_field1,"
         "   old_field2 => new_field2,"
         "   old_field3 => new_field3"
         "];";
-    const auto expected = Init::MigrateInit{}
+    auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
         .mappings(std::vector<Migrate::Mapping>{

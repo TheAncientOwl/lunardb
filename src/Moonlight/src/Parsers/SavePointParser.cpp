@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "savepoint" };
+constexpr auto c_query_prefix{"savepoint"};
 
 } // namespace
 
@@ -17,8 +17,11 @@ API::ParsedQuery SavePoint::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::SavePoint>();
     auto& out = out_parsed_query.get<QueryData::SavePoint>();
 
-    const auto [savepoint, hash] = extractor.extractTuple<2>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    auto const [savepoint, hash] = extractor.extractTuple<2>();
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(savepoint, "savepoint");
 

@@ -7,7 +7,7 @@
 
 namespace LunarDB::Astral::API {
 
-void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const QueryExecutorConfig& config)
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, QueryExecutorConfig const& config)
 {
     using namespace Implementation;
     using namespace CppExtensions;
@@ -19,8 +19,8 @@ void executeQuery(const Moonlight::API::ParsedQuery& parsed_query, const QueryEx
         Commit::makeExecutor(),   Rollback::makeExecutor(), SavePoint::makeExecutor(), Index::makeExecutor(),
         Database::makeExecutor(), View::makeExecutor(),     Rebind::makeExecutor(),    Schema::makeExecutor()};
 
-    const auto executor_opt = s_executors.find_if(
-        [&parsed_query](const ExecutorBundle& query_executor) { return parsed_query.type() == query_executor.first; });
+    auto const executor_opt = s_executors.find_if(
+        [&parsed_query](ExecutorBundle const& query_executor) { return parsed_query.type() == query_executor.first; });
 
     if (static_cast<bool>(executor_opt))
     {

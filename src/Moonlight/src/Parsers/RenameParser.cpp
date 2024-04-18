@@ -17,7 +17,7 @@ API::ParsedQuery Rename::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Rename>();
     auto& out = out_parsed_query.get<QueryData::Rename>();
 
-    const auto [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
+    auto const [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

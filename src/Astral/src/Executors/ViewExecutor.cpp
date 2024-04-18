@@ -6,10 +6,10 @@ namespace name {
 
 } // namespace name
 
-void View::execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config)
+void View::execute(Moonlight::API::ParsedQuery const& parsed_query, Astral::API::QueryExecutorConfig const& config)
 {
     // TODO: Provide implementation
-    const auto& query = parsed_query.get<QueryData::View>();
+    auto const& query = parsed_query.get<QueryData::View>();
 }
 
 } // namespace LunarDB::Astral::Implementation

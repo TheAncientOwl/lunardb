@@ -17,7 +17,7 @@ API::ParsedQuery Database::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Database>();
     auto& out = out_parsed_query.get<QueryData::Database>();
 
-    const auto [database, operation, database_name, to, disk] = extractor.extractTuple<5>();
+    auto const [database, operation, database_name, to, disk] = extractor.extractTuple<5>();
 
     Errors::assertKeywordEquals(database, "database");
 

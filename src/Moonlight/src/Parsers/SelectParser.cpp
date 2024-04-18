@@ -17,7 +17,7 @@ QueryData::Select::Order parseOrderBy(std::string_view str)
     QueryData::Select::Order out{};
 
     QueryExtractor extractor{str};
-    const auto [field_name, mode] = extractor.extractTuple<2>();
+    auto const [field_name, mode] = extractor.extractTuple<2>();
     if (!extractor.empty())
     {
         throw Errors::buildError("Invalid order clause");
@@ -36,7 +36,7 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Select>();
     auto& out = out_parsed_query.get<QueryData::Select>();
 
-    const auto [select, from, structure, structure_name] = extractor.extractTuple<4>();
+    auto const [select, from, structure, structure_name] = extractor.extractTuple<4>();
 
     Errors::assertKeywordEquals(select, "select");
     Errors::assertKeywordEquals(from, "from");
@@ -47,7 +47,7 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
     StringUtils::ltrim(extractor.unsafe_data());
 
-    const auto [fields] = extractor.extractTuple<1>();
+    auto const [fields] = extractor.extractTuple<1>();
     Errors::assertKeywordEquals(fields, "fields");
 
     out.fields = extractor.extractList<std::string>([](std::string_view sv) {
@@ -62,7 +62,7 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
 
     if (!extractor.empty())
     {
-        const auto [order, by] = extractor.extractTuple<2>();
+        auto const [order, by] = extractor.extractTuple<2>();
         Errors::assertKeywordEquals(order, "order");
         Errors::assertKeywordEquals(by, "by");
 
@@ -73,7 +73,7 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
         }
 
         std::unordered_set<std::string_view> order_fields{};
-        for (const auto& order : out.order_by)
+        for (auto const& order : out.order_by)
         {
             if (order_fields.find(order.field) != order_fields.end())
             {

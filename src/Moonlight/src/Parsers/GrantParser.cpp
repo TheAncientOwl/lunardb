@@ -19,7 +19,7 @@ API::ParsedQuery Grant::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Grant>();
     auto& out = out_parsed_query.get<QueryData::Grant>();
 
-    const auto grant = extractor.extractOne();
+    auto const grant = extractor.extractOne();
     Errors::assertKeywordEquals(grant, "grant");
 
     // parse permissions
@@ -31,7 +31,7 @@ API::ParsedQuery Grant::parse(QueryExtractor extractor)
     }
 
     // parse user and structure names
-    const auto [to, user_name, on, structure_name] = extractor.extractTuple<4>();
+    auto const [to, user_name, on, structure_name] = extractor.extractTuple<4>();
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);
