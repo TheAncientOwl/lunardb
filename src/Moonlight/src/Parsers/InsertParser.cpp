@@ -9,7 +9,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "insert" };
+constexpr auto c_query_prefix{"insert"};
 
 QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value element)
 {
@@ -37,7 +37,10 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
             }
         }
 
-        if (strings.size() != 0 && objects.size() != 0) { throw Errors::buildParseJSONObjectError("mixed arrays are not allowed"); }
+        if (strings.size() != 0 && objects.size() != 0)
+        {
+            throw Errors::buildParseJSONObjectError("mixed arrays are not allowed");
+        }
 
         if (strings.size() != 0)
         {
@@ -79,8 +82,14 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
 std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 {
     StringUtils::trim(str);
-    if (str.front() != '[') { throw Errors::buildParseJSONObjectError("["); }
-    if (str.back() != ']') { throw Errors::buildParseJSONObjectError("]"); }
+    if (str.front() != '[')
+    {
+        throw Errors::buildParseJSONObjectError("[");
+    }
+    if (str.back() != ']')
+    {
+        throw Errors::buildParseJSONObjectError("]");
+    }
     str.remove_prefix(1);
     str.remove_suffix(1);
     StringUtils::trim(str);
@@ -136,7 +145,10 @@ API::ParsedQuery Insert::parse(QueryExtractor extractor)
     out.into = Errors::assertNotEmpty(structure_name, "structure name");
     out.objects = parseObjects(extractor.data());
 
-    if (objects.empty()) { throw Errors::buildMissingError("objects"); }
+    if (objects.empty())
+    {
+        throw Errors::buildMissingError("objects");
+    }
 
     return out_parsed_query;
 }

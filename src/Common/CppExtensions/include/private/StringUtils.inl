@@ -9,7 +9,7 @@ constexpr std::string_view whitespace() noexcept
     return " \n\r\t\f\v";
 }
 
-template<typename... Args>
+template <typename... Args>
 [[nodiscard]] std::string stringify(Args&&... args)
 {
     std::ostringstream oss{};

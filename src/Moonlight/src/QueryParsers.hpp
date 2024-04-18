@@ -6,15 +6,15 @@
 #include "ParsedQuery.hpp"
 #include "QueryExtractor.hpp"
 
-#define PROVIDE_QUERY_PARSER(Specialization) \
-namespace Specialization { \
-[[nodiscard]] ParserBundle makeParser(); \
-[[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
-}
+#define PROVIDE_QUERY_PARSER(Specialization)                        \
+    namespace Specialization {                                      \
+    [[nodiscard]] ParserBundle makeParser();                        \
+    [[nodiscard]] API::ParsedQuery parse(QueryExtractor extractor); \
+    }
 
 namespace LunarDB::Moonlight::Implementation {
 
-using Parser = API::ParsedQuery(*)(QueryExtractor);
+using Parser = API::ParsedQuery (*)(QueryExtractor);
 using ParserBundle = std::pair<std::string, Parser>;
 
 PROVIDE_QUERY_PARSER(Create)

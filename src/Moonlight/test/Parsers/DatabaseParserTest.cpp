@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_DatabaseParserTest, success01)
 {
     const auto query = "database create SomeDatabase";
@@ -115,5 +116,6 @@ TEST(Moonlight_DatabaseParserTest, fail01)
     EXPECT_FAIL(R"(database backup SomeDatabase;)");
     EXPECT_FAIL(R"(database backup SomeDatabase)");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

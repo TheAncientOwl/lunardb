@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "rename" };
+constexpr auto c_query_prefix{"rename"};
 
 } // namespace
 
@@ -18,7 +18,10 @@ API::ParsedQuery Rename::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Rename>();
 
     const auto [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); };
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    };
 
     Errors::assertKeywordEquals(rename, "rename");
     Errors::assertKeywordEquals(from, "from");

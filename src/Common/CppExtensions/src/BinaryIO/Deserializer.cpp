@@ -2,20 +2,20 @@
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer {
 
-template<>
+template <>
 void deserializeImpl(std::istream& is, std::string& obj)
 {
-    std::string::size_type length{ 0 };
+    std::string::size_type length{0};
     deserialize(is, length);
 
     obj.resize(length);
     is.read(obj.data(), sizeof(std::string::value_type) * obj.length());
 }
 
-template<>
+template <>
 void deserializeImpl(std::istream& is, std::string_view& obj)
 {
-    throw std::logic_error{ "string_view's cannot be deserialized..." };
+    throw std::logic_error{"string_view's cannot be deserialized..."};
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer

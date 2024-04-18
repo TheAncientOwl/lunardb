@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_DropParserTest, success01)
 {
     const auto query = "drop structure SomeStructure";
@@ -54,5 +55,6 @@ TEST(Moonlight_DropParserTest, fail01)
     EXPECT_FAIL("drop _ structure SomeStruct ");
     EXPECT_FAIL("dropp structure cascade SomeStruct");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

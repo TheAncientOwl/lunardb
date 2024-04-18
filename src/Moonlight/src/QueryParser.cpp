@@ -17,31 +17,15 @@ ParsedQuery parseQuery(std::string_view query)
     StringUtils::trim(query);
 
     static const DataStructures::ItemArray<ParserBundle, 20> s_parsers{
-        Create::makeParser(),
-        Drop::makeParser(),
-        Migrate::makeParser(),
-        Truncate::makeParser(),
-        Rename::makeParser(),
-        Select::makeParser(),
-        Insert::makeParser(),
-        Update::makeParser(),
-        Delete::makeParser(),
-        Lock::makeParser(),
-        Grant::makeParser(),
-        Revoke::makeParser(),
-        Commit::makeParser(),
-        Rollback::makeParser(),
-        SavePoint::makeParser(),
-        Index::makeParser(),
-        Database::makeParser(),
-        View::makeParser(),
-        Rebind::makeParser(),
-        Schema::makeParser()
-    };
+        Create::makeParser(),   Drop::makeParser(),     Migrate::makeParser(),   Truncate::makeParser(),
+        Rename::makeParser(),   Select::makeParser(),   Insert::makeParser(),    Update::makeParser(),
+        Delete::makeParser(),   Lock::makeParser(),     Grant::makeParser(),     Revoke::makeParser(),
+        Commit::makeParser(),   Rollback::makeParser(), SavePoint::makeParser(), Index::makeParser(),
+        Database::makeParser(), View::makeParser(),     Rebind::makeParser(),    Schema::makeParser()};
 
     const auto parser_opt = s_parsers.find_if([query](const ParserBundle& query_parser) {
         return StringUtils::startsWithIgnoreCase(query, query_parser.first);
-        });
+    });
 
     if (static_cast<bool>(parser_opt))
     {
@@ -55,8 +39,11 @@ ParsedQuery parseQuery(std::string_view query)
 
 } // namespace LunarDB::Moonlight::API
 
-#define PROVIDE_PARSER_BUNLDER(Specialization, QueryPrefix) \
-ParserBundle Specialization::makeParser() { return std::make_pair(QueryPrefix, Specialization::parse); }
+#define PROVIDE_PARSER_BUNLDER(Specialization, QueryPrefix)        \
+    ParserBundle Specialization::makeParser()                      \
+    {                                                              \
+        return std::make_pair(QueryPrefix, Specialization::parse); \
+    }
 
 namespace LunarDB::Moonlight::Implementation {
 

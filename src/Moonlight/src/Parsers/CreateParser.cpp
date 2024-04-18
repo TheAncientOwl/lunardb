@@ -10,7 +10,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "create" };
+constexpr auto c_query_prefix{"create"};
 
 using Binding = QueryData::Create::Single::Binding;
 
@@ -18,10 +18,13 @@ Binding parseBinding(std::string_view str)
 {
     Binding out{};
 
-    QueryExtractor extractor{ str };
+    QueryExtractor extractor{str};
 
     const auto [field, from, table] = extractor.extractTuple<3>();
-    if (!extractor.empty()) { throw Errors::buildInvalidSequenceError(str); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidSequenceError(str);
+    }
 
     Errors::assertKeywordEquals(from, "from");
 
@@ -58,7 +61,10 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
 
             out.bindings = extractor.extractList<Binding>(parseBinding);
 
-            if (out.bindings.empty()) { throw Errors::buildMissingError("bindings"); }
+            if (out.bindings.empty())
+            {
+                throw Errors::buildMissingError("bindings");
+            }
 
             std::unordered_set<std::string_view> fields{};
             for (const auto& binding : out.bindings)
@@ -74,13 +80,19 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
             if (!extractor.empty())
             {
                 const auto blended = extractor.extractOne();
-                if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+                if (!extractor.empty())
+                {
+                    throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+                }
                 Errors::assertKeywordEquals(blended, "blended");
                 out.blended = true;
             }
         }
 
-        if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+        if (!extractor.empty())
+        {
+            throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+        }
     }
 
     return out;
@@ -97,17 +109,20 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
     // parse schemas
     const auto schemas = extractor.extractList();
-    if (schemas.empty()) { throw Errors::buildMissingError("schemas"); }
+    if (schemas.empty())
+    {
+        throw Errors::buildMissingError("schemas");
+    }
 
     std::set<std::string_view> schemas_set{};
     std::copy(schemas.begin(), schemas.end(), std::inserter(schemas_set, schemas_set.begin()));
 
     out.schema_names = std::vector<std::string>{};
     out.schema_names.reserve(schemas_set.size());
-    std::transform(schemas_set.begin(), schemas_set.end(),
-        std::back_inserter(out.schema_names),
-        [](std::string_view sv) -> std::string { return std::string(sv); }
-    );
+    std::transform(
+        schemas_set.begin(), schemas_set.end(), std::back_inserter(out.schema_names), [](std::string_view sv) -> std::string {
+            return std::string(sv);
+        });
 
     // parse name format
     if (extractor.empty())
@@ -123,8 +138,14 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
         auto format = extractor.data();
         StringUtils::trim(format);
-        if (format.empty() || format.size() < 2) { throw Errors::buildMissingError("format"); }
-        if (format.front() != '"' || format.back() != '"') { throw Errors::buildMissingError("\""); }
+        if (format.empty() || format.size() < 2)
+        {
+            throw Errors::buildMissingError("format");
+        }
+        if (format.front() != '"' || format.back() != '"')
+        {
+            throw Errors::buildMissingError("\"");
+        }
         format.remove_prefix(1);
         format.remove_suffix(1);
         out.structure_name_format = Errors::assertNotEmpty(format, "format");
@@ -144,7 +165,10 @@ API::ParsedQuery Create::parse(QueryExtractor extractor)
 
     Errors::assertKeywordEquals(create, "create");
 
-    if (any.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (any.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     std::string_view structure_type{};
     if (StringUtils::equalsIgnoreCase(any, "volatile"))
@@ -182,7 +206,10 @@ API::ParsedQuery Create::parse(QueryExtractor extractor)
         out.single = std::nullopt;
         out.multiple = parseMultiple(extractor);
     }
-    else { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    else
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     return out_parsed_query;
 }

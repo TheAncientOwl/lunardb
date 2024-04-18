@@ -2,14 +2,14 @@
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 
-template<>
+template <>
 void serializeImpl(std::ostream& os, const std::string& obj)
 {
     serialize(os, obj.length());
     os.write(obj.c_str(), sizeof(std::string::value_type) * obj.length());
 }
 
-template<>
+template <>
 void serializeImpl(std::ostream& os, const std::string_view& obj)
 {
     serialize(os, obj.length());

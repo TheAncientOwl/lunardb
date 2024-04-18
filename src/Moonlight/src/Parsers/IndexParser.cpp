@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "index" };
+constexpr auto c_query_prefix{"index"};
 
 } // namespace
 
@@ -33,7 +33,6 @@ API::ParsedQuery Index::parse(QueryExtractor extractor)
     {
         out.unique = false;
         Errors::assertKeywordEquals(unique_or_as, "as");
-
     }
 
     const auto index_name = extractor.extractOne();
@@ -47,8 +46,12 @@ API::ParsedQuery Index::parse(QueryExtractor extractor)
         out.using_fields = extractor.extractUniqueList<std::string>([](std::string_view sv) {
             auto str = std::string(sv);
             Errors::assertValidIdentifier(str);
-            return std::move(str);});
-        if (out.using_fields.empty()) { throw Errors::buildMissingError("index fields"); }
+            return std::move(str);
+        });
+        if (out.using_fields.empty())
+        {
+            throw Errors::buildMissingError("index fields");
+        }
     }
 
     return out_parsed_query;

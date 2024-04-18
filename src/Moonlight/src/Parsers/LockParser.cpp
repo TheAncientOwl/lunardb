@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "set" };
+constexpr auto c_query_prefix{"set"};
 
 } // namespace
 
@@ -18,7 +18,10 @@ API::ParsedQuery Lock::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Lock>();
 
     const auto [set, concurrency, on, structure, structure_name, state] = extractor.extractTuple<6>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(set, "set");
     Errors::assertKeywordEquals(concurrency, "concurrency");

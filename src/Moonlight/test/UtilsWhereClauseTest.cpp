@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "Errors.hpp"
 #include "Common/QueryData/Primitives.hpp"
 #include "Common/QueryData/helpers/Init.hpp"
 #include "Common/QueryData/helpers/Operators.hpp"
+#include "Errors.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils::Tests {
@@ -16,6 +16,7 @@ using BinaryExpression = QueryData::Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = QueryData::Primitives::EBooleanOperator;
 using BinaryOperator = QueryData::Primitives::EBinaryOperator;
 
+// clang-format off
 TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)
 {
     const auto where =
@@ -103,5 +104,6 @@ TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseFail01)
         std::ignore = Utils::extractWhereClause(where_sv);
         }, Errors::ParserError);
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Utils::Tests

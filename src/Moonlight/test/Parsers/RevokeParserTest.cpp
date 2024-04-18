@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_RevokeParserTest, success01)
 {
     const auto query = "revoke [ select, create, update, insert, delete ] from UserName";
@@ -116,5 +117,6 @@ TEST(Moonlight_RevokeParserTest, fail01)
     EXPECT_FAIL("revoke [ ] from UserName;");
     EXPECT_FAIL("revoke select from UserName on StructureName;");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

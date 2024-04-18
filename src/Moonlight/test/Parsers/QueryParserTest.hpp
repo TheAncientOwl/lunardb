@@ -2,10 +2,10 @@
 
 #include <gtest/gtest.h>
 
-#include "Errors.hpp"
-#include "ParsedQuery.hpp"
 #include "Common/QueryData/helpers/Init.hpp"
 #include "Common/QueryData/helpers/Operators.hpp"
+#include "Errors.hpp"
+#include "ParsedQuery.hpp"
 #include "QueryParser.hpp"
 
 ///
@@ -13,9 +13,9 @@
 /// @note QUERY_TYPE macro must be defined per unit in order to use following macros
 ///
 
-#define EXPECT_SUCCESS(query, expected) \
+#define EXPECT_SUCCESS(query, expected)                          \
     const auto parsed_query = Moonlight::API::parseQuery(query); \
-    const auto& out = parsed_query.get<QUERY_TYPE>(); \
+    const auto& out = parsed_query.get<QUERY_TYPE>();            \
     EXPECT_EQ(out, expected)
 
 #define EXPECT_FAIL(query) \

@@ -10,7 +10,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "grant" };
+constexpr auto c_query_prefix{"grant"};
 
 } // namespace
 
@@ -25,11 +25,17 @@ API::ParsedQuery Grant::parse(QueryExtractor extractor)
     // parse permissions
     using namespace QueryData::Primitives;
     out.permissions = extractor.extractUniqueList<EUserPermissionType>(UserPermissionType::toLiteral);
-    if (out.permissions.empty()) { throw Errors::buildMissingError("permissions"); }
+    if (out.permissions.empty())
+    {
+        throw Errors::buildMissingError("permissions");
+    }
 
     // parse user and structure names
     const auto [to, user_name, on, structure_name] = extractor.extractTuple<4>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(to, "to");
     out.to_user = Errors::assertNotEmpty(user_name, "user name");

@@ -16,7 +16,7 @@ inline constexpr std::string_view whitespace() noexcept;
 ///
 /// @brief Creates a string from given arguments
 ///
-template<typename... Args>
+template <typename... Args>
 [[nodiscard]] std::string stringify(Args&&... args);
 
 ///
@@ -36,7 +36,7 @@ void trim(std::string_view& str);
 
 ///
 /// @brief Check if 's1' is the same as 's2', case insensitive
-/// 
+///
 [[nodiscard]] bool equalsIgnoreCase(std::string_view s1, std::string_view s2);
 
 ///

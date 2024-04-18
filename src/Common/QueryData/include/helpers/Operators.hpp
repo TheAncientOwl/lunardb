@@ -4,11 +4,11 @@
 
 #include "Common/QueryData/QueryData.hpp"
 
-#define DEFINE_OPERATORS(Type) \
-namespace LunarDB::QueryData { \
-bool operator==(const Type& lhs, const Type& rhs); \
-std::ostream& operator<<(std::ostream& os, const Type& rhs); \
-}
+#define DEFINE_OPERATORS(Type)                                   \
+    namespace LunarDB::QueryData {                               \
+    bool operator==(const Type& lhs, const Type& rhs);           \
+    std::ostream& operator<<(std::ostream& os, const Type& rhs); \
+    }
 
 DEFINE_OPERATORS(Create::Single::Binding)
 DEFINE_OPERATORS(Create::Single)

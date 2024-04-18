@@ -7,16 +7,16 @@ namespace LunarDB::Moonlight::Errors {
 
 using ParserError = std::runtime_error;
 
-template<typename... Args>
+template <typename... Args>
 [[nodiscard]] ParserError buildError(Args&&... args)
 {
-    return std::runtime_error{ CppExtensions::StringUtils::stringify("Missing ", std::forward<Args>(args)...) };
+    return std::runtime_error{CppExtensions::StringUtils::stringify("Missing ", std::forward<Args>(args)...)};
 }
 
 [[nodiscard]] ParserError buildUnknownKeywordError(std::string_view keyword);
 [[nodiscard]] ParserError buildInvalidQueryFormatError(std::string_view query_type);
 
-template<typename... Args>
+template <typename... Args>
 [[nodiscard]] ParserError buildMissingError(Args&&... args)
 {
     return buildError("Missing ", std::forward<Args>(args)...);

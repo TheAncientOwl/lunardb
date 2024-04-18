@@ -3,7 +3,8 @@
 #include "Common/CppExtensions/BinaryIO/Common.hpp"
 
 #define SERIALIZE_IMPL(type) \
-template<> void serializeImpl(std::ostream& os, const type& obj);
+    template <>              \
+    void serializeImpl(std::ostream& os, const type& obj);
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 
@@ -16,14 +17,13 @@ template <std::size_t Index, typename... Args>
 void serializeTupleElements(const std::tuple<Args...>&);
 
 template <typename T>
-concept HasSerializeImpl = requires(std::ostream & os, T obj)
-{
+concept HasSerializeImpl = requires(std::ostream& os, T obj) {
     { serializeImpl<T>(os, obj) } -> std::same_as<void>;
 };
 
 template <typename T>
     requires HasSerializeImpl<T> || Common::HasMakeTuple<T>
-void serialize(std::ostream & os, const T & obj)
+void serialize(std::ostream& os, const T& obj)
 {
     if constexpr (Common::HasMakeTuple<T>)
     {

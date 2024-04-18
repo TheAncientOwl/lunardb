@@ -2,17 +2,18 @@
 
 #include "Common/QueryData/helpers/Operators.hpp"
 
-#define PROVIDE_EQUALITY_OPERATOR(Type, ...) \
-namespace LunarDB::QueryData { \
-bool operator==(const Type& lhs, const Type& rhs) \
-{ \
-const auto reduce = [](const Type& obj) { return std::tie(__VA_ARGS__); }; \
-return reduce(lhs) == reduce(rhs); \
-} \
-}
+#define PROVIDE_EQUALITY_OPERATOR(Type, ...)                                       \
+    namespace LunarDB::QueryData {                                                 \
+    bool operator==(const Type& lhs, const Type& rhs)                              \
+    {                                                                              \
+        const auto reduce = [](const Type& obj) { return std::tie(__VA_ARGS__); }; \
+        return reduce(lhs) == reduce(rhs);                                         \
+    }                                                                              \
+    }
 
 #define FIELD(field_name) obj.field_name
 
+// clang-format off
 PROVIDE_EQUALITY_OPERATOR(Create::Single::Binding,
     FIELD(field),
     FIELD(table)
@@ -179,3 +180,4 @@ PROVIDE_EQUALITY_OPERATOR(Schema,
     FIELD(name),
     FIELD(fields)
 )
+// clang-format on

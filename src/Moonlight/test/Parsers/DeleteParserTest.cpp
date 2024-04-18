@@ -12,6 +12,7 @@ using BinaryExpression = Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = Primitives::EBooleanOperator;
 using BinaryOperator = Primitives::EBinaryOperator;
 
+// clang-format off
 TEST(Moonlight_DeleteParserTest, success01)
 {
     const auto query =
@@ -112,5 +113,6 @@ TEST(Moonlight_DeleteParserTest, fail01)
         R"(      )                                           )"
     );
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

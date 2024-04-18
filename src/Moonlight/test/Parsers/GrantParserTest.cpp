@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_GrantParserTest, success01)
 {
     const auto query = "grant [ select, create, update, insert, delete ] to UserName";
@@ -116,5 +117,6 @@ TEST(Moonlight_GrantParserTest, fail01)
     EXPECT_FAIL("grant [ ] to UserName;");
     EXPECT_FAIL("grant select to UserName on StructureName;");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

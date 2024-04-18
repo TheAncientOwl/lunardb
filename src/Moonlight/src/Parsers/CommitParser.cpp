@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "commit" };
+constexpr auto c_query_prefix{"commit"};
 
 } // namespace
 
@@ -17,7 +17,10 @@ API::ParsedQuery Commit::parse(QueryExtractor extractor)
     auto out_parsed_query = API::ParsedQuery::make<QueryData::Commit>();
 
     const auto [commit] = extractor.extractTuple<1>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(commit, "commit");
 

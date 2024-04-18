@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "drop" };
+constexpr auto c_query_prefix{"drop"};
 
 } // namespace
 
@@ -18,7 +18,10 @@ API::ParsedQuery Drop::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Drop>();
 
     const auto [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(drop, "drop");
     Errors::assertKeywordEquals(structure, "structure");

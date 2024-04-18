@@ -17,26 +17,26 @@ public: // methods
     ///
     /// @brief Self explanatory
     ///
-    template<typename Data>
+    template <typename Data>
     Data& get();
 
     ///
     /// @brief Self explanatory
     ///
-    template<typename Data>
+    template <typename Data>
     const Data& get() const;
 
 public: // helpers
     ///
     /// @brief Creates an empty ParsedQuery of given QueryData::Type
     ///
-    template<typename Data>
+    template <typename Data>
     static ParsedQuery make();
 
 private: // fields;
     QueryData::Primitives::EQueryType m_type;
 
-    std::variant <
+    std::variant<
         QueryData::Create,
         QueryData::Drop,
         QueryData::Migrate,
@@ -56,30 +56,33 @@ private: // fields;
         QueryData::Database,
         QueryData::View,
         QueryData::Rebind,
-        QueryData::Schema
-    > m_data;
+        QueryData::Schema>
+        m_data;
 
     ///
     /// @brief Used by @see ParsedQuery::make() to decide the QueryData::Type
     /// @tparam T QueryData::Type
     ///
-    template<typename T>
-    struct QueryDataToTypeMap { static const QueryData::Primitives::EQueryType value; };
+    template <typename T>
+    struct QueryDataToTypeMap
+    {
+        static const QueryData::Primitives::EQueryType value;
+    };
 };
 
-template<typename Data>
+template <typename Data>
 inline Data& ParsedQuery::get()
 {
     return std::get<Data>(m_data);
 }
 
-template<typename Data>
+template <typename Data>
 inline const Data& ParsedQuery::get() const
 {
     return std::get<Data>(m_data);
 }
 
-template<typename Data>
+template <typename Data>
 ParsedQuery ParsedQuery::make()
 {
     ParsedQuery query{};

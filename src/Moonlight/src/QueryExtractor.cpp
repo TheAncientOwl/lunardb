@@ -9,8 +9,7 @@ namespace LunarDB::Moonlight::Implementation {
 
 using namespace CppExtensions;
 
-QueryExtractor::QueryExtractor(std::string_view query)
-    : m_data(query)
+QueryExtractor::QueryExtractor(std::string_view query) : m_data(query)
 {
     StringUtils::trim(m_data);
 
@@ -28,14 +27,14 @@ std::string_view QueryExtractor::extractOne()
 
     if (whitespace_pos == std::string_view::npos)
     {
-        const auto one{ m_data };
+        const auto one{m_data};
         m_data.remove_prefix(m_data.size());
 
         return one;
     }
     else
     {
-        const auto one{ m_data.substr(0, whitespace_pos) };
+        const auto one{m_data.substr(0, whitespace_pos)};
         m_data.remove_prefix(whitespace_pos);
         StringUtils::ltrim(m_data);
 
@@ -67,7 +66,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
         throw Errors::buildMissingError(str);
     }
 
-    const auto list_str{ m_data.substr(0, closed_square_bracket_pos) };
+    const auto list_str{m_data.substr(0, closed_square_bracket_pos)};
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     StringUtils::ltrim(m_data);
 

@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "truncate" };
+constexpr auto c_query_prefix{"truncate"};
 
 } // namespace
 
@@ -18,7 +18,10 @@ API::ParsedQuery Truncate::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Truncate>();
 
     const auto [truncate, structure, structure_name] = extractor.extractTuple<3>();
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(truncate, "truncate");
     Errors::assertKeywordEquals(structure, "structure");

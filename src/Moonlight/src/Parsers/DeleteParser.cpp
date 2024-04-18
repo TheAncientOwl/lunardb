@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "delete" };
+constexpr auto c_query_prefix{"delete"};
 
 } // namespace
 
@@ -18,7 +18,10 @@ API::ParsedQuery Delete::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Delete>();
 
     const auto [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
-    if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(delete_, "delete");
     Errors::assertKeywordEquals(from, "from");

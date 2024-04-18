@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "database" };
+constexpr auto c_query_prefix{"database"};
 
 } // namespace
 
@@ -31,17 +31,29 @@ API::ParsedQuery Database::parse(QueryExtractor extractor)
         Errors::assertKeywordEquals(to, "to");
         Errors::assertKeywordEquals(disk, "disk");
 
-        if (extractor.empty()) { throw Errors::buildMissingError("backup path"); }
+        if (extractor.empty())
+        {
+            throw Errors::buildMissingError("backup path");
+        }
 
         auto backup_path = extractor.data();
         StringUtils::trim(backup_path);
-        if (backup_path.empty() || backup_path.size() < 2) { throw Errors::buildMissingError("backup path"); }
-        if (backup_path.front() != '"' || backup_path.back() != '"') { throw Errors::buildMissingError("\""); }
+        if (backup_path.empty() || backup_path.size() < 2)
+        {
+            throw Errors::buildMissingError("backup path");
+        }
+        if (backup_path.front() != '"' || backup_path.back() != '"')
+        {
+            throw Errors::buildMissingError("\"");
+        }
         backup_path.remove_prefix(1);
         backup_path.remove_suffix(1);
         out.backup_path = Errors::assertNotEmpty(backup_path, "backup path");
     }
-    else if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    else if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     return out_parsed_query;
 }

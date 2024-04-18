@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_RebindParserTest, success01)
 {
     const auto query = "rebind SomeStructure::someField to SomeTable";
@@ -66,5 +67,6 @@ TEST(Moonlight_RebindParserTest, fail01)
     EXPECT_FAIL("rebind SomeStructure::someField to ");
     EXPECT_FAIL("rebind SomeStructure:someField to SomeTable");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

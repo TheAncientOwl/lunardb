@@ -1,16 +1,16 @@
-#include <iterator>
 #include <algorithm>
+#include <iterator>
 
 #include "Common/QueryData/helpers/Operators.hpp"
 
-#define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...) \
-namespace LunarDB::QueryData { \
-std::ostream& operator<<(std::ostream& os, const Type& rhs) \
-{ \
-    __VA_ARGS__, std::ignore; \
-    return os; \
-} \
-}
+#define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...)              \
+    namespace LunarDB::QueryData {                              \
+    std::ostream& operator<<(std::ostream& os, const Type& rhs) \
+    {                                                           \
+        __VA_ARGS__, std::ignore;                               \
+        return os;                                              \
+    }                                                           \
+    }
 
 #define FIELD_SEP(field_name) os << #field_name ": " << rhs.field_name << " | "
 #define FIELD_BOOL_SEP(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name << " | "
@@ -20,7 +20,7 @@ std::ostream& operator<<(std::ostream& os, const Type& rhs) \
 
 namespace LunarDB::QueryData {
 
-template<typename T>
+template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
 {
     if (static_cast<bool>(rhs))
@@ -34,23 +34,23 @@ std::ostream& operator<<(std::ostream& os, const std::optional<T>& rhs)
     return os;
 }
 
-template<typename T>
+template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs)
 {
     os << "[";
-    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << val << ", ";});
+    std::for_each(rhs.begin(), rhs.end(), [&os](const auto& val) { os << val << ", "; });
     os << "]";
     return os;
 }
 
-template<typename T, typename... Ts>
+template <typename T, typename... Ts>
 std::ostream& operator<<(std::ostream& os, const std::variant<T, Ts...>& rhs)
 {
-    std::visit([&os](auto&& arg) {os << arg;}, rhs);
+    std::visit([&os](auto&& arg) { os << arg; }, rhs);
     return os;
 }
 
-template<typename Key, typename Value>
+template <typename Key, typename Value>
 std::ostream& operator<<(std::ostream& os, const std::map<Key, Value>& rhs)
 {
     os << "{";
@@ -62,7 +62,7 @@ std::ostream& operator<<(std::ostream& os, const std::map<Key, Value>& rhs)
     return os;
 }
 
-template<>
+template <>
 std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
 {
     if (static_cast<bool>(rhs))
@@ -78,6 +78,7 @@ std::ostream& operator<<(std::ostream& os, const std::optional<bool>& rhs)
 
 } // namespace LunarDB::QueryData
 
+// clang-format off
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Single::Binding,
     os << "{" << rhs.field << " from " << rhs.table << "}"
 )
@@ -240,3 +241,4 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema,
     FIELD_SEP(name),
     FIELD(fields)
 )
+// clang-format on

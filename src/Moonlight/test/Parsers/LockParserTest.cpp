@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_LockParserTest, success01)
 {
     const auto query = "set concurrency on structure StructureName on";
@@ -59,5 +60,6 @@ TEST(Moonlight_LockParserTest, fail01)
     EXPECT_FAIL("set concurrency on structure off");
     EXPECT_FAIL("set concurrency on structure off;");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

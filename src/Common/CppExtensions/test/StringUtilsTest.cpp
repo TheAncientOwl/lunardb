@@ -2,7 +2,12 @@
 
 #include "Common/CppExtensions/StringUtils.hpp"
 
-#define EXPECT_TRIM_EQ(func, trimmed, not_trimmed) { auto str = not_trimmed; func(str); EXPECT_EQ(trimmed, str); }
+#define EXPECT_TRIM_EQ(func, trimmed, not_trimmed) \
+    {                                              \
+        auto str = not_trimmed;                    \
+        func(str);                                 \
+        EXPECT_EQ(trimmed, str);                   \
+    }
 
 namespace LunarDB::CppExtensions::StringUtils::Tests {
 
@@ -47,7 +52,8 @@ TEST(Common_CppExtensions_StringUtilsTest, trim)
     EXPECT_TRIM_EQ(trim, "some string"sv, "\f\f\fsome string\f\f\f"sv);
     EXPECT_TRIM_EQ(trim, "some string"sv, "\v\v\vsome string\v\v\v"sv);
     EXPECT_TRIM_EQ(trim, "some string"sv, "\n\n\nsome string\n\n\n"sv);
-    EXPECT_TRIM_EQ(trim, "some string"sv, "  \t  \v  \f  \t    \v     \t \rsome string  \t  \v  \f  \t    \v     \t \r"sv);
+    EXPECT_TRIM_EQ(
+        trim, "some string"sv, "  \t  \v  \f  \t    \v     \t \rsome string  \t  \v  \f  \t    \v     \t \r"sv);
 }
 
 TEST(Common_CppExtensions_StringUtilsTest, equalsIgnoreTest)

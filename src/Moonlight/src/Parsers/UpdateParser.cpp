@@ -10,7 +10,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "update" };
+constexpr auto c_query_prefix{"update"};
 
 QueryData::Update::Modify parseModify(std::string_view str)
 {
@@ -22,10 +22,12 @@ QueryData::Update::Modify parseModify(std::string_view str)
     Errors::assertKeywordEquals(arrow, "=>");
 
     StringUtils::trim(str);
-    if (str.find("=>") != std::string_view::npos) { throw Errors::buildMissingError(","); }
+    if (str.find("=>") != std::string_view::npos)
+    {
+        throw Errors::buildMissingError(",");
+    }
 
     out.expression = Errors::assertNotEmpty(str, "field expression");
-
 
     return out;
 }
@@ -38,7 +40,10 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<QueryData::Update>();
 
     const auto [update, structure, structure_name] = extractor.extractTuple<3>();
-    if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(update, "update");
     Errors::assertKeywordEquals(structure, "structure");
@@ -47,13 +52,19 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
 
     out.where = Utils::extractWhereClause(extractor.unsafe_data());
     StringUtils::ltrim(extractor.unsafe_data());
-    if (extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     const auto modify = extractor.extractOne();
     Errors::assertKeywordEquals(modify, "modify");
 
     out.modify = extractor.extractList<QueryData::Update::Modify>(parseModify);
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     std::unordered_set<std::string_view> modify_fields{};
     for (const auto& modify : out.modify)

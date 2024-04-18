@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_TruncateParserTest, success01)
 {
     const auto query = "truncate structure SomeStructure";
@@ -48,5 +49,6 @@ TEST(Moonlight_TruncateParserTest, fail01)
     EXPECT_FAIL("truncate structure SomeStructure dadad");
     EXPECT_FAIL("truncate SomeStructure");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

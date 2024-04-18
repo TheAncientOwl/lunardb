@@ -3,7 +3,8 @@
 #include "Common/CppExtensions/BinaryIO/Common.hpp"
 
 #define PROVIDE_DESERIALIZE(type) \
-template<> void deserializeImpl(std::istream& is, type& obj);
+    template <>                   \
+    void deserializeImpl(std::istream& is, type& obj);
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer {
 
@@ -16,14 +17,13 @@ template <std::size_t Index, typename... Args>
 void deserializeTupleElements(std::tuple<Args...>&);
 
 template <typename T>
-concept HasDeserializeImpl = requires(std::istream & is, T obj)
-{
+concept HasDeserializeImpl = requires(std::istream& is, T obj) {
     { deserializeImpl<T>(is, obj) } -> std::same_as<void>;
 };
 
 template <typename T>
     requires HasDeserializeImpl<T> || Common::HasMakeTuple<T>
-void deserialize(std::istream & is, T & obj)
+void deserialize(std::istream& is, T& obj)
 {
     if constexpr (Common::HasMakeTuple<T>)
     {

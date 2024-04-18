@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_RollbackParserTest, success01)
 {
     const auto query = "rollback";
@@ -43,5 +44,6 @@ TEST(Moonlight_RollbackParserTest, fail01)
     EXPECT_FAIL("rollback a591a6d40b f420404a011733cfb7b19 0d62c65bf0bcda32b57b27 7d9ad9f146e");
     EXPECT_FAIL("rollback a591a6d40b f420404a011733cfb7b19 0d62c65bf0bcda32b57b27 7d9ad9f146e;");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

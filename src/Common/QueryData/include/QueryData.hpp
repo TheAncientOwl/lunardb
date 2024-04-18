@@ -81,11 +81,7 @@ struct WhereClause
 
     struct BooleanExpression
     {
-        using type = std::variant<
-            Primitives::EBooleanOperator,
-            BinaryExpression,
-            BooleanExpression
-        >;
+        using type = std::variant<Primitives::EBooleanOperator, BinaryExpression, BooleanExpression>;
 
         bool negated;
         std::vector<type> data;
@@ -114,12 +110,7 @@ struct Insert
 
     struct Object
     {
-        using type = std::variant<
-            std::string,
-            Object,
-            std::vector<std::string>,
-            std::vector<Object>
-        >;
+        using type = std::variant<std::string, Object, std::vector<std::string>, std::vector<Object>>;
 
         std::map<std::string, type> entries;
     };
@@ -166,7 +157,9 @@ struct Revoke
     std::optional<std::string> structure_name;
 };
 
-struct Commit {};
+struct Commit
+{
+};
 
 struct Rollback
 {

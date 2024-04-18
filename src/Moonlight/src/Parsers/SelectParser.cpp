@@ -4,22 +4,24 @@
 
 #include <unordered_set>
 
-
 namespace LunarDB::Moonlight::Implementation {
 
 using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "select" };
+constexpr auto c_query_prefix{"select"};
 
 QueryData::Select::Order parseOrderBy(std::string_view str)
 {
     QueryData::Select::Order out{};
 
-    QueryExtractor extractor{ str };
+    QueryExtractor extractor{str};
     const auto [field_name, mode] = extractor.extractTuple<2>();
-    if (!extractor.empty()) { throw Errors::buildError("Invalid order clause"); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildError("Invalid order clause");
+    }
 
     out.field = Errors::assertNotEmpty(field_name, "field name");
     out.type = QueryData::Primitives::OrderType::toLiteral(mode);
@@ -52,8 +54,11 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
         auto str = std::string(sv);
         Errors::assertValidIdentifier(str);
         return std::move(str);
-        });
-    if (out.fields.empty()) { throw Errors::buildMissingError("fields"); }
+    });
+    if (out.fields.empty())
+    {
+        throw Errors::buildMissingError("fields");
+    }
 
     if (!extractor.empty())
     {
@@ -62,7 +67,10 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
         Errors::assertKeywordEquals(by, "by");
 
         out.order_by = extractor.extractList<QueryData::Select::Order>(parseOrderBy);
-        if (out.order_by.empty()) { throw Errors::buildMissingError("order by fields"); }
+        if (out.order_by.empty())
+        {
+            throw Errors::buildMissingError("order by fields");
+        }
 
         std::unordered_set<std::string_view> order_fields{};
         for (const auto& order : out.order_by)

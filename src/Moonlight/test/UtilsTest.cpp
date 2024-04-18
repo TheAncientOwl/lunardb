@@ -8,6 +8,7 @@ namespace LunarDB::Moonlight::Utils::Tests {
 using namespace CppExtensions;
 using namespace std::literals;
 
+// clang-format off
 TEST(Moonlight_UtilsTest, split01)
 {
     const auto str = "  field1  ,  field2  ";
@@ -145,5 +146,6 @@ TEST(Moonlight_UtilsTest, parseResolutionOperator)
     EXPECT_THROW({ std::ignore = parseResolutionOperator("String1 String2"); }, Errors::ParserError);
     EXPECT_THROW({ std::ignore = parseResolutionOperator("String1:dadsd:String2"); }, Errors::ParserError);
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Utils::Tests

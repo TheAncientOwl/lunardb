@@ -1,9 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
-#include <stdexcept>
 
 #include "Common/CppExtensions/StringUtils.hpp"
 
@@ -12,7 +12,7 @@ namespace LunarDB::CppExtensions::DataStructures {
 template <typename T>
 concept Enumeration = std::is_enum_v<T>;
 
-template<Enumeration Literal>
+template <Enumeration Literal>
 class LiteralToStringMap
 {
 public:

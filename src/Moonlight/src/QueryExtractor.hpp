@@ -36,7 +36,7 @@ public: // methods
     /// @brief Removes Size words from left part of query
     /// @return Tuple of Size string_views
     ///
-    template<std::size_t Size>
+    template <std::size_t Size>
     [[nodiscard]] decltype(auto) extractTuple();
 
     ///
@@ -45,7 +45,7 @@ public: // methods
     /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of words as string_views
     ///
-    [[nodiscard]] std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    [[nodiscard]] std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = {'[', ']'});
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -55,8 +55,11 @@ public: // methods
     /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of parsed words to T
     ///
-    template<typename T>
-    [[nodiscard]] std::vector<T> extractList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    template <typename T>
+    [[nodiscard]] std::vector<T> extractList(
+        std::function<T(std::string_view)> parser,
+        char sep = ',',
+        std::pair<char, char> bound_chars = {'[', ']'});
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -66,8 +69,11 @@ public: // methods
     /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
     /// @return List of unique parsed words to T
     ///
-    template<typename T>
-    [[nodiscard]] std::vector<T> extractUniqueList(std::function<T(std::string_view)> parser, char sep = ',', std::pair<char, char> bound_chars = { '[', ']' });
+    template <typename T>
+    [[nodiscard]] std::vector<T> extractUniqueList(
+        std::function<T(std::string_view)> parser,
+        char sep = ',',
+        std::pair<char, char> bound_chars = {'[', ']'});
 
     ///
     /// @brief Self explanatory
@@ -76,9 +82,9 @@ public: // methods
 
     ///
     /// @return Reference to underlying data.
-    /// @note Before any further operations with the extractor, 
+    /// @note Before any further operations with the extractor,
     ///       the data should be left trimmer
-    /// 
+    ///
     [[nodiscard]] std::string_view& unsafe_data();
 
     ///
@@ -104,10 +110,7 @@ private: // helpers
     {
         if constexpr (Index < Size)
         {
-            return std::tuple_cat(
-                std::make_tuple(arr[Index]),
-                makeTuple<Size, Index + 1>(arr)
-            );
+            return std::tuple_cat(std::make_tuple(arr[Index]), makeTuple<Size, Index + 1>(arr));
         }
         else
         {
@@ -119,12 +122,12 @@ private: // fields
     std::string_view m_data;
 };
 
-template<std::size_t Size>
+template <std::size_t Size>
 inline decltype(auto) QueryExtractor::extractTuple()
 {
     std::array<std::string_view, Size> arr{};
 
-    for (const auto i : std::ranges::iota_view{ 0u, Size })
+    for (const auto i : std::ranges::iota_view{0u, Size})
     {
         arr[i] = extractOne();
     }
@@ -132,7 +135,7 @@ inline decltype(auto) QueryExtractor::extractTuple()
     return makeTuple<Size>(arr);
 }
 
-template<typename T>
+template <typename T>
 inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
 {
     const auto values = extractList(sep, bound_chars);
@@ -144,8 +147,11 @@ inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_vi
     return out;
 }
 
-template<typename T>
-inline std::vector<T> QueryExtractor::extractUniqueList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
+template <typename T>
+inline std::vector<T> QueryExtractor::extractUniqueList(
+    std::function<T(std::string_view)> parser,
+    char sep,
+    std::pair<char, char> bound_chars)
 {
     const auto values = extractList(sep, bound_chars);
 

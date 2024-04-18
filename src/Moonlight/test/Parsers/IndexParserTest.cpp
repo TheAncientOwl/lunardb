@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_IndexParserTest, success02)
 {
     const auto query = "index StructureName as IndexName";
@@ -68,5 +69,6 @@ TEST(Moonlight_IndexParserTest, fail01)
     EXPECT_FAIL("index StructureName unique using [ field1, field2, field3, field1 ");
     EXPECT_FAIL("index StructureName unique as IndexName using [ field1 field2, field3, field1 ]");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

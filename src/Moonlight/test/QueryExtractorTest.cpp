@@ -1,14 +1,15 @@
 #include <gtest/gtest.h>
 
 #include "Errors.hpp"
-#include "Utils.hpp"
 #include "QueryExtractor.hpp"
+#include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace CppExtensions;
 using namespace std::literals;
 
+// clang-format off
 TEST(Moonlight_QueryExtractor, extractOne)
 {
     auto query{ "  some \t \n words \t\t12345  " };
@@ -80,5 +81,6 @@ TEST(Moonlight_QueryExtractor, extractTuples)
     EXPECT_EQ(_4, ""sv);
     EXPECT_TRUE(extractor.empty());
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

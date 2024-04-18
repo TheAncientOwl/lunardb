@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Moonlight/ParsedQuery.hpp"
 #include "Astral/QueryExecutorConfig.hpp"
+#include "Moonlight/ParsedQuery.hpp"
 
-#define PROVIDE_QUERY_EXECUTOR(Specialization) \
-namespace Specialization { \
-[[nodiscard]] ExecutorBundle makeExecutor(); \
-void execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config); \
-}
+#define PROVIDE_QUERY_EXECUTOR(Specialization)                                                                     \
+    namespace Specialization {                                                                                     \
+    [[nodiscard]] ExecutorBundle makeExecutor();                                                                   \
+    void execute(const Moonlight::API::ParsedQuery& parsed_query, const Astral::API::QueryExecutorConfig& config); \
+    }
 
 namespace LunarDB::Astral::Implementation {
 
-using Executor = void(*)(const Moonlight::API::ParsedQuery&, const Astral::API::QueryExecutorConfig&);
+using Executor = void (*)(const Moonlight::API::ParsedQuery&, const Astral::API::QueryExecutorConfig&);
 using ExecutorBundle = std::pair<QueryData::Primitives::EQueryType, Executor>;
 
 PROVIDE_QUERY_EXECUTOR(Create)

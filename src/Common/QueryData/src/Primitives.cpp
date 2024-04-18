@@ -2,6 +2,7 @@
 
 namespace LunarDB::QueryData::Primitives {
 
+// clang-format off
 DEFINE_LUNAR_PRIMITIVE_IMPL(QueryType,
     { Literal::None, "None" },
     { Literal::Create, "Create" },
@@ -79,5 +80,6 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(BooleanOperator,
     { Literal::And, "and" },
     { Literal::Or, "or" }
 )
+// clang-format on
 
 } // namespace LunarDB::QueryData::Primitives

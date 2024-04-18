@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_CreateParserTest, singleNoBindingSuccess01)
 {
     const auto query = "create table SomeTable based on SomeSchema";
@@ -574,5 +575,6 @@ TEST(Moonlight_CreateParserTest, multipleFail01)
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] using format "%TypeName%Collection)");
     EXPECT_FAIL(R"(create collections from [ Schema1, Schema2, Schema3, Schema4 ] using format)");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

@@ -12,6 +12,7 @@ using BinaryExpression = Init::WhereClauseInit::BinaryExpressionInit;
 using BooleanOperator = Primitives::EBooleanOperator;
 using BinaryOperator = Primitives::EBinaryOperator;
 
+// clang-format off
 TEST(Moonlight_SelectParserTest, success01)
 {
     const auto query =
@@ -518,5 +519,6 @@ TEST(Moonlight_SelectParserTest, fail01)
         R"(     order by [ field1 asc, field2 desc, field1 desc, field3 asc ]  )"
     );
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

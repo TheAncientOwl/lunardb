@@ -17,26 +17,27 @@ enum class ESplitModifier
     EscapeQuotes = 1
 };
 
-/// 
+///
 /// @brief split a string at given char
 /// @param str string to be splitted
 /// @param sep separator
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return std::vector<std::string_view> splits
-/// 
-[[nodiscard]] std::vector<std::string_view> split(std::string_view str,
-    char sep = ',', ESplitModifier modifier = ESplitModifier::None);
+///
+[[nodiscard]] std::vector<std::string_view> split(
+    std::string_view str,
+    char sep = ',',
+    ESplitModifier modifier = ESplitModifier::None);
 
-/// 
+///
 /// @brief extract first word separated by sep char
 ///        remove extracted word from given str
 /// @param str string to be extracted from
 /// @param sep separator
 /// @param modifier EscapeQuotes if quotes should be escaped using '\'
 /// @return extracted word
-/// 
-[[nodiscard]] std::string_view extractWord(std::string_view& str,
-    char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
+///
+[[nodiscard]] std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
 
 ///
 /// @brief Self explanatory

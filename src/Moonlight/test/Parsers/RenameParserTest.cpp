@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_RenameParserTest, success01)
 {
     const auto query = "rename structure from SomeStructure to SomeStructureNew";
@@ -99,5 +100,6 @@ TEST(Moonlight_RenameParserTest, fail01)
     EXPECT_FAIL("rename field from SomeStructure::SomeField to SomeStructure SomeFieldNew");
     EXPECT_FAIL("rename field SomeStructure::SomeField to SomeStructure::SomeFieldNew");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

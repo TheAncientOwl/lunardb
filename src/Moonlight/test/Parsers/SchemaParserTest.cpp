@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_SchemaParserTest, success01)
 {
     const auto query =
@@ -540,5 +541,6 @@ TEST(Moonlight_SchemaParserTest, fail01)
         "}"
     );
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

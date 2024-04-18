@@ -7,6 +7,7 @@
 
 namespace LunarDB::Moonlight::API::Tests {
 
+// clang-format off
 TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
 {
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Create);
@@ -30,5 +31,6 @@ TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Rebind);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Schema);
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::API::Tests

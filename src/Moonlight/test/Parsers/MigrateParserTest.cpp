@@ -6,6 +6,7 @@ namespace LunarDB::Moonlight::Implementation::Tests {
 
 using namespace QueryData;
 
+// clang-format off
 TEST(Moonlight_MigrateParserTest, success01)
 {
     const auto query = "migrate structure SomeStructure to NewSchema";
@@ -129,5 +130,6 @@ TEST(Moonlight_MigrateParserTest, fail01)
         "   old_field3 => new_field3"
         "];");
 }
+// clang-format on
 
 } // namespace LunarDB::Moonlight::Implementation::Tests

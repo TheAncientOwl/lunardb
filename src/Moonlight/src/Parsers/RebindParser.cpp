@@ -8,7 +8,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "rebind" };
+constexpr auto c_query_prefix{"rebind"};
 
 } // namespace
 
@@ -30,7 +30,10 @@ API::ParsedQuery Rebind::parse(QueryExtractor extractor)
         out.clean = false;
     }
 
-    if (!extractor.empty()) { throw Errors::buildInvalidQueryFormatError(c_query_prefix); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     Errors::assertKeywordEquals(rebind, "rebind");
     Errors::assertKeywordEquals(to, "to");

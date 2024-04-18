@@ -10,7 +10,7 @@ using namespace CppExtensions;
 
 namespace {
 
-constexpr auto c_query_prefix{ "migrate" };
+constexpr auto c_query_prefix{"migrate"};
 
 using Mapping = QueryData::Migrate::Mapping;
 
@@ -18,10 +18,13 @@ Mapping parseMapping(std::string_view str)
 {
     Mapping out{};
 
-    QueryExtractor extractor{ str };
+    QueryExtractor extractor{str};
     const auto [old_field, arrow, new_field] = extractor.extractTuple<3>();
 
-    if (!extractor.empty()) { throw Errors::buildInvalidSequenceError(str); }
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidSequenceError(str);
+    }
 
     Errors::assertKeywordEquals(arrow, "=>");
 
@@ -53,7 +56,10 @@ API::ParsedQuery Migrate::parse(QueryExtractor extractor)
 
         out.mappings = extractor.extractList<Mapping>(parseMapping);
 
-        if (out.mappings.empty()) { throw Errors::buildMissingError("mappings"); }
+        if (out.mappings.empty())
+        {
+            throw Errors::buildMissingError("mappings");
+        }
 
         std::unordered_set<std::string_view> olds{};
         std::unordered_set<std::string_view> news{};
@@ -66,7 +72,7 @@ API::ParsedQuery Migrate::parse(QueryExtractor extractor)
                 }
 
                 set.insert(value);
-                };
+            };
 
             handle_value(olds, mapping.old_field);
             handle_value(news, mapping.new_field);
