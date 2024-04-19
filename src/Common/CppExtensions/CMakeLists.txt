@@ -22,9 +22,9 @@ add_lunar_library(
     SOURCE_FILES
         src/StringUtils.cpp
 
-        src/BinaryIO/Deserializer.cpp
         src/BinaryIO/PODCommon.cpp
-        src/BinaryIO/Serializer.cpp
+        src/BinaryIO/String.cpp
+        src/BinaryIO/StringView.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS)
