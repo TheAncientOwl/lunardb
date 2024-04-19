@@ -193,7 +193,7 @@ TEST(Common_CppExtensions_BinaryIOTest, char)
     out.close();
 
     std::ifstream in{c_temp_file, std::ios::binary};
-    char const in_value{};
+    char in_value{};
     deserialize(in, in_value);
     in.close();
 
@@ -298,6 +298,68 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
     std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    using type = std::tuple<int, bool, char, float, double, std::string>; //, std::vector<int>, std::vector<std::string>>;
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    type const out_value{
+        404, true, 'x', 2.2f, 2.2, "some long string 123456789",
+        // std::vector<int>{1, 2, 3, 4},
+        // std::vector<std::string>{"somestr1", "somestr2"}
+    };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    type in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, object)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    struct Object
+    {
+        int a;
+        bool b;
+        char c;
+        float d;
+        double e;
+        std::string f;
+        // std::vector<int> g;
+        //  std::vector<std::string> h;
+
+        LUNAR_ENABLE_BINARY_IO(a, b, c, d, e, f);
+    };
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    Object const out_value{
+        404, true, 'x', 2.2f, 2.2, "some long string 123456789",
+        // std::vector<int>{1, 2, 3, 4},
+        // std::vector<std::string>{"somestr1", "somestr2"}
+    };
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    Object in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    // EXPECT_EQ(out_value, in_value);
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Tests

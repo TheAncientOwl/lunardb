@@ -1,9 +1,9 @@
 #include "Common/CppExtensions/BinaryIO.hpp"
 
-namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer {
+namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer::Implementation {
 
 template <>
-void deserializeImpl(std::istream& is, std::string& obj)
+void deserialize(std::istream& is, std::string& obj)
 {
     std::string::size_type length{0};
     deserialize(is, length);
@@ -13,9 +13,9 @@ void deserializeImpl(std::istream& is, std::string& obj)
 }
 
 template <>
-void deserializeImpl(std::istream& is, std::string_view& obj)
+void deserialize(std::istream& is, std::string_view& obj)
 {
     throw std::logic_error{"string_view's cannot be deserialized..."};
 }
 
-} // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
+} // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer::Implementation

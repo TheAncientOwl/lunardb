@@ -301,7 +301,7 @@ RebindInit& RebindInit::bind_structure_name(const std::string& value)
 {
     return base_t::bind_structure_name = value, *this;
 }
-RebindInit& RebindInit::clean(const std::optional<bool>& value)
+RebindInit& RebindInit::clean(std::optional<bool> const& value)
 {
     return base_t::clean = value, *this;
 }

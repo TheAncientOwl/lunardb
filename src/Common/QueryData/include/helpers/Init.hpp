@@ -243,7 +243,7 @@ struct RebindInit : public Rebind
     RebindInit& structure_name(std::string const& value);
     RebindInit& field(std::string const& value);
     RebindInit& bind_structure_name(std::string const& value);
-    RebindInit& clean(std::optional<bool>& value);
+    RebindInit& clean(std::optional<bool> const& value);
 };
 
 struct SchemaInit : public Schema

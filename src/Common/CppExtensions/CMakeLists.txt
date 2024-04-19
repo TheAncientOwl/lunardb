@@ -7,12 +7,14 @@ add_lunar_library(
         include/BinaryIO/Deserializer.hpp
         include/BinaryIO/Serializer.hpp
         include/BinaryIO.hpp
-
+        
         include/DefinePrimitive.hpp
         include/ItemArray.hpp
         include/LiteralToStringMap.hpp
         include/StringUtils.hpp
-
+        
+        include/private/BinaryIO/Deserializer.inl
+        include/private/BinaryIO/Serializer.inl
         include/private/ItemArray.inl
         include/private/LiteralToStringMap.inl
         include/private/StringUtils.inl
