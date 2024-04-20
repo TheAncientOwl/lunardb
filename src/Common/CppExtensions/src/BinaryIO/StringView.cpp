@@ -2,7 +2,7 @@
 
 namespace LunarDB::Common::CppExtensions::BinaryIO {
 
-namespace Serializer::Implementation {
+namespace Serializer::Internal {
 
 template <>
 void serialize(std::ostream& os, std::string_view const& obj)
@@ -11,9 +11,9 @@ void serialize(std::ostream& os, std::string_view const& obj)
     os.write(obj.data(), sizeof(std::string_view::value_type) * obj.length());
 }
 
-} // namespace Serializer::Implementation
+} // namespace Serializer::Internal
 
-namespace Deserializer::Implementation {
+namespace Deserializer::Internal {
 
 template <>
 void deserialize(std::istream& is, std::string_view& obj)
@@ -21,6 +21,6 @@ void deserialize(std::istream& is, std::string_view& obj)
     throw std::logic_error{"std::string_view's cannot be deserialized..."};
 }
 
-} // namespace Deserializer::Implementation
+} // namespace Deserializer::Internal
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO

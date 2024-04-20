@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
@@ -54,7 +55,8 @@
     }
 
 ///
-/// @brief Provide makeTuple() and makeTuple() const variants required by @c LunarDB::Common::CppExtensions::BinaryIO::serialize
+/// @brief Provide makeTuple() and makeTuple() const variants required by @c
+/// LunarDB::Common::CppExtensions::BinaryIO::serialize
 /// @param [in] List of desired fields to be binary serialized/deserialized
 ///
 #define LUNAR_ENABLE_BINARY_IO(...)        \
@@ -63,15 +65,75 @@
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Common {
 
+namespace Concepts {
+
+namespace ContainerHelpers {
+
 template <typename T>
-concept IsTuple = requires {
-    typename std::tuple_size<T>::type;
-    typename std::tuple_element<0, T>::type;
+concept NeqableBeginAndEnd = requires(T t) {
+    { std::begin(t) != std::end(t) } -> std::same_as<bool>;
 };
 
 template <typename T>
-concept HasMakeTuple = requires(T obj) {
-    { obj.makeTuple() } -> IsTuple;
+concept Beginable = requires(T t) { std::begin(t); };
+
+template <typename T>
+concept Endable = requires(T t) { std::end(t); };
+
+template <typename T>
+concept Sizeable = requires(T t) {
+    { std::size(t) } -> std::same_as<std::size_t>;
 };
+
+template <typename T>
+concept BeginIncrementable = requires(T t) { std::begin(t)++; };
+
+template <typename T>
+concept BeginDerefable = requires(T t) { *std::begin(t); };
+
+template <typename T>
+concept BeginDerefToVoid = requires(T t) {
+    { *std::begin(t) } -> std::same_as<void>;
+};
+
+template <typename T>
+concept BeginAndEndCopyConstructibleAndDestructible = requires(T t) {
+    requires std::destructible<decltype(std::begin(t))>;
+    requires std::destructible<decltype(std::end(t))>;
+    requires std::copy_constructible<decltype(std::begin(t))>;
+    requires std::copy_constructible<decltype(std::end(t))>;
+};
+
+} // namespace ContainerHelpers
+
+template <typename T>
+concept Container = ContainerHelpers::Beginable<T> && ContainerHelpers::Endable<T> &&
+                    ContainerHelpers::Sizeable<T> && ContainerHelpers::BeginIncrementable<T> &&
+                    ContainerHelpers::BeginDerefable<T> && ContainerHelpers::NeqableBeginAndEnd<T> &&
+                    !ContainerHelpers::BeginDerefToVoid<T> &&
+                    ContainerHelpers::BeginAndEndCopyConstructibleAndDestructible<T>;
+
+template <typename T>
+concept Pair = requires(T t) {
+    { t.first } -> std::convertible_to<typename T::first_type>;
+    { t.second } -> std::convertible_to<typename T::second_type>;
+};
+
+template <typename T>
+concept Tuple = requires {
+    typename std::tuple_size<T>::type;
+    typename std::tuple_element<0, T>::type;
+    requires !Pair<T>;
+};
+
+template <typename T>
+concept Tupleable = requires(T obj) {
+    { obj.makeTuple() } -> Tuple;
+};
+
+template <typename T>
+concept Enum = std::is_enum_v<T>;
+
+} // namespace Concepts
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Common

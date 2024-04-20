@@ -1,6 +1,11 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+
 #include "Common/CppExtensions/BinaryIO.hpp"
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Tests {
@@ -300,18 +305,42 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
     EXPECT_EQ(out_value, in_value);
 }
 
+TEST(Common_CppExtensions_BinaryIOTest, std_vector)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::vector<float> const out_value{2.2f, 3.4f};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::vector<float> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
 TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
 {
     static constexpr auto c_temp_file{TEMP_FILE};
 
-    using type = std::tuple<int, bool, char, float, double, std::string>; //, std::vector<int>, std::vector<std::string>>;
+    using type =
+        std::tuple<int, bool, char, float, double, std::string, std::vector<int>, std::vector<std::string>>;
 
     std::ofstream out{c_temp_file, std::ios::binary};
     type const out_value{
-        404, true, 'x', 2.2f, 2.2, "some long string 123456789",
-        // std::vector<int>{1, 2, 3, 4},
-        // std::vector<std::string>{"somestr1", "somestr2"}
-    };
+        404,
+        true,
+        'x',
+        2.2f,
+        2.2,
+        "some long string 123456789",
+        std::vector<int>{1, 2, 3, 4},
+        std::vector<std::string>{"somestr1", "somestr2"}};
     serialize(out, out_value);
     out.close();
 
@@ -337,18 +366,22 @@ TEST(Common_CppExtensions_BinaryIOTest, object)
         float d;
         double e;
         std::string f;
-        // std::vector<int> g;
-        //  std::vector<std::string> h;
+        std::vector<int> g;
+        std::vector<std::string> h;
 
-        LUNAR_ENABLE_BINARY_IO(a, b, c, d, e, f);
+        LUNAR_ENABLE_BINARY_IO(a, b, c, d, e, f, g, h);
     };
 
     std::ofstream out{c_temp_file, std::ios::binary};
     Object const out_value{
-        404, true, 'x', 2.2f, 2.2, "some long string 123456789",
-        // std::vector<int>{1, 2, 3, 4},
-        // std::vector<std::string>{"somestr1", "somestr2"}
-    };
+        404,
+        true,
+        'x',
+        2.2f,
+        2.2,
+        "some long string 123456789",
+        std::vector<int>{1, 2, 3, 4},
+        std::vector<std::string>{"somestr1", "somestr2"}};
     serialize(out, out_value);
     out.close();
 
@@ -359,7 +392,54 @@ TEST(Common_CppExtensions_BinaryIOTest, object)
 
     std::remove(c_temp_file);
 
-    // EXPECT_EQ(out_value, in_value);
+    EXPECT_EQ(out_value.makeTuple(), in_value.makeTuple());
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_pair)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::pair<std::string, int> const out_value{"some string no idea    \t\t\n ", 22};
+    serialize(out, out_value);
+    static_assert(Common::Concepts::Pair<decltype(out_value)>);
+    Serializer::Internal::serializePair(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::pair<std::string, int> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, enum)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    enum class SomeEnum : std::uint8_t
+    {
+        Value1 = 3,
+        Value2 = 101,
+        Value3 = 25
+    };
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    SomeEnum const out_value{SomeEnum::Value2};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    SomeEnum in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Tests
