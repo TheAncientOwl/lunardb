@@ -75,9 +75,13 @@ void serialize(std::ostream& os, T const& obj)
     {
         Internal::serializeEnum(os, obj);
     }
-    else
+    else if constexpr (Internal::Serializable<T>)
     {
         Internal::serialize(os, obj);
+    }
+    else
+    {
+        static_assert(false, "Cannot serialize object of this type");
     }
 }
 

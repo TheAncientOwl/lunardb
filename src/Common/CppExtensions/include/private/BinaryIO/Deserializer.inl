@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <ranges>
 
 #include "Common/CppExtensions/BinaryIO/Deserializer.hpp"
@@ -38,20 +39,64 @@ void deserializeTuple(std::istream& is, std::tuple<Args...>& tuple)
     }
 }
 
+namespace Concepts {
+
 template <typename T>
 concept Reservable = requires(T obj) {
     { obj.reserve() } -> std::same_as<void>;
 };
 
 template <typename T>
-concept EmplaceBackable = requires(T obj, typename T::value_type&& value) {
-    { obj.emplace_back(value) } -> std::same_as<typename T::reference>;
+concept EmplaceBackable = requires(T obj) {
+    { obj.emplace_back() } -> std::same_as<typename T::reference>;
 };
 
 template <typename T>
-concept Emplaceable = requires(T obj, typename T::value_type&& value) {
-    { obj.emplace(value) } -> std::same_as<void>;
+concept BeforeBeginable = requires(T obj) {
+    { obj.before_begin() } -> std::same_as<typename T::iterator>;
 };
+
+namespace Map {
+
+template <typename T>
+concept UniqueEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>(), std::declval<typename T::mapped_type>())
+    } -> std::same_as<std::pair<typename T::iterator, bool>>;
+};
+
+template <typename T>
+concept MultiEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>(), std::declval<typename T::mapped_type>())
+    } -> std::same_as<typename T::iterator>;
+};
+
+template <typename T>
+concept Emplaceable = UniqueEmplaceable<T> || MultiEmplaceable<T>;
+
+} // namespace Map
+
+namespace Set {
+
+template <typename T>
+concept UniqueEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>())
+    } -> std::same_as<std::pair<typename T::iterator, bool>>;
+};
+
+template <typename T>
+concept MultiEmplaceable = requires(T obj) {
+    { obj.emplace(std::declval<typename T::key_type>()) } -> std::same_as<typename T::iterator>;
+};
+
+template <typename T>
+concept Emplaceable = UniqueEmplaceable<T> || MultiEmplaceable<T>;
+
+} // namespace Set
+
+} // namespace Concepts
 
 template <typename T>
     requires Common::Concepts::Container<T>
@@ -60,12 +105,12 @@ void deserializeContainer(std::istream& is, T& container)
     typename T::size_type size{0};
     is.read(reinterpret_cast<char*>(&size), sizeof(decltype(size)));
 
-    if constexpr (Reservable<T>)
+    if constexpr (Concepts::Reservable<T>)
     {
         container.reserve(size);
     }
 
-    if constexpr (EmplaceBackable<T>)
+    if constexpr (Concepts::EmplaceBackable<T>)
     {
         for (auto const _ : std::ranges::iota_view{0u, size})
         {
@@ -73,14 +118,35 @@ void deserializeContainer(std::istream& is, T& container)
             Deserializer::deserialize(is, obj);
         }
     }
-    else if constexpr (Emplaceable<T>)
+    else if constexpr (Concepts::Map::Emplaceable<T>)
     {
-        T obj{};
+        std::pair<typename T::key_type, typename T::mapped_type> obj{};
+        for (auto const _ : std::ranges::iota_view{0u, size})
+        {
+            Deserializer::deserialize(is, obj);
+            container.emplace(std::move(obj.first), std::move(obj.second));
+        }
+    }
+    else if constexpr (Concepts::Set::Emplaceable<T>)
+    {
+        typename T::key_type obj{};
         for (auto const _ : std::ranges::iota_view{0u, size})
         {
             Deserializer::deserialize(is, obj);
             container.emplace(std::move(obj));
         }
+    }
+    else if constexpr (Common::Concepts::ArrayLike<T> && Common::Concepts::ContainerHelpers::Sizeable<T>)
+    {
+        typename T::size_type const use_size{std::min(size, container.size())};
+        for (auto const index : std::ranges::iota_view{0u, use_size})
+        {
+            Deserializer::deserialize(is, container[index]);
+        }
+    }
+    else
+    {
+        static_assert(false, "Cannot deserialize container...");
     }
 }
 
@@ -103,17 +169,21 @@ void deserialize(std::istream& is, T& obj)
     {
         Internal::deserializeTuple<0>(is, obj);
     }
-    else if constexpr (Common::Concepts::Container<T> && !std::is_same_v<T, std::string> && !std::is_same_v<T, std::string_view>)
-    {
-        Internal::deserializeContainer(is, obj);
-    }
     else if constexpr (Common::Concepts::Enum<T>)
     {
         Internal::deserializeEnum(is, obj);
     }
-    else
+    else if constexpr (Common::Concepts::Container<T> && !std::is_same_v<T, std::string> && !std::is_same_v<T, std::string_view>)
+    {
+        Internal::deserializeContainer(is, obj);
+    }
+    else if constexpr (Internal::Deserializable<T>)
     {
         Internal::deserialize(is, obj);
+    }
+    else
+    {
+        static_assert(false, "Cannot deserialize object of this type");
     }
 }
 

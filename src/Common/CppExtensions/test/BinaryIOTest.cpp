@@ -1,10 +1,15 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
+#include <array>
+#include <deque>
+#include <forward_list>
+#include <list>
 #include <map>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include "Common/CppExtensions/BinaryIO.hpp"
 
@@ -354,23 +359,46 @@ TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
     EXPECT_EQ(out_value, in_value);
 }
 
+template <typename T>
+std::ostream& operator<<(std::ostream& os, std::vector<T> const& values)
+{
+    std::for_each(
+        std::begin(values), std::end(values), [&os](auto const& value) { os << value << ", "; });
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, std::string const& str)
+{
+    os << "\"" << str << "\"";
+    return os;
+}
+
+struct Object
+{
+    int a;
+    bool b;
+    char c;
+    float d;
+    double e;
+    std::string f;
+    std::vector<int> g;
+    std::vector<std::string> h;
+
+    LUNAR_ENABLE_BINARY_IO(a, b, c, d, e, f, g, h);
+
+    bool operator==(Object const& rhs) const { return makeTuple() == rhs.makeTuple(); }
+
+    friend std::ostream& operator<<(std::ostream& os, Object const& rhs)
+    {
+        os << "Object{ a: " << rhs.a << "| b: " << rhs.b << "| c: " << rhs.c << "| d: " << rhs.d
+           << "| e: " << rhs.e << "| f: " << rhs.f << "| g: " << rhs.g << "| h: " << rhs.h << " }";
+        return os;
+    }
+};
+
 TEST(Common_CppExtensions_BinaryIOTest, object)
 {
     static constexpr auto c_temp_file{TEMP_FILE};
-
-    struct Object
-    {
-        int a;
-        bool b;
-        char c;
-        float d;
-        double e;
-        std::string f;
-        std::vector<int> g;
-        std::vector<std::string> h;
-
-        LUNAR_ENABLE_BINARY_IO(a, b, c, d, e, f, g, h);
-    };
 
     std::ofstream out{c_temp_file, std::ios::binary};
     Object const out_value{
@@ -392,7 +420,7 @@ TEST(Common_CppExtensions_BinaryIOTest, object)
 
     std::remove(c_temp_file);
 
-    EXPECT_EQ(out_value.makeTuple(), in_value.makeTuple());
+    EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_pair)
@@ -440,6 +468,228 @@ TEST(Common_CppExtensions_BinaryIOTest, enum)
     std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_map)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::map<std::string, double> const out_value{
+        {"2.2", 2.2}, {"555.555", 555.555}, {"123456.7890", 123456.7890}};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::map<std::string, double> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_multimap)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::multimap<std::string, double> const out_value{
+        {"2.2", 2.2}, {"555.555", 555.555}, {"123456.7890", 123456.7890}, {"2.2", 2.2}};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::multimap<std::string, double> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_unordered_map)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::unordered_map<std::string, double> const out_value{
+        {"2.2", 2.2}, {"555.555", 555.555}, {"123456.7890", 123456.7890}};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::unordered_map<std::string, double> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multimap)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::unordered_multimap<std::string, double> const out_value{
+        {"2.2", 2.2}, {"555.555", 555.555}, {"123456.7890", 123456.7890}, {"2.2", 2.2}};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::unordered_multimap<std::string, double> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_set)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::set<std::string> const out_value{"str1", "str2", "str3", "str4"};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::set<std::string> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_multiset)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::multiset<std::string> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_unordered_set)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::unordered_set<std::string> const out_value{"str1", "str2", "str3"};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::unordered_set<std::string> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multiset)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::unordered_multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::unordered_multiset<std::string> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_array)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    using array_t = std::array<std::string, 4>;
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    array_t const out_value{"str1", "str2", "str3", "str2"};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    array_t in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_list)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::list<float> const out_value{2.2f, 3.4f};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::list<float> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
+{
+    // static constexpr auto c_temp_file{TEMP_FILE};
+
+    // static_assert(Deserializer::Internal::Concepts::EmplaceAfterable<std::forward_list<float>>);
+    // static_assert(Deserializer::Internal::Concepts::BeforeBeginable<std::forward_list<float>>);
+
+    // std::ofstream out{c_temp_file, std::ios::binary};
+    // std::forward_list<float> const out_value{2.2f, 3.4f};
+    // serialize(out, out_value);
+    // out.close();
+
+    // std::ifstream in{c_temp_file, std::ios::binary};
+    // std::forward_list<float> in_value{};
+    // deserialize(in, in_value);
+    // in.close();
+
+    // std::remove(c_temp_file);
+
+    // EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_deque)
+{
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Tests

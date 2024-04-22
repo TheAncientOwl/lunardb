@@ -86,7 +86,7 @@ concept Sizeable = requires(T t) {
 };
 
 template <typename T>
-concept BeginIncrementable = requires(T t) { std::begin(t)++; };
+concept BeginIncrementable = requires(T t) { ++std::begin(t); };
 
 template <typename T>
 concept BeginDerefable = requires(T t) { *std::begin(t); };
@@ -108,7 +108,6 @@ concept BeginAndEndCopyConstructibleAndDestructible = requires(T t) {
 
 template <typename T>
 concept Container = ContainerHelpers::Beginable<T> && ContainerHelpers::Endable<T> &&
-                    ContainerHelpers::Sizeable<T> && ContainerHelpers::BeginIncrementable<T> &&
                     ContainerHelpers::BeginDerefable<T> && ContainerHelpers::NeqableBeginAndEnd<T> &&
                     !ContainerHelpers::BeginDerefToVoid<T> &&
                     ContainerHelpers::BeginAndEndCopyConstructibleAndDestructible<T>;
@@ -120,10 +119,19 @@ concept Pair = requires(T t) {
 };
 
 template <typename T>
+concept ArrayLike = requires(T obj) {
+    typename T::value_type;
+    { std::size(obj) } -> std::convertible_to<std::size_t>;
+    { obj.size() } -> std::convertible_to<std::size_t>;
+    { obj[0] } -> std::same_as<typename T::value_type&>;
+};
+
+template <typename T>
 concept Tuple = requires {
     typename std::tuple_size<T>::type;
     typename std::tuple_element<0, T>::type;
     requires !Pair<T>;
+    requires !ArrayLike<T>;
 };
 
 template <typename T>
