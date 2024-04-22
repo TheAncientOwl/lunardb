@@ -40,7 +40,43 @@
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts {
 
-namespace Helpers {
+template <typename T>
+concept Arithmetic = std::is_arithmetic_v<T>;
+
+template <typename T>
+concept Enum = std::is_enum_v<T>;
+
+template <typename T>
+concept Primitive = Arithmetic<T> || Enum<T>;
+
+template <typename T>
+concept Pair = requires(T t) {
+    { t.first } -> std::convertible_to<typename T::first_type>;
+    { t.second } -> std::convertible_to<typename T::second_type>;
+};
+
+template <typename T>
+concept ArrayLike = requires(T obj) {
+    typename T::value_type;
+    { std::size(obj) } -> std::convertible_to<std::size_t>;
+    { obj.size() } -> std::convertible_to<std::size_t>;
+    { obj[0] } -> std::same_as<typename T::value_type&>;
+};
+
+template <typename T>
+concept Tuple = requires {
+    typename std::tuple_size<T>::type;
+    typename std::tuple_element<0, T>::type;
+    requires !Pair<T>;
+    requires !ArrayLike<T>;
+};
+
+template <typename T>
+concept Tupleable = requires(T obj) {
+    { obj.makeTuple() } -> Tuple;
+};
+
+namespace Container {
 
 template <typename T>
 concept NeqableBeginAndEnd = requires(T t) {
@@ -77,52 +113,6 @@ concept Sizeable = requires(T t) {
     { std::size(t) } -> std::same_as<std::size_t>;
 };
 
-} // namespace Helpers
-
-template <typename T>
-concept IterableSerializable =
-    Helpers::Sizeable<T> && Helpers::Beginable<T> && Helpers::Endable<T> &&
-    Helpers::BeginDerefable<T> && Helpers::NeqableBeginAndEnd<T> && !Helpers::BeginDerefToVoid<T> &&
-    Helpers::BeginAndEndCopyConstructibleAndDestructible<T>;
-
-template <typename T>
-concept Pair = requires(T t) {
-    { t.first } -> std::convertible_to<typename T::first_type>;
-    { t.second } -> std::convertible_to<typename T::second_type>;
-};
-
-template <typename T>
-concept ArrayLike = requires(T obj) {
-    typename T::value_type;
-    { std::size(obj) } -> std::convertible_to<std::size_t>;
-    { obj.size() } -> std::convertible_to<std::size_t>;
-    { obj[0] } -> std::same_as<typename T::value_type&>;
-};
-
-template <typename T>
-concept Tuple = requires {
-    typename std::tuple_size<T>::type;
-    typename std::tuple_element<0, T>::type;
-    requires !Pair<T>;
-    requires !ArrayLike<T>;
-};
-
-template <typename T>
-concept Tupleable = requires(T obj) {
-    { obj.makeTuple() } -> Tuple;
-};
-
-template <typename T>
-concept Enum = std::is_enum_v<T>;
-
-template <typename T>
-concept Arithmetic = std::is_arithmetic_v<T>;
-
-template <typename T>
-concept Primitive = Enum<T> || Arithmetic<T>;
-
-namespace Container {
-
 template <typename T>
 concept Reservable = requires(T obj) {
     { obj.reserve() } -> std::same_as<void>;
@@ -130,7 +120,7 @@ concept Reservable = requires(T obj) {
 
 template <typename T>
 concept EmplaceBackable = requires(T obj) {
-    requires Helpers::Sizeable<T>;
+    requires Sizeable<T>;
     {
         obj.emplace_back(std::declval<typename T::value_type>)
     } -> std::same_as<typename T::reference>;
@@ -177,5 +167,11 @@ concept Emplaceable = UniqueEmplaceable<T> || MultiEmplaceable<T>;
 } // namespace Set
 
 } // namespace Container
+
+template <typename T>
+concept IterableSerializable =
+    Container::Sizeable<T> && Container::Beginable<T> && Container::Endable<T> &&
+    Container::BeginDerefable<T> && Container::NeqableBeginAndEnd<T> &&
+    !Container::BeginDerefToVoid<T> && Container::BeginAndEndCopyConstructibleAndDestructible<T>;
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts
