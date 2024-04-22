@@ -3,16 +3,16 @@ add_lunar_library(
     INCLUDE_PATH Common/CppExtensions
 
     API_HEADER_FILES
-        include/BinaryIO/Common.hpp
+        include/BinaryIO/Concepts.hpp
         include/BinaryIO/Deserializer.hpp
         include/BinaryIO/Serializer.hpp
         include/BinaryIO.hpp
-        
+
         include/DefinePrimitive.hpp
         include/ItemArray.hpp
         include/LiteralToStringMap.hpp
         include/StringUtils.hpp
-        
+
         include/private/BinaryIO/Deserializer.inl
         include/private/BinaryIO/Serializer.inl
         include/private/ItemArray.inl
@@ -21,10 +21,7 @@ add_lunar_library(
 
     SOURCE_FILES
         src/StringUtils.cpp
-
-        src/BinaryIO/PODCommon.cpp
-        src/BinaryIO/String.cpp
-        src/BinaryIO/StringView.cpp
+        src/BinaryIO.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS)

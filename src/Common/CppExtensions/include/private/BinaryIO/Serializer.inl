@@ -2,86 +2,87 @@
 
 #include "Common/CppExtensions/BinaryIO/Serializer.hpp"
 
-#define INTERNAL_SERIALIZE(type) \
-    template <>                  \
-    void serialize(std::ostream& os, type const& obj);
-
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 
-namespace Internal {
-
-PROVIDE_IMPL_FOR(INTERNAL_SERIALIZE);
-
 template <typename T>
-    requires Common::Concepts::Enum<T>
-void serializeEnum(std::ostream& os, T const& obj)
+void serialize(std::ostream&, T const&)
 {
-    os.write(reinterpret_cast<const char*>(&obj), sizeof(decltype(obj)));
+    static_assert(false, "Serializer not implemented for this type...");
 }
 
-template <typename First, typename Second>
-void serializePair(std::ostream& os, std::pair<First, Second> const& pair)
+template <typename T>
+    requires Concepts::Primitive<T>
+void serialize(std::ostream& os, T const& primitive)
 {
-    Serializer::serialize(os, pair.first);
-    Serializer::serialize(os, pair.second);
+    os.write(reinterpret_cast<const char*>(&primitive), sizeof(T));
+}
+
+template <typename T>
+    requires Concepts::Pair<T>
+void serialize(std::ostream& os, T const& pair)
+{
+    serialize(os, pair.first);
+    serialize(os, pair.second);
 }
 
 template <std::size_t Index, typename... Args>
-void serializeTuple(std::ostream& os, std::tuple<Args...> const& tuple)
+void serializeTupleImpl(std::ostream& os, std::tuple<Args...> const& tuple)
 {
     if constexpr (Index < sizeof...(Args))
     {
-        Serializer::serialize(os, std::get<Index>(tuple));
-        Internal::serializeTuple<Index + 1>(os, tuple);
+        serialize(os, std::get<Index>(tuple));
+        serializeTupleImpl<Index + 1>(os, tuple);
     }
 }
 
 template <typename T>
-    requires Common::Concepts::Container<T>
-void serializeContainer(std::ostream& os, T const& container)
+    requires Concepts::Tuple<T>
+void serialize(std::ostream& os, T const& tuple)
 {
-    auto const size{std::size(container)};
+    serializeTupleImpl<0>(os, tuple);
+}
+
+template <typename T>
+    requires Concepts::IterableSerializable<T>
+void serialize(std::ostream& os, T const& iterable)
+{
+    auto const size{std::size(iterable)};
     os.write(reinterpret_cast<const char*>(&size), sizeof(decltype(size)));
 
-    for (auto const& element : container)
+    for (auto const& element : iterable)
     {
-        Serializer::serialize(os, element);
+        serialize(os, element);
     }
 }
 
-} // namespace Internal
+template <typename T>
+    requires Concepts::Tupleable<T>
+void serialize(std::ostream& os, T const& tupleable)
+{
+    auto tuple = tupleable.makeTuple();
+    serialize(os, tuple);
+}
 
 template <typename T>
-    requires Serializer::Serializable<T>
-void serialize(std::ostream& os, T const& obj)
+void serialize(std::ostream& os, std::forward_list<T> const& list)
 {
-    if constexpr (Common::Concepts::Pair<T>)
+    typename std::forward_list<T>::size_type size{0};
+    for (auto const& _ : list)
     {
-        Internal::serializePair(os, obj);
+        ++size;
     }
-    else if constexpr (Common::Concepts::Tupleable<T>)
+
+    serialize(os, list, size);
+}
+
+template <typename T>
+void serialize(std::ostream& os, std::forward_list<T> const& list, typename std::forward_list<T>::size_type size)
+{
+    os.write(reinterpret_cast<const char*>(&size), sizeof(decltype(size)));
+
+    for (auto const& element : list)
     {
-        Internal::serializeTuple<0>(os, obj.makeTuple());
-    }
-    else if constexpr (Common::Concepts::Tuple<T>)
-    {
-        Internal::serializeTuple<0>(os, obj);
-    }
-    else if constexpr (Common::Concepts::Container<T>)
-    {
-        Internal::serializeContainer(os, obj);
-    }
-    else if constexpr (Common::Concepts::Enum<T>)
-    {
-        Internal::serializeEnum(os, obj);
-    }
-    else if constexpr (Internal::Serializable<T>)
-    {
-        Internal::serialize(os, obj);
-    }
-    else
-    {
-        static_assert(false, "Cannot serialize object of this type");
+        serialize(os, element);
     }
 }
 

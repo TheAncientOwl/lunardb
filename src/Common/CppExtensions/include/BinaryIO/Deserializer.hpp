@@ -1,43 +1,50 @@
 #pragma once
 
-#include "Common/CppExtensions/BinaryIO/Common.hpp"
+#include <array>
+#include <forward_list>
+#include <span>
+#include <string>
+#include <string_view>
+
+#include "Common/CppExtensions/BinaryIO/Concepts.hpp"
+
+#define PROVIDE_CONCEPT_DESERIALIZE(Concept) \
+    template <typename T>                    \
+        requires Concept<T>                  \
+    void deserialize(std::istream&, T&)
+
+#define PROVIDE_SPECIALIZED_DESERIALIZE(Type) \
+    template <>                               \
+    void deserialize(std::istream&, Type&)
+
+#define PROVIDE_TEMPLATE_DESERIALIZE(Type) \
+    template <typename T>                  \
+    void deserialize(std::istream&, Type<T>&)
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer {
 
-namespace Internal {
+template <typename T>
+void deserialize(std::istream&, T&);
+
+PROVIDE_SPECIALIZED_DESERIALIZE(std::string);
+
+PROVIDE_CONCEPT_DESERIALIZE(Concepts::Primitive);
+PROVIDE_CONCEPT_DESERIALIZE(Concepts::Pair);
+PROVIDE_CONCEPT_DESERIALIZE(Concepts::Tuple);
+PROVIDE_CONCEPT_DESERIALIZE(Concepts::Tupleable);
 
 template <typename T>
-void deserialize(std::istream& is, T& obj) = delete;
+concept AnyContainer =
+    Concepts::Container::EmplaceBackable<T> || Concepts::Container::Map::Emplaceable<T> ||
+    Concepts::Container::Set::Emplaceable<T>;
+
+PROVIDE_CONCEPT_DESERIALIZE(AnyContainer);
 
 template <typename T>
-    requires Common::Concepts::Enum<T>
-void deserializeEnum(std::istream& is, T& obj);
+void deserialize(std::istream&, std::forward_list<T>&);
 
-template <typename First, typename Second>
-void deserializePair(std::istream& is, std::pair<First, Second>& pair);
-
-template <std::size_t Index, typename... Args>
-void deserializeTuple(std::istream& is, std::tuple<Args...>& tuple);
-
-template <typename T>
-    requires Common::Concepts::Container<T>
-void deserializeContainer(std::istream& is, T& container);
-
-template <typename T>
-concept Deserializable = requires(std::istream& is, T obj) {
-    { Internal::deserialize<T>(is, obj) } -> std::same_as<void>;
-};
-
-} // namespace Internal
-
-template <typename T>
-concept Deserializable =
-    std::is_enum_v<T> || Internal::Deserializable<T> || Common::Concepts::Pair<T> ||
-    Common::Concepts::Tuple<T> || Common::Concepts::Tupleable<T> || Common::Concepts::Container<T>;
-
-template <typename T>
-    requires Deserializer::Deserializable<T>
-void deserialize(std::istream& is, T& obj);
+// template <>
+// void deserialize(std::istream& is, std::string_view& sv) = delete;
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
 

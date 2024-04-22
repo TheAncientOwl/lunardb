@@ -7,11 +7,54 @@
 #include <list>
 #include <map>
 #include <set>
+#include <span>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 #include "Common/CppExtensions/BinaryIO.hpp"
+
+namespace std {
+
+template <typename T>
+bool operator==(std::span<T> const& lhs, std::vector<T> const& rhs)
+{
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+
+    for (auto index = 0; index < lhs.size(); ++index)
+    {
+        if (lhs[index] != rhs[index])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+template <typename T, std::size_t Size>
+bool operator==(std::span<T> const& lhs, std::array<T, Size> const& rhs)
+{
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+
+    for (auto index = 0; index < lhs.size(); ++index)
+    {
+        if (lhs[index] != rhs[index])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+} // namespace std
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Tests {
 
@@ -298,9 +341,6 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
     out.close();
 
     std::ifstream in{c_temp_file, std::ios::binary};
-    std::string_view in_value_sv{};
-    EXPECT_THROW({ deserialize(in, in_value_sv); }, std::logic_error);
-
     std::string in_value{};
     deserialize(in, in_value);
     in.close();
@@ -430,8 +470,6 @@ TEST(Common_CppExtensions_BinaryIOTest, std_pair)
     std::ofstream out{c_temp_file, std::ios::binary};
     std::pair<std::string, int> const out_value{"some string no idea    \t\t\n ", 22};
     serialize(out, out_value);
-    static_assert(Common::Concepts::Pair<decltype(out_value)>);
-    Serializer::Internal::serializePair(out, out_value);
     out.close();
 
     std::ifstream in{c_temp_file, std::ios::binary};
@@ -668,28 +706,100 @@ TEST(Common_CppExtensions_BinaryIOTest, std_list)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
 {
-    // static constexpr auto c_temp_file{TEMP_FILE};
+    static constexpr auto c_temp_file{TEMP_FILE};
 
-    // static_assert(Deserializer::Internal::Concepts::EmplaceAfterable<std::forward_list<float>>);
-    // static_assert(Deserializer::Internal::Concepts::BeforeBeginable<std::forward_list<float>>);
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::forward_list<float> const out_value{2.2f, 3.4f};
+    serialize(out, out_value);
+    out.close();
 
-    // std::ofstream out{c_temp_file, std::ios::binary};
-    // std::forward_list<float> const out_value{2.2f, 3.4f};
-    // serialize(out, out_value);
-    // out.close();
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::forward_list<float> in_value{};
+    deserialize(in, in_value);
+    in.close();
 
-    // std::ifstream in{c_temp_file, std::ios::binary};
-    // std::forward_list<float> in_value{};
-    // deserialize(in, in_value);
-    // in.close();
+    std::remove(c_temp_file);
 
-    // std::remove(c_temp_file);
-
-    // EXPECT_EQ(out_value, in_value);
+    EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_deque)
 {
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::deque<float> const out_value{2.2f, 3.4f};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::deque<float> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_span_vector)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::vector<float> values{2.2f, 3.4f};
+    std::span<float> const out_value{values};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::vector<float> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_span_array)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::array<float, 2> values{2.2f, 3.4f};
+    std::span<float> const out_value{values};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::array<float, 2> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    float values[] = {2.2f, 3.4f};
+    std::span<float> const out_value{values};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::array<float, 2> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Tests

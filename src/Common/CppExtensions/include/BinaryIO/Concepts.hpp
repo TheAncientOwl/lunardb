@@ -4,31 +4,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
-#include <string>
-#include <string_view>
-#include <tuple>
-
-#define PROVIDE_IMPL_FOR_PODS(MACRO) \
-    MACRO(std::int8_t)               \
-    MACRO(std::int16_t)              \
-    MACRO(std::int32_t)              \
-    MACRO(std::int64_t)              \
-    MACRO(std::uint8_t)              \
-    MACRO(std::uint16_t)             \
-    MACRO(std::uint32_t)             \
-    MACRO(std::uint64_t)             \
-    MACRO(char)                      \
-    MACRO(bool)                      \
-    MACRO(float)                     \
-    MACRO(double)
-
-#define PROVIDE_IMPL_FOR_OBJECTS(MACRO) \
-    MACRO(std::string)                  \
-    MACRO(std::string_view)
-
-#define PROVIDE_IMPL_FOR(MACRO)  \
-    PROVIDE_IMPL_FOR_PODS(MACRO) \
-    PROVIDE_IMPL_FOR_OBJECTS(MACRO)
 
 ///
 /// @warning This macro should be used alone only if binary serialization is desired.
@@ -63,11 +38,9 @@
     LUNAR_ENABLE_BINARY_INPUT(__VA_ARGS__) \
     LUNAR_ENABLE_BINARY_OUTPUT(__VA_ARGS__)
 
-namespace LunarDB::Common::CppExtensions::BinaryIO::Common {
+namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts {
 
-namespace Concepts {
-
-namespace ContainerHelpers {
+namespace Helpers {
 
 template <typename T>
 concept NeqableBeginAndEnd = requires(T t) {
@@ -79,11 +52,6 @@ concept Beginable = requires(T t) { std::begin(t); };
 
 template <typename T>
 concept Endable = requires(T t) { std::end(t); };
-
-template <typename T>
-concept Sizeable = requires(T t) {
-    { std::size(t) } -> std::same_as<std::size_t>;
-};
 
 template <typename T>
 concept BeginIncrementable = requires(T t) { ++std::begin(t); };
@@ -104,13 +72,18 @@ concept BeginAndEndCopyConstructibleAndDestructible = requires(T t) {
     requires std::copy_constructible<decltype(std::end(t))>;
 };
 
-} // namespace ContainerHelpers
+template <typename T>
+concept Sizeable = requires(T t) {
+    { std::size(t) } -> std::same_as<std::size_t>;
+};
+
+} // namespace Helpers
 
 template <typename T>
-concept Container = ContainerHelpers::Beginable<T> && ContainerHelpers::Endable<T> &&
-                    ContainerHelpers::BeginDerefable<T> && ContainerHelpers::NeqableBeginAndEnd<T> &&
-                    !ContainerHelpers::BeginDerefToVoid<T> &&
-                    ContainerHelpers::BeginAndEndCopyConstructibleAndDestructible<T>;
+concept IterableSerializable =
+    Helpers::Sizeable<T> && Helpers::Beginable<T> && Helpers::Endable<T> &&
+    Helpers::BeginDerefable<T> && Helpers::NeqableBeginAndEnd<T> && !Helpers::BeginDerefToVoid<T> &&
+    Helpers::BeginAndEndCopyConstructibleAndDestructible<T>;
 
 template <typename T>
 concept Pair = requires(T t) {
@@ -142,6 +115,67 @@ concept Tupleable = requires(T obj) {
 template <typename T>
 concept Enum = std::is_enum_v<T>;
 
-} // namespace Concepts
+template <typename T>
+concept Arithmetic = std::is_arithmetic_v<T>;
 
-} // namespace LunarDB::Common::CppExtensions::BinaryIO::Common
+template <typename T>
+concept Primitive = Enum<T> || Arithmetic<T>;
+
+namespace Container {
+
+template <typename T>
+concept Reservable = requires(T obj) {
+    { obj.reserve() } -> std::same_as<void>;
+};
+
+template <typename T>
+concept EmplaceBackable = requires(T obj) {
+    requires Helpers::Sizeable<T>;
+    {
+        obj.emplace_back(std::declval<typename T::value_type>)
+    } -> std::same_as<typename T::reference>;
+};
+
+namespace Map {
+
+template <typename T>
+concept UniqueEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>(), std::declval<typename T::mapped_type>())
+    } -> std::same_as<std::pair<typename T::iterator, bool>>;
+};
+
+template <typename T>
+concept MultiEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>(), std::declval<typename T::mapped_type>())
+    } -> std::same_as<typename T::iterator>;
+};
+
+template <typename T>
+concept Emplaceable = UniqueEmplaceable<T> || MultiEmplaceable<T>;
+
+} // namespace Map
+
+namespace Set {
+
+template <typename T>
+concept UniqueEmplaceable = requires(T obj) {
+    {
+        obj.emplace(std::declval<typename T::key_type>())
+    } -> std::same_as<std::pair<typename T::iterator, bool>>;
+};
+
+template <typename T>
+concept MultiEmplaceable = requires(T obj) {
+    { obj.emplace(std::declval<typename T::key_type>()) } -> std::same_as<typename T::iterator>;
+};
+
+template <typename T>
+concept Emplaceable = UniqueEmplaceable<T> || MultiEmplaceable<T>;
+
+} // namespace Set
+
+} // namespace Container
+
+} // namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts
