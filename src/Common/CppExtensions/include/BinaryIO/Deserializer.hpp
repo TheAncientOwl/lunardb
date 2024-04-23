@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <filesystem>
 #include <forward_list>
 #include <span>
 #include <string>
@@ -27,6 +28,7 @@ template <typename T>
 void deserialize(std::istream&, T&);
 
 PROVIDE_SPECIALIZED_DESERIALIZE(std::string);
+PROVIDE_SPECIALIZED_DESERIALIZE(std::filesystem::path);
 
 PROVIDE_CONCEPT_DESERIALIZE(Concepts::Primitive);
 PROVIDE_CONCEPT_DESERIALIZE(Concepts::Pair);

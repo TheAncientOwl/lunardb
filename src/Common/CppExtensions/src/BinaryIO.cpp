@@ -18,6 +18,13 @@ void serialize(std::ostream& os, std::string const& str)
     os.write(str.c_str(), sizeof(std::string::value_type) * str.length());
 }
 
+template <>
+void serialize(std::ostream& os, std::filesystem::path const& path)
+{
+    std::string_view const path_sv{path.c_str()};
+    serialize(os, path_sv);
+}
+
 } // namespace Serializer
 
 namespace Deserializer {
@@ -30,6 +37,14 @@ void deserialize(std::istream& is, std::string& str)
 
     str.resize(length);
     is.read(str.data(), sizeof(std::string::value_type) * str.length());
+}
+
+template <>
+void deserialize(std::istream& is, std::filesystem::path& path)
+{
+    std::string path_str{};
+    deserialize(is, path_str);
+    path.assign(std::move(path_str));
 }
 
 } // namespace Deserializer

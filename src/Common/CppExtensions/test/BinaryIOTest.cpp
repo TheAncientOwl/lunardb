@@ -3,6 +3,7 @@
 
 #include <array>
 #include <deque>
+#include <filesystem>
 #include <forward_list>
 #include <list>
 #include <map>
@@ -794,6 +795,25 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
 
     std::ifstream in{c_temp_file, std::ios::binary};
     std::array<float, 2> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    std::remove(c_temp_file);
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
+{
+    static constexpr auto c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::filesystem::path const out_value{std::filesystem::current_path()};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::filesystem::path in_value{};
     deserialize(in, in_value);
     in.close();
 

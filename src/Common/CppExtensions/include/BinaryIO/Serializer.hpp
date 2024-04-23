@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <forward_list>
 #include <string>
 #include <string_view>
@@ -22,6 +23,7 @@ void serialize(std::ostream&, T const&);
 
 PROVIDE_SPECIALIZED_SERIALIZE(std::string);
 PROVIDE_SPECIALIZED_SERIALIZE(std::string_view);
+PROVIDE_SPECIALIZED_SERIALIZE(std::filesystem::path);
 
 PROVIDE_CONCEPT_SERIALIZE(Concepts::Primitive);
 PROVIDE_CONCEPT_SERIALIZE(Concepts::Pair);
