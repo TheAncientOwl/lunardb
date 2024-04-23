@@ -43,6 +43,9 @@ PROVIDE_CONCEPT_DESERIALIZE(AnyContainer);
 template <typename T>
 void deserialize(std::istream&, std::forward_list<T>&);
 
+// template <>
+// void deserialize(std::istream& is, std::string_view& sv) = delete;
+
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
 
 #include "Common/CppExtensions/private/BinaryIO/Deserializer.inl"
