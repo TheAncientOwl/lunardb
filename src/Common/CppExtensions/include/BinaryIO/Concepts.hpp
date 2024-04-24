@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
+#include <tuple>
 
 ///
 /// @brief Provide makeTuple() and makeTuple() const variants required by @c
