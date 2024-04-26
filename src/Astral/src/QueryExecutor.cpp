@@ -7,20 +7,24 @@
 
 namespace LunarDB::Astral::API {
 
-void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, QueryExecutorConfig const& config)
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDependencies const& config)
 {
     using namespace Implementation;
     using namespace CppExtensions;
 
     static const DataStructures::ItemArray<ExecutorBundle, 20> s_executors{
-        Create::makeExecutor(),   Drop::makeExecutor(),     Migrate::makeExecutor(),   Truncate::makeExecutor(),
-        Rename::makeExecutor(),   Select::makeExecutor(),   Insert::makeExecutor(),    Update::makeExecutor(),
-        Delete::makeExecutor(),   Lock::makeExecutor(),     Grant::makeExecutor(),     Revoke::makeExecutor(),
-        Commit::makeExecutor(),   Rollback::makeExecutor(), SavePoint::makeExecutor(), Index::makeExecutor(),
-        Database::makeExecutor(), View::makeExecutor(),     Rebind::makeExecutor(),    Schema::makeExecutor()};
+        Create::makeExecutor(),   Drop::makeExecutor(),     Migrate::makeExecutor(),
+        Truncate::makeExecutor(), Rename::makeExecutor(),   Select::makeExecutor(),
+        Insert::makeExecutor(),   Update::makeExecutor(),   Delete::makeExecutor(),
+        Lock::makeExecutor(),     Grant::makeExecutor(),    Revoke::makeExecutor(),
+        Commit::makeExecutor(),   Rollback::makeExecutor(), SavePoint::makeExecutor(),
+        Index::makeExecutor(),    Database::makeExecutor(), View::makeExecutor(),
+        Rebind::makeExecutor(),   Schema::makeExecutor()};
 
-    auto const executor_opt = s_executors.find_if(
-        [&parsed_query](ExecutorBundle const& query_executor) { return parsed_query.type() == query_executor.first; });
+    auto const executor_opt =
+        s_executors.find_if([&parsed_query](ExecutorBundle const& query_executor) {
+            return parsed_query.type() == query_executor.first;
+        });
 
     if (static_cast<bool>(executor_opt))
     {
@@ -34,10 +38,11 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, QueryExecutor
 
 } // namespace LunarDB::Astral::API
 
-#define PROVIDE_EXECUTOR_BUNDLER(Specialization)                                                           \
-    ExecutorBundle Specialization::makeExecutor()                                                          \
-    {                                                                                                      \
-        return std::make_pair(QueryData::Primitives::EQueryType::Specialization, Specialization::execute); \
+#define PROVIDE_EXECUTOR_BUNDLER(Specialization)                                         \
+    ExecutorBundle Specialization::makeExecutor()                                        \
+    {                                                                                    \
+        return std::make_pair(                                                           \
+            QueryData::Primitives::EQueryType::Specialization, Specialization::execute); \
     }
 
 namespace LunarDB::Astral::Implementation {

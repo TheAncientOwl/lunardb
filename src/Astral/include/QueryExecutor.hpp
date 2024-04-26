@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Astral/QueryExecutorConfig.hpp"
+#include "Astral/SelenityDependencies.hpp"
 #include "Moonlight/ParsedQuery.hpp"
 
 namespace LunarDB::Astral::API {
 
-void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, QueryExecutorConfig const& config);
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDependencies const& config);
 
 } // namespace LunarDB::Astral::API

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Moonlight/ParsedQuery.hpp"
+#include "Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Astral::API {
 
-struct QueryExecutorConfig
+struct SelenityDependencies
 {
-    std::string database;
+    Selenity::SystemCatalog& db_catalog;
 };
 
 } // namespace LunarDB::Astral::API

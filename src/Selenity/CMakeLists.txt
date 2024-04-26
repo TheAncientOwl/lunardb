@@ -3,6 +3,7 @@ add_lunar_library(
     INCLUDE_PATH Selenity
 
     API_HEADER_FILES
+        include/SystemCatalog.hpp
 
     PRIVATE_DEPENDENCIES
 
