@@ -7,7 +7,7 @@ namespace LunarDB::Astral::API {
 
 struct SelenityDependencies
 {
-    Selenity::SystemCatalog& db_catalog;
+    Selenity::API::SystemCatalog& db_catalog;
 };
 
 } // namespace LunarDB::Astral::API

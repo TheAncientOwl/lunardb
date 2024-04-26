@@ -4,11 +4,13 @@ add_lunar_library(
 
     API_HEADER_FILES
         include/SystemCatalog.hpp
+        include/private/SystemCatalog/DatabaseConfig.hpp
 
     PRIVATE_DEPENDENCIES
 
     SOURCE_FILES
-        src/main.cpp
+        src/SystemCatalog/SystemCatalog.cpp
+        src/SystemCatalog/DatabaseConfig.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_SELENITY_TESTS)

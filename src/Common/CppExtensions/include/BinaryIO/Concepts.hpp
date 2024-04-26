@@ -6,23 +6,7 @@
 #include <iostream>
 #include <tuple>
 
-///
-/// @brief Provide makeTuple() and makeTuple() const variants required by @c
-/// LunarDB::Common::CppExtensions::BinaryIO::serialize
-/// @param [in] List of desired fields to be binary serialized/deserialized
-///
-#define LUNAR_ENABLE_BINARY_IO(...)   \
-    inline auto makeTuple()           \
-    {                                 \
-        return std::tie(__VA_ARGS__); \
-    }                                 \
-    inline auto makeTuple() const     \
-    {                                 \
-        return std::tie(__VA_ARGS__); \
-    }
-
 namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts {
-
 template <typename T>
 concept Arithmetic = std::is_arithmetic_v<T>;
 

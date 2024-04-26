@@ -14,6 +14,11 @@
 #include <vector>
 
 #include "Common/CppExtensions/BinaryIO.hpp"
+#include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+
+#define AS_STRING_(x) #x
+#define AS_STRING(x) AS_STRING_(x)
+#define TEMP_FILE "/tmp/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
 
 namespace std {
 
@@ -62,13 +67,11 @@ namespace LunarDB::Common::CppExtensions::BinaryIO::Tests {
 using namespace Serializer;
 using namespace Deserializer;
 
-#define AS_STRING_(x) #x
-#define AS_STRING(x) AS_STRING_(x)
-#define TEMP_FILE "/tmp/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
+using TempFileGuard = Testing::TempFileSystemGuards::TempFileGuard;
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint8_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint8_t const out_value{2};
@@ -80,14 +83,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint8_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint16_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint16_t const out_value{221};
@@ -99,14 +100,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint16_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint32_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint32_t const out_value{2312312};
@@ -118,14 +117,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint32_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint64_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint64_t const out_value{42312312};
@@ -137,14 +134,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint64_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int8_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int8_t const out_value{-2};
@@ -156,14 +151,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int8_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int16_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int16_t const out_value{-221};
@@ -175,14 +168,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int16_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int32_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int32_t const out_value{-2312312};
@@ -194,14 +185,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int32_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int64_t const out_value{-42312312};
@@ -213,14 +202,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_size_t)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::size_t const out_value{42312312};
@@ -232,14 +219,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_size_t)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, char)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     const char out_value{'c'};
@@ -251,14 +236,12 @@ TEST(Common_CppExtensions_BinaryIOTest, char)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, bool)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     bool const out_value{true};
@@ -270,14 +253,12 @@ TEST(Common_CppExtensions_BinaryIOTest, bool)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, float)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     float const out_value{true};
@@ -289,14 +270,12 @@ TEST(Common_CppExtensions_BinaryIOTest, float)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, double)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     double const out_value{true};
@@ -308,14 +287,12 @@ TEST(Common_CppExtensions_BinaryIOTest, double)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_string)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::string const out_value{"some string no idea    \t\t\n "};
@@ -327,14 +304,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::string_view const out_value{"some string_view no idea    \t\t\n "};
@@ -346,14 +321,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_vector)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::vector<float> const out_value{2.2f, 3.4f};
@@ -365,14 +338,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_vector)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     using type =
         std::tuple<int, bool, char, float, double, std::string, std::vector<int>, std::vector<std::string>>;
@@ -394,8 +365,6 @@ TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
     type in_value{};
     deserialize(in, in_value);
     in.close();
-
-    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }
@@ -439,7 +408,7 @@ struct Object
 
 TEST(Common_CppExtensions_BinaryIOTest, object)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     Object const out_value{
@@ -459,14 +428,12 @@ TEST(Common_CppExtensions_BinaryIOTest, object)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_pair)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::pair<std::string, int> const out_value{"some string no idea    \t\t\n ", 22};
@@ -478,14 +445,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_pair)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, enum)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     enum class SomeEnum : std::uint8_t
     {
@@ -504,14 +469,12 @@ TEST(Common_CppExtensions_BinaryIOTest, enum)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_map)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::map<std::string, double> const out_value{
@@ -524,14 +487,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_map)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_multimap)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::multimap<std::string, double> const out_value{
@@ -544,14 +505,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_multimap)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_map)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_map<std::string, double> const out_value{
@@ -564,14 +523,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_map)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multimap)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_multimap<std::string, double> const out_value{
@@ -584,14 +541,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multimap)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_set)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::set<std::string> const out_value{"str1", "str2", "str3", "str4"};
@@ -603,14 +558,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_set)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_multiset)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
@@ -622,14 +575,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_multiset)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_set)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_set<std::string> const out_value{"str1", "str2", "str3"};
@@ -641,14 +592,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_set)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multiset)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
@@ -660,14 +609,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multiset)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_array)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     using array_t = std::array<std::string, 4>;
 
@@ -681,14 +628,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_array)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_list)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::list<float> const out_value{2.2f, 3.4f};
@@ -700,14 +645,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_list)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::forward_list<float> const out_value{2.2f, 3.4f};
@@ -719,14 +662,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_deque)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::deque<float> const out_value{2.2f, 3.4f};
@@ -738,14 +679,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_deque)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_vector)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::vector<float> values{2.2f, 3.4f};
@@ -758,14 +697,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_vector)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_array)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::array<float, 2> values{2.2f, 3.4f};
@@ -778,14 +715,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_array)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     float values[] = {2.2f, 3.4f};
@@ -798,14 +733,12 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
     deserialize(in, in_value);
     in.close();
 
-    std::remove(c_temp_file);
-
     EXPECT_EQ(out_value, in_value);
 }
 
 TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
 {
-    static constexpr auto c_temp_file{TEMP_FILE};
+    static TempFileGuard c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::filesystem::path const out_value{std::filesystem::current_path()};
@@ -816,8 +749,6 @@ TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
     std::filesystem::path in_value{};
     deserialize(in, in_value);
     in.close();
-
-    std::remove(c_temp_file);
 
     EXPECT_EQ(out_value, in_value);
 }

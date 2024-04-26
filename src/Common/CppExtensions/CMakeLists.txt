@@ -9,6 +9,7 @@ add_lunar_library(
         include/BinaryIO.hpp
 
         include/DefinePrimitive.hpp
+        include/EncapsulationHelpers.hpp
         include/ItemArray.hpp
         include/LiteralToStringMap.hpp
         include/StringUtils.hpp
@@ -18,6 +19,8 @@ add_lunar_library(
         include/private/ItemArray.inl
         include/private/LiteralToStringMap.inl
         include/private/StringUtils.inl
+
+        include/testing/TempFileSystemGuards.hpp
 
     SOURCE_FILES
         src/StringUtils.cpp
