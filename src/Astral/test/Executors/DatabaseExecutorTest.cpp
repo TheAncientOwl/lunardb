@@ -3,13 +3,13 @@
 #include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "Common/QueryData/helpers/Init.hpp"
 #include "QueryExecutors.hpp"
-#include "Selenity/private/SystemCatalog/helpers/Ostream.hpp"
+#include "Selenity/private/SystemCatalog/helpers/Operators.hpp"
 
 namespace LunarDB::Astral::Tests {
 
 using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards::TempDirectoryGuard;
 
-TEST(Astral_DatabaseExecutorTest, create_drop)
+TEST(Astral_DatabaseExecutorTest, create_drop_use)
 {
     // 1. setup
     TempDirectoryGuard const c_lunar_home{TEMP_LUNAR_HOME_PATH};
@@ -29,19 +29,39 @@ TEST(Astral_DatabaseExecutorTest, create_drop)
     auto const database_storage_path = catalog.configs()[0].storage_path();
     EXPECT_TRUE(std::filesystem::exists(database_storage_path));
 
-    // 3. load catalog from disk, check if configs saved
+    // 3. use existing database
+    parsed_query.get<QueryData::Database>() =
+        QueryData::Init::DatabaseInit{}
+            .name("some_name")
+            .operation_type(QueryData::Primitives::EDatabaseOperationType::Use);
+
+    Astral::Implementation::Database::execute(parsed_query, deps);
+
+    EXPECT_TRUE(catalog.usingDatabase());
+
+    // 4. use non existing database
+    parsed_query.get<QueryData::Database>() =
+        QueryData::Init::DatabaseInit{}
+            .name("some_non_existing_database")
+            .operation_type(QueryData::Primitives::EDatabaseOperationType::Use);
+
+    EXPECT_THROW(
+        { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
+
+    // 5. load catalog from disk, check if configs saved
     {
         Selenity::API::SystemCatalog in_catalog{c_lunar_home};
         in_catalog.loadFromDisk();
 
-        EXPECT_EQ(catalog, in_catalog);
+        EXPECT_TRUE(surfaceEquals(catalog, in_catalog))
+            << "in_catalog: " << in_catalog << "\ncatalog: " << catalog;
     }
 
-    // 4. throw when creating same database
+    // 6. throw when creating same database
     EXPECT_THROW(
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
 
-    // 5. drop database
+    // 7. drop database
     parsed_query.get<QueryData::Database>() =
         QueryData::Init::DatabaseInit{}
             .name("some_name")
@@ -52,7 +72,7 @@ TEST(Astral_DatabaseExecutorTest, create_drop)
     ASSERT_TRUE(catalog.configs().empty());
     EXPECT_FALSE(std::filesystem::exists(database_storage_path));
 
-    // 6. throw when dropping same database
+    // 8. throw when dropping same database
     EXPECT_THROW(
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
 }

@@ -22,8 +22,8 @@ void Database::execute(
         config.db_catalog.saveToDisk();
         break;
     case QueryData::Primitives::EDatabaseOperationType::Use:
-        // TODO: Provide implementation
-        throw std::runtime_error{"Not implemented yet..."};
+        config.db_catalog.useDatabase(query.name);
+        break;
     case QueryData::Primitives::EDatabaseOperationType::Backup:
         // TODO: Provide implementation
         throw std::runtime_error{"Not implemented yet..."};

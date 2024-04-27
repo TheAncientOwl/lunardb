@@ -3,7 +3,7 @@
 
 #include "Common/CppExtensions/BinaryIO.hpp"
 #include "Selenity/private/SystemCatalog/DatabaseConfig.hpp"
-#include "Selenity/private/SystemCatalog/helpers/Ostream.hpp"
+#include "Selenity/private/SystemCatalog/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests {
 

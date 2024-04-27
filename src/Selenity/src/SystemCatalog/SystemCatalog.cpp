@@ -5,7 +5,11 @@
 
 namespace LunarDB::Selenity::API {
 
-SystemCatalog::SystemCatalog(std::filesystem::path lunar_home) : m_lunar_home(std::move(lunar_home))
+SystemCatalog::SystemCatalog(std::filesystem::path lunar_home)
+    : m_lunar_home(std::move(lunar_home))
+    , m_configs{}
+    , m_config_in_use_index{0}
+    , m_config_in_use_index_valid{false}
 {
     if (!std::filesystem::exists(m_lunar_home))
     {
@@ -59,8 +63,31 @@ void SystemCatalog::dropDatabase(std::string_view name)
         throw std::runtime_error("Database does not exist");
     }
 
+    auto const index = config_it - m_configs.begin();
+    if (m_config_in_use_index == index)
+    {
+        m_config_in_use_index_valid = false;
+    }
+
     std::filesystem::remove_all(config_it->storage_path());
     m_configs.erase(config_it);
+}
+
+void SystemCatalog::useDatabase(std::string_view name)
+{
+    auto const config_it{findDatabaseConfigByName(name)};
+    if (config_it == std::end(m_configs))
+    {
+        throw std::runtime_error("Database does not exist");
+    }
+
+    m_config_in_use_index = config_it - m_configs.begin();
+    m_config_in_use_index_valid = true;
+}
+
+bool SystemCatalog::usingDatabase() const
+{
+    return m_config_in_use_index_valid;
 }
 
 } // namespace LunarDB::Selenity::API
