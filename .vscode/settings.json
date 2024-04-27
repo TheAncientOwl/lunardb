@@ -1,7 +1,7 @@
 {
   "cmake.configureSettings": {
     "LUNAR_ENABLE_TESTING": true,
-    "LUNAR_BUILD_ASTRAL_TESTS": false,
+    "LUNAR_BUILD_ASTRAL_TESTS": true,
     "LUNAR_BUILD_BRIGHTMOON_TESTS": false,
     "LUNAR_BUILD_CELESTIAL_TESTS": false,
     "LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS": true,

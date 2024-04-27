@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
 // TODO: Provide unit tests
-namespace LunarDB::Astro::Tests {
+namespace LunarDB::Astral::Tests {
 
 TEST(Astral_CreateExecutorTest, dummy)
 {
     EXPECT_TRUE(true);
 }
 
-} // namespace LunarDB::Astro::Tests
+} // namespace LunarDB::Astral::Tests

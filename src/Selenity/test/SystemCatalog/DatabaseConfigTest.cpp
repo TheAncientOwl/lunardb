@@ -3,18 +3,7 @@
 
 #include "Common/CppExtensions/BinaryIO.hpp"
 #include "Selenity/private/SystemCatalog/DatabaseConfig.hpp"
-
-namespace std {
-
-std::ostream& operator<<(
-    std::ostream& os,
-    LunarDB::Selenity::Implementation::SystemCatalog::DatabaseConfig const& rhs)
-{
-    os << "storage_path: " << rhs.storage_path() << ", name: " << rhs.name();
-    return os;
-}
-
-} // namespace std
+#include "Selenity/private/SystemCatalog/helpers/Ostream.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests {
 

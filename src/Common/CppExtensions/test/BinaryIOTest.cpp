@@ -16,10 +16,6 @@
 #include "Common/CppExtensions/BinaryIO.hpp"
 #include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 
-#define AS_STRING_(x) #x
-#define AS_STRING(x) AS_STRING_(x)
-#define TEMP_FILE "/tmp/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
-
 namespace std {
 
 template <typename T>

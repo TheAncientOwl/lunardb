@@ -6,6 +6,8 @@ add_lunar_library(
         include/SystemCatalog.hpp
         include/private/SystemCatalog/DatabaseConfig.hpp
 
+        include/private/SystemCatalog/helpers/Ostream.hpp
+
     PRIVATE_DEPENDENCIES
 
     SOURCE_FILES
