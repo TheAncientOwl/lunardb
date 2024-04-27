@@ -8,6 +8,9 @@
 #include "Common/CppExtensions/LiteralToStringMap.hpp"
 #include "Common/QueryData/Primitives.hpp"
 
+///
+/// @brief Define enum Literal, toString, toLiteral, operator<<() under 'name' namespace.
+///
 #define DEFINE_LUNAR_PRIMITIVE(name, ...)                           \
     namespace name {                                                \
     enum class Literal : std::uint8_t                               \
@@ -20,6 +23,9 @@
     }                                                               \
     using E##name = name::Literal;
 
+///
+/// @brief Define implementation of toString, toLiteral, operator<<() under 'name::Internal' namespace.
+///
 #define DEFINE_LUNAR_PRIMITIVE_IMPL(name, ...)                                           \
     namespace name {                                                                     \
     namespace Internal {                                                                 \

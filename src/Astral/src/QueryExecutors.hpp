@@ -3,12 +3,15 @@
 #include "Astral/SelenityDependencies.hpp"
 #include "Moonlight/ParsedQuery.hpp"
 
-#define PROVIDE_QUERY_EXECUTOR(Specialization)            \
-    namespace Specialization {                            \
-    [[nodiscard]] ExecutorBundle makeExecutor();          \
-    void execute(                                         \
-        Moonlight::API::ParsedQuery const& parsed_query,  \
-        Astral::API::SelenityDependencies const& config); \
+///
+/// @brief Provide makeExecutor() and execute(query, deps) signatures under Specialization namespace.
+///
+#define PROVIDE_QUERY_EXECUTOR(Specialization)           \
+    namespace Specialization {                           \
+    [[nodiscard]] ExecutorBundle makeExecutor();         \
+    void execute(                                        \
+        Moonlight::API::ParsedQuery const& parsed_query, \
+        Astral::API::SelenityDependencies const& deps);  \
     }
 
 namespace LunarDB::Astral::Implementation {

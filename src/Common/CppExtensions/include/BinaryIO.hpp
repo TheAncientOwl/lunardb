@@ -4,7 +4,7 @@
 #include "Common/CppExtensions/BinaryIO/Serializer.hpp"
 
 ///
-/// @brief Provide binary serialize friend function signature;
+/// @brief Provide binary serialize friend function signature.
 ///
 #define LUNAR_ENABLE_BINARY_SERIALIZER()                                          \
     template <typename T>                                                         \
@@ -13,7 +13,7 @@
         std::ostream& os, T const& tupleable);
 
 ///
-/// @brief Provide binary deserialize friend function signature;
+/// @brief Provide binary deserialize friend function signature.
 ///
 #define LUNAR_ENABLE_BINARY_DESERIALIZER()                                           \
     template <typename T>                                                            \
@@ -23,7 +23,7 @@
 
 ///
 /// @brief Provide makeTuple() and makeTuple() const variants required by
-///        @c LunarDB::Common::CppExtensions::BinaryIO::serialize
+///        @c LunarDB::Common::CppExtensions::BinaryIO::serialize.
 /// @param [in] List of desired fields to be binary serialized/deserialized
 ///
 #define LUNAR_ENABLE_BINARY_IO(...)   \

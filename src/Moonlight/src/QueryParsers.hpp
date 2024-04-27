@@ -6,6 +6,9 @@
 #include "ParsedQuery.hpp"
 #include "QueryExtractor.hpp"
 
+///
+/// @brief Provide makeParser() and parse(query) signatures under Specialization namespace.
+///
 #define PROVIDE_QUERY_PARSER(Specialization)                        \
     namespace Specialization {                                      \
     [[nodiscard]] ParserBundle makeParser();                        \

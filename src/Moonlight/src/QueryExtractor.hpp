@@ -22,6 +22,7 @@ public: // methods
     ///
     /// @brief Trims query before storing.
     ///        Also remove semicolon at the end if existing.
+    /// @param [in] query -> String representation of a query
     ///
     QueryExtractor(std::string_view query);
 
@@ -33,26 +34,28 @@ public: // methods
     [[nodiscard]] std::string_view extractOne();
 
     ///
-    /// @brief Removes Size words from left part of query
-    /// @return Tuple of Size string_views
+    /// @brief Removes Size words from left part of query.
+    /// @return Tuple of Size string_views.
     ///
     template <std::size_t Size>
     [[nodiscard]] decltype(auto) extractTuple();
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
-    /// @param sep List elements separator, default ','
-    /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
+    /// @param [in] sep -> List elements separator, default ','
+    /// @param [in] bound_chars -> Characters that define the list, Ex. { '[', ']' }
     /// @return List of words as string_views
     ///
-    [[nodiscard]] std::vector<std::string_view> extractList(char sep = ',', std::pair<char, char> bound_chars = {'[', ']'});
+    [[nodiscard]] std::vector<std::string_view> extractList(
+        char sep = ',',
+        std::pair<char, char> bound_chars = {'[', ']'});
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @tparam T Final type of list returned elements
-    /// @param parser Function string_view -> T
-    /// @param sep List elements separator, default ','
-    /// @param bound_chars Characters that define the list, Ex. { '[', ']' }
+    /// @param [in] parser -> Function string_view -> T
+    /// @param [in] sep -> List elements separator, default ','
+    /// @param [in] bound_chars -> Characters that define the list, Ex. { '[', ']' }
     /// @return List of parsed words to T
     ///
     template <typename T>
@@ -76,33 +79,33 @@ public: // methods
         std::pair<char, char> bound_chars = {'[', ']'});
 
     ///
-    /// @brief Self explanatory
+    /// @return View to underlying data
     ///
     [[nodiscard]] std::string_view data() const;
 
     ///
     /// @return Reference to underlying data.
     /// @note Before any further operations with the extractor,
-    ///       the data should be left trimmer
+    ///       the data should be left trimmed.
     ///
     [[nodiscard]] std::string_view& unsafe_data();
 
     ///
-    /// @brief Self explanatory
+    /// @brief Self explanatory.
     ///
     [[nodiscard]] bool empty() const;
 
     ///
-    /// @brief Self explanatory
+    /// @brief Self explanatory.
     ///
     void remove_prefix(std::size_t size);
 
 private: // helpers
     ///
-    /// @brief Helper function to convert std::array to std::tuple
+    /// @brief Helper function to convert std::array to std::tuple.
     /// @tparam Size of the array
     /// @tparam Index of current template iteration
-    /// @param arr array to be converted
+    /// @param [in] arr -> Array to be converted
     /// @return tuple<elements of array>
     ///
     template <std::size_t Size, std::size_t Index = 0>
@@ -136,7 +139,10 @@ inline decltype(auto) QueryExtractor::extractTuple()
 }
 
 template <typename T>
-inline std::vector<T> QueryExtractor::extractList(std::function<T(std::string_view)> parser, char sep, std::pair<char, char> bound_chars)
+inline std::vector<T> QueryExtractor::extractList(
+    std::function<T(std::string_view)> parser,
+    char sep,
+    std::pair<char, char> bound_chars)
 {
     auto const values = extractList(sep, bound_chars);
 

@@ -9,7 +9,7 @@
 namespace LunarDB::Moonlight::Utils {
 
 ///
-/// @brief Flag used signal escaping quoted strings
+/// @brief Flag used signal escaping quoted strings.
 ///
 enum class ESplitModifier
 {
@@ -18,10 +18,10 @@ enum class ESplitModifier
 };
 
 ///
-/// @brief split a string at given char
-/// @param str string to be splitted
-/// @param sep separator
-/// @param modifier EscapeQuotes if quotes should be escaped using '\'
+/// @brief Split a string at given char.
+/// @param [in] str -> String to be splitted
+/// @param [in] sep -> Separator
+/// @param [in] modifier -> EscapeQuotes if quotes should be escaped using '\'
 /// @return std::vector<std::string_view> splits
 ///
 [[nodiscard]] std::vector<std::string_view> split(
@@ -30,24 +30,27 @@ enum class ESplitModifier
     ESplitModifier modifier = ESplitModifier::None);
 
 ///
-/// @brief extract first word separated by sep char
-///        remove extracted word from given str
-/// @param str string to be extracted from
-/// @param sep separator
-/// @param modifier EscapeQuotes if quotes should be escaped using '\'
+/// @brief Extract first word separated by sep char.
+///        Remove extracted word from given str.
+/// @param [in] str -> String to be extracted from
+/// @param [in] sep -> Separator
+/// @param [in] modifier -> EscapeQuotes if quotes should be escaped using '\'
 /// @return extracted word
 ///
-[[nodiscard]] std::string_view extractWord(std::string_view& str, char sep = ' ', ESplitModifier modifier = ESplitModifier::None);
+[[nodiscard]] std::string_view extractWord(
+    std::string_view& str,
+    char sep = ' ',
+    ESplitModifier modifier = ESplitModifier::None);
 
 ///
-/// @brief Self explanatory
+/// @brief Self explanatory.
 /// @see QueryData::WhereClause
 ///
 [[nodiscard]] QueryData::WhereClause extractWhereClause(std::string_view& str);
 
 ///
-/// @brief Self explanatory
-/// @param str in format "str1::str2"
+/// @brief Self explanatory.
+/// @param [in] str -> In format "str1::str2"
 /// @return pair<str1, str2>
 ///
 [[nodiscard]] std::pair<std::string_view, std::string_view> parseResolutionOperator(std::string_view str);

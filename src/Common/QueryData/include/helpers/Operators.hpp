@@ -4,6 +4,9 @@
 
 #include "Common/QueryData/QueryData.hpp"
 
+///
+/// @brief Define operator==(Type, Type) and operator<<(ostream, Type) signatures.
+///
 #define DEFINE_OPERATORS(Type)                                   \
     namespace LunarDB::QueryData {                               \
     bool operator==(Type const& lhs, Type const& rhs);           \

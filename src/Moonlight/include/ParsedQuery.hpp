@@ -10,25 +10,25 @@ class ParsedQuery
 {
 public: // methods
     ///
-    /// @brief Self explanatory
+    /// @brief Self explanatory.
     ///
     QueryData::Primitives::EQueryType type() const;
 
     ///
-    /// @brief Self explanatory
+    /// @brief Self explanatory.
     ///
     template <typename Data>
     Data& get();
 
     ///
-    /// @brief Self explanatory
+    /// @brief Self explanatory.
     ///
     template <typename Data>
     Data const& get() const;
 
 public: // helpers
     ///
-    /// @brief Creates an empty ParsedQuery of given QueryData::Type
+    /// @brief Creates an empty ParsedQuery of given QueryData::Type.
     ///
     template <typename Data>
     static ParsedQuery make();
@@ -60,7 +60,7 @@ private: // fields;
         m_data;
 
     ///
-    /// @brief Used by @see ParsedQuery::make() to decide the QueryData::Type
+    /// @brief Used by @see ParsedQuery::make() to decide the QueryData::Type.
     /// @tparam T QueryData::Type
     ///
     template <typename T>
