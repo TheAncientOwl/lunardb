@@ -14,7 +14,8 @@ namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer {
 template <typename T>
 void deserialize(std::istream&, T&)
 {
-    static_assert(false, "Deserializer not implemented for this type...");
+    static_assert(
+        Concepts::StopCompilationIf<T>::value, "Deserializer not implemented for this type...");
 }
 
 template <typename T>

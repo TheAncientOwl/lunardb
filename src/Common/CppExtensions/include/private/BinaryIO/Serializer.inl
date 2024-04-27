@@ -7,7 +7,8 @@ namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 template <typename T>
 void serialize(std::ostream&, T const&)
 {
-    static_assert(false, "Serializer not implemented for this type...");
+    static_assert(
+        Concepts::StopCompilationIf<T>::value, "Serializer not implemented for this type...");
 }
 
 template <typename T>

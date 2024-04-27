@@ -11,6 +11,11 @@ template <typename T>
 concept Arithmetic = std::is_arithmetic_v<T>;
 
 template <typename T>
+struct StopCompilationIf : std::false_type
+{
+};
+
+template <typename T>
 concept Enum = std::is_enum_v<T>;
 
 template <typename T>
