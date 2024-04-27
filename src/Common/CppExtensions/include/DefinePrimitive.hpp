@@ -4,9 +4,9 @@
 #include <ostream>
 #include <string_view>
 
-#include "Common/CppExtensions/ItemArray.hpp"
-#include "Common/CppExtensions/LiteralToStringMap.hpp"
-#include "Common/QueryData/Primitives.hpp"
+#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
+#include "LunarDB/Common/CppExtensions/LiteralToStringMap.hpp"
+#include "LunarDB/Common/QueryData/Primitives.hpp"
 
 ///
 /// @brief Define enum Literal, toString, toLiteral, operator<<() under 'name' namespace.

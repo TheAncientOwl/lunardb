@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "Common/CppExtensions/StringUtils.hpp"
 #include "Errors.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Utils {
@@ -37,8 +37,8 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
 
             StringUtils::trim(word);
 
-            if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 && word.starts_with('"') &&
-                word.ends_with('"'))
+            if (modifier == ESplitModifier::EscapeQuotes && word.length() > 1 &&
+                word.starts_with('"') && word.ends_with('"'))
             {
                 word.remove_prefix(1);
                 word.remove_suffix(1);
@@ -62,7 +62,8 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         out = str;
         StringUtils::trim(out);
 
-        if (modifier == ESplitModifier::EscapeQuotes && out.length() > 1 && out.starts_with('"') && out.ends_with('"'))
+        if (modifier == ESplitModifier::EscapeQuotes && out.length() > 1 && out.starts_with('"') &&
+            out.ends_with('"'))
         {
             out.remove_prefix(1);
             out.remove_suffix(1);
@@ -248,8 +249,8 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
             QueryData::WhereClause::BinaryExpression expression{};
 
             expression.lhs = word;
-            expression.operation =
-                QueryData::Primitives::BinaryOperator::toLiteral(extractWord(str, ' ', ESplitModifier::None));
+            expression.operation = QueryData::Primitives::BinaryOperator::toLiteral(
+                extractWord(str, ' ', ESplitModifier::None));
 
             switch (expression.operation)
             {
@@ -320,17 +321,20 @@ std::pair<std::string_view, std::string_view> parseResolutionOperator(std::strin
     auto const first_sep_pos{str.find_first_of(':')};
     auto const last_sep_pos{str.find_last_of(':')};
 
-    if (first_sep_pos == std::string_view::npos || last_sep_pos == std::string_view::npos || first_sep_pos == last_sep_pos)
+    if (first_sep_pos == std::string_view::npos || last_sep_pos == std::string_view::npos ||
+        first_sep_pos == last_sep_pos)
     {
         throw Errors::buildMissingError("':' symbol in resolution operator");
     }
 
     if (last_sep_pos - first_sep_pos > 1)
     {
-        throw Errors::buildUnknownSequenceError(str.substr(last_sep_pos, first_sep_pos - last_sep_pos + 1));
+        throw Errors::buildUnknownSequenceError(
+            str.substr(last_sep_pos, first_sep_pos - last_sep_pos + 1));
     }
 
-    return std::make_pair(str.substr(0, first_sep_pos), str.substr(last_sep_pos + 1, str.length() - last_sep_pos));
+    return std::make_pair(
+        str.substr(0, first_sep_pos), str.substr(last_sep_pos + 1, str.length() - last_sep_pos));
 }
 
 } // namespace LunarDB::Moonlight::Utils

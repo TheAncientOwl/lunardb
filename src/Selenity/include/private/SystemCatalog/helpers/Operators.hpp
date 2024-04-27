@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Selenity/SystemCatalog.hpp"
-#include "Selenity/private/SystemCatalog/DatabaseConfig.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
+#include "LunarDB/Selenity/private/SystemCatalog/DatabaseConfig.hpp"
 
 namespace std {
 

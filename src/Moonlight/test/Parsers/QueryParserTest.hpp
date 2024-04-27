@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include "Common/QueryData/helpers/Init.hpp"
-#include "Common/QueryData/helpers/Operators.hpp"
 #include "Errors.hpp"
+#include "LunarDB/Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 #include "ParsedQuery.hpp"
 #include "QueryParser.hpp"
 

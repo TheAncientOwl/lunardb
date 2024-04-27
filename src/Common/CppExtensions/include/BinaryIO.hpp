@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/CppExtensions/BinaryIO/Deserializer.hpp"
-#include "Common/CppExtensions/BinaryIO/Serializer.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Deserializer.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Serializer.hpp"
 
 ///
 /// @brief Provide binary serialize friend function signature.

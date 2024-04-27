@@ -1,4 +1,4 @@
-#include "Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 
 namespace LunarDB::Common::CppExtensions::BinaryIO {
 

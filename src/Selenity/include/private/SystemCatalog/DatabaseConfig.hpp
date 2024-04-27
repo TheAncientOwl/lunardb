@@ -3,8 +3,8 @@
 #include <filesystem>
 #include <iostream>
 
-#include "Common/CppExtensions/BinaryIO.hpp"
-#include "Common/CppExtensions/EncapsulationHelpers.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/EncapsulationHelpers.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog {
 

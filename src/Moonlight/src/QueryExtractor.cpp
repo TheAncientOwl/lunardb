@@ -1,7 +1,7 @@
 #include <stdexcept>
 
-#include "Common/CppExtensions/StringUtils.hpp"
 #include "Errors.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "QueryExtractor.hpp"
 #include "Utils.hpp"
 

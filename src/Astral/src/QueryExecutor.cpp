@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <array>
 
-#include "Common/CppExtensions/ItemArray.hpp"
+#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
 #include "QueryExecutor.hpp"
 #include "QueryExecutors.hpp"
 

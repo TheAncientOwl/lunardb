@@ -2,7 +2,7 @@
 
 #include <variant>
 
-#include "Common/QueryData/QueryData.hpp"
+#include "LunarDB/Common/QueryData/QueryData.hpp"
 
 namespace LunarDB::Moonlight::API {
 

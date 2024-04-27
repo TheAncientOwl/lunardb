@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
 namespace LunarDB::CppExtensions::StringUtils {
 

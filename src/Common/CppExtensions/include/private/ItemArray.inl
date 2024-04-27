@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/CppExtensions/ItemArray.hpp"
+#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
 
 namespace LunarDB::CppExtensions::DataStructures {
 

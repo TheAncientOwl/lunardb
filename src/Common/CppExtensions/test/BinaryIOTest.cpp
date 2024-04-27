@@ -13,8 +13,8 @@
 #include <unordered_set>
 #include <vector>
 
-#include "Common/CppExtensions/BinaryIO.hpp"
-#include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 
 namespace std {
 

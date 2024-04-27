@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
-#include "Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+#include "LunarDB/Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Selenity/private/SystemCatalog/helpers/Operators.hpp"
 #include "QueryExecutors.hpp"
-#include "Selenity/private/SystemCatalog/helpers/Operators.hpp"
 
 namespace LunarDB::Astral::Tests {
 

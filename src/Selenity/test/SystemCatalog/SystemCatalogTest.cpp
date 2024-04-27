@@ -1,10 +1,10 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "Common/CppExtensions/BinaryIO.hpp"
-#include "Common/CppExtensions/testing/TempFileSystemGuards.hpp"
-#include "Selenity/SystemCatalog.hpp"
-#include "Selenity/private/SystemCatalog/helpers/Operators.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
+#include "LunarDB/Selenity/private/SystemCatalog/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::API::Tests {
 

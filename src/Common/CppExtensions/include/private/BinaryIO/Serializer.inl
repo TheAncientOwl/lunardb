@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/CppExtensions/BinaryIO/Serializer.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Serializer.hpp"
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
 

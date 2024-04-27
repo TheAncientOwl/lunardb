@@ -7,7 +7,7 @@
 #include <string>
 #include <string_view>
 
-#include "Common/CppExtensions/BinaryIO/Concepts.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Concepts.hpp"
 
 #define PROVIDE_CONCEPT_DESERIALIZE(Concept) \
     template <typename T>                    \
@@ -47,4 +47,4 @@ void deserialize(std::istream&, std::forward_list<T>&);
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
 
-#include "Common/CppExtensions/private/BinaryIO/Deserializer.inl"
+#include "LunarDB/Common/CppExtensions/private/BinaryIO/Deserializer.inl"

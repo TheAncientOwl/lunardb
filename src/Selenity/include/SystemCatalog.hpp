@@ -3,8 +3,8 @@
 #include <filesystem>
 #include <vector>
 
-#include "Common/CppExtensions/BinaryIO.hpp"
-#include "Selenity/private/SystemCatalog/DatabaseConfig.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Selenity/private/SystemCatalog/DatabaseConfig.hpp"
 
 namespace LunarDB::Selenity::API {
 

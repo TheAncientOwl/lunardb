@@ -2,7 +2,7 @@
 #include <string_view>
 #include <utility>
 
-#include "Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
 namespace LunarDB::CppExtensions::StringUtils {
 

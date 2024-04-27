@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include "Common/QueryData/helpers/Operators.hpp"
+#include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...)              \
     namespace LunarDB::QueryData {                              \
@@ -13,7 +13,8 @@
     }
 
 #define FIELD_SEP(field_name) os << #field_name ": " << rhs.field_name << " | "
-#define FIELD_BOOL_SEP(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name << " | "
+#define FIELD_BOOL_SEP(field_name) \
+    os << #field_name ": " << std::boolalpha << rhs.field_name << " | "
 
 #define FIELD(field_name) os << #field_name ": " << rhs.field_name
 #define FIELD_BOOL(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name

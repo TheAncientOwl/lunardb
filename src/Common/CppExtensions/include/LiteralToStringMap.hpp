@@ -5,7 +5,7 @@
 #include <string_view>
 #include <vector>
 
-#include "Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
 namespace LunarDB::CppExtensions::DataStructures {
 
@@ -49,4 +49,4 @@ private: // fields
 
 } // namespace LunarDB::CppExtensions::DataStructures
 
-#include "Common/CppExtensions/private/LiteralToStringMap.inl"
+#include "LunarDB/Common/CppExtensions/private/LiteralToStringMap.inl"

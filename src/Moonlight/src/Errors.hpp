@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdexcept>
-#include "Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
 namespace LunarDB::Moonlight::Errors {
 

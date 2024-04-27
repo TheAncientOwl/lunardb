@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <ranges>
 
-#include "Common/CppExtensions/BinaryIO/Deserializer.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Deserializer.hpp"
 
 #define INTERNAL_DESERIALIZE(type) \
     template <>                    \

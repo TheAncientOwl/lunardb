@@ -1,4 +1,4 @@
-#include "Common/QueryData/Primitives.hpp"
+#include "LunarDB/Common/QueryData/Primitives.hpp"
 
 namespace LunarDB::QueryData::Primitives {
 

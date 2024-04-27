@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/CppExtensions/DefinePrimitive.hpp"
+#include "LunarDB/Common/CppExtensions/DefinePrimitive.hpp"
 
 namespace LunarDB::QueryData::Primitives {
 

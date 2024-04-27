@@ -1,5 +1,5 @@
-#include "Common/Simdjson/simdjson.hpp"
 #include "Errors.hpp"
+#include "LunarDB/Common/Simdjson/simdjson.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
@@ -25,7 +25,8 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
         {
             if (value.type() == simdjson::ondemand::json_type::object)
             {
-                objects.push_back(std::get<QueryData::Insert::Object>(recursiveParseObject(value.value())));
+                objects.push_back(
+                    std::get<QueryData::Insert::Object>(recursiveParseObject(value.value())));
             }
             else if (value.type() == simdjson::ondemand::json_type::string)
             {
@@ -71,7 +72,8 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
         break;
     }
     default: {
-        throw Errors::buildParseJSONObjectError("only syntax allowed types are arrays, objects and strings");
+        throw Errors::buildParseJSONObjectError(
+            "only syntax allowed types are arrays, objects and strings");
         break;
     }
     }
@@ -112,7 +114,8 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
                 auto json_obj = doc.get_object();
                 for (auto field : json_obj)
                 {
-                    obj.entries.emplace(field.unescaped_key().value(), recursiveParseObject(field.value()));
+                    obj.entries.emplace(
+                        field.unescaped_key().value(), recursiveParseObject(field.value()));
                 }
             }
             else

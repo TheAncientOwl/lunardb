@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/QueryData/QueryData.hpp"
+#include "LunarDB/Common/QueryData/QueryData.hpp"
 
 namespace LunarDB::QueryData::Init {
 

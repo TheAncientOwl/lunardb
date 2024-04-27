@@ -1,4 +1,4 @@
-#include "Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Common/QueryData/helpers/Init.hpp"
 
 namespace LunarDB::QueryData::Init {
 
@@ -115,7 +115,8 @@ WhereClauseInit::BinaryExpressionInit& WhereClauseInit::BinaryExpressionInit::rh
 {
     return base_t::rhs = value, *this;
 }
-WhereClauseInit::BinaryExpressionInit& WhereClauseInit::BinaryExpressionInit::operation(const Primitives::EBinaryOperator& value)
+WhereClauseInit::BinaryExpressionInit& WhereClauseInit::BinaryExpressionInit::operation(
+    const Primitives::EBinaryOperator& value)
 {
     return base_t::operation = value, *this;
 }
@@ -124,7 +125,8 @@ WhereClauseInit::BooleanExpressionInit& WhereClauseInit::BooleanExpressionInit::
 {
     return base_t::negated = value, *this;
 }
-WhereClauseInit::BooleanExpressionInit& WhereClauseInit::BooleanExpressionInit::data(const std::vector<type>& value)
+WhereClauseInit::BooleanExpressionInit& WhereClauseInit::BooleanExpressionInit::data(
+    const std::vector<type>& value)
 {
     return base_t::data = value, *this;
 };

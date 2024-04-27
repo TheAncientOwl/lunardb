@@ -46,4 +46,4 @@ void trim(std::string_view& str);
 
 } // namespace LunarDB::CppExtensions::StringUtils
 
-#include "Common/CppExtensions/private/StringUtils.inl"
+#include "LunarDB/Common/CppExtensions/private/StringUtils.inl"

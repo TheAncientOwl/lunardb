@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Moonlight/ParsedQuery.hpp"
-#include "Selenity/SystemCatalog.hpp"
+#include "LunarDB/Moonlight/ParsedQuery.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Astral::API {
 

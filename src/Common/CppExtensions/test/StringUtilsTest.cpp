@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
 #define EXPECT_TRIM_EQ(func, trimmed, not_trimmed) \
     {                                              \
@@ -53,7 +53,9 @@ TEST(Common_CppExtensions_StringUtilsTest, trim)
     EXPECT_TRIM_EQ(trim, "some string"sv, "\v\v\vsome string\v\v\v"sv);
     EXPECT_TRIM_EQ(trim, "some string"sv, "\n\n\nsome string\n\n\n"sv);
     EXPECT_TRIM_EQ(
-        trim, "some string"sv, "  \t  \v  \f  \t    \v     \t \rsome string  \t  \v  \f  \t    \v     \t \r"sv);
+        trim,
+        "some string"sv,
+        "  \t  \v  \f  \t    \v     \t \rsome string  \t  \v  \f  \t    \v     \t \r"sv);
 }
 
 TEST(Common_CppExtensions_StringUtilsTest, equalsIgnoreTest)
@@ -70,7 +72,8 @@ TEST(Common_CppExtensions_StringUtilsTest, startsWithIgnoreCase)
 {
     EXPECT_TRUE(startsWithIgnoreCase("", ""));
     EXPECT_TRUE(startsWithIgnoreCase("qWertYUIopASDFGHJKL", "QWErtyUIOp"));
-    EXPECT_TRUE(startsWithIgnoreCase("some string \r :) WITH SOME MORE STRINGS", "some string \r :)"));
+    EXPECT_TRUE(
+        startsWithIgnoreCase("some string \r :) WITH SOME MORE STRINGS", "some string \r :)"));
 
     EXPECT_FALSE(startsWithIgnoreCase("qwerty", "qQWERT"));
     EXPECT_FALSE(startsWithIgnoreCase("somestr1", "ssomestr2"));

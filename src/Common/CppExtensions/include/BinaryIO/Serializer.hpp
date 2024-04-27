@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-#include "Common/CppExtensions/BinaryIO/Concepts.hpp"
+#include "LunarDB/Common/CppExtensions/BinaryIO/Concepts.hpp"
 
 #define PROVIDE_CONCEPT_SERIALIZE(Concept) \
     template <typename T>                  \
@@ -39,4 +39,4 @@ void serialize(std::ostream&, std::forward_list<T> const&, typename std::forward
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer
 
-#include "Common/CppExtensions/private/BinaryIO/Serializer.inl"
+#include "LunarDB/Common/CppExtensions/private/BinaryIO/Serializer.inl"

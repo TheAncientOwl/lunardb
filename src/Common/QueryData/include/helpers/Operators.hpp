@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "Common/QueryData/QueryData.hpp"
+#include "LunarDB/Common/QueryData/QueryData.hpp"
 
 ///
 /// @brief Define operator==(Type, Type) and operator<<(ostream, Type) signatures.
