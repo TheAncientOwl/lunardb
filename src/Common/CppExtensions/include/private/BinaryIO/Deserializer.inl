@@ -120,7 +120,8 @@ void deserialize(std::istream& is, T& container)
     }
     else
     {
-        static_assert(false, "Deserializer not implemented for this container type...");
+        static_assert(
+            Concepts::StopCompilationIf<T>::value, "Deserializer not implemented for this type...");
     }
 }
 
