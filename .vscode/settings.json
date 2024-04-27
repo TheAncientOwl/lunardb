@@ -10,6 +10,12 @@
     "LUNAR_BUILD_MOONLIGHT_TESTS": false,
     "LUNAR_BUILD_SELENITY_TESTS": true
   },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "C_Cpp.default.includePath": ["${workspaceFolder}/build/include/**"],
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.default.cStandard": "c17",
+  "C_Cpp.doxygen.generatedStyle": "///",
+  "C_Cpp.enhancedColorization": "enabled",
   "files.associations": {
     "*.rmd": "markdown",
     "array": "cpp",
@@ -85,6 +91,5 @@
     "filesystem": "cpp",
     "fstream": "cpp",
     "codecvt": "cpp"
-  },
-  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+  }
 }
