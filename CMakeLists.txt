@@ -15,5 +15,3 @@ include(cmake-tools/setup/testing.cmake)
 set(LUNAR_BUILD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/include)
 
 add_subdirectory(src)
-
-add_executable(LunarDB src/driver.cpp)
