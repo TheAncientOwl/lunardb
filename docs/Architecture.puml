@@ -1,5 +1,5 @@
 @startuml Architecture
-!theme crt-amber
+'!theme crt-amber
 
 left to right direction
 
@@ -12,6 +12,23 @@ stereotype Input {
 namespace Moonlight <<Query Parser>> {
 
 namespace API {
+
+class ParsedQuery {
+    + type() : EQueryType
+    + get<QueryData>() : QueryData
+
+    - type : EQueryType
+    - data : variant<QueryDataTypes>
+}
+note right
+    QueryDataTypes / QueryTypes: [ 
+        Create, Drop, Migrate, Truncate,
+        Rename, Select, Insert, Update,
+        Delete, Grant, Revoke, Database
+        Commit, Rollback, SavePoint, Index,
+        Rebind, Schema 
+    ]
+end note
 
 stereotype QueryParser {
     + parseQuery(query : std::string_view) : ParsedQuery
@@ -73,21 +90,22 @@ stereotype Server {
 
 }
 
-Input --> LunarDB.API.Server : send to
+LunarDB.API.Server --> Selenity.API : [0.1] Database Configs
+LunarDB.API.Server --> BrightMoon.API : [0.2] Crash Recovery
 
-LunarDB.API.Server --> Celestial.API : Users
-LunarDB.API.Server -> Astral.API.QueryExecutor : Execute Query
-LunarDB.API.Server -> Moonlight.API.QueryParser : Parse Query
-LunarDB.API.Server --> BrightMoon.API : Crash Recovery
-LunarDB.API.Server --> Selenity.API : Database Configs
+Input --> LunarDB.API.Server : [1] send to
+LunarDB.API.Server -> Moonlight.API.QueryParser : [2] Parse Query
+LunarDB.API.Server --> Celestial.API : [3] Users
+Celestial.API -> Selenity.API : [4] Users Data
+LunarDB.API.Server -> Astral.API.QueryExecutor : [5] Execute Query
+Astral.API.QueryExecutor --> Selenity.API : [6.1] Modify Data
+Astral.API.QueryExecutor --> BrightMoon.API : [6.2] Write Ahead Log
 
-BrightMoon.API <-- Astral.API.QueryExecutor : Write Ahead Log
-Selenity.API <-- Astral.API.QueryExecutor : Modify Data
-
-Celestial.API -> Selenity.API : Users
+Moonlight.API.ParsedQuery *- Moonlight.API.QueryParser : use
+Astral.API.QueryExecutor -* Moonlight.API.ParsedQuery : use
 
 stereotype Global {}
-Global --> Crescentum.API : use
+Global --> Crescentum.API : [general] use
 
 }
 

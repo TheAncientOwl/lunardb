@@ -22,7 +22,6 @@ add_lunar_library(
         src/Executors/InsertExecutor.cpp
         src/Executors/UpdateExecutor.cpp
         src/Executors/DeleteExecutor.cpp
-        src/Executors/LockExecutor.cpp
         src/Executors/GrantExecutor.cpp
         src/Executors/RevokeExecutor.cpp
         src/Executors/CommitExecutor.cpp
@@ -30,7 +29,6 @@ add_lunar_library(
         src/Executors/SavePointExecutor.cpp
         src/Executors/IndexExecutor.cpp
         src/Executors/DatabaseExecutor.cpp
-        src/Executors/ViewExecutor.cpp
         src/Executors/RebindExecutor.cpp
         src/Executors/SchemaExecutor.cpp
 )

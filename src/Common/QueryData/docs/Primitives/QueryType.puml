@@ -16,7 +16,6 @@ enum Literal {
     Insert,
     Update,
     Delete,
-    Lock,
     Grant,
     Revoke,
     Commit,
@@ -24,7 +23,6 @@ enum Literal {
     SavePoint,
     Index,
     Database,
-    View,
     Rebind,
     Schema
 }

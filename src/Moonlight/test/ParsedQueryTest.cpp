@@ -3,7 +3,8 @@
 #include "ParsedQuery.hpp"
 
 #define EXPECT_MAKE_PARSED_QUERY_SUCCESS(Type) \
-    EXPECT_EQ(API::ParsedQuery::make<QueryData::Type>().type(), QueryData::Primitives::EQueryType::Type)
+    EXPECT_EQ(                                 \
+        API::ParsedQuery::make<QueryData::Type>().type(), QueryData::Primitives::EQueryType::Type)
 
 namespace LunarDB::Moonlight::API::Tests {
 
@@ -19,7 +20,6 @@ TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Insert);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Update);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Delete);
-    EXPECT_MAKE_PARSED_QUERY_SUCCESS(Lock);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Grant);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Revoke);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Commit);
@@ -27,7 +27,6 @@ TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(SavePoint);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Index);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Database);
-    EXPECT_MAKE_PARSED_QUERY_SUCCESS(View);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Rebind);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Schema);
 }

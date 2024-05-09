@@ -177,11 +177,6 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Delete,
     FIELD(where)
 )
 
-PROVIDE_OSTREAM_OUTPUT_OPERATOR(Lock,
-    FIELD_SEP(structure_name),
-    FIELD_BOOL(concurrency)
-)
-
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Grant,
     FIELD_SEP(permissions),
     FIELD_SEP(to_user),
@@ -217,11 +212,6 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Database,
     FIELD_SEP(operation_type),
     FIELD_SEP(name),
     FIELD(backup_path)
-)
-
-PROVIDE_OSTREAM_OUTPUT_OPERATOR(View,
-    FIELD_SEP(name),
-    FIELD(as_select)
 )
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Rebind,

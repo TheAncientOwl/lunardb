@@ -13,13 +13,24 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDepen
     using namespace CppExtensions;
 
     static const DataStructures::ItemArray<ExecutorBundle, 20> s_executors{
-        Create::makeExecutor(),   Drop::makeExecutor(),     Migrate::makeExecutor(),
-        Truncate::makeExecutor(), Rename::makeExecutor(),   Select::makeExecutor(),
-        Insert::makeExecutor(),   Update::makeExecutor(),   Delete::makeExecutor(),
-        Lock::makeExecutor(),     Grant::makeExecutor(),    Revoke::makeExecutor(),
-        Commit::makeExecutor(),   Rollback::makeExecutor(), SavePoint::makeExecutor(),
-        Index::makeExecutor(),    Database::makeExecutor(), View::makeExecutor(),
-        Rebind::makeExecutor(),   Schema::makeExecutor()};
+        Create::makeExecutor(),
+        Drop::makeExecutor(),
+        Migrate::makeExecutor(),
+        Truncate::makeExecutor(),
+        Rename::makeExecutor(),
+        Select::makeExecutor(),
+        Insert::makeExecutor(),
+        Update::makeExecutor(),
+        Delete::makeExecutor(),
+        Grant::makeExecutor(),
+        Revoke::makeExecutor(),
+        Commit::makeExecutor(),
+        Rollback::makeExecutor(),
+        SavePoint::makeExecutor(),
+        Index::makeExecutor(),
+        Database::makeExecutor(),
+        Rebind::makeExecutor(),
+        Schema::makeExecutor()};
 
     auto const executor_opt =
         s_executors.find_if([&parsed_query](ExecutorBundle const& query_executor) {
@@ -56,7 +67,6 @@ PROVIDE_EXECUTOR_BUNDLER(Select)
 PROVIDE_EXECUTOR_BUNDLER(Insert)
 PROVIDE_EXECUTOR_BUNDLER(Update)
 PROVIDE_EXECUTOR_BUNDLER(Delete)
-PROVIDE_EXECUTOR_BUNDLER(Lock)
 PROVIDE_EXECUTOR_BUNDLER(Grant)
 PROVIDE_EXECUTOR_BUNDLER(Revoke)
 PROVIDE_EXECUTOR_BUNDLER(Commit)
@@ -64,7 +74,6 @@ PROVIDE_EXECUTOR_BUNDLER(Rollback)
 PROVIDE_EXECUTOR_BUNDLER(SavePoint)
 PROVIDE_EXECUTOR_BUNDLER(Index)
 PROVIDE_EXECUTOR_BUNDLER(Database)
-PROVIDE_EXECUTOR_BUNDLER(View)
 PROVIDE_EXECUTOR_BUNDLER(Rebind)
 PROVIDE_EXECUTOR_BUNDLER(Schema)
 

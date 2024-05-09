@@ -1,11 +1,11 @@
-@startuml View
+@startuml Update
 !theme crt-amber
 
 namespace LunarDB.QueryData {
 
-struct View {
+struct User {
     + name : std::string
-    + as_select : Select
+    + action : EUserActionType
 }
 
 }

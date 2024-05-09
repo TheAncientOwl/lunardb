@@ -17,13 +17,24 @@ ParsedQuery parseQuery(std::string_view query)
     StringUtils::trim(query);
 
     static const DataStructures::ItemArray<ParserBundle, 20> s_parsers{
-        Create::makeParser(),   Drop::makeParser(),     Migrate::makeParser(),
-        Truncate::makeParser(), Rename::makeParser(),   Select::makeParser(),
-        Insert::makeParser(),   Update::makeParser(),   Delete::makeParser(),
-        Lock::makeParser(),     Grant::makeParser(),    Revoke::makeParser(),
-        Commit::makeParser(),   Rollback::makeParser(), SavePoint::makeParser(),
-        Index::makeParser(),    Database::makeParser(), View::makeParser(),
-        Rebind::makeParser(),   Schema::makeParser()};
+        Create::makeParser(),
+        Drop::makeParser(),
+        Migrate::makeParser(),
+        Truncate::makeParser(),
+        Rename::makeParser(),
+        Select::makeParser(),
+        Insert::makeParser(),
+        Update::makeParser(),
+        Delete::makeParser(),
+        Grant::makeParser(),
+        Revoke::makeParser(),
+        Commit::makeParser(),
+        Rollback::makeParser(),
+        SavePoint::makeParser(),
+        Index::makeParser(),
+        Database::makeParser(),
+        Rebind::makeParser(),
+        Schema::makeParser()};
 
     auto const parser_opt = s_parsers.find_if([query](ParserBundle const& query_parser) {
         return StringUtils::startsWithIgnoreCase(query, query_parser.first);
@@ -58,7 +69,6 @@ PROVIDE_PARSER_BUNLDER(Select, "select")
 PROVIDE_PARSER_BUNLDER(Insert, "insert")
 PROVIDE_PARSER_BUNLDER(Update, "update")
 PROVIDE_PARSER_BUNLDER(Delete, "delete")
-PROVIDE_PARSER_BUNLDER(Lock, "set")
 PROVIDE_PARSER_BUNLDER(Grant, "grant")
 PROVIDE_PARSER_BUNLDER(Revoke, "revoke")
 PROVIDE_PARSER_BUNLDER(Commit, "commit")
@@ -66,7 +76,6 @@ PROVIDE_PARSER_BUNLDER(Rollback, "rollback")
 PROVIDE_PARSER_BUNLDER(SavePoint, "savepoint")
 PROVIDE_PARSER_BUNLDER(Index, "index")
 PROVIDE_PARSER_BUNLDER(Database, "database")
-PROVIDE_PARSER_BUNLDER(View, "view")
 PROVIDE_PARSER_BUNLDER(Rebind, "rebind")
 PROVIDE_PARSER_BUNLDER(Schema, "schema")
 

@@ -106,14 +106,6 @@ add_lunar_unit_test(
 )
 
 add_lunar_unit_test(
-    NAME LockParserTest 
-    SOURCE_FILES test/Parsers/LockParserTest.cpp 
-    DEPENDENCIES 
-        LunarDB_Moonlight
-        LunarDB_Common_QueryData
-)
-
-add_lunar_unit_test(
     NAME GrantParserTest 
     SOURCE_FILES test/Parsers/GrantParserTest.cpp 
     DEPENDENCIES 
@@ -164,14 +156,6 @@ add_lunar_unit_test(
 add_lunar_unit_test(
     NAME DatabaseParserTest 
     SOURCE_FILES test/Parsers/DatabaseParserTest.cpp 
-    DEPENDENCIES 
-        LunarDB_Moonlight
-        LunarDB_Common_QueryData
-)
-
-add_lunar_unit_test(
-    NAME ViewParserTest 
-    SOURCE_FILES test/Parsers/ViewParserTest.cpp 
     DEPENDENCIES 
         LunarDB_Moonlight
         LunarDB_Common_QueryData

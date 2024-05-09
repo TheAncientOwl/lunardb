@@ -117,11 +117,6 @@ PROVIDE_EQUALITY_OPERATOR(Delete,
     FIELD(where)
 )
 
-PROVIDE_EQUALITY_OPERATOR(Lock,
-    FIELD(structure_name),
-    FIELD(concurrency)
-)
-
 PROVIDE_EQUALITY_OPERATOR(Grant,
     FIELD(permissions),
     FIELD(to_user),
@@ -155,11 +150,6 @@ PROVIDE_EQUALITY_OPERATOR(Database,
     FIELD(operation_type),
     FIELD(name),
     FIELD(backup_path)
-)
-
-PROVIDE_EQUALITY_OPERATOR(View,
-    FIELD(name),
-    FIELD(as_select)
 )
 
 PROVIDE_EQUALITY_OPERATOR(Rebind,

@@ -46,7 +46,6 @@ private: // fields;
         QueryData::Insert,
         QueryData::Update,
         QueryData::Delete,
-        QueryData::Lock,
         QueryData::Grant,
         QueryData::Revoke,
         QueryData::Commit,
@@ -54,7 +53,6 @@ private: // fields;
         QueryData::SavePoint,
         QueryData::Index,
         QueryData::Database,
-        QueryData::View,
         QueryData::Rebind,
         QueryData::Schema>
         m_data;

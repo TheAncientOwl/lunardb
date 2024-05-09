@@ -24,7 +24,6 @@ using QueryDataType = std::variant<
     QueryData::Insert,
     QueryData::Update,
     QueryData::Delete,
-    QueryData::Lock,
     QueryData::Grant,
     QueryData::Revoke,
     QueryData::Commit,
@@ -32,7 +31,6 @@ using QueryDataType = std::variant<
     QueryData::SavePoint,
     QueryData::Index,
     QueryData::Database,
-    QueryData::View,
     QueryData::Rebind,
     QueryData::Schema
 >;

@@ -137,12 +137,6 @@ struct Delete
     WhereClause where;
 };
 
-struct Lock
-{
-    std::string structure_name;
-    bool concurrency;
-};
-
 struct Grant
 {
     std::vector<Primitives::EUserPermissionType> permissions;
@@ -184,12 +178,6 @@ struct Database
     Primitives::EDatabaseOperationType operation_type;
     std::string name;
     std::optional<std::string> backup_path;
-};
-
-struct View
-{
-    std::string name;
-    Select as_select;
 };
 
 struct Rebind

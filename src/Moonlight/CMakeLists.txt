@@ -27,7 +27,6 @@ add_lunar_library(
         src/Parsers/InsertParser.cpp
         src/Parsers/UpdateParser.cpp
         src/Parsers/DeleteParser.cpp
-        src/Parsers/LockParser.cpp
         src/Parsers/GrantParser.cpp
         src/Parsers/RevokeParser.cpp
         src/Parsers/CommitParser.cpp
@@ -35,7 +34,6 @@ add_lunar_library(
         src/Parsers/SavePointParser.cpp
         src/Parsers/IndexParser.cpp
         src/Parsers/DatabaseParser.cpp
-        src/Parsers/ViewParser.cpp
         src/Parsers/RebindParser.cpp
         src/Parsers/SchemaParser.cpp
 

@@ -18,7 +18,6 @@ TEST(Common_QueryData_PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Insert, toLiteral(toString(EQueryType::Insert)));
     EXPECT_EQ(EQueryType::Update, toLiteral(toString(EQueryType::Update)));
     EXPECT_EQ(EQueryType::Delete, toLiteral(toString(EQueryType::Delete)));
-    EXPECT_EQ(EQueryType::Lock, toLiteral(toString(EQueryType::Lock)));
     EXPECT_EQ(EQueryType::Grant, toLiteral(toString(EQueryType::Grant)));
     EXPECT_EQ(EQueryType::Revoke, toLiteral(toString(EQueryType::Revoke)));
     EXPECT_EQ(EQueryType::Commit, toLiteral(toString(EQueryType::Commit)));
@@ -26,7 +25,6 @@ TEST(Common_QueryData_PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::SavePoint, toLiteral(toString(EQueryType::SavePoint)));
     EXPECT_EQ(EQueryType::Index, toLiteral(toString(EQueryType::Index)));
     EXPECT_EQ(EQueryType::Database, toLiteral(toString(EQueryType::Database)));
-    EXPECT_EQ(EQueryType::View, toLiteral(toString(EQueryType::View)));
     EXPECT_EQ(EQueryType::Rebind, toLiteral(toString(EQueryType::Rebind)));
     EXPECT_EQ(EQueryType::Schema, toLiteral(toString(EQueryType::Schema)));
 }
@@ -89,7 +87,8 @@ TEST(Common_QueryData_PrimitivesTest, BinaryOperator)
     EXPECT_EQ(EBinaryOperator::None, toLiteral(toString(EBinaryOperator::None)));
     EXPECT_EQ(EBinaryOperator::Equals, toLiteral(toString(EBinaryOperator::Equals)));
     EXPECT_EQ(EBinaryOperator::GreaterThan, toLiteral(toString(EBinaryOperator::GreaterThan)));
-    EXPECT_EQ(EBinaryOperator::GreaterThanEqualTo, toLiteral(toString(EBinaryOperator::GreaterThanEqualTo)));
+    EXPECT_EQ(
+        EBinaryOperator::GreaterThanEqualTo, toLiteral(toString(EBinaryOperator::GreaterThanEqualTo)));
     EXPECT_EQ(EBinaryOperator::LessThan, toLiteral(toString(EBinaryOperator::LessThan)));
     EXPECT_EQ(EBinaryOperator::LessThanEqualTo, toLiteral(toString(EBinaryOperator::LessThanEqualTo)));
     EXPECT_EQ(EBinaryOperator::In, toLiteral(toString(EBinaryOperator::In)));

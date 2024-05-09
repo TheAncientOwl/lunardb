@@ -164,14 +164,6 @@ struct DeleteInit : public Delete
     DeleteInit& where(WhereClause const& value);
 };
 
-struct LockInit : public Lock
-{
-    using base_t = Lock;
-
-    LockInit& structure_name(std::string const& value);
-    LockInit& concurrency(bool const& value);
-};
-
 struct GrantInit : public Grant
 {
     using base_t = Grant;
@@ -226,14 +218,6 @@ struct DatabaseInit : public Database
     DatabaseInit& operation_type(const Primitives::EDatabaseOperationType& value);
     DatabaseInit& name(std::string const& value);
     DatabaseInit& backup_path(std::optional<std::string> const& value);
-};
-
-struct ViewInit : public View
-{
-    using base_t = View;
-
-    ViewInit& name(std::string const& name);
-    ViewInit& as_select(Select const& value);
 };
 
 struct RebindInit : public Rebind
