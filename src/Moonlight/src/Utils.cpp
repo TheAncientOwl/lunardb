@@ -189,9 +189,9 @@ std::string_view Like(std::string_view& str)
 
 } // namespace ExtractBinaryOperators
 
-QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::string_view& str)
+Common::QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::string_view& str)
 {
-    QueryData::WhereClause::BooleanExpression out{};
+    Common::QueryData::WhereClause::BooleanExpression out{};
 
     if (str.starts_with('!'))
     {
@@ -240,49 +240,49 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
 
         try
         {
-            auto operator_ = QueryData::Primitives::BooleanOperator::toLiteral(word);
+            auto operator_ = Common::QueryData::Primitives::BooleanOperator::toLiteral(word);
             out.data.push_back(operator_);
             continue;
         }
         catch (Errors::ParserError const& err)
         {
-            QueryData::WhereClause::BinaryExpression expression{};
+            Common::QueryData::WhereClause::BinaryExpression expression{};
 
             expression.lhs = word;
-            expression.operation = QueryData::Primitives::BinaryOperator::toLiteral(
+            expression.operation = Common::QueryData::Primitives::BinaryOperator::toLiteral(
                 extractWord(str, ' ', ESplitModifier::None));
 
             switch (expression.operation)
             {
-            case QueryData::Primitives::EBinaryOperator::Equals: {
+            case Common::QueryData::Primitives::EBinaryOperator::Equals: {
                 expression.rhs = ExtractBinaryOperators::Equals(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::GreaterThan: {
+            case Common::QueryData::Primitives::EBinaryOperator::GreaterThan: {
                 expression.rhs = ExtractBinaryOperators::GreaterThan(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::GreaterThanEqualTo: {
+            case Common::QueryData::Primitives::EBinaryOperator::GreaterThanEqualTo: {
                 expression.rhs = ExtractBinaryOperators::GreaterThanEqualTo(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::LessThan: {
+            case Common::QueryData::Primitives::EBinaryOperator::LessThan: {
                 expression.rhs = ExtractBinaryOperators::LessThan(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::LessThanEqualTo: {
+            case Common::QueryData::Primitives::EBinaryOperator::LessThanEqualTo: {
                 expression.rhs = ExtractBinaryOperators::LessThanEqualTo(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::In: {
+            case Common::QueryData::Primitives::EBinaryOperator::In: {
                 expression.rhs = ExtractBinaryOperators::In(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::Between: {
+            case Common::QueryData::Primitives::EBinaryOperator::Between: {
                 expression.rhs = ExtractBinaryOperators::Between(str);
                 break;
             }
-            case QueryData::Primitives::EBinaryOperator::Like: {
+            case Common::QueryData::Primitives::EBinaryOperator::Like: {
                 expression.rhs = ExtractBinaryOperators::Like(str);
                 break;
             }
@@ -299,9 +299,9 @@ QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpression(std::s
     return out;
 }
 
-QueryData::WhereClause extractWhereClause(std::string_view& str)
+Common::QueryData::WhereClause extractWhereClause(std::string_view& str)
 {
-    QueryData::WhereClause out{};
+    Common::QueryData::WhereClause out{};
 
     StringUtils::ltrim(str);
     auto const where = extractWord(str, ' ');

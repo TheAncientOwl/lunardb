@@ -11,7 +11,7 @@ void Rebind::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Rebind>();
+    auto const& query = parsed_query.get<Common::QueryData::Rebind>();
 }
 
 } // namespace LunarDB::Astral::Implementation

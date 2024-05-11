@@ -10,11 +10,11 @@ namespace LunarDB::Moonlight::Utils::Tests {
 
 using namespace CppExtensions;
 
-using Where = QueryData::Init::WhereClauseInit;
-using BooleanExpression = QueryData::Init::WhereClauseInit::BooleanExpressionInit;
-using BinaryExpression = QueryData::Init::WhereClauseInit::BinaryExpressionInit;
-using BooleanOperator = QueryData::Primitives::EBooleanOperator;
-using BinaryOperator = QueryData::Primitives::EBinaryOperator;
+using Where = Common::QueryData::Init::WhereClauseInit;
+using BooleanExpression = Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit;
+using BinaryExpression = Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit;
+using BooleanOperator = Common::QueryData::Primitives::EBooleanOperator;
+using BinaryOperator = Common::QueryData::Primitives::EBinaryOperator;
 
 // clang-format off
 TEST(Moonlight_UtilsWhereClauseTest, parseWhereClauseSuccess01)

@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"savepoint"};
 
 API::ParsedQuery SavePoint::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::SavePoint>();
-    auto& out = out_parsed_query.get<QueryData::SavePoint>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::SavePoint>();
+    auto& out = out_parsed_query.get<Common::QueryData::SavePoint>();
 
     auto const [savepoint, hash] = extractor.extractTuple<2>();
     if (!extractor.empty())

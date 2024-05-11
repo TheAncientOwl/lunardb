@@ -16,14 +16,14 @@ constexpr auto c_query_prefix{"grant"};
 
 API::ParsedQuery Grant::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Grant>();
-    auto& out = out_parsed_query.get<QueryData::Grant>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Grant>();
+    auto& out = out_parsed_query.get<Common::QueryData::Grant>();
 
     auto const grant = extractor.extractOne();
     Errors::assertKeywordEquals(grant, "grant");
 
     // parse permissions
-    using namespace QueryData::Primitives;
+    using namespace Common::QueryData::Primitives;
     out.permissions = extractor.extractUniqueList<EUserPermissionType>(UserPermissionType::toLiteral);
     if (out.permissions.empty())
     {

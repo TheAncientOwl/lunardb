@@ -11,7 +11,7 @@ void Insert::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Insert>();
+    auto const& query = parsed_query.get<Common::QueryData::Insert>();
 }
 
 } // namespace LunarDB::Astral::Implementation

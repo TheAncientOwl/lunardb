@@ -16,14 +16,14 @@ constexpr auto c_query_prefix{"revoke"};
 
 API::ParsedQuery Revoke::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Revoke>();
-    auto& out = out_parsed_query.get<QueryData::Revoke>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Revoke>();
+    auto& out = out_parsed_query.get<Common::QueryData::Revoke>();
 
     auto const revoke = extractor.extractOne();
     Errors::assertKeywordEquals(revoke, "revoke");
 
     // parse permissions
-    using namespace QueryData::Primitives;
+    using namespace Common::QueryData::Primitives;
     out.permissions = extractor.extractUniqueList<EUserPermissionType>(UserPermissionType::toLiteral);
     if (out.permissions.empty())
     {

@@ -11,7 +11,7 @@ void Migrate::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Migrate>();
+    auto const& query = parsed_query.get<Common::QueryData::Migrate>();
 }
 
 } // namespace LunarDB::Astral::Implementation

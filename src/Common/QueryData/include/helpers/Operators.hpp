@@ -8,7 +8,7 @@
 /// @brief Define operator==(Type, Type) and operator<<(ostream, Type) signatures.
 ///
 #define DEFINE_OPERATORS(Type)                                   \
-    namespace LunarDB::QueryData {                               \
+    namespace LunarDB::Common::QueryData {                       \
     bool operator==(Type const& lhs, Type const& rhs);           \
     std::ostream& operator<<(std::ostream& os, const Type& rhs); \
     }

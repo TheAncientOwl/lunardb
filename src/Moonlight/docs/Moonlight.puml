@@ -5,33 +5,33 @@ namespace LunarDB.Moonlight.API {
 
 class ParsedQuery {
 
-    + type() const : QueryData::Primitives::EQueryType
+    + type() const : Common::QueryData::Primitives::EQueryType
     + get<Data>() : Data&
     + get<Data>() const : const Data&
     + make<Data>() : ParsedQuery
 
-    - m_type : QueryData::Primitives::EQueryType
+    - m_type : Common::QueryData::Primitives::EQueryType
     - m_data : QueryDataType
 }
 note left
 using QueryDataType = std::variant<
-    QueryData::Create,
-    QueryData::Drop,
-    QueryData::Migrate,
-    QueryData::Truncate,
-    QueryData::Rename,
-    QueryData::Select,
-    QueryData::Insert,
-    QueryData::Update,
-    QueryData::Delete,
-    QueryData::Grant,
-    QueryData::Revoke,
-    QueryData::Commit,
-    QueryData::Rollback,
-    QueryData::SavePoint,
-    QueryData::Database,
-    QueryData::Rebind,
-    QueryData::Schema
+    Common::QueryData::Create,
+    Common::QueryData::Drop,
+    Common::QueryData::Migrate,
+    Common::QueryData::Truncate,
+    Common::QueryData::Rename,
+    Common::QueryData::Select,
+    Common::QueryData::Insert,
+    Common::QueryData::Update,
+    Common::QueryData::Delete,
+    Common::QueryData::Grant,
+    Common::QueryData::Revoke,
+    Common::QueryData::Commit,
+    Common::QueryData::Rollback,
+    Common::QueryData::SavePoint,
+    Common::QueryData::Database,
+    Common::QueryData::Rebind,
+    Common::QueryData::Schema
 >;
 end note
 

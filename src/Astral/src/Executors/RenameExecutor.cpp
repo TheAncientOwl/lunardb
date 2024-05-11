@@ -11,7 +11,7 @@ void Rename::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Rename>();
+    auto const& query = parsed_query.get<Common::QueryData::Rename>();
 }
 
 } // namespace LunarDB::Astral::Implementation

@@ -11,7 +11,7 @@ void Grant::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Grant>();
+    auto const& query = parsed_query.get<Common::QueryData::Grant>();
 }
 
 } // namespace LunarDB::Astral::Implementation

@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"rename"};
 
 API::ParsedQuery Rename::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Rename>();
-    auto& out = out_parsed_query.get<QueryData::Rename>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rename>();
+    auto& out = out_parsed_query.get<Common::QueryData::Rename>();
 
     auto const [rename, type, from, old_name, to, new_name] = extractor.extractTuple<6>();
     if (!extractor.empty())
@@ -27,7 +27,8 @@ API::ParsedQuery Rename::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(from, "from");
     Errors::assertKeywordEquals(to, "to");
 
-    out.type = QueryData::Primitives::RenameType::toLiteral(Errors::assertNotEmpty(type, "rename type"));
+    out.type = Common::QueryData::Primitives::RenameType::toLiteral(
+        Errors::assertNotEmpty(type, "rename type"));
     out.old_name = Errors::assertNotEmpty(old_name, "old name");
     out.new_name = Errors::assertNotEmpty(new_name, "new name");
 

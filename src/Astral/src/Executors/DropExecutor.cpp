@@ -11,7 +11,7 @@ void Drop::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Drop>();
+    auto const& query = parsed_query.get<Common::QueryData::Drop>();
 }
 
 } // namespace LunarDB::Astral::Implementation

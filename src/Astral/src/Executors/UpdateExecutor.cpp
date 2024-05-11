@@ -11,7 +11,7 @@ void Update::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Update>();
+    auto const& query = parsed_query.get<Common::QueryData::Update>();
 }
 
 } // namespace LunarDB::Astral::Implementation

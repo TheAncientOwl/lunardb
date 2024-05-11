@@ -12,9 +12,9 @@ namespace {
 
 constexpr auto c_query_prefix{"select"};
 
-QueryData::Select::Order parseOrderBy(std::string_view str)
+Common::QueryData::Select::Order parseOrderBy(std::string_view str)
 {
-    QueryData::Select::Order out{};
+    Common::QueryData::Select::Order out{};
 
     QueryExtractor extractor{str};
     auto const [field_name, mode] = extractor.extractTuple<2>();
@@ -24,7 +24,7 @@ QueryData::Select::Order parseOrderBy(std::string_view str)
     }
 
     out.field = Errors::assertNotEmpty(field_name, "field name");
-    out.type = QueryData::Primitives::OrderType::toLiteral(mode);
+    out.type = Common::QueryData::Primitives::OrderType::toLiteral(mode);
 
     return out;
 }
@@ -33,8 +33,8 @@ QueryData::Select::Order parseOrderBy(std::string_view str)
 
 API::ParsedQuery Select::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Select>();
-    auto& out = out_parsed_query.get<QueryData::Select>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Select>();
+    auto& out = out_parsed_query.get<Common::QueryData::Select>();
 
     auto const [select, from, structure, structure_name] = extractor.extractTuple<4>();
 
@@ -66,7 +66,7 @@ API::ParsedQuery Select::parse(QueryExtractor extractor)
         Errors::assertKeywordEquals(order, "order");
         Errors::assertKeywordEquals(by, "by");
 
-        out.order_by = extractor.extractList<QueryData::Select::Order>(parseOrderBy);
+        out.order_by = extractor.extractList<Common::QueryData::Select::Order>(parseOrderBy);
         if (out.order_by.empty())
         {
             throw Errors::buildMissingError("order by fields");

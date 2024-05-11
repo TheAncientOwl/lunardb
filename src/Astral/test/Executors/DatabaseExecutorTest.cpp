@@ -17,11 +17,11 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
     API::SelenityDependencies deps{catalog};
 
     // 2. create database
-    auto parsed_query = Moonlight::API::ParsedQuery::make<QueryData::Database>();
-    parsed_query.get<QueryData::Database>() =
-        QueryData::Init::DatabaseInit{}
+    auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Database>();
+    parsed_query.get<Common::QueryData::Database>() =
+        Common::QueryData::Init::DatabaseInit{}
             .name("some_name")
-            .operation_type(QueryData::Primitives::EDatabaseOperationType::Create);
+            .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Create);
 
     Astral::Implementation::Database::execute(parsed_query, deps);
 
@@ -30,20 +30,20 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
     EXPECT_TRUE(std::filesystem::exists(database_storage_path));
 
     // 3. use existing database
-    parsed_query.get<QueryData::Database>() =
-        QueryData::Init::DatabaseInit{}
+    parsed_query.get<Common::QueryData::Database>() =
+        Common::QueryData::Init::DatabaseInit{}
             .name("some_name")
-            .operation_type(QueryData::Primitives::EDatabaseOperationType::Use);
+            .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Use);
 
     Astral::Implementation::Database::execute(parsed_query, deps);
 
     EXPECT_TRUE(catalog.usingDatabase());
 
     // 4. use non existing database
-    parsed_query.get<QueryData::Database>() =
-        QueryData::Init::DatabaseInit{}
+    parsed_query.get<Common::QueryData::Database>() =
+        Common::QueryData::Init::DatabaseInit{}
             .name("some_non_existing_database")
-            .operation_type(QueryData::Primitives::EDatabaseOperationType::Use);
+            .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Use);
 
     EXPECT_THROW(
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
@@ -62,10 +62,10 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
 
     // 7. drop database
-    parsed_query.get<QueryData::Database>() =
-        QueryData::Init::DatabaseInit{}
+    parsed_query.get<Common::QueryData::Database>() =
+        Common::QueryData::Init::DatabaseInit{}
             .name("some_name")
-            .operation_type(QueryData::Primitives::EDatabaseOperationType::Drop);
+            .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Drop);
 
     Astral::Implementation::Database::execute(parsed_query, deps);
 

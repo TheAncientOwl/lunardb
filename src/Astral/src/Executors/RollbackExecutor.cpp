@@ -11,7 +11,7 @@ void Rollback::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Rollback>();
+    auto const& query = parsed_query.get<Common::QueryData::Rollback>();
 }
 
 } // namespace LunarDB::Astral::Implementation

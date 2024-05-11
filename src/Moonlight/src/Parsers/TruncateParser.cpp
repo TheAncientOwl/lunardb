@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"truncate"};
 
 API::ParsedQuery Truncate::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Truncate>();
-    auto& out = out_parsed_query.get<QueryData::Truncate>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Truncate>();
+    auto& out = out_parsed_query.get<Common::QueryData::Truncate>();
 
     auto const [truncate, structure, structure_name] = extractor.extractTuple<3>();
     if (!extractor.empty())

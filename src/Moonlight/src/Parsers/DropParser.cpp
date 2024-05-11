@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"drop"};
 
 API::ParsedQuery Drop::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Drop>();
-    auto& out = out_parsed_query.get<QueryData::Drop>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Drop>();
+    auto& out = out_parsed_query.get<Common::QueryData::Drop>();
 
     auto const [drop, structure, structure_name, cascade] = extractor.extractTuple<4>();
     if (!extractor.empty())

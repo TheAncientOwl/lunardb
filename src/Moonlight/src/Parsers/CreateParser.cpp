@@ -12,7 +12,7 @@ namespace {
 
 constexpr auto c_query_prefix{"create"};
 
-using Binding = QueryData::Create::Single::Binding;
+using Binding = Common::QueryData::Create::Single::Binding;
 
 Binding parseBinding(std::string_view str)
 {
@@ -37,11 +37,12 @@ Binding parseBinding(std::string_view str)
 ///
 /// @brief Parsing starting from 'StructureName'
 ///
-QueryData::Create::Single parseSingle(QueryExtractor extractor)
+Common::QueryData::Create::Single parseSingle(QueryExtractor extractor)
 {
-    QueryData::Create::Single out{};
+    Common::QueryData::Create::Single out{};
 
-    auto const [structure_name, based, on, schema_name, blended_or_binding] = extractor.extractTuple<5>();
+    auto const [structure_name, based, on, schema_name, blended_or_binding] =
+        extractor.extractTuple<5>();
 
     Errors::assertKeywordEquals(based, "based");
     Errors::assertKeywordEquals(on, "on");
@@ -101,9 +102,9 @@ QueryData::Create::Single parseSingle(QueryExtractor extractor)
 ///
 /// @brief Parsing starting from 'from'
 ///
-QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
+Common::QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 {
-    QueryData::Create::Multiple out{};
+    Common::QueryData::Create::Multiple out{};
 
     Errors::assertKeywordEquals(extractor.extractOne(), "from");
 
@@ -120,9 +121,10 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
     out.schema_names = std::vector<std::string>{};
     out.schema_names.reserve(schemas_set.size());
     std::transform(
-        schemas_set.begin(), schemas_set.end(), std::back_inserter(out.schema_names), [](std::string_view sv) -> std::string {
-            return std::string(sv);
-        });
+        schemas_set.begin(),
+        schemas_set.end(),
+        std::back_inserter(out.schema_names),
+        [](std::string_view sv) -> std::string { return std::string(sv); });
 
     // parse name format
     if (extractor.empty())
@@ -158,8 +160,8 @@ QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
 API::ParsedQuery Create::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Create>();
-    auto& out = out_parsed_query.get<QueryData::Create>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Create>();
+    auto& out = out_parsed_query.get<Common::QueryData::Create>();
 
     auto const [create, any] = extractor.extractTuple<2>();
 
@@ -184,25 +186,25 @@ API::ParsedQuery Create::parse(QueryExtractor extractor)
 
     if (StringUtils::equalsIgnoreCase(structure_type, "table"))
     {
-        out.structure_type = QueryData::Primitives::EStructureType::Table;
+        out.structure_type = Common::QueryData::Primitives::EStructureType::Table;
         out.single = parseSingle(extractor);
         out.multiple = std::nullopt;
     }
     else if (StringUtils::equalsIgnoreCase(structure_type, "tables"))
     {
-        out.structure_type = QueryData::Primitives::EStructureType::Table;
+        out.structure_type = Common::QueryData::Primitives::EStructureType::Table;
         out.single = std::nullopt;
         out.multiple = parseMultiple(extractor);
     }
     else if (StringUtils::equalsIgnoreCase(structure_type, "collection"))
     {
-        out.structure_type = QueryData::Primitives::EStructureType::Collection;
+        out.structure_type = Common::QueryData::Primitives::EStructureType::Collection;
         out.single = parseSingle(extractor);
         out.multiple = std::nullopt;
     }
     else if (StringUtils::equalsIgnoreCase(structure_type, "collections"))
     {
-        out.structure_type = QueryData::Primitives::EStructureType::Collection;
+        out.structure_type = Common::QueryData::Primitives::EStructureType::Collection;
         out.single = std::nullopt;
         out.multiple = parseMultiple(extractor);
     }

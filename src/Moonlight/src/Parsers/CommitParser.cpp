@@ -14,7 +14,7 @@ constexpr auto c_query_prefix{"commit"};
 
 API::ParsedQuery Commit::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Commit>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Commit>();
 
     auto const [commit] = extractor.extractTuple<1>();
     if (!extractor.empty())

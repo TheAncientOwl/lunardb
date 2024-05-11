@@ -9,22 +9,22 @@ void Database::execute(
     Moonlight::API::ParsedQuery const& parsed_query,
     Astral::API::SelenityDependencies const& config)
 {
-    auto const& query = parsed_query.get<QueryData::Database>();
+    auto const& query = parsed_query.get<Common::QueryData::Database>();
 
     switch (query.operation_type)
     {
-    case QueryData::Primitives::EDatabaseOperationType::Create:
+    case Common::QueryData::Primitives::EDatabaseOperationType::Create:
         config.db_catalog.createDatabase(query.name);
         config.db_catalog.saveToDisk();
         break;
-    case QueryData::Primitives::EDatabaseOperationType::Drop:
+    case Common::QueryData::Primitives::EDatabaseOperationType::Drop:
         config.db_catalog.dropDatabase(query.name);
         config.db_catalog.saveToDisk();
         break;
-    case QueryData::Primitives::EDatabaseOperationType::Use:
+    case Common::QueryData::Primitives::EDatabaseOperationType::Use:
         config.db_catalog.useDatabase(query.name);
         break;
-    case QueryData::Primitives::EDatabaseOperationType::Backup:
+    case Common::QueryData::Primitives::EDatabaseOperationType::Backup:
         // TODO: Provide implementation
         throw std::runtime_error{"Not implemented yet..."};
     default:

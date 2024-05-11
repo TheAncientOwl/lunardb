@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"rollback"};
 
 API::ParsedQuery Rollback::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Rollback>();
-    auto& out = out_parsed_query.get<QueryData::Rollback>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rollback>();
+    auto& out = out_parsed_query.get<Common::QueryData::Rollback>();
 
     auto const [rollback, hash] = extractor.extractTuple<2>();
     if (!extractor.empty())

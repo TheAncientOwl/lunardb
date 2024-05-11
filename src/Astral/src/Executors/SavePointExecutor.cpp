@@ -11,7 +11,7 @@ void SavePoint::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::SavePoint>();
+    auto const& query = parsed_query.get<Common::QueryData::SavePoint>();
 }
 
 } // namespace LunarDB::Astral::Implementation

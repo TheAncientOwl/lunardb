@@ -11,22 +11,22 @@ namespace {
 
 constexpr auto c_query_prefix{"insert"};
 
-QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value element)
+Common::QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value element)
 {
-    QueryData::Insert::Object::type out{};
+    Common::QueryData::Insert::Object::type out{};
 
     switch (element.type())
     {
     case simdjson::ondemand::json_type::array: {
         std::vector<std::string> strings{};
-        std::vector<QueryData::Insert::Object> objects{};
+        std::vector<Common::QueryData::Insert::Object> objects{};
 
         for (auto value : element.get_array())
         {
             if (value.type() == simdjson::ondemand::json_type::object)
             {
                 objects.push_back(
-                    std::get<QueryData::Insert::Object>(recursiveParseObject(value.value())));
+                    std::get<Common::QueryData::Insert::Object>(recursiveParseObject(value.value())));
             }
             else if (value.type() == simdjson::ondemand::json_type::string)
             {
@@ -59,7 +59,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
         break;
     }
     case simdjson::ondemand::json_type::object: {
-        auto obj = QueryData::Insert::Object{};
+        auto obj = Common::QueryData::Insert::Object{};
         for (auto field : element.get_object())
         {
             obj.entries.emplace(field.unescaped_key().value(), recursiveParseObject(field.value()));
@@ -81,7 +81,7 @@ QueryData::Insert::Object::type recursiveParseObject(simdjson::ondemand::value e
     return out;
 }
 
-std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
+std::vector<Common::QueryData::Insert::Object> parseObjects(std::string_view str)
 {
     StringUtils::trim(str);
     if (str.front() != '[')
@@ -97,7 +97,7 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
     StringUtils::trim(str);
     Errors::assertNotEmpty(str, "objects");
 
-    std::vector<QueryData::Insert::Object> out{};
+    std::vector<Common::QueryData::Insert::Object> out{};
 
     try
     {
@@ -136,8 +136,8 @@ std::vector<QueryData::Insert::Object> parseObjects(std::string_view str)
 
 API::ParsedQuery Insert::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Insert>();
-    auto& out = out_parsed_query.get<QueryData::Insert>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Insert>();
+    auto& out = out_parsed_query.get<Common::QueryData::Insert>();
 
     auto const [insert, into, structure_name, objects] = extractor.extractTuple<4>();
 

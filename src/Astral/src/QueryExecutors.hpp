@@ -17,7 +17,7 @@
 namespace LunarDB::Astral::Implementation {
 
 using Executor = void (*)(Moonlight::API::ParsedQuery const&, Astral::API::SelenityDependencies const&);
-using ExecutorBundle = std::pair<QueryData::Primitives::EQueryType, Executor>;
+using ExecutorBundle = std::pair<Common::QueryData::Primitives::EQueryType, Executor>;
 
 PROVIDE_QUERY_EXECUTOR(Create)
 PROVIDE_QUERY_EXECUTOR(Drop)

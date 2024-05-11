@@ -2,7 +2,7 @@
 
 #include "LunarDB/Common/QueryData/QueryData.hpp"
 
-namespace LunarDB::QueryData::Init {
+namespace LunarDB::Common::QueryData::Init {
 
 struct CreateInit : public Create
 {
@@ -238,4 +238,4 @@ struct SchemaInit : public Schema
     SchemaInit& fields(std::vector<Field> const& value);
 };
 
-} // namespace LunarDB::QueryData::Init
+} // namespace LunarDB::Common::QueryData::Init

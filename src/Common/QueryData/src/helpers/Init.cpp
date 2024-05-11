@@ -1,6 +1,6 @@
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 
-namespace LunarDB::QueryData::Init {
+namespace LunarDB::Common::QueryData::Init {
 
 CreateInit::SingleInit::BindingInit& CreateInit::SingleInit::BindingInit::field(const std::string& value)
 {
@@ -299,4 +299,4 @@ SchemaInit& SchemaInit::fields(const std::vector<Field>& value)
     return base_t::fields = value, *this;
 }
 
-} // namespace LunarDB::QueryData::Init
+} // namespace LunarDB::Common::QueryData::Init

@@ -1,6 +1,6 @@
 #include "LunarDB/Common/QueryData/Primitives.hpp"
 
-namespace LunarDB::QueryData::Primitives {
+namespace LunarDB::Common::QueryData::Primitives {
 
 // clang-format off
 DEFINE_LUNAR_PRIMITIVE_IMPL(QueryType,
@@ -79,4 +79,4 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(BooleanOperator,
 )
 // clang-format on
 
-} // namespace LunarDB::QueryData::Primitives
+} // namespace LunarDB::Common::QueryData::Primitives

@@ -14,19 +14,19 @@ constexpr auto c_query_prefix{"database"};
 
 API::ParsedQuery Database::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Database>();
-    auto& out = out_parsed_query.get<QueryData::Database>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Database>();
+    auto& out = out_parsed_query.get<Common::QueryData::Database>();
 
     auto const [database, operation, database_name, to, disk] = extractor.extractTuple<5>();
 
     Errors::assertKeywordEquals(database, "database");
 
     Errors::assertNotEmpty(operation, "operation");
-    out.operation_type = QueryData::Primitives::DatabaseOperationType::toLiteral(operation);
+    out.operation_type = Common::QueryData::Primitives::DatabaseOperationType::toLiteral(operation);
 
     out.name = Errors::assertNotEmpty(database_name, "database name");
 
-    if (out.operation_type == QueryData::Primitives::EDatabaseOperationType::Backup)
+    if (out.operation_type == Common::QueryData::Primitives::EDatabaseOperationType::Backup)
     {
         Errors::assertKeywordEquals(to, "to");
         Errors::assertKeywordEquals(disk, "disk");

@@ -3,7 +3,7 @@
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 
 #define PROVIDE_EQUALITY_OPERATOR(Type, ...)                                       \
-    namespace LunarDB::QueryData {                                                 \
+    namespace LunarDB::Common::QueryData {                                         \
     bool operator==(Type const& lhs, Type const& rhs)                              \
     {                                                                              \
         auto const reduce = [](Type const& obj) { return std::tie(__VA_ARGS__); }; \

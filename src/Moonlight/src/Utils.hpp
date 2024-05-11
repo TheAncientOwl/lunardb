@@ -44,9 +44,9 @@ enum class ESplitModifier
 
 ///
 /// @brief Self explanatory.
-/// @see QueryData::WhereClause
+/// @see Common::QueryData::WhereClause
 ///
-[[nodiscard]] QueryData::WhereClause extractWhereClause(std::string_view& str);
+[[nodiscard]] Common::QueryData::WhereClause extractWhereClause(std::string_view& str);
 
 ///
 /// @brief Self explanatory.

@@ -11,11 +11,11 @@ namespace {
 constexpr auto c_query_prefix{"schema"};
 
 // TODO: Add types validation
-QueryData::Schema::Field parseField(std::string_view str)
+Common::QueryData::Schema::Field parseField(std::string_view str)
 {
     using namespace std::literals;
 
-    QueryData::Schema::Field out{};
+    Common::QueryData::Schema::Field out{};
 
     auto const separator_pos = str.find_first_of(':');
     if (separator_pos == std::string_view::npos)
@@ -78,8 +78,8 @@ QueryData::Schema::Field parseField(std::string_view str)
 
 API::ParsedQuery Schema::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Schema>();
-    auto& out = out_parsed_query.get<QueryData::Schema>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Schema>();
+    auto& out = out_parsed_query.get<Common::QueryData::Schema>();
 
     auto const [schema, schema_name] = extractor.extractTuple<2>();
     if (extractor.empty())
@@ -90,8 +90,8 @@ API::ParsedQuery Schema::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(schema, "schema");
 
     out.name = Errors::assertNotEmpty(schema_name, "schema name");
-    out.fields =
-        extractor.extractList<QueryData::Schema::Field>(parseField, ';', std::make_pair('{', '}'));
+    out.fields = extractor.extractList<Common::QueryData::Schema::Field>(
+        parseField, ';', std::make_pair('{', '}'));
 
     if (!extractor.empty())
     {

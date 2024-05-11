@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"rebind"};
 
 API::ParsedQuery Rebind::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Rebind>();
-    auto& out = out_parsed_query.get<QueryData::Rebind>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rebind>();
+    auto& out = out_parsed_query.get<Common::QueryData::Rebind>();
 
     auto const [rebind, structure_field, to, bind_structure_name] = extractor.extractTuple<4>();
 

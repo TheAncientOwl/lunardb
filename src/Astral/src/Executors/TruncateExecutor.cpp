@@ -11,7 +11,7 @@ void Truncate::execute(
     Astral::API::SelenityDependencies const& config)
 {
     // TODO: Provide implementation
-    auto const& query = parsed_query.get<QueryData::Truncate>();
+    auto const& query = parsed_query.get<Common::QueryData::Truncate>();
 }
 
 } // namespace LunarDB::Astral::Implementation

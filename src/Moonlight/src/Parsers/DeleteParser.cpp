@@ -14,8 +14,8 @@ constexpr auto c_query_prefix{"delete"};
 
 API::ParsedQuery Delete::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Delete>();
-    auto& out = out_parsed_query.get<QueryData::Delete>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Delete>();
+    auto& out = out_parsed_query.get<Common::QueryData::Delete>();
 
     auto const [delete_, from, structure, structure_name] = extractor.extractTuple<4>();
     if (extractor.empty())

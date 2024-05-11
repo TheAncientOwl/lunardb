@@ -12,7 +12,7 @@ namespace {
 
 constexpr auto c_query_prefix{"migrate"};
 
-using Mapping = QueryData::Migrate::Mapping;
+using Mapping = Common::QueryData::Migrate::Mapping;
 
 Mapping parseMapping(std::string_view str)
 {
@@ -38,10 +38,11 @@ Mapping parseMapping(std::string_view str)
 
 API::ParsedQuery Migrate::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Migrate>();
-    auto& out = out_parsed_query.get<QueryData::Migrate>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Migrate>();
+    auto& out = out_parsed_query.get<Common::QueryData::Migrate>();
 
-    auto const [migrate, structure, structure_name, to, schema_name, using_] = extractor.extractTuple<6>();
+    auto const [migrate, structure, structure_name, to, schema_name, using_] =
+        extractor.extractTuple<6>();
 
     Errors::assertKeywordEquals(migrate, "migrate");
     Errors::assertKeywordEquals(structure, "structure");

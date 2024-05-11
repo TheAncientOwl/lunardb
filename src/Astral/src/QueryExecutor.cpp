@@ -48,11 +48,11 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDepen
 
 } // namespace LunarDB::Astral::API
 
-#define PROVIDE_EXECUTOR_BUNDLER(Specialization)                                         \
-    ExecutorBundle Specialization::makeExecutor()                                        \
-    {                                                                                    \
-        return std::make_pair(                                                           \
-            QueryData::Primitives::EQueryType::Specialization, Specialization::execute); \
+#define PROVIDE_EXECUTOR_BUNDLER(Specialization)                                                 \
+    ExecutorBundle Specialization::makeExecutor()                                                \
+    {                                                                                            \
+        return std::make_pair(                                                                   \
+            Common::QueryData::Primitives::EQueryType::Specialization, Specialization::execute); \
     }
 
 namespace LunarDB::Astral::Implementation {

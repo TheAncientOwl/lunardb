@@ -12,7 +12,7 @@ public: // methods
     ///
     /// @brief Self explanatory.
     ///
-    QueryData::Primitives::EQueryType type() const;
+    Common::QueryData::Primitives::EQueryType type() const;
 
     ///
     /// @brief Self explanatory.
@@ -28,42 +28,42 @@ public: // methods
 
 public: // helpers
     ///
-    /// @brief Creates an empty ParsedQuery of given QueryData::Type.
+    /// @brief Creates an empty ParsedQuery of given Common::QueryData::Type.
     ///
     template <typename Data>
     static ParsedQuery make();
 
 private: // fields;
-    QueryData::Primitives::EQueryType m_type;
+    Common::QueryData::Primitives::EQueryType m_type;
 
     std::variant<
-        QueryData::Create,
-        QueryData::Drop,
-        QueryData::Migrate,
-        QueryData::Truncate,
-        QueryData::Rename,
-        QueryData::Select,
-        QueryData::Insert,
-        QueryData::Update,
-        QueryData::Delete,
-        QueryData::Grant,
-        QueryData::Revoke,
-        QueryData::Commit,
-        QueryData::Rollback,
-        QueryData::SavePoint,
-        QueryData::Database,
-        QueryData::Rebind,
-        QueryData::Schema>
+        Common::QueryData::Create,
+        Common::QueryData::Drop,
+        Common::QueryData::Migrate,
+        Common::QueryData::Truncate,
+        Common::QueryData::Rename,
+        Common::QueryData::Select,
+        Common::QueryData::Insert,
+        Common::QueryData::Update,
+        Common::QueryData::Delete,
+        Common::QueryData::Grant,
+        Common::QueryData::Revoke,
+        Common::QueryData::Commit,
+        Common::QueryData::Rollback,
+        Common::QueryData::SavePoint,
+        Common::QueryData::Database,
+        Common::QueryData::Rebind,
+        Common::QueryData::Schema>
         m_data;
 
     ///
-    /// @brief Used by @see ParsedQuery::make() to decide the QueryData::Type.
-    /// @tparam T QueryData::Type
+    /// @brief Used by @see ParsedQuery::make() to decide the Common::QueryData::Type.
+    /// @tparam T Common::QueryData::Type
     ///
     template <typename T>
     struct QueryDataToTypeMap
     {
-        static const QueryData::Primitives::EQueryType value;
+        static const Common::QueryData::Primitives::EQueryType value;
     };
 };
 

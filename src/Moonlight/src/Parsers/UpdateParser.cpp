@@ -12,9 +12,9 @@ namespace {
 
 constexpr auto c_query_prefix{"update"};
 
-QueryData::Update::Modify parseModify(std::string_view str)
+Common::QueryData::Update::Modify parseModify(std::string_view str)
 {
-    QueryData::Update::Modify out{};
+    Common::QueryData::Update::Modify out{};
 
     out.field = Errors::assertNotEmpty(Utils::extractWord(str, ' '), "field name");
 
@@ -36,8 +36,8 @@ QueryData::Update::Modify parseModify(std::string_view str)
 
 API::ParsedQuery Update::parse(QueryExtractor extractor)
 {
-    auto out_parsed_query = API::ParsedQuery::make<QueryData::Update>();
-    auto& out = out_parsed_query.get<QueryData::Update>();
+    auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Update>();
+    auto& out = out_parsed_query.get<Common::QueryData::Update>();
 
     auto const [update, structure, structure_name] = extractor.extractTuple<3>();
     if (extractor.empty())
@@ -60,7 +60,7 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     auto const modify = extractor.extractOne();
     Errors::assertKeywordEquals(modify, "modify");
 
-    out.modify = extractor.extractList<QueryData::Update::Modify>(parseModify);
+    out.modify = extractor.extractList<Common::QueryData::Update::Modify>(parseModify);
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);
@@ -71,7 +71,8 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     {
         if (modify_fields.find(modify.field) != modify_fields.end())
         {
-            throw Errors::buildError("Modify fields should be unique, found '", modify.field, "' twice");
+            throw Errors::buildError(
+                "Modify fields should be unique, found '", modify.field, "' twice");
         }
         modify_fields.insert(modify.field);
     }

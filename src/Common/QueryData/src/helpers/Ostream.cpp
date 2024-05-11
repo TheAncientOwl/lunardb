@@ -4,7 +4,7 @@
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 
 #define PROVIDE_OSTREAM_OUTPUT_OPERATOR(Type, ...)              \
-    namespace LunarDB::QueryData {                              \
+    namespace LunarDB::Common::QueryData {                      \
     std::ostream& operator<<(std::ostream& os, Type const& rhs) \
     {                                                           \
         __VA_ARGS__, std::ignore;                               \
@@ -19,7 +19,7 @@
 #define FIELD(field_name) os << #field_name ": " << rhs.field_name
 #define FIELD_BOOL(field_name) os << #field_name ": " << std::boolalpha << rhs.field_name
 
-namespace LunarDB::QueryData {
+namespace LunarDB::Common::QueryData {
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, std::optional<T> const& rhs)
@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& os, std::optional<bool> const& rhs)
     return os;
 }
 
-} // namespace LunarDB::QueryData
+} // namespace LunarDB::Common::QueryData
 
 // clang-format off
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Create::Single::Binding,
