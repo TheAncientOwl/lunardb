@@ -1,5 +1,5 @@
 @startuml RenameType
-!theme crt-amber
+
 
 namespace LunarDB.QueryData.Primitives {
 

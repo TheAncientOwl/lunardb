@@ -1,5 +1,5 @@
 @startuml Commit
-!theme crt-amber
+
 
 namespace LunarDB.QueryData {
 

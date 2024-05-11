@@ -1,5 +1,5 @@
 @startuml Rollback
-!theme crt-amber
+
 
 namespace LunarDB.QueryData {
 

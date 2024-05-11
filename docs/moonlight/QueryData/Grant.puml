@@ -1,5 +1,5 @@
 @startuml Grant
-!theme crt-amber
+
 
 namespace LunarDB.QueryData {
 

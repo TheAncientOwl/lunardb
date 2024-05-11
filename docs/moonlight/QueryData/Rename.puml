@@ -1,5 +1,5 @@
 @startuml Rename
-!theme crt-amber
+
 
 namespace LunarDB.QueryData {
 
