@@ -1,59 +1,28 @@
-LunarDB:
-  Components:
-    Moonlight: query parser
-      roles:
-        - Given a string representation of a query provide a C++ object representation of it
-        - Check for the query syntax to be valid, throw meaningful exceptions if not
-
-      implementation:
-        - free functions that parse a query string to a C++ object representation
-
-    Astral: query executor
-      roles:
-        - Given a valid C++ object representation of a query, execute it
-        - If the query cannot be executed throw meaningful exceptions
-
-      implementation:
-        - free functions that execute a query represented by a C++ object
-
-    Celestial: users manager
-      roles:
-        - add / remove / modify -> users (username, password, permissions)
-        - authenticate user
-        - check if user is authenticated
-        - check if given user has permission
-
-      implementation:
-        - TBD
-
-    Crescentum: logger
-      roles:
-        - manage log files
-        - logs with different severities -> Info, Warn, Error, Critical, System
-
-      implementation:
-        - TBD
-
-    BrightMoon: write ahead logger
-      roles:
-        - write query execution logs
-        - undo / redo
-        - crash recovery
-
-      implementation:
-        - TBD
-
-    Selenity: data manager
-      roles:
-        - DiskManager
-        - BufferManager
-        - FileManager
-      implementation:
-        - TBD
-
-    LunarDB: server?
-      roles:
-        - REST API?
-
-      implementation:
-        - TBD
+architecture:
+  project: LunarDB
+  role: Database Management System
+  modules:
+    Moonlight:
+      role: Query Parser
+      architecture: Moonlight/Architecture.yml
+      diagram: Moonlight/Architecture.puml
+    Astral:
+      role: Query Executor
+      architecture: Astral/Architecture.yml
+      diagram: Astral/Architecture.puml
+    Celestial:
+      role: Users Manager
+      architecture: Celestial/Architecture.yml
+      diagram: Celestial/Architecture.puml
+    Selenity:
+      role: Data Manager
+      architecture: Selenity/Architecture.yml
+      diagram: Selenity/Architecture.puml
+    BrightMoon:
+      role: Write Ahead Logger
+      architecture: BrightMoon/Architecture.yml
+      diagram: BrightMoon/Architecture.puml
+    Crescentum:
+      role: Logger
+      architecture: Crescentum/Architecture.yml
+      diagram: Crescentum/Architecture.puml

@@ -1,0 +1,19 @@
+architecture:
+  module: BrightMoon
+  role: Write Ahead Logger
+  functional-requirements:
+    - The data will be stored in a file located at a path starting from {LUNARDB_HOME}.
+    - Data must be flushed to the file as it is received.
+    - On system natural close a boolean flag {SYSTEM_NATURAL_EXIT} will be stored in a file located at a path starting from {LUNARDB_HOME}.
+  implementation:
+    mode: Singleton
+  interface:
+    write:
+      brief: logs database action, Eg. writing data to a collection
+      parameters:
+        # TODO: Transaction Data, TBD
+    recover:
+      brief: |
+        1. Reads logged file and reverts the changes that were logged ONLY IF NOT SYSTEM_NATURAL_EXIT. @see architecture.functional-requirements
+        2. Moves the logged file to backup directory and clears it.
+        3. Clears SYSTEM_NATURAL_EXIT flag

@@ -1,0 +1,26 @@
+@startuml Moonlight
+
+namespace LunarDB {
+namespace Moonlight {
+
+namespace API {
+
+class ParsedQuery {
+    + type() : EQueryType
+    + get<QueryData>() : QueryData
+
+    - type : EQueryType
+    - data : variant<QueryDataTypes>
+}
+
+stereotype FreeFunctions {
+    + parseQuery(query: string) : ParsedQuery
+}
+
+FreeFunctions -* ParsedQuery : use
+
+}
+}
+}
+
+@enduml

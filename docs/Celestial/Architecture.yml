@@ -1,0 +1,65 @@
+architecture:
+  module: Celestial
+  role: User Manager
+  functional-requirements:
+    - All users will be stored in collections of bson data.
+    - The data will be stored in a file located at a path starting from {LUNARDB_HOME}.
+    - All CRUD operations on users can only be issued by the root user. @see architecture.implementation.root-user
+    - The data must be encrypted when stored.
+    - Create / remove / update permissions of users.
+    - Authenticate the user and check if given user is authenticated.
+    - Check if given user has given permission.
+  implementation:
+    mode: Singleton
+    root-user:
+      username: root
+      password: env variable LUNARDB_ROOT_USER_PASSWD
+    user-attributes:
+      uid: UniqueID
+      name: string
+      password: string
+      permissions: Set<Permission>
+    permission:
+      type: create|read|update|delete
+      database-uid: UniqueID
+      table-uid: optional<UniqueID>
+  interface:
+    createUser:
+      brief: Creates a user
+      parameters:
+        username: string
+        password: string
+      return: void
+    removeUser:
+      brief: Removes a user given its ID
+      parameters:
+        user-uid: UniqueID, user's ID
+      return: void
+    updatePassword:
+      brief: Changes the password of a user
+      parameters:
+        user-uid: UniqueID, user's ID
+        new-password: string
+      return: void
+    updatePermission:
+      brief: Updates permission set of given user by its ID
+      parameters:
+        user-uid: UniqueID, user's ID
+        permission: |
+          @see architecture.implementation.permission
+        return: boolean -> true if permission was modified successfully, false otherwise (Eg. already existing or not existing at all)
+    authenticateUser:
+      brief: Auth user
+      parameters:
+        username: string
+        password: string
+      return: EAuthState
+    isUserAuthenticated:
+      brief: Check if user is authenticated
+      parameters:
+        user_uid: UniqueID
+      return: EAuthState
+    deauthenticateUser:
+      brief: Deauth user;
+      parameters:
+        user-id: UniqueID

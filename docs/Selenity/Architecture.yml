@@ -1,0 +1,101 @@
+architecture:
+  module: Selenity
+  role: Data Manager
+  functional-requirements:
+      - Data will be stored in collections.
+      - Collections can be either of tables (relational model) or documents (non relational model).
+      - Collections can be stored either in RAM or on physical storage like SSDs.
+      - Data can be written, accessed, updated and deleted regardless its type (tables, documents)
+  implementation:
+    mode: Singleton
+    modules:
+      SystemCatalog:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          createDatabase:
+            brief: Adds database to the SystemCatalog
+            parameters:
+              name: string
+            return: void
+          dropDatabase:
+            brief: Removes database to the SystemCatalog and all the data stored on disk
+            parameters:
+              name: string
+            return: void
+      DatabaseManager:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          addCollection:
+            brief: Add a collection to the database config
+            parameters:
+              config: CollectionConfig
+            return: void
+          removeCollection:
+            brief: Remove a collection from the database config and all its data
+            parameters:
+              collectionUID: UniqueID
+              cascade: boolean, true if removal should cascade the change to related collections
+            return: void
+          truncateCollection:
+            brief: Delete all the data in given collection
+            parameters:
+              collectionUID: UniqueID
+              return: void
+      CollectionManager:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          selectData:
+            brief: Select data based on a given where clause
+            parameters:
+              whereClause: WhereClause
+            return: Data[]
+          updateData:
+            brief: Update data based on given where clause applying given modifications
+            parameters:
+              whereClause: WhereClause
+              modify: Modify
+            return: int, number of affected entries
+          deleteData:
+            brief: Delete data based on given where clause
+            parameters:
+              whereClause: WhereClause
+            return: int, number of affected entries
+          migrate:
+            brief: Migrates given collection to new schema
+            parameters:
+              config: MigrateConfig
+          rebind:
+            brief: Rebinds field RID to new one
+            parameters:
+              config: RebindConfig
+      DiskManager:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          # TODO: TBD
+      BufferManager:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          # TODO: TBD
+      FileManager:
+        requirements:
+          # TODO: TBD
+        implementation:
+          # TODO: TBD
+        interface:
+          # TODO: TBD
+  interface: @see architecture.implementation.SystemCatalog as starting point

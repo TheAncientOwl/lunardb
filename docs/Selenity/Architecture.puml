@@ -1,0 +1,66 @@
+@startuml Selenity
+
+namespace LunarDB {
+namespace Selenity {
+
+namespace Common {
+
+namespace CppExtensions {
+class UniqueID {}
+}
+
+namespace QueryData {
+struct WhereClause {}
+}
+
+}
+
+namespace Implementation {
+
+namespace Configs {
+
+struct CollectionConfig {}
+struct MigrateConfig {}
+struct RebindConfig {}
+
+}
+
+class DatabaseManager {
+    + addCollection(config: CollectionConfig) : void
+    + removeCollection(collection_uid: UniqueID) : void
+    + truncateCollection(collection_uid: UniqueID) : void
+}
+
+class CollectionManager {
+    + selectData(where_clause: WhereClause) : Data[]
+    + updateData(where_clause: WhereClause, modify: Modify) : int
+    + deleteData(where_clause: WhereClause) : int
+    + migrate(migrate_config: MigrateConfig) : void
+    + rebind(rebind_config: RebindConfig) : void
+}
+
+}
+
+namespace API {
+
+entity SystemCatalog <<Singleton>> {
+    + createDatabase(name: string) : void
+    + dropDatabase(database_uid: UniqueID) : void
+}
+
+}
+
+Implementation.DatabaseManager --* Implementation.Configs.CollectionConfig : use
+Implementation.DatabaseManager ---* Common.CppExtensions.UniqueID : use
+
+Implementation.CollectionManager --* Implementation.Configs.MigrateConfig : use
+Implementation.CollectionManager --* Implementation.Configs.RebindConfig : use
+Implementation.CollectionManager --* Common.QueryData.WhereClause
+Implementation.CollectionManager -* Common.CppExtensions.UniqueID : use
+
+API.SystemCatalog --* Implementation.DatabaseManager : use
+
+}
+}
+
+@enduml

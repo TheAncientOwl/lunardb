@@ -1,0 +1,23 @@
+architecture:
+  module: Crescentum
+  role: Logger
+  functional-requirements:
+      - Logs messages to given the log file located at LUNARDB_HOME/lunardb.log.
+  implementation:
+    mode: Singleton
+    format: [TIMESTAMP] [LEVEL] [MODULE] [MESSAGE]
+    log-levels:
+      - trace
+      - info
+      - debug
+      - warning
+      - error
+      - critical
+  interface:
+    log:
+      brief: logs message to @see architecture.functional-requirements in @see architecture.implementation.format format
+      parameters:
+        level: @see architecture.implementation.log-levels
+        moduleName: enum type, can be implemented as Common::Primitive
+        message: string
+      return: void

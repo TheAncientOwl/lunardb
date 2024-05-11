@@ -1,0 +1,80 @@
+@startuml Celestial
+
+namespace LunarDB {
+
+namespace Common {
+
+namespace CppExtensions {
+
+class UniqueID {}
+
+}
+
+namespace QueryData {
+namespace Primitives {
+
+enum EUserPermissionType {
+    None
+    Create
+    Update
+    Insert
+    Delete
+    Select
+}
+
+}
+}
+
+}
+
+namespace Celestial {
+namespace API {
+
+struct Permission {
+    + type: EUserPermissionType
+    + database_uid: UniqueID
+    + table_uid: optional<UniqueID>
+}
+
+struct User {
+    + uid: UniqueID
+    + name: string
+    + password: string
+    + permissions: Set<Permission>
+}
+
+namespace Primitives {
+
+enum EAuthState {
+    Unknown
+    Authenticated
+    NotAuthenticated
+    WrongPassword
+    UnknwonUser
+}
+
+}
+
+entity UsersManager <<Singleton>> {
+    + createUser(username: string, password: string) : void
+    + removeUser(user_uid: UniqueID) : void
+    + updatePassword(user_uid: UniqueID, new_password: string) : void
+    + updatePermission(user_uid: UniqueID, permission: Permission) : void
+    + authenticateUser(username: string, password: string) : EAuthState
+    + isUserAuthenticated(user_uid: UniqueID) : EAuthState
+    + deauthenticateUser(user_uid: UniqueID) : void
+}
+
+}
+}
+
+Celestial.API.UsersManager --* Celestial.API.User : use
+Celestial.API.UsersManager --* Celestial.API.Permission : use
+Celestial.API.UsersManager --* Common.CppExtensions.UniqueID : use
+Celestial.API.User --* Common.CppExtensions.UniqueID : use
+Celestial.API.Permission --* Common.CppExtensions.UniqueID : use
+Celestial.API.Permission --* Common.QueryData.Primitives.EUserPermissionType : use
+
+}
+
+@enduml

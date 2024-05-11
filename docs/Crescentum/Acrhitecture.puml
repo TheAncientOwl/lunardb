@@ -1,0 +1,38 @@
+@startuml Crescentum
+
+namespace LunarDB {
+namespace Crescentum {
+namespace API {
+
+enum ELogLevel {
+    Trace
+    Info
+    Debug
+    Warning
+    Error
+    Critical
+}
+
+enum ELunarModule {
+    General
+    LunarDB
+    Moonlight
+    Astral
+    BrightMoon
+    Selenity
+    Celestial
+}
+
+Entity Logger <<Singleton>> {
+    + log(level: ELogLevel, module: ELunarModule, message: string) : void
+    - file : OutputFileStream
+}
+
+Logger --* ELogLevel : use
+Logger --* ELunarModule : use
+
+}
+}
+}
+
+@enduml

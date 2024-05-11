@@ -1,0 +1,14 @@
+architecture:
+  module: Astral
+  role: Query Executor
+  functional-requirements:
+    - Given a valid C++ object representation of a query, execute it
+    - If the query cannot be executed throw meaningful exceptions
+  implementation:
+    mode: Free functions that executes a valid C++ object representation of a query.
+  interface:
+    executeQuery:
+      brief: Self explanatory
+      parameters:
+        parsedQuery: ParsedQuery
+      return: void

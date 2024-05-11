@@ -1,0 +1,20 @@
+@startuml BrightMoon
+
+namespace LunarDB {
+namespace BrightMoon {
+namespace API {
+
+struct TransactionData {}
+
+entity WriteAheadLogger <<Singleton>> {
+    + log(transaction_data: TransactionData) : void
+    + tryRecover() : bool
+}
+
+}
+}
+}
+
+WriteAheadLogger -* TransactionData : use
+
+@enduml

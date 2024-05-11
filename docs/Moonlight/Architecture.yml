@@ -1,228 +1,241 @@
-queries:
-  # ---------------------------------------[ General Capabilities ]---------------------------------------- #
-  general-capabilities:
-    database:
-      syntax: |
-        database create|drop|backup|use DatabaseName 
-            to disk "/home/user/lunardb-backup";
-    transactions:
-      syntax: |
-        commit;
-        rollback [hash];
-        savepoint [hash];
-    rename:
-      syntax: |
-        rename structure|field|database from OldName to NewName;
-        rename structure|field|database from Structure::OldFieldName to Structure::NewFieldName;
-  # ---------------------------------------[ Structures Management ]--------------------------------------- #
-  structures-management:
-    schema:
-      syntax: |
-        schema SchemaName {
-          field1: Type;
-          field2: Type?;
-          field3: ArrayOf<Type>;
-          ...
-        };
-
-        schema SchemaName inherits OtherSchemaName {
-          fieldX: Type;
-          ...
-        };
-      primitives:
-        types:
-          - String
-          - Boolean
-          - DateTime
-          - Integer, Integer8, Integer16, Integer32, Integer64
-          - Unsigned, Unsigned8, Unsigned16, Unsigned32, Unsigned64
-          - Float, Float32, Float64
-        notes:
-          - default value for plain Integer / Unsigned / Float types is max available value on system
-      defaults:
-        String: ''
-        Boolean: false
-        DateTime: current date and time
-        Integer: 0
-        Float: 0
-      example: |
-        schema Person {
-            firstName: String;
-            lastName: String;
-            phone: String;
-            email: String;
-        };
-        schema Client inherits Person {
-            creditLimit: Float;
-            birthDate: DateTime;
-            sex: String;
-            incomeLevel: String;
-        };
-        schema Region {
-            name: String;
-        }
-        schema Country {
-            name: String;
-            region: Region;
-        };
-        schema Location {
-            address: String;
-            postCode: String;
-            city: String;
-            country: Country;
-        };
-        schema Department {
-            name: String;
-            manager: Employee?;
-            location: Location;
-        };
-        schema Function {
-            name: String;
-            minSalary: Float;
-            maxSalary: Float;
-        };
-        schema Employee inherits Person {
-            employmentDate: DateTime;
-            manager: Employee?;
-            salary: Float;
-            function: Function;
-            department: Department;
-        };
-        schema Product {
-            name: String;
-            description: String;
-            category: String;
-            listPrice: Float;
-        };
-        schema OrderedProduct {
-            product: Product;
-            price: Float;
-            amount: Integer;
-        };
-        schema Order {
-            date: DateTime;
-            shipped: Boolean;
-            paymentType: String;
-            client: Client;
-            employee: Employee;
-            products: ArrayOf<OrderedProduct>;
-        };
-        schema FunctionsHistory {
-            startDate: DateTime;
-            endDate: DateTime;
-            employee: Employee;
-            function: Function;
-            department: Department;
-        };
-    create:
-      syntax: |
-        create [volatile] table|collection StructureName based on SchemaName binding [ 
-          field from SomeOtherTableName,
-        ] [blended];
-
-        create [volatile] tables|collections from [ 
-          Type1, Type2, ..., TypeN
-        ] using format "%TypeName%Structure";
-      see:
-        - queries.rebind
-    rebind:
-      syntax: |
-        rebind StructureName::fieldName to OtherTable [clean];
-    migrate:
-      syntax: |
-        migrate structure ExistingStructure to NewSchema;
-        migrate structure ExistingStructure to NewSchema using [
-            old_field1 => new_field1,
-            old_field2 => new_field2
-        ];
-    drop:
-      syntax: |
-        drop structure StructureName;
-        drop structure StructureName cascade;
-    truncate:
-      syntax: |
-        truncate structure StructureName;
-  # ------------------------------------------[ Data Management ]------------------------------------------ #
-  data:
-    select:
-      syntax: |
-        select from StructureName
-            where (rid = 11 or (rid >= 2 and 5 <= rid or eleome_field < 5000) or rid = 9  or rid = 120)
-            fields [ field1, field2, ..., fieldx ]
-            order by [ field1 asc, field2 desc, ..., field_z desc ];
-
-        select from StructureName::*arrayField*
-            where ( conditions... )
-            fields [ fields from arrayField..., StructureName::fields from StructureName ];
-    insert:
-      syntax: |
-        insert into StructureName objects [
-            {
-                "field0": 0,
-                "fieldM": {
-                    "_field1": 1,
-                    "_field2": 2
-                }
-                "fieldN": "X",
-            },
+architecture:
+  module: Moonlight
+  role: Query Parser
+  functional-requirements:
+    - Given a string representation of a query provide a C++ object representation of it.
+    - Check for the query syntax to be valid, throw meaningful exceptions if not.
+  implementation:
+    mode: Free functions that parse a query string to a C++ object representation.
+  interface:
+    parseQuery:
+      brief: Self explanatory
+      parameters:
+        query: string
+      return: ParsedQuery
+  queries:
+    # ---------------------------------------[ General Capabilities ]---------------------------------------- #
+    general-capabilities:
+      database:
+        syntax: |
+          database create|drop|backup|use DatabaseName 
+              to disk "/home/user/lunardb-backup";
+      transactions:
+        syntax: |
+          commit;
+          rollback [hash];
+          savepoint [hash];
+      rename:
+        syntax: |
+          rename structure|field|database from OldName to NewName;
+          rename structure|field|database from Structure::OldFieldName to Structure::NewFieldName;
+    # ---------------------------------------[ Structures Management ]--------------------------------------- #
+    structures-management:
+      schema:
+        syntax: |
+          schema SchemaName {
+            field1: Type;
+            field2: Type?;
+            field3: ArrayOf<Type>;
             ...
-        ];
-      example: |
-        insert into StructureName objects [
-            {
-                "salary": "4000",
-                "name": "Bob",
-                "birth_date": "09/10/1985",
-                "address": {
-                    "street": "Soie Street",
-                    "number": "5"
-                }
-            }
-            {
-                "salary": "4000",
-                "rank": "HeadmasterSupreme", -- observe new field added dynamically
-                "name": "Ultimate Bob",
-                "birth_date": "09/10/1985",
-                "address": {
-                    "street": "Some Street",
-                    "number": "5"
-                }
-            }
-            {
-                "salary": "4000",
-                "rank(String)": "HeadmasterSupreme", -- observe new field added dynamically with data type
-                "name": "Ultimate Bob",
-                "birth_date": "09/10/1985",
-                "address": {
-                    "street": "Some Street",
-                    "number": "5"
-                }
-            }
-        ];
-    delete:
-      syntax: |
-        delete from structure StructureName
-            where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
-    update:
-      syntax: |
-        update structure StructureName 
-            where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
-            modify [
-                field1 => field1 * 1.5 + 2,
-                field2 => field3
-            ]
-  # -----------------------------------------[ Users Management ]------------------------------------------ #
-  users:
-    user:
-      syntax: |
-        user create|remove UserName;
-    grant:
-      syntax: |
-        grant [ update, insert, ..., delete ]
-          to UserName
-          on StructureName;
-    revoke:
-      syntax: |
-        revoke [ update, insert, ..., delete ]
-          from UserName
-          on StructureName;
+          };
+          schema SchemaName inherits OtherSchemaName {
+            fieldX: Type;
+            ...
+          };
+        primitives:
+          types:
+            - String
+            - Boolean
+            - DateTime
+            - Integer, Integer8, Integer16, Integer32, Integer64
+            - Unsigned, Unsigned8, Unsigned16, Unsigned32, Unsigned64
+            - Float, Float32, Float64
+          notes:
+            - default value for plain Integer / Unsigned / Float types is max available value on system
+        defaults:
+          String: ''
+          Boolean: false
+          DateTime: current date and time
+          Integer: 0
+          Float: 0
+        example: |
+          schema Person {
+              firstName: String;
+              lastName: String;
+              phone: String;
+              email: String;
+          };
+          schema Client inherits Person {
+              creditLimit: Float;
+              birthDate: DateTime;
+              sex: String;
+              incomeLevel: String;
+          };
+          schema Region {
+              name: String;
+          }
+          schema Country {
+              name: String;
+              region: Region;
+          };
+          schema Location {
+              address: String;
+              postCode: String;
+              city: String;
+              country: Country;
+          };
+          schema Department {
+              name: String;
+              manager: Employee?;
+              location: Location;
+          };
+          schema Function {
+              name: String;
+              minSalary: Float;
+              maxSalary: Float;
+          };
+          schema Employee inherits Person {
+              employmentDate: DateTime;
+              manager: Employee?;
+              salary: Float;
+              function: Function;
+              department: Department;
+          };
+          schema Product {
+              name: String;
+              description: String;
+              category: String;
+              listPrice: Float;
+          };
+          schema OrderedProduct {
+              product: Product;
+              price: Float;
+              amount: Integer;
+          };
+          schema Order {
+              date: DateTime;
+              shipped: Boolean;
+              paymentType: String;
+              client: Client;
+              employee: Employee;
+              products: ArrayOf<OrderedProduct>;
+          };
+          schema FunctionsHistory {
+              startDate: DateTime;
+              endDate: DateTime;
+              employee: Employee;
+              function: Function;
+              department: Department;
+          };
+      create:
+        syntax: |
+          create [volatile] table|collection StructureName based on SchemaName binding [ 
+            field from SomeOtherTableName,
+          ] [blended];
+
+          create [volatile] tables|collections from [ 
+            Type1, Type2, ..., TypeN
+          ] using format "%TypeName%Structure";
+        see:
+          - queries.rebind
+      rebind:
+        syntax: |
+          rebind StructureName::fieldName to OtherTable [clean];
+      migrate:
+        syntax: |
+          migrate structure ExistingStructure to NewSchema;
+          migrate structure ExistingStructure to NewSchema using [
+              old_field1 => new_field1,
+              old_field2 => new_field2
+          ];
+      drop:
+        syntax: |
+          drop structure StructureName;
+          drop structure StructureName cascade;
+      truncate:
+        syntax: |
+          truncate structure StructureName;
+    # ------------------------------------------[ Data Management ]------------------------------------------ #
+    data:
+      select:
+        syntax: |
+          select from StructureName
+              where (rid = 11 or (rid >= 2 and 5 <= rid or eleome_field < 5000) or rid = 9  or rid = 120)
+              fields [ field1, field2, ..., fieldx ]
+              order by [ field1 asc, field2 desc, ..., field_z desc ];
+
+          select from StructureName::*arrayField*
+              where ( conditions... )
+              fields [ fields from arrayField..., StructureName::fields from StructureName ];
+      insert:
+        syntax: |
+          insert into StructureName objects [
+              {
+                  "field0": 0,
+                  "fieldM": {
+                      "_field1": 1,
+                      "_field2": 2
+                  }
+                  "fieldN": "X",
+              },
+              ...
+          ];
+        example: |
+          insert into StructureName objects [
+              {
+                  "salary": "4000",
+                  "name": "Bob",
+                  "birth_date": "09/10/1985",
+                  "address": {
+                      "street": "Soie Street",
+                      "number": "5"
+                  }
+              }
+              {
+                  "salary": "4000",
+                  "rank": "HeadmasterSupreme", -- observe new field added dynamically
+                  "name": "Ultimate Bob",
+                  "birth_date": "09/10/1985",
+                  "address": {
+                      "street": "Some Street",
+                      "number": "5"
+                  }
+              }
+              {
+                  "salary": "4000",
+                  "rank(String)": "HeadmasterSupreme", -- observe new field added dynamically with data type
+                  "name": "Ultimate Bob",
+                  "birth_date": "09/10/1985",
+                  "address": {
+                      "street": "Some Street",
+                      "number": "5"
+                  }
+              }
+          ];
+      delete:
+        syntax: |
+          delete from structure StructureName
+              where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
+      update:
+        syntax: |
+          update structure StructureName 
+              where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
+              modify [
+                  field1 => field1 * 1.5 + 2,
+                  field2 => field3
+              ]
+    # -----------------------------------------[ Users Management ]------------------------------------------ #
+    users:
+      user:
+        syntax: |
+          user create|remove UserName;
+      grant:
+        syntax: |
+          grant [ update, insert, ..., delete ]
+            to UserName
+            on StructureName;
+      revoke:
+        syntax: |
+          revoke [ update, insert, ..., delete ]
+            from UserName
+            on StructureName;
