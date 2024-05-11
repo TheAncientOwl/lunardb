@@ -25,7 +25,7 @@ note right
         Create, Drop, Migrate, Truncate,
         Rename, Select, Insert, Update,
         Delete, Grant, Revoke, Database
-        Commit, Rollback, SavePoint, Index,
+        Commit, Rollback, SavePoint,
         Rebind, Schema 
     ]
 end note

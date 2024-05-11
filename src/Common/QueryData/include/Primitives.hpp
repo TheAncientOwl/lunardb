@@ -21,10 +21,9 @@ DEFINE_LUNAR_PRIMITIVE(QueryType,
     Commit = 12,
     Rollback = 13,
     SavePoint = 14,
-    Index = 15,
-    Database = 16,
-    Rebind = 17,
-    Schema = 18
+    Database = 15,
+    Rebind = 16,
+    Schema = 17
 )
 
 DEFINE_LUNAR_PRIMITIVE(StructureType,

@@ -201,13 +201,6 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(SavePoint,
     FIELD(hash)
 )
 
-PROVIDE_OSTREAM_OUTPUT_OPERATOR(Index,
-    FIELD_SEP(on_structure_name),
-    FIELD_BOOL_SEP(unique),
-    FIELD_SEP(name),
-    FIELD(using_fields)
-)
-
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(Database,
     FIELD_SEP(operation_type),
     FIELD_SEP(name),

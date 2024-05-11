@@ -23,7 +23,6 @@ TEST(Common_QueryData_PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Commit, toLiteral(toString(EQueryType::Commit)));
     EXPECT_EQ(EQueryType::Rollback, toLiteral(toString(EQueryType::Rollback)));
     EXPECT_EQ(EQueryType::SavePoint, toLiteral(toString(EQueryType::SavePoint)));
-    EXPECT_EQ(EQueryType::Index, toLiteral(toString(EQueryType::Index)));
     EXPECT_EQ(EQueryType::Database, toLiteral(toString(EQueryType::Database)));
     EXPECT_EQ(EQueryType::Rebind, toLiteral(toString(EQueryType::Rebind)));
     EXPECT_EQ(EQueryType::Schema, toLiteral(toString(EQueryType::Schema)));

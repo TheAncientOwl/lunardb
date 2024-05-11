@@ -27,7 +27,6 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDepen
         Commit::makeExecutor(),
         Rollback::makeExecutor(),
         SavePoint::makeExecutor(),
-        Index::makeExecutor(),
         Database::makeExecutor(),
         Rebind::makeExecutor(),
         Schema::makeExecutor()};
@@ -72,7 +71,6 @@ PROVIDE_EXECUTOR_BUNDLER(Revoke)
 PROVIDE_EXECUTOR_BUNDLER(Commit)
 PROVIDE_EXECUTOR_BUNDLER(Rollback)
 PROVIDE_EXECUTOR_BUNDLER(SavePoint)
-PROVIDE_EXECUTOR_BUNDLER(Index)
 PROVIDE_EXECUTOR_BUNDLER(Database)
 PROVIDE_EXECUTOR_BUNDLER(Rebind)
 PROVIDE_EXECUTOR_BUNDLER(Schema)

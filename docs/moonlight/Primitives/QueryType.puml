@@ -21,7 +21,6 @@ enum Literal {
     Commit,
     Rollback,
     SavePoint,
-    Index,
     Database,
     Rebind,
     Schema

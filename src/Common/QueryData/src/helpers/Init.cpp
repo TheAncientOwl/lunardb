@@ -243,23 +243,6 @@ SavePointInit& SavePointInit::hash(const std::optional<std::string>& value)
     return base_t::hash = value, *this;
 }
 
-IndexInit& IndexInit::on_structure_name(const std::string& value)
-{
-    return base_t::on_structure_name = value, *this;
-}
-IndexInit& IndexInit::unique(const bool& value)
-{
-    return base_t::unique = value, *this;
-}
-IndexInit& IndexInit::name(const std::optional<std::string>& value)
-{
-    return base_t::name = value, *this;
-}
-IndexInit& IndexInit::using_fields(const std::vector<std::string>& value)
-{
-    return base_t::using_fields = value, *this;
-}
-
 DatabaseInit& DatabaseInit::operation_type(const Primitives::EDatabaseOperationType& value)
 {
     return base_t::operation_type = value, *this;

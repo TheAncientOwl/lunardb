@@ -139,13 +139,6 @@ PROVIDE_EQUALITY_OPERATOR(SavePoint,
     FIELD(hash)
 )
 
-PROVIDE_EQUALITY_OPERATOR(Index,
-    FIELD(on_structure_name),
-    FIELD(unique),
-    FIELD(name),
-    FIELD(using_fields)
-)
-
 PROVIDE_EQUALITY_OPERATOR(Database,
     FIELD(operation_type),
     FIELD(name),

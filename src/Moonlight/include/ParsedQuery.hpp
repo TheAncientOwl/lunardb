@@ -51,7 +51,6 @@ private: // fields;
         QueryData::Commit,
         QueryData::Rollback,
         QueryData::SavePoint,
-        QueryData::Index,
         QueryData::Database,
         QueryData::Rebind,
         QueryData::Schema>

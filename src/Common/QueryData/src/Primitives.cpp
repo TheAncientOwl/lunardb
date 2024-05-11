@@ -19,7 +19,6 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(QueryType,
     { Literal::Commit, "Commit" },
     { Literal::Rollback, "Rollback" },
     { Literal::SavePoint, "SavePoint" },
-    { Literal::Index, "Index" },
     { Literal::Database, "Database" },
     { Literal::Rebind, "Rebind" },
     { Literal::Schema, "Schema" }

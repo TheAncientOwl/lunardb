@@ -141,16 +141,6 @@ add_lunar_unit_test(
 )
 
 add_lunar_unit_test(
-    NAME IndexExecutorTest 
-    SOURCE_FILES test/Executors/IndexExecutorTest.cpp 
-    DEPENDENCIES 
-        LunarDB_Astral
-        LunarDB_Moonlight
-        LunarDB_Selenity
-        LunarDB_Common_CppExtensions
-)
-
-add_lunar_unit_test(
     NAME DatabaseExecutorTest 
     SOURCE_FILES test/Executors/DatabaseExecutorTest.cpp 
     DEPENDENCIES 

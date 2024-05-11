@@ -27,7 +27,6 @@ add_lunar_library(
         src/Executors/CommitExecutor.cpp
         src/Executors/RollbackExecutor.cpp
         src/Executors/SavePointExecutor.cpp
-        src/Executors/IndexExecutor.cpp
         src/Executors/DatabaseExecutor.cpp
         src/Executors/RebindExecutor.cpp
         src/Executors/SchemaExecutor.cpp

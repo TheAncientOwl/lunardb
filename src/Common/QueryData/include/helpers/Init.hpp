@@ -201,16 +201,6 @@ struct SavePointInit : public SavePoint
     SavePointInit& hash(std::optional<std::string> const& value);
 };
 
-struct IndexInit : public Index
-{
-    using base_t = Index;
-
-    IndexInit& on_structure_name(std::string const& value);
-    IndexInit& unique(bool const& value);
-    IndexInit& name(std::optional<std::string> const& value);
-    IndexInit& using_fields(std::vector<std::string> const& value);
-};
-
 struct DatabaseInit : public Database
 {
     using base_t = Database;

@@ -32,7 +32,6 @@ add_lunar_library(
         src/Parsers/CommitParser.cpp
         src/Parsers/RollbackParser.cpp
         src/Parsers/SavePointParser.cpp
-        src/Parsers/IndexParser.cpp
         src/Parsers/DatabaseParser.cpp
         src/Parsers/RebindParser.cpp
         src/Parsers/SchemaParser.cpp

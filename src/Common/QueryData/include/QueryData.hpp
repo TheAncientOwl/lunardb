@@ -165,14 +165,6 @@ struct SavePoint
     std::optional<std::string> hash;
 };
 
-struct Index
-{
-    std::string on_structure_name;
-    bool unique;
-    std::optional<std::string> name;
-    std::vector<std::string> using_fields;
-};
-
 struct Database
 {
     Primitives::EDatabaseOperationType operation_type;

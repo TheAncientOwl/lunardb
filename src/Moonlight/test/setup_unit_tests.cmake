@@ -146,14 +146,6 @@ add_lunar_unit_test(
 )
 
 add_lunar_unit_test(
-    NAME IndexParserTest 
-    SOURCE_FILES test/Parsers/IndexParserTest.cpp 
-    DEPENDENCIES 
-        LunarDB_Moonlight
-        LunarDB_Common_QueryData
-)
-
-add_lunar_unit_test(
     NAME DatabaseParserTest 
     SOURCE_FILES test/Parsers/DatabaseParserTest.cpp 
     DEPENDENCIES 

@@ -31,7 +31,6 @@ ParsedQuery parseQuery(std::string_view query)
         Commit::makeParser(),
         Rollback::makeParser(),
         SavePoint::makeParser(),
-        Index::makeParser(),
         Database::makeParser(),
         Rebind::makeParser(),
         Schema::makeParser()};
@@ -74,7 +73,6 @@ PROVIDE_PARSER_BUNLDER(Revoke, "revoke")
 PROVIDE_PARSER_BUNLDER(Commit, "commit")
 PROVIDE_PARSER_BUNLDER(Rollback, "rollback")
 PROVIDE_PARSER_BUNLDER(SavePoint, "savepoint")
-PROVIDE_PARSER_BUNLDER(Index, "index")
 PROVIDE_PARSER_BUNLDER(Database, "database")
 PROVIDE_PARSER_BUNLDER(Rebind, "rebind")
 PROVIDE_PARSER_BUNLDER(Schema, "schema")
