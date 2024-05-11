@@ -1,0 +1,130 @@
+queries:
+  # ---------------------------------------[ General Capabilities ]---------------------------------------- #
+  general-capabilities:
+    database:
+      syntax: |
+        database create|drop|backup|use DatabaseName 
+            to disk "/home/user/lunardb-backup";
+    transactions:
+      syntax: |
+        commit;
+        rollback [hash];
+        savepoint [hash];
+    rename:
+      syntax: |
+        rename structure|field|database from OldName to NewName;
+        rename structure|field|database from Structure::OldFieldName to Structure::NewFieldName;
+  # ---------------------------------------[ Structures Management ]--------------------------------------- #
+  structures-management:
+    create:
+      syntax: |
+        create [volatile] table|collection StructureName based on SchemaName binding [ 
+          field from SomeOtherTableName,
+        ] [blended];
+
+        create [volatile] tables|collections from [ 
+          Type1, Type2, ..., TypeN
+        ] using format "%TypeName%Structure";
+      see:
+        - queries.rebind
+    rebind:
+      syntax: |
+        rebind StructureName::fieldName to OtherTable [clean];
+    migrate:
+      syntax: |
+        migrate structure ExistingStructure to NewSchema;
+        migrate structure ExistingStructure to NewSchema using [
+            old_field1 => new_field1,
+            old_field2 => new_field2
+        ];
+    drop:
+      syntax: |
+        drop structure StructureName;
+        drop structure StructureName cascade;
+    truncate:
+      syntax: |
+        truncate structure StructureName;
+  # ------------------------------------------[ Data Management ]------------------------------------------ #
+  data:
+    select:
+      syntax: |
+        select from StructureName
+            where (rid = 11 or (rid >= 2 and 5 <= rid or eleome_field < 5000) or rid = 9  or rid = 120)
+            fields [ field1, field2, ..., fieldx ]
+            order by [ field1 asc, field2 desc, ..., field_z desc ];
+
+        select from StructureName::*arrayField*
+            where ( conditions... )
+            fields [ fields from arrayField..., StructureName::fields from StructureName ];
+    insert:
+      syntax: |
+        insert into StructureName objects [
+            {
+                "field0": 0,
+                "fieldM": {
+                    "_field1": 1,
+                    "_field2": 2
+                }
+                "fieldN": "X",
+            },
+            ...
+        ];
+      example: |
+        insert into StructureName objects [
+            {
+                "salary": "4000",
+                "name": "Bob",
+                "birth_date": "09/10/1985",
+                "address": {
+                    "street": "Soie Street",
+                    "number": "5"
+                }
+            }
+            {
+                "salary": "4000",
+                "rank": "HeadmasterSupreme", -- observe new field added dynamically
+                "name": "Ultimate Bob",
+                "birth_date": "09/10/1985",
+                "address": {
+                    "street": "Some Street",
+                    "number": "5"
+                }
+            }
+            {
+                "salary": "4000",
+                "rank(String)": "HeadmasterSupreme", -- observe new field added dynamically with data type
+                "name": "Ultimate Bob",
+                "birth_date": "09/10/1985",
+                "address": {
+                    "street": "Some Street",
+                    "number": "5"
+                }
+            }
+        ];
+    delete:
+      syntax: |
+        delete from structure StructureName
+            where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120);
+    update:
+      syntax: |
+        update structure StructureName 
+            where (rid = 11 or (rid >= 2 and 5 <= rid or some_field < 5000) or rid = 9  or rid = 120)
+            modify [
+                field1 => field1 * 1.5 + 2,
+                field2 => field3
+            ]
+  # -----------------------------------------[ Users Management ]------------------------------------------ #
+  users:
+    user:
+      syntax: |
+        user create|remove UserName;
+    grant:
+      syntax: |
+        grant [ update, insert, ..., delete ]
+          to UserName
+          on StructureName;
+    revoke:
+      syntax: |
+        revoke [ update, insert, ..., delete ]
+          from UserName
+          on StructureName;
