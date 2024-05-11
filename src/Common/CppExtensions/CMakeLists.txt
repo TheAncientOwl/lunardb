@@ -12,12 +12,14 @@ add_lunar_library(
         include/EncapsulationHelpers.hpp
         include/ItemArray.hpp
         include/LiteralToStringMap.hpp
+        include/Singleton.hpp
         include/StringUtils.hpp
 
         include/private/BinaryIO/Deserializer.inl
         include/private/BinaryIO/Serializer.inl
         include/private/ItemArray.inl
         include/private/LiteralToStringMap.inl
+        include/private/Singleton.inl
         include/private/StringUtils.inl
 
         include/testing/TempFileSystemGuards.hpp

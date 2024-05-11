@@ -13,3 +13,10 @@ add_lunar_unit_test(
     DEPENDENCIES 
         LunarDB_Common_CppExtensions
 )
+
+add_lunar_unit_test(
+    NAME SingletonTest
+    SOURCE_FILES test/SingletonTest.cpp
+    DEPENDENCIES 
+        LunarDB_Common_CppExtensions
+)
