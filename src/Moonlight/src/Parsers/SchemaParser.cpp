@@ -10,6 +10,7 @@ namespace {
 
 constexpr auto c_query_prefix{"schema"};
 
+// TODO: Add types validation
 QueryData::Schema::Field parseField(std::string_view str)
 {
     using namespace std::literals;
@@ -89,7 +90,8 @@ API::ParsedQuery Schema::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(schema, "schema");
 
     out.name = Errors::assertNotEmpty(schema_name, "schema name");
-    out.fields = extractor.extractList<QueryData::Schema::Field>(parseField, ';', std::make_pair('{', '}'));
+    out.fields =
+        extractor.extractList<QueryData::Schema::Field>(parseField, ';', std::make_pair('{', '}'));
 
     if (!extractor.empty())
     {

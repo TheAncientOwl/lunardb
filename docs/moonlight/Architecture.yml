@@ -16,6 +16,104 @@ queries:
         rename structure|field|database from Structure::OldFieldName to Structure::NewFieldName;
   # ---------------------------------------[ Structures Management ]--------------------------------------- #
   structures-management:
+    schema:
+      syntax: |
+        schema SchemaName {
+          field1: Type;
+          field2: Type?;
+          field3: ArrayOf<Type>;
+          ...
+        };
+
+        schema SchemaName inherits OtherSchemaName {
+          fieldX: Type;
+          ...
+        };
+      primitives:
+        types:
+          - String
+          - Boolean
+          - DateTime
+          - Integer, Integer8, Integer16, Integer32, Integer64
+          - Unsigned, Unsigned8, Unsigned16, Unsigned32, Unsigned64
+          - Float, Float32, Float64
+        notes:
+          - default value for plain Integer / Unsigned / Float types is max available value on system
+      defaults:
+        String: ''
+        Boolean: false
+        DateTime: current date and time
+        Integer: 0
+        Float: 0
+      example: |
+        schema Person {
+            firstName: String;
+            lastName: String;
+            phone: String;
+            email: String;
+        };
+        schema Client inherits Person {
+            creditLimit: Float;
+            birthDate: DateTime;
+            sex: String;
+            incomeLevel: String;
+        };
+        schema Region {
+            name: String;
+        }
+        schema Country {
+            name: String;
+            region: Region;
+        };
+        schema Location {
+            address: String;
+            postCode: String;
+            city: String;
+            country: Country;
+        };
+        schema Department {
+            name: String;
+            manager: Employee?;
+            location: Location;
+        };
+        schema Function {
+            name: String;
+            minSalary: Float;
+            maxSalary: Float;
+        };
+        schema Employee inherits Person {
+            employmentDate: DateTime;
+            manager: Employee?;
+            salary: Float;
+            function: Function;
+            department: Department;
+        };
+        schema Product {
+            name: String;
+            description: String;
+            category: String;
+            listPrice: Float;
+        };
+        schema OrderedProduct {
+            product: Product;
+            price: Float;
+            amount: Integer;
+        };
+        schema Order {
+            date: DateTime;
+            shipped: Boolean;
+            paymentType: String;
+            client: Client;
+            employee: Employee;
+            products: ArrayOf<OrderedProduct>;
+        };
+        schema FunctionsHistory {
+            startDate: DateTime;
+            endDate: DateTime;
+            employee: Employee;
+            function: Function;
+            department: Department;
+        };
     create:
       syntax: |
         create [volatile] table|collection StructureName based on SchemaName binding [ 
