@@ -1,0 +1,17 @@
+@startuml BrightMoonRecovery
+
+participant OperatingSystem as os
+database LunarDB as ldb
+
+os -> ldb : Start LunarDB
+ldb -> ldb : Crash Recovery
+ldb -> ldb : LunarDB actions...
+ldb -> ldb : Process X1, X2, X3, X4, X5
+ldb -> ldb : X1, X2, X3 processed
+ldb -> ldb : LunarDB crash
+os -> ldb : Start LunarDB
+ldb -> ldb : Crash Recovery
+ldb -> ldb : Redo X1, X2, X3
+ldb -> ldb : LunarDB actions...
+
+@enduml

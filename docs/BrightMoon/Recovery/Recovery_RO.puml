@@ -1,0 +1,17 @@
+@startuml BrightMoonRecovery
+
+participant SistemDeOperare as os
+database LunarDB as ldb
+
+os -> ldb : Start LunarDB
+ldb -> ldb : Crash Recovery
+ldb -> ldb : Diverse acțiuni de procesare
+ldb -> ldb : stocare X1, X2, X3, X4, X5
+ldb -> ldb : X1, X2, X3 stocate
+ldb -> ldb : LunarDB se oprește neașteptat
+os -> ldb : Start LunarDB
+ldb -> ldb : Crash Recovery
+ldb -> ldb : Refacere schimbări X1, X2, X3
+ldb -> ldb : Diverse acțiuni de procesare
+
+@enduml
