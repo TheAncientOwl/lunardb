@@ -1,0 +1,70 @@
+@startuml Business
+
+namespace FirmăDeCurierat {
+
+entity Curier {
+    nume
+    prenume
+    CNP
+    data_naștere
+    data_angajare
+    nr_telefon
+    email
+    salariu
+    funcție
+}
+
+entity Operator {
+    nume
+    prenume
+    CNP
+    data_naștere
+    data_angajare
+    nr_telefon
+    email
+    salariu
+    funcție
+}
+
+entity Client {
+    nume
+    prenume
+    CNP
+    data_naștere
+    nr_telefon
+    email
+}
+
+entity PersoanăDeContact {
+    nume
+    prenume
+    nr_telefon
+}
+
+entity Colet {
+    curier
+    client
+    persoană_contact
+    adresă_livrare
+    adresă_facturare
+    greutate_grame
+    preț_expediere
+}
+
+entity ȘedințăSuport {
+    operator
+    client
+    dată
+    descriere
+}
+
+Colet --* Curier
+Colet --* Client
+Colet --* PersoanăDeContact
+
+ȘedințăSuport --* Operator
+ȘedințăSuport --* Client
+
+}
+
+@enduml

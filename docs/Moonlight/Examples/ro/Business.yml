@@ -1,0 +1,7 @@
+scenariu:
+  activitate: firmă de curierat
+  date:
+    angajați: nume, prenume, CNP, data nașterii, nr. telefon, data angajării, salariu, funcție (curier / operator)
+    clienți: nume, prenume, CNP, data nașterii, nr. telefon, email
+    persoană-de-contact: nume, prenume, nr. telefon
+    colet: curier, client, persoană de contact, adresă de livrare, adresă de facturare, greutate în grame, preț de expediere
