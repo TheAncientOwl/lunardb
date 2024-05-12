@@ -51,6 +51,7 @@ entity SystemCatalog <<Singleton>> {
 }
 
 Implementation.DatabaseManager --* Implementation.Configs.CollectionConfig : use
+Implementation.DatabaseManager --* Implementation.CollectionManager : use
 Implementation.DatabaseManager ---* Common.CppExtensions.UniqueID : use
 
 Implementation.CollectionManager --* Implementation.Configs.MigrateConfig : use
