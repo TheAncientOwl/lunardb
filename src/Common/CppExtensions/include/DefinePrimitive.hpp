@@ -6,7 +6,6 @@
 
 #include "LunarDB/Common/CppExtensions/ItemArray.hpp"
 #include "LunarDB/Common/CppExtensions/LiteralToStringMap.hpp"
-#include "LunarDB/Common/QueryData/Primitives.hpp"
 
 ///
 /// @brief Define enum Literal, toString, toLiteral, operator<<() under 'name' namespace.
@@ -26,21 +25,22 @@
 ///
 /// @brief Define implementation of toString, toLiteral, operator<<() under 'name::Internal' namespace.
 ///
-#define DEFINE_LUNAR_PRIMITIVE_IMPL(name, ...)                                           \
-    namespace name {                                                                     \
-    namespace Internal {                                                                 \
-    CppExtensions::DataStructures::LiteralToStringMap<Literal> const map{{__VA_ARGS__}}; \
-    }                                                                                    \
-    std::string_view toString(Literal literal)                                           \
-    {                                                                                    \
-        return Internal::map.findByLiteral(literal);                                     \
-    }                                                                                    \
-    Literal toLiteral(std::string_view str)                                              \
-    {                                                                                    \
-        return Internal::map.findByString(str);                                          \
-    }                                                                                    \
-    std::ostream& operator<<(std::ostream& os, Literal const& rhs)                       \
-    {                                                                                    \
-        return os << toString(rhs);                                                      \
-    }                                                                                    \
+#define DEFINE_LUNAR_PRIMITIVE_IMPL(name, ...)                                             \
+    namespace name {                                                                       \
+    namespace Internal {                                                                   \
+    LunarDB::Common::CppExtensions::DataStructures::LiteralToStringMap<Literal> const map{ \
+        {__VA_ARGS__}};                                                                    \
+    }                                                                                      \
+    std::string_view toString(Literal literal)                                             \
+    {                                                                                      \
+        return Internal::map.findByLiteral(literal);                                       \
+    }                                                                                      \
+    Literal toLiteral(std::string_view str)                                                \
+    {                                                                                      \
+        return Internal::map.findByString(str);                                            \
+    }                                                                                      \
+    std::ostream& operator<<(std::ostream& os, Literal const& rhs)                         \
+    {                                                                                      \
+        return os << toString(rhs);                                                        \
+    }                                                                                      \
     }
