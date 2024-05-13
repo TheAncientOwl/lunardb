@@ -4,8 +4,6 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
-namespace CppExtensions = LunarDB::Common::CppExtensions;
-
 namespace {
 
 constexpr auto c_query_prefix{"drop"};
