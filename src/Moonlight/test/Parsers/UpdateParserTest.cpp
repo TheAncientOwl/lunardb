@@ -4,7 +4,7 @@
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
-using namespace QueryData;
+using namespace Common::QueryData;
 
 using Where = Init::WhereClauseInit;
 using BooleanExpression = Init::WhereClauseInit::BooleanExpressionInit;

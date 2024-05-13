@@ -4,7 +4,7 @@
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
-using namespace QueryData;
+using namespace Common::QueryData;
 
 // clang-format off
 TEST(Moonlight_DatabaseParserTest, success01)
