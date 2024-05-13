@@ -2,10 +2,10 @@
 
 namespace LunarDB::Common::CppExtensions::DesignPatterns {
 
-template <typename ObjectType>
-ObjectType& Singleton<ObjectType>::Instance()
+template <typename EntityType>
+EntityType& Singleton<EntityType>::Instance()
 {
-    static ObjectType s_instance{};
+    static EntityType s_instance{};
     return s_instance;
 }
 

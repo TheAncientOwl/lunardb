@@ -2,11 +2,11 @@
 
 namespace LunarDB::Common::CppExtensions::DesignPatterns {
 
-template <typename ObjectType>
+template <typename EntityType>
 class Singleton
 {
 public:
-    static ObjectType& Instance();
+    static EntityType& Instance();
 
 private:
     Singleton() = default;
