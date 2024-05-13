@@ -1,4 +1,5 @@
 @startuml Selenity
+!theme crt-amber
 
 left to right direction
 

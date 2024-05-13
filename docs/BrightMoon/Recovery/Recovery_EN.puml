@@ -1,4 +1,5 @@
 @startuml BrightMoonRecovery
+!theme crt-amber
 
 participant OperatingSystem as os
 database LunarDB as ldb
