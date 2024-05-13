@@ -6,7 +6,7 @@
 #include <functional>
 #include <optional>
 
-namespace LunarDB::CppExtensions::DataStructures {
+namespace LunarDB::Common::CppExtensions::DataStructures {
 
 ///
 /// @brief Enforces .first and .second members on a type.
@@ -45,6 +45,6 @@ private: // fields
     std::array<Data, Size> m_data;
 };
 
-} // namespace LunarDB::CppExtensions::DataStructures
+} // namespace LunarDB::Common::CppExtensions::DataStructures
 
 #include "LunarDB/Common/CppExtensions/private/ItemArray.inl"

@@ -9,7 +9,7 @@
         EXPECT_EQ(trimmed, str);                   \
     }
 
-namespace LunarDB::CppExtensions::StringUtils::Tests {
+namespace LunarDB::Common::CppExtensions::StringUtils::Tests {
 
 using namespace std::literals;
 
@@ -79,4 +79,4 @@ TEST(Common_CppExtensions_StringUtilsTest, startsWithIgnoreCase)
     EXPECT_FALSE(startsWithIgnoreCase("somestr1", "ssomestr2"));
 }
 
-} // namespace LunarDB::CppExtensions::StringUtils::Tests
+} // namespace LunarDB::Common::CppExtensions::StringUtils::Tests

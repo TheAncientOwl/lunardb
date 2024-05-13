@@ -8,7 +8,7 @@
 
 namespace LunarDB::Moonlight::Utils::Tests {
 
-using namespace CppExtensions;
+namespace CppExtensions = LunarDB::Common::CppExtensions;
 
 using Where = Common::QueryData::Init::WhereClauseInit;
 using BooleanExpression = Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit;

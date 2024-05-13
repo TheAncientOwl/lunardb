@@ -11,33 +11,35 @@ namespace LunarDB::Moonlight::API {
 
 ParsedQuery parseQuery(std::string_view query)
 {
-    using namespace Implementation;
-    using namespace CppExtensions;
+    namespace CppExtensions = LunarDB::Common::CppExtensions;
+    namespace DataStructures = CppExtensions::DataStructures;
+    namespace StringUtils = CppExtensions::StringUtils;
 
     StringUtils::trim(query);
 
-    static const DataStructures::ItemArray<ParserBundle, 20> s_parsers{
-        Create::makeParser(),
-        Drop::makeParser(),
-        Migrate::makeParser(),
-        Truncate::makeParser(),
-        Rename::makeParser(),
-        Select::makeParser(),
-        Insert::makeParser(),
-        Update::makeParser(),
-        Delete::makeParser(),
-        Grant::makeParser(),
-        Revoke::makeParser(),
-        Commit::makeParser(),
-        Rollback::makeParser(),
-        SavePoint::makeParser(),
-        Database::makeParser(),
-        Rebind::makeParser(),
-        Schema::makeParser()};
+    static const DataStructures::ItemArray<Implementation::ParserBundle, 20> s_parsers{
+        Implementation::Create::makeParser(),
+        Implementation::Drop::makeParser(),
+        Implementation::Migrate::makeParser(),
+        Implementation::Truncate::makeParser(),
+        Implementation::Rename::makeParser(),
+        Implementation::Select::makeParser(),
+        Implementation::Insert::makeParser(),
+        Implementation::Update::makeParser(),
+        Implementation::Delete::makeParser(),
+        Implementation::Grant::makeParser(),
+        Implementation::Revoke::makeParser(),
+        Implementation::Commit::makeParser(),
+        Implementation::Rollback::makeParser(),
+        Implementation::SavePoint::makeParser(),
+        Implementation::Database::makeParser(),
+        Implementation::Rebind::makeParser(),
+        Implementation::Schema::makeParser()};
 
-    auto const parser_opt = s_parsers.find_if([query](ParserBundle const& query_parser) {
-        return StringUtils::startsWithIgnoreCase(query, query_parser.first);
-    });
+    auto const parser_opt =
+        s_parsers.find_if([query](Implementation::ParserBundle const& query_parser) {
+            return StringUtils::startsWithIgnoreCase(query, query_parser.first);
+        });
 
     if (static_cast<bool>(parser_opt))
     {

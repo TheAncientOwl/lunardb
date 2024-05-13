@@ -1,6 +1,6 @@
 #pragma once
 
-namespace LunarDB::CppExtensions::DesignPatterns {
+namespace LunarDB::Common::CppExtensions::DesignPatterns {
 
 template <typename ObjectType>
 class Singleton
@@ -19,6 +19,6 @@ public:
     Singleton& operator=(Singleton&&) noexcept = delete;
 };
 
-} // namespace LunarDB::CppExtensions::DesignPatterns
+} // namespace LunarDB::Common::CppExtensions::DesignPatterns
 
 #include "LunarDB/Common/CppExtensions/private/Singleton.inl"

@@ -2,7 +2,7 @@
 
 #include "LunarDB/Common/CppExtensions/ItemArray.hpp"
 
-namespace LunarDB::CppExtensions::DataStructures {
+namespace LunarDB::Common::CppExtensions::DataStructures {
 
 template <Item Data, std::size_t Size>
 template <typename... Args>
@@ -26,4 +26,4 @@ std::optional<typename Data::second_type> ItemArray<Data, Size>::find_if(Callabl
     }
 }
 
-} // namespace LunarDB::CppExtensions::DataStructures
+} // namespace LunarDB::Common::CppExtensions::DataStructures

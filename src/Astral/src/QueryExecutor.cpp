@@ -9,30 +9,29 @@ namespace LunarDB::Astral::API {
 
 void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDependencies const& config)
 {
-    using namespace Implementation;
-    using namespace CppExtensions;
+    namespace DataStructures = LunarDB::Common::CppExtensions::DataStructures;
 
-    static const DataStructures::ItemArray<ExecutorBundle, 20> s_executors{
-        Create::makeExecutor(),
-        Drop::makeExecutor(),
-        Migrate::makeExecutor(),
-        Truncate::makeExecutor(),
-        Rename::makeExecutor(),
-        Select::makeExecutor(),
-        Insert::makeExecutor(),
-        Update::makeExecutor(),
-        Delete::makeExecutor(),
-        Grant::makeExecutor(),
-        Revoke::makeExecutor(),
-        Commit::makeExecutor(),
-        Rollback::makeExecutor(),
-        SavePoint::makeExecutor(),
-        Database::makeExecutor(),
-        Rebind::makeExecutor(),
-        Schema::makeExecutor()};
+    static const DataStructures::ItemArray<Implementation::ExecutorBundle, 20> s_executors{
+        Implementation::Create::makeExecutor(),
+        Implementation::Drop::makeExecutor(),
+        Implementation::Migrate::makeExecutor(),
+        Implementation::Truncate::makeExecutor(),
+        Implementation::Rename::makeExecutor(),
+        Implementation::Select::makeExecutor(),
+        Implementation::Insert::makeExecutor(),
+        Implementation::Update::makeExecutor(),
+        Implementation::Delete::makeExecutor(),
+        Implementation::Grant::makeExecutor(),
+        Implementation::Revoke::makeExecutor(),
+        Implementation::Commit::makeExecutor(),
+        Implementation::Rollback::makeExecutor(),
+        Implementation::SavePoint::makeExecutor(),
+        Implementation::Database::makeExecutor(),
+        Implementation::Rebind::makeExecutor(),
+        Implementation::Schema::makeExecutor()};
 
     auto const executor_opt =
-        s_executors.find_if([&parsed_query](ExecutorBundle const& query_executor) {
+        s_executors.find_if([&parsed_query](Implementation::ExecutorBundle const& query_executor) {
             return parsed_query.type() == query_executor.first;
         });
 

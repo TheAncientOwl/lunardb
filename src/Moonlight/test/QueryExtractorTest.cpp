@@ -6,7 +6,7 @@
 
 namespace LunarDB::Moonlight::Implementation::Tests {
 
-using namespace CppExtensions;
+namespace CppExtensions = LunarDB::Common::CppExtensions;
 using namespace std::literals;
 
 // clang-format off

@@ -6,7 +6,7 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
-using namespace CppExtensions;
+namespace StringUtils = Common::CppExtensions::StringUtils;
 
 namespace {
 

@@ -4,7 +4,7 @@
 
 #include "LunarDB/Common/CppExtensions/LiteralToStringMap.hpp"
 
-namespace LunarDB::CppExtensions::DataStructures {
+namespace LunarDB::Common::CppExtensions::DataStructures {
 
 template <Enumeration Literal>
 LiteralToStringMap<Literal>::LiteralToStringMap(LiteralToStringMap<Literal>::container data)
@@ -50,4 +50,4 @@ Literal LiteralToStringMap<Literal>::findByString(std::string_view str) const
     return it->first;
 }
 
-} // namespace LunarDB::CppExtensions::DataStructures
+} // namespace LunarDB::Common::CppExtensions::DataStructures

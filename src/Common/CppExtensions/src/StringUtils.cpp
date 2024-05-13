@@ -4,7 +4,7 @@
 
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
-namespace LunarDB::CppExtensions::StringUtils {
+namespace LunarDB::Common::CppExtensions::StringUtils {
 
 void ltrim(std::string_view& str)
 {
@@ -60,4 +60,4 @@ bool startsWithIgnoreCase(std::string_view src, std::string_view what)
     return equalsIgnoreCase(src.substr(0, what.length()), what);
 }
 
-} // namespace LunarDB::CppExtensions::StringUtils
+} // namespace LunarDB::Common::CppExtensions::StringUtils

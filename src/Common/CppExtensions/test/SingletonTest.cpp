@@ -2,7 +2,7 @@
 
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
 
-namespace LunarDB::CppExtensions::DesignPatterns::Tests {
+namespace LunarDB::Common::CppExtensions::DesignPatterns::Tests {
 
 struct SomeClass : public Singleton<SomeClass>
 {
@@ -22,4 +22,4 @@ TEST(Common_CppExtensions_SingletonTest, dummy)
     }
 }
 
-} // namespace LunarDB::CppExtensions::DesignPatterns::Tests
+} // namespace LunarDB::Common::CppExtensions::DesignPatterns::Tests

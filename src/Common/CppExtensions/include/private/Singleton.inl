@@ -1,6 +1,6 @@
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
 
-namespace LunarDB::CppExtensions::DesignPatterns {
+namespace LunarDB::Common::CppExtensions::DesignPatterns {
 
 template <typename ObjectType>
 ObjectType& Singleton<ObjectType>::Instance()
@@ -9,4 +9,4 @@ ObjectType& Singleton<ObjectType>::Instance()
     return s_instance;
 }
 
-} // namespace LunarDB::CppExtensions::DesignPatterns
+} // namespace LunarDB::Common::CppExtensions::DesignPatterns

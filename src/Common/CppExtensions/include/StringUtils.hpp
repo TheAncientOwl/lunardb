@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace LunarDB::CppExtensions::StringUtils {
+namespace LunarDB::Common::CppExtensions::StringUtils {
 
 ///
 /// @return Stringview of all possible whitespace characters.
@@ -44,6 +44,6 @@ void trim(std::string_view& str);
 ///
 [[nodiscard]] bool startsWithIgnoreCase(std::string_view src, std::string_view what);
 
-} // namespace LunarDB::CppExtensions::StringUtils
+} // namespace LunarDB::Common::CppExtensions::StringUtils
 
 #include "LunarDB/Common/CppExtensions/private/StringUtils.inl"

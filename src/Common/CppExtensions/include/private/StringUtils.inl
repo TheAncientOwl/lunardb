@@ -2,7 +2,7 @@
 
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
-namespace LunarDB::CppExtensions::StringUtils {
+namespace LunarDB::Common::CppExtensions::StringUtils {
 
 constexpr std::string_view whitespace() noexcept
 {
@@ -17,4 +17,4 @@ template <typename... Args>
     return std::move(oss.str());
 }
 
-} // namespace LunarDB::CppExtensions::StringUtils
+} // namespace LunarDB::Common::CppExtensions::StringUtils

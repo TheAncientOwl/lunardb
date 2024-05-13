@@ -7,7 +7,8 @@
 
 namespace LunarDB::Moonlight::Implementation {
 
-using namespace CppExtensions;
+namespace CppExtensions = LunarDB::Common::CppExtensions;
+namespace StringUtils = Common::CppExtensions::StringUtils;
 
 QueryExtractor::QueryExtractor(std::string_view query) : m_data(query)
 {

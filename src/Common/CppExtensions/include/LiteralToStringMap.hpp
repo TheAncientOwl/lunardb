@@ -7,7 +7,7 @@
 
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 
-namespace LunarDB::CppExtensions::DataStructures {
+namespace LunarDB::Common::CppExtensions::DataStructures {
 
 ///
 /// @brief Concept to enforce a type to be enum.
@@ -47,6 +47,6 @@ private: // fields
     container m_data;
 };
 
-} // namespace LunarDB::CppExtensions::DataStructures
+} // namespace LunarDB::Common::CppExtensions::DataStructures
 
 #include "LunarDB/Common/CppExtensions/private/LiteralToStringMap.inl"

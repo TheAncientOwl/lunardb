@@ -6,7 +6,8 @@
 
 namespace LunarDB::Moonlight::Utils {
 
-using namespace CppExtensions;
+namespace CppExtensions = LunarDB::Common::CppExtensions;
+namespace StringUtils = CppExtensions::StringUtils;
 
 std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier)
 {
