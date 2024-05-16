@@ -1,8 +1,11 @@
+#include <unordered_set>
+
 #include "Errors.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
-#include <unordered_set>
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
 
 namespace LunarDB::Moonlight::Implementation {
 
@@ -33,6 +36,8 @@ Common::QueryData::Select::Order parseOrderBy(std::string_view str)
 
 API::ParsedQuery Select::parse(QueryExtractor extractor)
 {
+    CLOG_VERBOSE("Parsing 'select' query");
+
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Select>();
     auto& out = out_parsed_query.get<Common::QueryData::Select>();
 

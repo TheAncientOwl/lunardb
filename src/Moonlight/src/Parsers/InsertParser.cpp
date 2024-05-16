@@ -3,6 +3,9 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::Implementation {
 
 namespace StringUtils = LunarDB::Common::CppExtensions::StringUtils;
@@ -136,6 +139,8 @@ std::vector<Common::QueryData::Insert::Object> parseObjects(std::string_view str
 
 API::ParsedQuery Insert::parse(QueryExtractor extractor)
 {
+    CLOG_VERBOSE("Parsing 'insert' query");
+
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Insert>();
     auto& out = out_parsed_query.get<Common::QueryData::Insert>();
 

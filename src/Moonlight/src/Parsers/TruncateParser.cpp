@@ -2,6 +2,9 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::Implementation {
 
 namespace {
@@ -12,6 +15,8 @@ constexpr auto c_query_prefix{"truncate"};
 
 API::ParsedQuery Truncate::parse(QueryExtractor extractor)
 {
+    CLOG_VERBOSE("Parsing 'truncate' query");
+
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Truncate>();
     auto& out = out_parsed_query.get<Common::QueryData::Truncate>();
 

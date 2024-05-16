@@ -4,6 +4,9 @@
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::Utils {
 
 namespace CppExtensions = LunarDB::Common::CppExtensions;
@@ -288,6 +291,8 @@ Common::QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpressio
                 break;
             }
             default: {
+                CLOG_WARN(
+                    "Operator", static_cast<std::int64_t>(expression.operation), "not implemented");
                 throw Errors::buildError("Operator not implemented, please contact developer");
                 break;
             }

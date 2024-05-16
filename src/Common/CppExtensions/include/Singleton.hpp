@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mutex>
+
 namespace LunarDB::Common::CppExtensions::DesignPatterns {
 
 template <typename EntityType>
@@ -8,8 +10,10 @@ class Singleton
 public:
     static EntityType& Instance();
 
-private:
+protected:
     Singleton() = default;
+
+    virtual void init() {};
 
 public:
     ~Singleton() = default;
@@ -20,5 +24,11 @@ public:
 };
 
 } // namespace LunarDB::Common::CppExtensions::DesignPatterns
+
+#define LUNAR_SINGLETON_INIT(classname)                                       \
+    friend class Common::CppExtensions::DesignPatterns::Singleton<classname>; \
+    void init() final override
+
+#define LUNAR_SINGLETON_INIT_IMPL(classname) void classname::init()
 
 #include "LunarDB/Common/CppExtensions/private/Singleton.inl"

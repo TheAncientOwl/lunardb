@@ -7,6 +7,9 @@
 #include "QueryParser.hpp"
 #include "QueryParsers.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::API {
 
 ParsedQuery parseQuery(std::string_view query)
@@ -14,6 +17,8 @@ ParsedQuery parseQuery(std::string_view query)
     namespace CppExtensions = LunarDB::Common::CppExtensions;
     namespace DataStructures = CppExtensions::DataStructures;
     namespace StringUtils = CppExtensions::StringUtils;
+
+    CLOG_VERBOSE("Parsing query: ", query);
 
     StringUtils::trim(query);
 
@@ -43,7 +48,9 @@ ParsedQuery parseQuery(std::string_view query)
 
     if (static_cast<bool>(parser_opt))
     {
-        return parser_opt.value()(query);
+        auto const parsed_query{parser_opt.value()(query)};
+        CLOG_VERBOSE("Query parsed successfully: ", query);
+        return parsed_query;
     }
     else
     {

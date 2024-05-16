@@ -4,6 +4,9 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::Implementation {
 
 namespace StringUtils = LunarDB::Common::CppExtensions::StringUtils;
@@ -36,6 +39,8 @@ Common::QueryData::Update::Modify parseModify(std::string_view str)
 
 API::ParsedQuery Update::parse(QueryExtractor extractor)
 {
+    CLOG_VERBOSE("Parsing 'update' query");
+
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Update>();
     auto& out = out_parsed_query.get<Common::QueryData::Update>();
 

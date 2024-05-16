@@ -4,6 +4,9 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Crescentum/Logger.hpp"
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
+
 namespace LunarDB::Moonlight::Implementation {
 
 namespace StringUtils = Common::CppExtensions::StringUtils;
@@ -160,6 +163,8 @@ Common::QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
 API::ParsedQuery Create::parse(QueryExtractor extractor)
 {
+    CLOG_VERBOSE("Parsing 'create' query");
+
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Create>();
     auto& out = out_parsed_query.get<Common::QueryData::Create>();
 
