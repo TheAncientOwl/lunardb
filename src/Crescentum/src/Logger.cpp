@@ -36,12 +36,12 @@ LUNAR_SINGLETON_INIT_IMPL(Logger)
         std::filesystem::create_directories(c_logs_dir_path);
     }
 
-    auto const c_log_file{
+    auto const c_log_file_path{
         c_logs_dir_path /
         ("session." + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) +
          ".log")};
 
-    m_log.open(c_log_file);
+    m_log.open(c_log_file_path);
     m_log_start_time = std::chrono::system_clock::now();
 }
 
@@ -54,6 +54,11 @@ void Logger::close()
     }
 
     m_log.close();
+}
+
+Logger::~Logger()
+{
+    close();
 }
 
 } // namespace LunarDB::Crescentum::API

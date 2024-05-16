@@ -39,6 +39,9 @@ public:
 
     void close();
 
+public:
+    ~Logger();
+
 private:
     LUNAR_SINGLETON_INIT(Logger);
 
