@@ -26,9 +26,9 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
 
     Astral::Implementation::Database::execute(parsed_query, deps);
 
-    ASSERT_TRUE(catalog.configs().size() == 1);
-    auto const database_storage_path = catalog.configs()[0].storage_path();
-    EXPECT_TRUE(std::filesystem::exists(database_storage_path));
+    ASSERT_TRUE(catalog.getConfigs().size() == 1);
+    auto const database_home_path = catalog.getConfigs()[0].getHomePath();
+    EXPECT_TRUE(std::filesystem::exists(database_home_path));
 
     // 3. use existing database
     parsed_query.get<Common::QueryData::Database>() =
@@ -50,9 +50,9 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
 
     // 5. load catalog from disk, check if configs saved
-    auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+    auto const old_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
     catalog.loadFromDisk();
-    auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+    auto const new_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
 
     EXPECT_EQ(old_cfgs, new_cfgs);
 
@@ -68,8 +68,8 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
 
     Astral::Implementation::Database::execute(parsed_query, deps);
 
-    ASSERT_TRUE(catalog.configs().empty());
-    EXPECT_FALSE(std::filesystem::exists(database_storage_path));
+    ASSERT_TRUE(catalog.getConfigs().empty());
+    EXPECT_FALSE(std::filesystem::exists(database_home_path));
 
     // 8. throw when dropping same database
     EXPECT_THROW(

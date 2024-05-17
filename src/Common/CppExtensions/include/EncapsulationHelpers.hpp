@@ -1,21 +1,21 @@
 #pragma once
 
-#define LUNAR_PROVIDE_GETTER(field) \
-    inline auto field() const       \
-    {                               \
-        return m_##field;           \
+#define LUNAR_PROVIDE_GETTER(field, getter_name) \
+    inline auto getter_name() const              \
+    {                                            \
+        return m_##field;                        \
     }
 
-#define LUNAR_PROVIDE_REF_GETTER(field) \
-    inline auto& field()                \
-    {                                   \
-        return m_##field;               \
+#define LUNAR_PROVIDE_REF_GETTER(field, getter_name) \
+    inline auto& get##getter_name()                  \
+    {                                                \
+        return m_##field;                            \
     }
 
-#define LUNAR_PROVIDE_CONST_GETTER(field) \
-    inline auto const& field() const      \
-    {                                     \
-        return m_##field;                 \
+#define LUNAR_PROVIDE_CONST_GETTER(field, getter_name) \
+    inline auto const& get##getter_name() const        \
+    {                                                  \
+        return m_##field;                              \
     }
 
 #define LUNAR_PROVIDE_SETTER(field, setter_name)   \
@@ -24,12 +24,12 @@
         m_##field = std::move(new_##field);        \
     }
 
-#define LUNAR_PROVIDE_WINDOW(field, setter_name) \
-    LUNAR_PROVIDE_GETTER(field)                  \
+#define LUNAR_PROVIDE_GET_SET(field, setter_name) \
+    LUNAR_PROVIDE_GETTER(field, setter_name)      \
     LUNAR_PROVIDE_SETTER(field, setter_name)
 
-#define LUNAR_PROVIDE_REF_WINDOW(field, setter_name) \
-    LUNAR_PROVIDE_CONST_GETTER(field)                \
+#define LUNAR_PROVIDE_REF_GET_SET(field, setter_name) \
+    LUNAR_PROVIDE_CONST_GETTER(field, setter_name)    \
     LUNAR_PROVIDE_SETTER(field, setter_name)
 
 #define LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(type) bool operator==(type const&) const = default;

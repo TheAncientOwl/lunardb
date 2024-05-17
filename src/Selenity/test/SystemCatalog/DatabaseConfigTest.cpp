@@ -32,7 +32,7 @@ TEST(Selenity_SystemCatalog_DatabaseConfigTest, binary_io_setters)
 
     std::ofstream out(c_file, std::ios::binary);
     DatabaseConfig out_config{"/tmp/lunardb/some_db_storage", "some_db"};
-    out_config.setStoragePath("some/storage_path");
+    out_config.setHomePath("some/home_path");
     out_config.setName("some_name");
     Common::CppExtensions::BinaryIO::Serializer::serialize(out, out_config);
     out.close();

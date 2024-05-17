@@ -19,11 +19,11 @@ TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
 
     // 2. create database
     catalog.createDatabase("some_database");
-    auto const database_storage_path = catalog.configs()[0].storage_path();
+    auto const database_home_path = catalog.getConfigs()[0].getHomePath();
     catalog.saveToDisk();
 
-    ASSERT_TRUE(catalog.configs().size() == 1);
-    EXPECT_TRUE(std::filesystem::exists(database_storage_path));
+    ASSERT_TRUE(catalog.getConfigs().size() == 1);
+    EXPECT_TRUE(std::filesystem::exists(database_home_path));
 
     // 3. throw when using non existing database
     EXPECT_THROW({ catalog.useDatabase("non_existing_db"); }, std::runtime_error);
@@ -34,9 +34,9 @@ TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
 
     // 4. check if changes saved
     {
-        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
         catalog.loadFromDisk();
-        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
     }
 
     // 5. throw when creating same database
@@ -46,15 +46,15 @@ TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
     catalog.dropDatabase("some_database");
     catalog.saveToDisk();
 
-    ASSERT_TRUE(catalog.configs().empty());
-    EXPECT_FALSE(std::filesystem::exists(database_storage_path));
+    ASSERT_TRUE(catalog.getConfigs().empty());
+    EXPECT_FALSE(std::filesystem::exists(database_home_path));
     EXPECT_FALSE(catalog.usingDatabase());
 
     // 7. check if changes saved
     {
-        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
         catalog.loadFromDisk();
-        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().getConfigs();
     }
 
     // 8. throw when dropping same database

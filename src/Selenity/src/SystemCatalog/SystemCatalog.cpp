@@ -50,7 +50,7 @@ void SystemCatalog::loadFromDisk()
 auto SystemCatalog::findDatabaseConfigByName(std::string_view name) const
 {
     return std::find_if(std::begin(m_configs), std::end(m_configs), [name](auto const& db_config) {
-        return db_config.name() == name;
+        return db_config.getName() == name;
     });
 }
 
@@ -62,7 +62,7 @@ void SystemCatalog::createDatabase(std::string name)
     }
 
     auto& db_config = m_configs.emplace_back(getLunarHomePath() / "storage" / name, std::move(name));
-    std::filesystem::create_directories(db_config.storage_path());
+    std::filesystem::create_directories(db_config.getHomePath());
 }
 
 void SystemCatalog::dropDatabase(std::string_view name)
@@ -78,7 +78,7 @@ void SystemCatalog::dropDatabase(std::string_view name)
         m_config_in_use_index = std::nullopt;
     }
 
-    std::filesystem::remove_all(config_it->storage_path());
+    std::filesystem::remove_all(config_it->getHomePath());
     m_configs.erase(config_it);
 }
 
@@ -107,6 +107,16 @@ void SystemCatalog::clear()
 SystemCatalog::~SystemCatalog()
 {
     saveToDisk();
+}
+
+std::optional<std::filesystem::path> SystemCatalog::getDatabaseInUseHomePath() const
+{
+    if (static_cast<bool>(m_config_in_use_index))
+    {
+        return m_configs[*m_config_in_use_index].getHomePath();
+    }
+
+    return std::nullopt;
 }
 
 } // namespace LunarDB::Selenity::API

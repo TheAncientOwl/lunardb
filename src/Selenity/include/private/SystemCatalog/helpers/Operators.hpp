@@ -20,7 +20,7 @@ namespace LunarDB::Selenity::Implementation::SystemCatalog {
 
 std::ostream& operator<<(std::ostream& os, DatabaseConfig const& rhs)
 {
-    os << "DatabaseConfig{ " << "storage_path: " << rhs.storage_path() << ", name: " << rhs.name()
+    os << "DatabaseConfig{ " << "home_path: " << rhs.getHomePath() << ", name: " << rhs.getName()
        << " }";
     return os;
 }

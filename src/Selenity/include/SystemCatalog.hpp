@@ -57,12 +57,19 @@ public: // public API
 
     ///
     /// @brief Self explanatory
+    /// @return Requested path if any database in use, std::nullopt otherwise
+    ///
+    std::optional<std::filesystem::path> getDatabaseInUseHomePath() const;
+
+public: // lifecycle
+    ///
+    /// @brief Self explanatory
     /// @note Save data to disk
     ///
     ~SystemCatalog();
 
 public: // basic encapsulation
-    LUNAR_PROVIDE_CONST_GETTER(configs);
+    LUNAR_PROVIDE_CONST_GETTER(configs, Configs);
     LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(SystemCatalog);
 
 private: // singleton
