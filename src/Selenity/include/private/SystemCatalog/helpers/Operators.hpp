@@ -29,17 +29,17 @@ std::ostream& operator<<(std::ostream& os, DatabaseConfig const& rhs)
 
 namespace LunarDB::Selenity::API {
 
-std::ostream& operator<<(std::ostream& os, SystemCatalog const& rhs)
+template <typename T>
+std::ostream& operator<<(std::ostream& os, std::optional<T> const& rhs)
 {
-    os << "lunar_home: " << rhs.m_lunar_home << ", configs: " << rhs.m_configs
-       << ", config_in_use_index: " << rhs.m_config_in_use_index
-       << ", config_in_use_index_valid: " << std::boolalpha << rhs.m_config_in_use_index_valid;
-    return os;
+    return (static_cast<bool>(rhs) ? os << *rhs : os << "---");
 }
 
-bool surfaceEquals(SystemCatalog const& lhs, SystemCatalog const& rhs)
+std::ostream& operator<<(std::ostream& os, SystemCatalog const& rhs)
 {
-    return lhs.configs() == rhs.configs();
+    os << "lunar_home: " << rhs.getLunarHomePath() << ", configs: " << rhs.m_configs
+       << ", config_in_use_index: " << rhs.m_config_in_use_index;
+    return os;
 }
 
 } // namespace LunarDB::Selenity::API

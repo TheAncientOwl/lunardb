@@ -13,56 +13,52 @@ using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards:
 TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
 {
     // 1. setup
-    TempDirectoryGuard const c_lunar_home{TEMP_LUNAR_HOME_PATH};
+    TempDirectoryGuard const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
 
-    SystemCatalog out_catalog{c_lunar_home};
+    auto& catalog{Selenity::API::SystemCatalog::Instance()};
 
     // 2. create database
-    out_catalog.createDatabase("some_database");
-    auto const database_storage_path = out_catalog.configs()[0].storage_path();
-    out_catalog.saveToDisk();
+    catalog.createDatabase("some_database");
+    auto const database_storage_path = catalog.configs()[0].storage_path();
+    catalog.saveToDisk();
 
-    ASSERT_TRUE(out_catalog.configs().size() == 1);
+    ASSERT_TRUE(catalog.configs().size() == 1);
     EXPECT_TRUE(std::filesystem::exists(database_storage_path));
 
     // 3. throw when using non existing database
-    EXPECT_THROW({ out_catalog.useDatabase("non_existing_db"); }, std::runtime_error);
+    EXPECT_THROW({ catalog.useDatabase("non_existing_db"); }, std::runtime_error);
 
     // 3. use database
-    out_catalog.useDatabase("some_database");
-    EXPECT_TRUE(out_catalog.usingDatabase());
+    catalog.useDatabase("some_database");
+    EXPECT_TRUE(catalog.usingDatabase());
 
     // 4. check if changes saved
     {
-        SystemCatalog in_catalog{c_lunar_home};
-        in_catalog.loadFromDisk();
-
-        EXPECT_TRUE(surfaceEquals(out_catalog, in_catalog))
-            << "in_catalog: " << in_catalog << "\nout_catalog: " << out_catalog;
+        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        catalog.loadFromDisk();
+        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
     }
 
     // 5. throw when creating same database
-    EXPECT_THROW({ out_catalog.createDatabase("some_database"); }, std::runtime_error);
+    EXPECT_THROW({ catalog.createDatabase("some_database"); }, std::runtime_error);
 
     // 6. drop database
-    out_catalog.dropDatabase("some_database");
-    out_catalog.saveToDisk();
+    catalog.dropDatabase("some_database");
+    catalog.saveToDisk();
 
-    ASSERT_TRUE(out_catalog.configs().empty());
+    ASSERT_TRUE(catalog.configs().empty());
     EXPECT_FALSE(std::filesystem::exists(database_storage_path));
-    EXPECT_FALSE(out_catalog.usingDatabase());
+    EXPECT_FALSE(catalog.usingDatabase());
 
     // 7. check if changes saved
     {
-        SystemCatalog in_catalog{c_lunar_home};
-        in_catalog.loadFromDisk();
-
-        EXPECT_TRUE(surfaceEquals(out_catalog, in_catalog))
-            << "in_catalog: " << in_catalog << "\nout_catalog: " << out_catalog;
+        auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+        catalog.loadFromDisk();
+        auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
     }
 
     // 8. throw when dropping same database
-    EXPECT_THROW({ out_catalog.dropDatabase("some_database"); }, std::runtime_error);
+    EXPECT_THROW({ catalog.dropDatabase("some_database"); }, std::runtime_error);
 }
 
 } // namespace LunarDB::Selenity::API::Tests

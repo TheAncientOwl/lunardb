@@ -1,4 +1,5 @@
 #include "LunarDB/Crescentum/Logger.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
 
 #include <filesystem>
 #include <string>
@@ -29,7 +30,8 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(LunarModule,
 
 LUNAR_SINGLETON_INIT_IMPL(Logger)
 {
-    static std::filesystem::path const c_logs_dir_path{"/tmp/lunardb/logs"};
+    static auto const c_logs_dir_path{
+        Selenity::API::SystemCatalog::Instance().getLunarHomePath() / "logs"};
 
     if (!std::filesystem::exists(c_logs_dir_path))
     {

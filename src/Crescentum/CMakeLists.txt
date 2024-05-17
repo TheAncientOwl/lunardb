@@ -9,6 +9,7 @@ add_lunar_library(
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
+        LunarDB_Selenity
 
     SOURCE_FILES
         src/Logger.cpp

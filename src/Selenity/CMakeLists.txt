@@ -9,6 +9,7 @@ add_lunar_library(
         include/private/SystemCatalog/helpers/Operators.hpp
 
     PRIVATE_DEPENDENCIES
+        LunarDB_Common_CppExtensions
 
     SOURCE_FILES
         src/SystemCatalog/SystemCatalog.cpp

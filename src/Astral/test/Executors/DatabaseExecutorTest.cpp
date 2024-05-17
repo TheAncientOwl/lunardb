@@ -12,8 +12,9 @@ using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards:
 TEST(Astral_DatabaseExecutorTest, create_drop_use)
 {
     // 1. setup
-    TempDirectoryGuard const c_lunar_home{TEMP_LUNAR_HOME_PATH};
-    Selenity::API::SystemCatalog catalog{c_lunar_home};
+    TempDirectoryGuard const c_lunar_home{
+        Selenity::API::SystemCatalog::Instance().getLunarHomePath().string()};
+    auto& catalog{Selenity::API::SystemCatalog::Instance()};
     API::SelenityDependencies deps{catalog};
 
     // 2. create database
@@ -49,13 +50,11 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
         { Astral::Implementation::Database::execute(parsed_query, deps); }, std::runtime_error);
 
     // 5. load catalog from disk, check if configs saved
-    {
-        Selenity::API::SystemCatalog in_catalog{c_lunar_home};
-        in_catalog.loadFromDisk();
+    auto const old_cfgs = Selenity::API::SystemCatalog::Instance().configs();
+    catalog.loadFromDisk();
+    auto const new_cfgs = Selenity::API::SystemCatalog::Instance().configs();
 
-        EXPECT_TRUE(surfaceEquals(catalog, in_catalog))
-            << "in_catalog: " << in_catalog << "\ncatalog: " << catalog;
-    }
+    EXPECT_EQ(old_cfgs, new_cfgs);
 
     // 6. throw when creating same database
     EXPECT_THROW(

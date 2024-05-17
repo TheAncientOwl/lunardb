@@ -7,8 +7,7 @@
 
 #define AS_STRING_(x) #x
 #define AS_STRING(x) AS_STRING_(x)
-#define TEMP_FILE "/tmp/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
-#define TEMP_LUNAR_HOME_PATH "/tmp/lunardb_" AS_STRING(__LINE__) "_tmp_home"
+#define TEMP_FILE "/tmp/lunardb/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
 
 namespace LunarDB::Common::CppExtensions::Testing::TempFileSystemGuards {
 

@@ -1,18 +1,17 @@
 #pragma once
 
 #include <filesystem>
+#include <optional>
 #include <vector>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/Singleton.hpp"
 #include "LunarDB/Selenity/private/SystemCatalog/DatabaseConfig.hpp"
 
 namespace LunarDB::Selenity::API {
 
-class SystemCatalog
+class SystemCatalog : public Common::CppExtensions::DesignPatterns::Singleton<SystemCatalog>
 {
-public: // lifecycle
-    SystemCatalog(std::filesystem::path lunar_home);
-
 public: // public API
     ///
     /// @brief Create database config, store it to internal configs and save configuration to disk
@@ -50,16 +49,30 @@ public: // public API
     ///
     void loadFromDisk();
 
+    ///
+    /// @brief Self explanatory
+    /// @return LunarDB home path
+    ///
+    std::filesystem::path getLunarHomePath() const;
+
+    ///
+    /// @brief Self explanatory
+    /// @note Save data to disk
+    ///
+    ~SystemCatalog();
+
 public: // basic encapsulation
-    LUNAR_PROVIDE_CONST_GETTER(lunar_home);
     LUNAR_PROVIDE_CONST_GETTER(configs);
     LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(SystemCatalog);
+
+private: // singleton
+    LUNAR_SINGLETON_INIT(SystemCatalog);
 
 private: // IO
     LUNAR_ENABLE_BINARY_IO(m_configs);
     friend std::ostream& operator<<(std::ostream&, SystemCatalog const&);
 
-private: // helpers
+private: // private API
     ///
     /// @param [in] name -> config name
     /// @return iterator from m_configs to searched database config name
@@ -71,12 +84,15 @@ private: // helpers
     ///
     std::filesystem::path getLunarConfigFilePath() const;
 
-private: // fields
-    std::filesystem::path m_lunar_home;
-    std::vector<Implementation::SystemCatalog::DatabaseConfig> m_configs;
+    ///
+    /// @brief Clears all data
+    ///
+    void clear();
 
-    bool m_config_in_use_index_valid;
-    std::size_t m_config_in_use_index;
+private: // fields
+    std::vector<Implementation::SystemCatalog::DatabaseConfig> m_configs{};
+
+    std::optional<std::size_t> m_config_in_use_index{std::nullopt};
 };
 
 } // namespace LunarDB::Selenity::API
