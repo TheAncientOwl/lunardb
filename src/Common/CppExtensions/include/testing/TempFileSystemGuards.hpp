@@ -9,6 +9,8 @@
 #define AS_STRING(x) AS_STRING_(x)
 #define TEMP_FILE "/tmp/lunardb/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
 
+// #define TEMP_GUARDS_REMOVE_DATA
+
 namespace LunarDB::Common::CppExtensions::Testing::TempFileSystemGuards {
 
 ///
@@ -29,7 +31,10 @@ public:
     ~TempFileGuard()
     {
         EXPECT_TRUE(std::filesystem::exists(m_data)) << "File does not exists: " << m_data;
+
+#ifdef TEMP_GUARDS_REMOVE_DATA
         std::remove(m_data.data());
+#endif
     }
 
     operator const char*() const { return m_data.data(); }
@@ -57,7 +62,10 @@ public:
     ~TempDirectoryGuard()
     {
         EXPECT_TRUE(std::filesystem::exists(m_data)) << "Directory path does not exist: " << m_data;
+
+#ifdef TEMP_GUARDS_REMOVE_DATA
         std::filesystem::remove_all(m_data);
+#endif
     }
 
     operator std::filesystem::path() const { return m_data; }
@@ -67,3 +75,5 @@ private:
 };
 
 } // namespace LunarDB::Common::CppExtensions::Testing::TempFileSystemGuards
+
+#undef TEMP_GUARDS_REMOVE_DATA
