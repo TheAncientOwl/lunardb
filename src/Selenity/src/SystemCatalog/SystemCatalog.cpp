@@ -47,7 +47,7 @@ void SystemCatalog::loadFromDisk()
     in_file.close();
 }
 
-auto SystemCatalog::findDatabaseConfigByName(std::string_view name) const
+auto SystemCatalog::findDatabaseCatalogByName(std::string_view name) const
 {
     return std::find_if(std::begin(m_configs), std::end(m_configs), [name](auto const& db_config) {
         return db_config.getName() == name;
@@ -56,7 +56,7 @@ auto SystemCatalog::findDatabaseConfigByName(std::string_view name) const
 
 void SystemCatalog::createDatabase(std::string name)
 {
-    if (findDatabaseConfigByName(name) != std::end(m_configs))
+    if (findDatabaseCatalogByName(name) != std::end(m_configs))
     {
         throw std::runtime_error("Database already exists");
     }
@@ -67,7 +67,7 @@ void SystemCatalog::createDatabase(std::string name)
 
 void SystemCatalog::dropDatabase(std::string_view name)
 {
-    auto const config_it{findDatabaseConfigByName(name)};
+    auto const config_it{findDatabaseCatalogByName(name)};
     if (config_it == std::end(m_configs))
     {
         throw std::runtime_error("Database does not exist");
@@ -84,7 +84,7 @@ void SystemCatalog::dropDatabase(std::string_view name)
 
 void SystemCatalog::useDatabase(std::string_view name)
 {
-    auto const config_it{findDatabaseConfigByName(name)};
+    auto const config_it{findDatabaseCatalogByName(name)};
     if (config_it == std::end(m_configs))
     {
         throw std::runtime_error("Database does not exist");
