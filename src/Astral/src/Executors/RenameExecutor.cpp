@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Rename::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Rename::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'rename' query");
 

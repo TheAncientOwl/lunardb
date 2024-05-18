@@ -40,5 +40,3 @@ private:
 };
 
 } // namespace LunarDB::BrightMoon::API
-
-#include "LunarDB/BrightMoon/private/WriteAheadLogger.inl"

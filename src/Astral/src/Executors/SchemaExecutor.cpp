@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Schema::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Schema::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'schema' query");
 

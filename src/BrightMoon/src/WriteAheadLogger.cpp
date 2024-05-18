@@ -17,7 +17,7 @@ namespace {
 std::pair<std::filesystem::path, std::optional<std::filesystem::path>> computeFilePaths(
     std::filesystem::path const& wal_home)
 {
-    static auto const c_index_file_path{wal_home / "wal.hash.db"};
+    auto const c_index_file_path{wal_home / "wal.hash.db"};
 
     auto out = std::make_pair<std::filesystem::path, std::optional<std::filesystem::path>>(
         wal_home /

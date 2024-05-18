@@ -33,7 +33,7 @@ void AES256::handleErrors()
     // TODO: Log critical error
 }
 
-AES256::ByteArray AES256::encryptAES(ByteArray const& plaintext)
+AES256::ByteArray AES256::encrypt(ByteArray const& plaintext)
 {
     EVP_CIPHER_CTX* ctx;
     std::int32_t len{0};
@@ -70,7 +70,7 @@ AES256::ByteArray AES256::encryptAES(ByteArray const& plaintext)
     return ciphertext;
 }
 
-AES256::ByteArray AES256::decryptAES(ByteArray const& ciphertext)
+AES256::ByteArray AES256::decrypt(ByteArray const& ciphertext)
 {
     EVP_CIPHER_CTX* ctx;
     std::int32_t len{0};

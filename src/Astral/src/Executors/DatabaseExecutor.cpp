@@ -8,9 +8,7 @@ namespace {
 
 } // namespace
 
-void Database::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Database::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'database' query");
 
@@ -19,15 +17,15 @@ void Database::execute(
     switch (query.operation_type)
     {
     case Common::QueryData::Primitives::EDatabaseOperationType::Create:
-        config.db_catalog.createDatabase(query.name);
-        config.db_catalog.saveToDisk();
+        Selenity::API::SystemCatalog::Instance().createDatabase(query.name);
+        Selenity::API::SystemCatalog::Instance().saveToDisk();
         break;
     case Common::QueryData::Primitives::EDatabaseOperationType::Drop:
-        config.db_catalog.dropDatabase(query.name);
-        config.db_catalog.saveToDisk();
+        Selenity::API::SystemCatalog::Instance().dropDatabase(query.name);
+        Selenity::API::SystemCatalog::Instance().saveToDisk();
         break;
     case Common::QueryData::Primitives::EDatabaseOperationType::Use:
-        config.db_catalog.useDatabase(query.name);
+        Selenity::API::SystemCatalog::Instance().useDatabase(query.name);
         break;
     case Common::QueryData::Primitives::EDatabaseOperationType::Backup:
         // TODO: Provide implementation

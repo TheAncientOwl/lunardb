@@ -4,7 +4,7 @@
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
-#include "LunarDB/Selenity/private/SystemCatalog/helpers/Operators.hpp"
+#include "LunarDB/Selenity/private/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::API::Tests {
 

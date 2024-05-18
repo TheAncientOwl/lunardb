@@ -11,8 +11,8 @@ TEST(Common_CppExtensions_Cryptography, AES256)
     auto const in_data{"some string   12345 with \nsome text 12302021 \t"s};
 
     auto const encrypted_data{
-        AES256::Instance().encryptAES(AES256::ByteArray(in_data.cbegin(), in_data.cend()))};
-    auto const decrypted_data{AES256::Instance().decryptAES(encrypted_data)};
+        AES256::Instance().encrypt(AES256::ByteArray(in_data.cbegin(), in_data.cend()))};
+    auto const decrypted_data{AES256::Instance().decrypt(encrypted_data)};
 
     auto const out_data{std::string(decrypted_data.begin(), decrypted_data.end())};
 

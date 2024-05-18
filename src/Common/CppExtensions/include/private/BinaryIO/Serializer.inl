@@ -87,4 +87,18 @@ void serialize(std::ostream& os, std::forward_list<T> const& list, typename std:
     }
 }
 
+template <typename T>
+void serialize(std::ostream& os, std::optional<T> const& opt)
+{
+    if (static_cast<bool>(opt))
+    {
+        serialize(os, true);
+        serialize(os, *opt);
+    }
+    else
+    {
+        serialize(os, false);
+    }
+}
+
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer

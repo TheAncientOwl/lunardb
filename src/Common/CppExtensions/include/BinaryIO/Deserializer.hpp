@@ -1,8 +1,10 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 #include <filesystem>
 #include <forward_list>
+#include <optional>
 #include <span>
 #include <string>
 #include <string_view>
@@ -44,6 +46,12 @@ PROVIDE_CONCEPT_DESERIALIZE(AnyContainer);
 
 template <typename T>
 void deserialize(std::istream&, std::forward_list<T>&);
+
+template <typename T>
+void deserialize(std::istream&, std::optional<T>&);
+
+template <typename T, std::size_t Size>
+void deserialize(std::istream&, std::array<T, Size>&);
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
 

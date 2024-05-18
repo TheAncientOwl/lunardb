@@ -155,4 +155,21 @@ void deserialize(std::istream& is, std::forward_list<T>& list)
     }
 }
 
+template <typename T>
+void deserialize(std::istream& is, std::optional<T>& opt)
+{
+    bool exists{false};
+    deserialize(is, exists);
+
+    if (exists)
+    {
+        opt.emplace();
+        deserialize(is, *opt);
+    }
+    else
+    {
+        opt = std::nullopt;
+    }
+}
+
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer

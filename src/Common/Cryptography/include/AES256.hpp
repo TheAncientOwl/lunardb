@@ -12,8 +12,8 @@ class AES256 : public Common::CppExtensions::DesignPatterns::Singleton<AES256>
 public:
     using ByteArray = std::vector<unsigned char>;
 
-    ByteArray encryptAES(ByteArray const& plaintext);
-    ByteArray decryptAES(ByteArray const& ciphertext);
+    ByteArray encrypt(ByteArray const& plaintext);
+    ByteArray decrypt(ByteArray const& ciphertext);
 
     ~AES256();
 

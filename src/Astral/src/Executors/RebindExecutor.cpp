@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Rebind::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Rebind::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'rebind' query");
 

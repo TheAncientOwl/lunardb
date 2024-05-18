@@ -1,4 +1,4 @@
-#include "LunarDB/Selenity/private/SystemCatalog/DatabaseCatalog.hpp"
+#include "LunarDB/Selenity/private/DatabaseCatalog.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog {
 

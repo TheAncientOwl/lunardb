@@ -2,8 +2,8 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Selenity/private/SystemCatalog/DatabaseCatalog.hpp"
-#include "LunarDB/Selenity/private/SystemCatalog/helpers/Operators.hpp"
+#include "LunarDB/Selenity/private/DatabaseCatalog.hpp"
+#include "LunarDB/Selenity/private/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests {
 

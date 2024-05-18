@@ -14,7 +14,7 @@ std::filesystem::path SystemCatalog::getLunarHomePath() const
 {
     // TODO: Get path from config.
     // !NOTE: This is not windows compatible? config path should fix this.
-    static std::filesystem::path const c_lunar_home{"/tmp/lunardb"};
+    std::filesystem::path const c_lunar_home{"/tmp/lunardb"};
 
     if (!std::filesystem::exists(c_lunar_home))
     {
@@ -26,8 +26,7 @@ std::filesystem::path SystemCatalog::getLunarHomePath() const
 
 std::filesystem::path SystemCatalog::getLunarConfigFilePath() const
 {
-    static auto const c_lunar_config_file_path{getLunarHomePath() / "lunar_config.ldb"};
-    return c_lunar_config_file_path;
+    return getLunarHomePath() / "lunar_config.ldb";
 }
 
 void SystemCatalog::saveToDisk() const

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "LunarDB/Astral/SelenityDependencies.hpp"
 #include "LunarDB/Moonlight/ParsedQuery.hpp"
 
 namespace LunarDB::Astral::API {
@@ -10,6 +9,6 @@ namespace LunarDB::Astral::API {
 /// @param [in] parsed_query
 /// @param [in] config
 ///
-void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDependencies const& config);
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query);
 
 } // namespace LunarDB::Astral::API

@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <forward_list>
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -36,6 +37,9 @@ void serialize(std::ostream&, std::forward_list<T> const&);
 
 template <typename T>
 void serialize(std::ostream&, std::forward_list<T> const&, typename std::forward_list<T>::size_type);
+
+template <typename T>
+void serialize(std::ostream&, std::optional<T> const&);
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer
 

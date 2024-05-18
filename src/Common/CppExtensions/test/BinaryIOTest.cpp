@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/UniqueID.hpp"
 #include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 
 namespace std {
@@ -743,6 +744,58 @@ TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
 
     std::ifstream in{c_temp_file, std::ios::binary};
     std::filesystem::path in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, optional)
+{
+    static TempFileGuard c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::optional<std::uint64_t> const out_value{404};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::optional<std::uint64_t> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, empty_optional)
+{
+    static TempFileGuard c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    std::optional<std::uint64_t> const out_value{std::nullopt};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    std::optional<std::uint64_t> in_value{};
+    deserialize(in, in_value);
+    in.close();
+
+    EXPECT_EQ(out_value, in_value);
+}
+
+TEST(Common_CppExtensions_BinaryIOTest, UniqueID)
+{
+    static TempFileGuard c_temp_file{TEMP_FILE};
+
+    std::ofstream out{c_temp_file, std::ios::binary};
+    Common::CppExtensions::Types::UniqueID const out_value{
+        Common::CppExtensions::Types::UniqueID::generate()};
+    serialize(out, out_value);
+    out.close();
+
+    std::ifstream in{c_temp_file, std::ios::binary};
+    Common::CppExtensions::Types::UniqueID in_value{};
     deserialize(in, in_value);
     in.close();
 

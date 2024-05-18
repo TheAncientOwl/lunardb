@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Grant::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Grant::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'grant' query");
 

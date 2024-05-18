@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Revoke::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Revoke::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'revoke' query");
 

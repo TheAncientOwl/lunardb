@@ -4,11 +4,12 @@ add_lunar_library(
 
     API_HEADER_FILES
         include/QueryExecutor.hpp
-        include/SelenityDependencies.hpp
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_QueryData
         LunarDB_Common_CppExtensions
+        LunarDB_Selenity
+        LunarDB_Crescentum
 
     SOURCE_FILES
         src/QueryExecutor.cpp

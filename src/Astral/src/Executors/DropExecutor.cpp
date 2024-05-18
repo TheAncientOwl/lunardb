@@ -9,9 +9,7 @@ namespace name {
 
 } // namespace name
 
-void Drop::execute(
-    Moonlight::API::ParsedQuery const& parsed_query,
-    Astral::API::SelenityDependencies const& config)
+void Drop::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'drop' query");
 

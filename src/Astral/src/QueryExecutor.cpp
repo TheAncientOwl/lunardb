@@ -10,7 +10,7 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::API {
 
-void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDependencies const& config)
+void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE(
         "Executing query: ",
@@ -44,7 +44,7 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query, SelenityDepen
 
     if (static_cast<bool>(executor_opt))
     {
-        executor_opt.value()(parsed_query, config);
+        executor_opt.value()(parsed_query);
         CLOG_VERBOSE(
             LunarDB::Common::QueryData::Primitives::QueryType::toString(parsed_query.type()),
             "Query executed successfully");

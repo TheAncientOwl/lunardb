@@ -14,6 +14,7 @@ add_lunar_library(
         include/LiteralToStringMap.hpp
         include/Singleton.hpp
         include/StringUtils.hpp
+        include/UniqueID.hpp
 
         include/private/BinaryIO/Deserializer.inl
         include/private/BinaryIO/Serializer.inl
@@ -27,6 +28,7 @@ add_lunar_library(
     SOURCE_FILES
         src/StringUtils.cpp
         src/BinaryIO.cpp
+        src/UniqueID.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS)
