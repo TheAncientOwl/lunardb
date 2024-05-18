@@ -43,11 +43,8 @@ API::ParsedQuery Revoke::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(from, "from");
     out.from_user = Errors::assertNotEmpty(user_name, "user name");
 
-    if (!on.empty())
-    {
-        Errors::assertKeywordEquals(on, "on");
-        out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
-    }
+    Errors::assertKeywordEquals(on, "on");
+    out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     return out_parsed_query;
 }

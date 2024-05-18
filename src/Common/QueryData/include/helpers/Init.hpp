@@ -179,7 +179,7 @@ struct RevokeInit : public Revoke
 
     RevokeInit& permissions(std::vector<Primitives::EUserPermissionType> const& value);
     RevokeInit& from_user(std::string const& value);
-    RevokeInit& structure_name(std::optional<std::string> const& value);
+    RevokeInit& structure_name(std::string const& value);
 };
 
 struct CommitInit : public Commit

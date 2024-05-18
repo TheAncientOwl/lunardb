@@ -8,21 +8,6 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::Implementation {
 
-namespace name {
-
-std::vector<Celestial::API::Configuration::PermissionUpdate> convert(
-    std::vector<Common::QueryData::Primitives::EUserPermissionType> const& permissions,
-    Common::CppExtensions::Types::UniqueID const& db_uid,
-    Common::CppExtensions::Types::UniqueID const& collection_uid)
-{
-    std::vector<Celestial::API::Configuration::PermissionUpdate> out{};
-    out.reserve(permissions.size());
-
-    return out;
-}
-
-} // namespace name
-
 void Grant::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'grant' query");

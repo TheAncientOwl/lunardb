@@ -228,7 +228,7 @@ RevokeInit& RevokeInit::from_user(const std::string& value)
 {
     return base_t::from_user = value, *this;
 }
-RevokeInit& RevokeInit::structure_name(const std::optional<std::string>& value)
+RevokeInit& RevokeInit::structure_name(const std::string& value)
 {
     return base_t::structure_name = value, *this;
 }

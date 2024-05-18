@@ -9,7 +9,7 @@ using namespace Common::QueryData;
 // clang-format off
 TEST(Moonlight_RevokeParserTest, success01)
 {
-    auto const query = "revoke [ select, create, update, insert, delete ] from UserName";
+    auto const query = "revoke [ select, create, update, insert, delete ] from UserName on SomeCollection";
     auto const expected = Init::RevokeInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -19,14 +19,14 @@ TEST(Moonlight_RevokeParserTest, success01)
             Primitives::EUserPermissionType::Select
             })
         .from_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_RevokeParserTest, success02)
 {
-    auto const query = "revoke    [      create,         update,      insert,    delete  ]    from         UserName    ;";
+    auto const query = "revoke    [      create,         update,      insert,    delete  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -35,14 +35,14 @@ TEST(Moonlight_RevokeParserTest, success02)
             Primitives::EUserPermissionType::Delete
             })
         .from_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_RevokeParserTest, success03)
 {
-    auto const query = "revoke    [      update,         create,      delete,    insert  ]    from         UserName    ;";
+    auto const query = "revoke    [      update,         create,      delete,    insert  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -51,7 +51,7 @@ TEST(Moonlight_RevokeParserTest, success03)
             Primitives::EUserPermissionType::Delete
             })
         .from_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }

@@ -148,7 +148,7 @@ struct Revoke
 {
     std::vector<Primitives::EUserPermissionType> permissions;
     std::string from_user;
-    std::optional<std::string> structure_name;
+    std::string structure_name;
 };
 
 struct Commit
