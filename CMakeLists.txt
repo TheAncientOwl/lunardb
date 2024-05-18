@@ -11,6 +11,7 @@ project(LunarDB VERSION 0.1.0 LANGUAGES C CXX)
 include(cmake-tools/macros/add_lunar_unit_test.cmake)
 include(cmake-tools/macros/add_lunar_library.cmake)
 include(cmake-tools/setup/testing.cmake)
+include(cmake-tools/setup/openssl.cmake)
 
 set(LUNAR_BUILD_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/include)
 
