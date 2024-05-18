@@ -2,18 +2,15 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "LunarDB/Selenity/private/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::API::Tests {
 
-using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards::TempDirectoryGuard;
-
 TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
 {
     // 1. setup
-    TempDirectoryGuard const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
+    std::filesystem::remove_all("/tmp/lunardb");
 
     auto& catalog{Selenity::API::SystemCatalog::Instance()};
 

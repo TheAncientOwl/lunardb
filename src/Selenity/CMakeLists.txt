@@ -3,17 +3,19 @@ add_lunar_library(
     INCLUDE_PATH Selenity
 
     API_HEADER_FILES
+        include/SchemasCatalog.hpp
         include/SystemCatalog.hpp
-        include/private/DatabaseCatalog.hpp
 
+        include/private/DatabaseCatalog.hpp
         include/private/helpers/Operators.hpp
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
 
     SOURCE_FILES
-        src/SystemCatalog.cpp
         src/DatabaseCatalog.cpp
+        src/SchemasCatalog.cpp
+        src/SystemCatalog.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_SELENITY_TESTS)

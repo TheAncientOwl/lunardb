@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
@@ -10,10 +9,8 @@ namespace LunarDB::Celestial::API::Tests {
 
 TEST(Celestial_UsersCatalog, crud)
 {
+    std::filesystem::remove_all("/tmp/lunardb");
     auto const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
-    Common::CppExtensions::Testing::TempFileSystemGuards::TempDirectoryGuard users_directory_guard{
-        c_lunar_home / "users"};
-    std::filesystem::remove_all(users_directory_guard);
 
     auto& catalog{Celestial::API::UsersCatalog::Instance()};
 

@@ -1,20 +1,20 @@
 #include "QueryExecutors.hpp"
 
+#include "LunarDB/Selenity/SchemasCatalog.hpp"
+
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::Implementation {
 
-namespace name {
-
-} // namespace name
-
 void Schema::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'schema' query");
+    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
-    // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Schema>();
+
+    schemas_catalog.createSchema(query);
 }
 
 } // namespace LunarDB::Astral::Implementation

@@ -15,7 +15,10 @@
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/UniqueID.hpp"
-#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+
+#define AS_STRING_(x) #x
+#define AS_STRING(x) AS_STRING_(x)
+#define TEMP_FILE "/tmp/lunardb/lunardb_binary_test." AS_STRING(__LINE__) ".tmp"
 
 namespace std {
 
@@ -64,11 +67,33 @@ namespace LunarDB::Common::CppExtensions::BinaryIO::Tests {
 using namespace Serializer;
 using namespace Deserializer;
 
-using TempFileGuard = Testing::TempFileSystemGuards::TempFileGuard;
+class TempFileGuard
+{
+public:
+    ///
+    /// @brief Self explanatory.
+    /// @param [in] data -> Path to be checked at the end of the scope.
+    ///
+    TempFileGuard(std::string_view data) : m_data(data) {}
+
+    ///
+    /// @brief Self explanatory.
+    ///
+    ~TempFileGuard()
+    {
+        EXPECT_TRUE(std::filesystem::exists(m_data)) << "File does not exist: " << m_data;
+        std::filesystem::remove(m_data);
+    }
+
+    operator const char*() const { return m_data.data(); }
+
+private:
+    std::string_view m_data;
+};
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint8_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint8_t const out_value{2};
@@ -85,7 +110,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint8_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint16_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint16_t const out_value{221};
@@ -102,7 +127,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint16_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint32_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint32_t const out_value{2312312};
@@ -119,7 +144,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint32_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_uint64_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::uint64_t const out_value{42312312};
@@ -136,7 +161,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_uint64_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int8_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int8_t const out_value{-2};
@@ -153,7 +178,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int8_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int16_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int16_t const out_value{-221};
@@ -170,7 +195,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int16_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int32_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int32_t const out_value{-2312312};
@@ -187,7 +212,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int32_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::int64_t const out_value{-42312312};
@@ -204,7 +229,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_int64_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_size_t)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::size_t const out_value{42312312};
@@ -221,7 +246,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_size_t)
 
 TEST(Common_CppExtensions_BinaryIOTest, char)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     const char out_value{'c'};
@@ -238,7 +263,7 @@ TEST(Common_CppExtensions_BinaryIOTest, char)
 
 TEST(Common_CppExtensions_BinaryIOTest, bool)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     bool const out_value{true};
@@ -255,7 +280,7 @@ TEST(Common_CppExtensions_BinaryIOTest, bool)
 
 TEST(Common_CppExtensions_BinaryIOTest, float)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     float const out_value{true};
@@ -272,7 +297,7 @@ TEST(Common_CppExtensions_BinaryIOTest, float)
 
 TEST(Common_CppExtensions_BinaryIOTest, double)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     double const out_value{true};
@@ -289,7 +314,7 @@ TEST(Common_CppExtensions_BinaryIOTest, double)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_string)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::string const out_value{"some string no idea    \t\t\n "};
@@ -306,7 +331,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::string_view const out_value{"some string_view no idea    \t\t\n "};
@@ -323,7 +348,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_string_view)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_vector)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::vector<float> const out_value{2.2f, 3.4f};
@@ -340,7 +365,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_vector)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_tuple)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     using type =
         std::tuple<int, bool, char, float, double, std::string, std::vector<int>, std::vector<std::string>>;
@@ -405,7 +430,7 @@ struct Object
 
 TEST(Common_CppExtensions_BinaryIOTest, object)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     Object const out_value{
@@ -430,7 +455,7 @@ TEST(Common_CppExtensions_BinaryIOTest, object)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_pair)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::pair<std::string, int> const out_value{"some string no idea    \t\t\n ", 22};
@@ -447,7 +472,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_pair)
 
 TEST(Common_CppExtensions_BinaryIOTest, enum)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     enum class SomeEnum : std::uint8_t
     {
@@ -471,7 +496,7 @@ TEST(Common_CppExtensions_BinaryIOTest, enum)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_map)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::map<std::string, double> const out_value{
@@ -489,7 +514,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_map)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_multimap)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::multimap<std::string, double> const out_value{
@@ -507,7 +532,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_multimap)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_map)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_map<std::string, double> const out_value{
@@ -525,7 +550,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_map)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multimap)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_multimap<std::string, double> const out_value{
@@ -543,7 +568,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multimap)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_set)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::set<std::string> const out_value{"str1", "str2", "str3", "str4"};
@@ -560,7 +585,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_set)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_multiset)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
@@ -577,7 +602,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_multiset)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_set)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_set<std::string> const out_value{"str1", "str2", "str3"};
@@ -594,7 +619,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_set)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multiset)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::unordered_multiset<std::string> const out_value{"str1", "str2", "str3", "str2"};
@@ -611,7 +636,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_unordered_multiset)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_array)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     using array_t = std::array<std::string, 4>;
 
@@ -630,7 +655,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_array)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_list)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::list<float> const out_value{2.2f, 3.4f};
@@ -647,7 +672,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_list)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::forward_list<float> const out_value{2.2f, 3.4f};
@@ -664,7 +689,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_forward_list)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_deque)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::deque<float> const out_value{2.2f, 3.4f};
@@ -681,7 +706,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_deque)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_vector)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::vector<float> values{2.2f, 3.4f};
@@ -699,7 +724,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_vector)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_array)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::array<float, 2> values{2.2f, 3.4f};
@@ -717,7 +742,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_array)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     float values[] = {2.2f, 3.4f};
@@ -735,7 +760,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_span_carray)
 
 TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::filesystem::path const out_value{std::filesystem::current_path()};
@@ -752,7 +777,7 @@ TEST(Common_CppExtensions_BinaryIOTest, std_filesystem_path)
 
 TEST(Common_CppExtensions_BinaryIOTest, optional)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::optional<std::uint64_t> const out_value{404};
@@ -769,7 +794,7 @@ TEST(Common_CppExtensions_BinaryIOTest, optional)
 
 TEST(Common_CppExtensions_BinaryIOTest, empty_optional)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     std::optional<std::uint64_t> const out_value{std::nullopt};
@@ -786,7 +811,7 @@ TEST(Common_CppExtensions_BinaryIOTest, empty_optional)
 
 TEST(Common_CppExtensions_BinaryIOTest, UniqueID)
 {
-    static TempFileGuard c_temp_file{TEMP_FILE};
+    static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
     Common::CppExtensions::Types::UniqueID const out_value{

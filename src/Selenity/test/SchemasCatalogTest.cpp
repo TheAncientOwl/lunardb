@@ -1,30 +1,26 @@
+#include <fstream>
 #include <gtest/gtest.h>
-
-#include <filesystem>
 
 #include "LunarDB/Common/QueryData/QueryData.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
-#include "QueryExecutors.hpp"
 
 using namespace std::string_literals;
 
-namespace LunarDB::Astral::Tests {
+namespace LunarDB::Selenity::API::Tests {
 
-TEST(Astral_SchemaExecutorTest, create_schema)
+TEST(Selenity_SchemasCatalogTest, schemas)
 {
+    // 1. setup
     std::filesystem::remove_all("/tmp/lunardb");
 
-    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
+    auto& schemas_catalog{SchemasCatalog::Instance()};
 
     auto const c_schema1_name{"SomeSchema1"s};
     auto const c_schema2_name{"SomeSchema2"s};
 
     namespace Init = Common::QueryData::Init;
-
-    auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Schema>();
-
-    parsed_query.get<Common::QueryData::Schema>() =
+    auto const schema1 =
         Init::SchemaInit{}
             .name(c_schema1_name)
             .fields(std::vector<Common::QueryData::Schema::Field>{
@@ -41,17 +37,7 @@ TEST(Astral_SchemaExecutorTest, create_schema)
                 Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").nullable(false).array(false)});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({
-        EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
-    });
-
-    parsed_query.get<Common::QueryData::Schema>() =
+    auto const schema2 =
         Init::SchemaInit{}
             .name(c_schema1_name)
             .fields(std::vector<Common::QueryData::Schema::Field>{
@@ -63,9 +49,19 @@ TEST(Astral_SchemaExecutorTest, create_schema)
                 Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").nullable(false).array(false)});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    EXPECT_NO_THROW({
+        EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
+    });
+
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
     EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
     EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
     EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
@@ -78,4 +74,4 @@ TEST(Astral_SchemaExecutorTest, create_schema)
     EXPECT_THROW({ std::ignore = schemas_catalog.getSchema(c_schema2_name); }, std::runtime_error);
 }
 
-} // namespace LunarDB::Astral::Tests
+} // namespace LunarDB::Selenity::API::Tests

@@ -23,8 +23,6 @@ add_lunar_library(
         include/private/Singleton.inl
         include/private/StringUtils.inl
 
-        include/testing/TempFileSystemGuards.hpp
-
     SOURCE_FILES
         src/StringUtils.cpp
         src/BinaryIO.cpp

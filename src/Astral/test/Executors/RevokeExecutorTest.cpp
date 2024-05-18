@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "QueryExecutors.hpp"
@@ -10,13 +9,10 @@ using namespace std::string_literals;
 
 namespace LunarDB::Astral::Tests {
 
-using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards::TempDirectoryGuard;
-
 TEST(Astral_RevokeExecutorTest, revoke)
 {
     // 1. System setup
     std::filesystem::remove_all("/tmp/lunardb");
-    TempDirectoryGuard const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
 
     auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};

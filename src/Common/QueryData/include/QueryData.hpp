@@ -6,6 +6,8 @@
 #include <variant>
 #include <vector>
 
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+
 #include "Primitives.hpp"
 
 namespace LunarDB::Common::QueryData {
@@ -188,10 +190,14 @@ struct Schema
         std::string type;
         bool nullable;
         bool array;
+
+        LUNAR_ENABLE_BINARY_IO(name, type, nullable, array);
     };
 
     std::string name;
     std::vector<Field> fields;
+
+    LUNAR_ENABLE_BINARY_IO(name, fields);
 };
 
 struct User
