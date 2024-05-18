@@ -36,6 +36,7 @@ add_lunar_library(
         src/Parsers/DatabaseParser.cpp
         src/Parsers/RebindParser.cpp
         src/Parsers/SchemaParser.cpp
+        src/Parsers/UserParser.cpp
 
 )
 

@@ -169,3 +169,13 @@ add_lunar_unit_test(
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
 )
+
+add_lunar_unit_test(
+    NAME UserExecutorTest 
+    SOURCE_FILES test/Executors/UserExecutorTest.cpp 
+    DEPENDENCIES 
+        LunarDB_Astral
+        LunarDB_Moonlight
+        LunarDB_Selenity
+        LunarDB_Common_CppExtensions
+)

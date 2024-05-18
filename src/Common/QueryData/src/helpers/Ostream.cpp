@@ -225,4 +225,9 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema,
     FIELD_SEP(name),
     FIELD(fields)
 )
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(User,
+    FIELD_SEP(name),
+    FIELD(action)
+)
 // clang-format on

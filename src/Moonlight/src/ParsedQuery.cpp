@@ -37,5 +37,6 @@ MAP_QUERY_DATA_TO_TYPE(SavePoint)
 MAP_QUERY_DATA_TO_TYPE(Database)
 MAP_QUERY_DATA_TO_TYPE(Rebind)
 MAP_QUERY_DATA_TO_TYPE(Schema)
+MAP_QUERY_DATA_TO_TYPE(User)
 
 } // namespace LunarDB::Moonlight::API

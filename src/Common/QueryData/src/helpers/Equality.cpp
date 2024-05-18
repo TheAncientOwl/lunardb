@@ -163,4 +163,9 @@ PROVIDE_EQUALITY_OPERATOR(Schema,
     FIELD(name),
     FIELD(fields)
 )
+
+PROVIDE_EQUALITY_OPERATOR(User,
+    FIELD(name),
+    FIELD(action)
+)
 // clang-format on

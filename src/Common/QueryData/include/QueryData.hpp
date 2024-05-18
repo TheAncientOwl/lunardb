@@ -194,4 +194,10 @@ struct Schema
     std::vector<Field> fields;
 };
 
+struct User
+{
+    std::string name;
+    Primitives::EUserActionType action;
+};
+
 } // namespace LunarDB::Common::QueryData

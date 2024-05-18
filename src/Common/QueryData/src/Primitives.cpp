@@ -77,6 +77,12 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(BooleanOperator,
     { Literal::And, "and" },
     { Literal::Or, "or" }
 )
+
+DEFINE_LUNAR_PRIMITIVE_IMPL(UserActionType,
+    { Literal::None, "None" },
+    { Literal::Create, "Create" },
+    { Literal::Remove, "Remove" }
+)
 // clang-format on
 
 } // namespace LunarDB::Common::QueryData::Primitives

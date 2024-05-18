@@ -22,7 +22,7 @@ ParsedQuery parseQuery(std::string_view query)
 
     StringUtils::trim(query);
 
-    static const DataStructures::ItemArray<Implementation::ParserBundle, 20> s_parsers{
+    static const DataStructures::ItemArray<Implementation::ParserBundle, 18> s_parsers{
         Implementation::Create::makeParser(),
         Implementation::Drop::makeParser(),
         Implementation::Migrate::makeParser(),
@@ -39,7 +39,8 @@ ParsedQuery parseQuery(std::string_view query)
         Implementation::SavePoint::makeParser(),
         Implementation::Database::makeParser(),
         Implementation::Rebind::makeParser(),
-        Implementation::Schema::makeParser()};
+        Implementation::Schema::makeParser(),
+        Implementation::User::makeParser()};
 
     auto const parser_opt =
         s_parsers.find_if([query](Implementation::ParserBundle const& query_parser) {
@@ -85,5 +86,6 @@ PROVIDE_PARSER_BUNLDER(SavePoint, "savepoint")
 PROVIDE_PARSER_BUNLDER(Database, "database")
 PROVIDE_PARSER_BUNLDER(Rebind, "rebind")
 PROVIDE_PARSER_BUNLDER(Schema, "schema")
+PROVIDE_PARSER_BUNLDER(User, "user")
 
 } // namespace LunarDB::Moonlight::Implementation

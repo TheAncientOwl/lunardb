@@ -37,5 +37,6 @@ PROVIDE_QUERY_PARSER(SavePoint)
 PROVIDE_QUERY_PARSER(Database)
 PROVIDE_QUERY_PARSER(Rebind)
 PROVIDE_QUERY_PARSER(Schema)
+PROVIDE_QUERY_PARSER(User)
 
 } // namespace LunarDB::Moonlight::Implementation

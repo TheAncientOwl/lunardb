@@ -53,7 +53,8 @@ private: // fields;
         Common::QueryData::SavePoint,
         Common::QueryData::Database,
         Common::QueryData::Rebind,
-        Common::QueryData::Schema>
+        Common::QueryData::Schema,
+        Common::QueryData::User>
         m_data;
 
     ///

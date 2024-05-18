@@ -168,3 +168,11 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Common_QueryData
 )
+
+add_lunar_unit_test(
+    NAME UserParserTest 
+    SOURCE_FILES test/Parsers/UserParserTest.cpp 
+    DEPENDENCIES 
+        LunarDB_Moonlight
+        LunarDB_Common_QueryData
+)

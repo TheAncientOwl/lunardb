@@ -31,6 +31,7 @@ add_lunar_library(
         src/Executors/DatabaseExecutor.cpp
         src/Executors/RebindExecutor.cpp
         src/Executors/SchemaExecutor.cpp
+        src/Executors/UserExecutor.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_ASTRAL_TESTS)

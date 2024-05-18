@@ -299,4 +299,13 @@ SchemaInit& SchemaInit::fields(const std::vector<Field>& value)
     return base_t::fields = value, *this;
 }
 
+UserInit& UserInit::name(std::string const& value)
+{
+    return base_t::name = value, *this;
+}
+UserInit& UserInit::action(Primitives::EUserActionType const& value)
+{
+    return base_t::action = value, *this;
+}
+
 } // namespace LunarDB::Common::QueryData::Init

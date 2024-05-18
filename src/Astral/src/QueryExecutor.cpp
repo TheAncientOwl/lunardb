@@ -18,7 +18,7 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
 
     namespace DataStructures = LunarDB::Common::CppExtensions::DataStructures;
 
-    static const DataStructures::ItemArray<Implementation::ExecutorBundle, 20> s_executors{
+    static const DataStructures::ItemArray<Implementation::ExecutorBundle, 18> s_executors{
         Implementation::Create::makeExecutor(),
         Implementation::Drop::makeExecutor(),
         Implementation::Migrate::makeExecutor(),
@@ -35,7 +35,8 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
         Implementation::SavePoint::makeExecutor(),
         Implementation::Database::makeExecutor(),
         Implementation::Rebind::makeExecutor(),
-        Implementation::Schema::makeExecutor()};
+        Implementation::Schema::makeExecutor(),
+        Implementation::User::makeExecutor()};
 
     auto const executor_opt =
         s_executors.find_if([&parsed_query](Implementation::ExecutorBundle const& query_executor) {
@@ -84,5 +85,6 @@ PROVIDE_EXECUTOR_BUNDLER(SavePoint)
 PROVIDE_EXECUTOR_BUNDLER(Database)
 PROVIDE_EXECUTOR_BUNDLER(Rebind)
 PROVIDE_EXECUTOR_BUNDLER(Schema)
+PROVIDE_EXECUTOR_BUNDLER(User)
 
 } // namespace LunarDB::Astral::Implementation

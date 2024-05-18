@@ -104,4 +104,13 @@ TEST(Common_QueryData_PrimitivesTest, BooleanOperator)
     EXPECT_EQ(EBooleanOperator::Or, toLiteral(toString(EBooleanOperator::Or)));
 }
 
+TEST(Common_QueryData_PrimitivesTest, UserActionType)
+{
+    using namespace UserActionType;
+
+    EXPECT_EQ(EUserActionType::None, toLiteral(toString(EUserActionType::None)));
+    EXPECT_EQ(EUserActionType::Create, toLiteral(toString(EUserActionType::Create)));
+    EXPECT_EQ(EUserActionType::Remove, toLiteral(toString(EUserActionType::Remove)));
+}
+
 } // namespace LunarDB::Common::QueryData::Primitives::Tests

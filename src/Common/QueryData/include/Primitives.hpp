@@ -23,7 +23,8 @@ DEFINE_LUNAR_PRIMITIVE(QueryType,
     SavePoint = 14,
     Database = 15,
     Rebind = 16,
-    Schema = 17
+    Schema = 17,
+    User = 18
 )
 
 DEFINE_LUNAR_PRIMITIVE(StructureType,
@@ -78,6 +79,12 @@ DEFINE_LUNAR_PRIMITIVE(BooleanOperator,
     None = 0,
     And = 1,
     Or = 2
+)
+
+DEFINE_LUNAR_PRIMITIVE(UserActionType,
+    None = 0,
+    Create = 1,
+    Remove = 2
 )
 // clang-format on
 
