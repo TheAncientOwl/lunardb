@@ -1,5 +1,5 @@
 @startuml Revoke
-
+!theme crt-amber
 
 namespace LunarDB.QueryData {
 

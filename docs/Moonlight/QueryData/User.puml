@@ -1,5 +1,5 @@
 @startuml Update
-
+!theme crt-amber
 
 namespace LunarDB.QueryData {
 
