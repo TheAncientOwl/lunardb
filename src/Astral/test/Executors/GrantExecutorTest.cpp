@@ -1,11 +1,103 @@
 #include <gtest/gtest.h>
 
-// TODO: Provide unit tests
+#include "LunarDB/Celestial/UsersCatalog.hpp"
+#include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
+#include "LunarDB/Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
+#include "QueryExecutors.hpp"
+
+using namespace std::string_literals;
+
 namespace LunarDB::Astral::Tests {
 
-TEST(Astral_CreateExecutorTest, dummy)
+using TempDirectoryGuard = Common::CppExtensions::Testing::TempFileSystemGuards::TempDirectoryGuard;
+
+TEST(Astral_GrantExecutorTest, grant)
 {
-    EXPECT_TRUE(true);
+    // 1. System setup
+    std::filesystem::remove_all("/tmp/lunardb");
+    TempDirectoryGuard const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
+
+    auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
+    auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
+
+    auto const c_database_name{"SomeDatabase"s};
+    system_catalog.createDatabase(c_database_name);
+    system_catalog.useDatabase(c_database_name);
+
+    auto& database_in_use{system_catalog.getDatabaseInUse()};
+    auto const c_database_in_use_uid{database_in_use.getUID()};
+
+    auto const c_collection_name{"SomeCollection"s};
+    database_in_use.createCollection(c_collection_name);
+    auto const c_collection_uid{database_in_use.getCollectionUID(c_collection_name)};
+
+    auto const c_username{"SomeUsername"s};
+    auto const c_password{"SomePassword"s};
+    auto const c_user_uid{users_catalog.createUser(c_username, c_password)};
+
+    system_catalog.saveToDisk();
+
+    ASSERT_TRUE(std::filesystem::exists(system_catalog.getLunarHomePath()));
+    ASSERT_TRUE(std::filesystem::exists(users_catalog.getUsersHomePath()));
+    ASSERT_TRUE(std::filesystem::exists(users_catalog.getUsernamesFilePath()));
+    ASSERT_TRUE(std::filesystem::exists(users_catalog.getUserConfigurationFilePath(c_user_uid)));
+
+    // 2. Testing
+    auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Grant>();
+    parsed_query.get<Common::QueryData::Grant>() =
+        Common::QueryData::Init::GrantInit{}
+            .to_user(c_username)
+            .structure_name(c_collection_name)
+            .permissions(std::vector<Common::QueryData::Primitives::EUserPermissionType>{
+                Common::QueryData::Primitives::EUserPermissionType::Insert,
+                Common::QueryData::Primitives::EUserPermissionType::Select,
+                Common::QueryData::Primitives::EUserPermissionType::Update});
+
+    EXPECT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
+    EXPECT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
+
+    EXPECT_NO_THROW({
+        EXPECT_TRUE(users_catalog.userHasPermission(
+            c_user_uid,
+            Celestial::API::Configuration::Permission{
+                Common::QueryData::Primitives::EUserPermissionType::Insert,
+                c_database_in_use_uid,
+                c_collection_uid}));
+    });
+    EXPECT_NO_THROW({
+        EXPECT_TRUE(users_catalog.userHasPermission(
+            c_user_uid,
+            Celestial::API::Configuration::Permission{
+                Common::QueryData::Primitives::EUserPermissionType::Select,
+                c_database_in_use_uid,
+                c_collection_uid}));
+    });
+    EXPECT_NO_THROW({
+        EXPECT_TRUE(users_catalog.userHasPermission(
+            c_user_uid,
+            Celestial::API::Configuration::Permission{
+                Common::QueryData::Primitives::EUserPermissionType::Update,
+                c_database_in_use_uid,
+                c_collection_uid}));
+    });
+
+    EXPECT_NO_THROW({
+        EXPECT_FALSE(users_catalog.userHasPermission(
+            c_user_uid,
+            Celestial::API::Configuration::Permission{
+                Common::QueryData::Primitives::EUserPermissionType::Create,
+                c_database_in_use_uid,
+                c_collection_uid}));
+    });
+    EXPECT_NO_THROW({
+        EXPECT_FALSE(users_catalog.userHasPermission(
+            c_user_uid,
+            Celestial::API::Configuration::Permission{
+                Common::QueryData::Primitives::EUserPermissionType::Delete,
+                c_database_in_use_uid,
+                c_collection_uid}));
+    });
 }
 
 } // namespace LunarDB::Astral::Tests

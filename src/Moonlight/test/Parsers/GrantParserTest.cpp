@@ -9,7 +9,7 @@ using namespace Common::QueryData;
 // clang-format off
 TEST(Moonlight_GrantParserTest, success01)
 {
-    auto const query = "grant [ select, create, update, insert, delete ] to UserName";
+    auto const query = "grant [ select, create, update, insert, delete ] to UserName on SomeCollection";
     auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -19,14 +19,14 @@ TEST(Moonlight_GrantParserTest, success01)
             Primitives::EUserPermissionType::Select
             })
         .to_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_GrantParserTest, success02)
 {
-    auto const query = "grant    [      create,         update,      insert,    delete  ]    to         UserName    ;";
+    auto const query = "grant    [      create,         update,      insert,    delete  ]    to         UserName    on SomeCollection;";
     auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -35,14 +35,14 @@ TEST(Moonlight_GrantParserTest, success02)
             Primitives::EUserPermissionType::Delete
             })
         .to_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }
 
 TEST(Moonlight_GrantParserTest, success03)
 {
-    auto const query = "grant    [      update,         create,      delete,    insert  ]    to         UserName    ;";
+    auto const query = "grant    [      update,         create,      delete,    insert  ]    to         UserName    on SomeCollection;";
     auto const expected = Init::GrantInit{}
         .permissions({
             Primitives::EUserPermissionType::Create,
@@ -51,7 +51,7 @@ TEST(Moonlight_GrantParserTest, success03)
             Primitives::EUserPermissionType::Delete
             })
         .to_user("UserName")
-        .structure_name(std::nullopt);
+        .structure_name("SomeCollection");
 
     EXPECT_SUCCESS(query, expected);
 }

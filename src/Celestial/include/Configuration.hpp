@@ -31,7 +31,7 @@ struct Permission
 
     EUserPermissionType type{EUserPermissionType::None};
     Common::CppExtensions::Types::UniqueID database_uid;
-    std::optional<Common::CppExtensions::Types::UniqueID> collection_uid;
+    Common::CppExtensions::Types::UniqueID collection_uid;
 
     bool operator==(Permission const&) const;
     struct Hash

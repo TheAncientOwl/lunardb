@@ -7,4 +7,24 @@ DatabaseCatalog::DatabaseCatalog(std::filesystem::path home_path, std::string na
 {
 }
 
+Common::CppExtensions::Types::UniqueID DatabaseCatalog::getCollectionUID(
+    std::string const& collection_name) const
+{
+    // TODO: Provide actual implementation
+    static auto const c_uid{Common::CppExtensions::Types::UniqueID::generate()};
+    return c_uid;
+}
+
+Common::CppExtensions::Types::UniqueID DatabaseCatalog::getUID() const
+{
+    // TODO: Provide actual implementation
+    static auto const c_uid{Common::CppExtensions::Types::UniqueID::generate()};
+    return c_uid;
+}
+
+void DatabaseCatalog::createCollection(std::string name)
+{
+    // TODO: Provide implementation
+}
+
 } // namespace LunarDB::Selenity::Implementation::SystemCatalog

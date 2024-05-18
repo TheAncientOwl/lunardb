@@ -21,12 +21,9 @@ std::size_t Permission::Hash::operator()(Permission const& permission) const
         Common::CppExtensions::Types::UniqueID::Hash{}(permission.database_uid)};
     seed ^= (database_uid_hash << 1);
 
-    if (static_cast<bool>(permission.collection_uid))
-    {
-        auto const collection_uid_hash{
-            Common::CppExtensions::Types::UniqueID::Hash{}(*permission.collection_uid)};
-        seed ^= (collection_uid_hash << 2);
-    }
+    auto const collection_uid_hash{
+        Common::CppExtensions::Types::UniqueID::Hash{}(permission.collection_uid)};
+    seed ^= (collection_uid_hash << 2);
 
     return seed;
 }

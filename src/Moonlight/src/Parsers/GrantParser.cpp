@@ -43,11 +43,9 @@ API::ParsedQuery Grant::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(to, "to");
     out.to_user = Errors::assertNotEmpty(user_name, "user name");
 
-    if (!on.empty())
-    {
-        Errors::assertKeywordEquals(on, "on");
-        out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
-    }
+    Errors::assertKeywordEquals(on, "on");
+    Errors::assertKeywordEquals(on, "on");
+    out.structure_name = Errors::assertNotEmpty(structure_name, "structure name");
 
     return out_parsed_query;
 }

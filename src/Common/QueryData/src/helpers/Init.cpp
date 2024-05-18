@@ -215,7 +215,7 @@ GrantInit& GrantInit::to_user(const std::string& value)
 {
     return base_t::to_user = value, *this;
 }
-GrantInit& GrantInit::structure_name(const std::optional<std::string>& value)
+GrantInit& GrantInit::structure_name(const std::string& value)
 {
     return base_t::structure_name = value, *this;
 }

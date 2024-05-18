@@ -170,7 +170,7 @@ struct GrantInit : public Grant
 
     GrantInit& permissions(std::vector<Primitives::EUserPermissionType> const& value);
     GrantInit& to_user(std::string const& value);
-    GrantInit& structure_name(std::optional<std::string> const& value);
+    GrantInit& structure_name(std::string const& value);
 };
 
 struct RevokeInit : public Revoke

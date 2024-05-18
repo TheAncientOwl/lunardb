@@ -14,10 +14,9 @@ namespace name {
 void User::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'user' query");
+    auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
 
     auto const& query = parsed_query.get<Common::QueryData::User>();
-
-    auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
 
     switch (query.action)
     {
@@ -36,3 +35,4 @@ void User::execute(Moonlight::API::ParsedQuery const& parsed_query)
 }
 
 } // namespace LunarDB::Astral::Implementation
+  // TODO: Provide implementation

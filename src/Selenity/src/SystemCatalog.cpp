@@ -108,14 +108,14 @@ SystemCatalog::~SystemCatalog()
     saveToDisk();
 }
 
-std::optional<std::filesystem::path> SystemCatalog::getDatabaseInUseHomePath() const
+Implementation::SystemCatalog::DatabaseCatalog& SystemCatalog::getDatabaseInUse()
 {
-    if (static_cast<bool>(m_config_in_use_index))
+    if (!static_cast<bool>(m_config_in_use_index))
     {
-        return m_configs[*m_config_in_use_index].getHomePath();
+        throw std::runtime_error{"No database in use"};
     }
 
-    return std::nullopt;
+    return m_configs[*m_config_in_use_index];
 }
 
 } // namespace LunarDB::Selenity::API

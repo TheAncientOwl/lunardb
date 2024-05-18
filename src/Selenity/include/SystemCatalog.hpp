@@ -57,9 +57,9 @@ public: // public API
 
     ///
     /// @brief Self explanatory
-    /// @return Requested path if any database in use, std::nullopt otherwise
+    /// @throw std::runtime_error if no database in use
     ///
-    std::optional<std::filesystem::path> getDatabaseInUseHomePath() const;
+    Implementation::SystemCatalog::DatabaseCatalog& getDatabaseInUse();
 
 public: // lifecycle
     ///

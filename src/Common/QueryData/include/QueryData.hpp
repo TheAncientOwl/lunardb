@@ -141,7 +141,7 @@ struct Grant
 {
     std::vector<Primitives::EUserPermissionType> permissions;
     std::string to_user;
-    std::optional<std::string> structure_name;
+    std::string structure_name;
 };
 
 struct Revoke
