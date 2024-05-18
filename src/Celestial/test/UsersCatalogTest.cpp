@@ -41,6 +41,7 @@ TEST(Celestial_UsersCatalog, crud)
     EXPECT_FALSE(uid1.toString().empty());
     EXPECT_TRUE(std::filesystem::exists(c_lunar_home / "users" / (uid1.toString() + ".cfg")));
     EXPECT_TRUE(std::filesystem::exists(c_lunar_home / "users" / "usernames.db"));
+    EXPECT_EQ(uid1, catalog.getUserUID(c_username1));
 
     // 2. updatePassword
     EXPECT_NO_THROW({ catalog.updatePassword(uid1, "SomeUpdatedPassword1"); });

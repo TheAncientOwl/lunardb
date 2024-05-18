@@ -21,16 +21,24 @@ API::ParsedQuery User::parse(QueryExtractor extractor)
     auto& out = out_parsed_query.get<Common::QueryData::User>();
 
     auto const [user, action, name] = extractor.extractTuple<3>();
-    if (!extractor.empty())
-    {
-        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
-    }
 
     Errors::assertKeywordEquals(user, "user");
 
     out.action = Common::QueryData::Primitives::UserActionType::toLiteral(
         Errors::assertNotEmpty(action, "action type"));
     out.name = Errors::assertNotEmpty(name, "username");
+
+    if (out.action == Common::QueryData::Primitives::EUserActionType::Create)
+    {
+        auto const [password_keyword, password] = extractor.extractTuple<2>();
+        Errors::assertKeywordEquals(password_keyword, "password");
+        out.password = Errors::assertNotEmpty(password, "password");
+    }
+
+    if (!extractor.empty())
+    {
+        throw Errors::buildInvalidQueryFormatError(c_query_prefix);
+    }
 
     return out_parsed_query;
 }

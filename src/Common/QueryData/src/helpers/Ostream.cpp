@@ -228,6 +228,7 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(Schema,
 
 PROVIDE_OSTREAM_OUTPUT_OPERATOR(User,
     FIELD_SEP(name),
+    FIELD_SEP(password),
     FIELD(action)
 )
 // clang-format on

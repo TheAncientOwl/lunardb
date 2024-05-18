@@ -4,7 +4,6 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <unordered_set>
 #include <utility>
 
 #include "LunarDB/Celestial/Authentication.hpp"
@@ -81,12 +80,15 @@ public: // public API
     ///
     void deauthenticateUser(Common::CppExtensions::Types::UniqueID const& user_uid);
 
+    ///
+    /// @brief Self explanatory
+    /// @param username
+    /// @return
+    ///
+    Common::CppExtensions::Types::UniqueID getUserUID(std::string const& username) const;
+
     ~UsersCatalog();
 
-private: // singleton
-    LUNAR_SINGLETON_INIT(UsersCatalog);
-
-private: // private API
     ///
     /// @brief Self explanatory
     ///
@@ -103,6 +105,10 @@ private: // private API
     ///
     std::filesystem::path getUsernamesFilePath() const;
 
+private: // singleton
+    LUNAR_SINGLETON_INIT(UsersCatalog);
+
+private: // private API
     ///
     /// @brief Self explanatory
     /// @note Data encryption
@@ -154,7 +160,7 @@ private: // fields
 
     UniqueIDMap<Configuration::User> m_users;
     UniqueIDMap<Authentication::AuthKey> m_authenticated_users;
-    std::unordered_set<std::string> m_usernames;
+    std::unordered_map<std::string, Common::CppExtensions::Types::UniqueID> m_users_uids;
 };
 
 } // namespace LunarDB::Celestial::API

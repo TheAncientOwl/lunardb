@@ -303,6 +303,10 @@ UserInit& UserInit::name(std::string const& value)
 {
     return base_t::name = value, *this;
 }
+UserInit& UserInit::password(std::optional<std::string> const& value)
+{
+    return base_t::password = value, *this;
+}
 UserInit& UserInit::action(Primitives::EUserActionType const& value)
 {
     return base_t::action = value, *this;

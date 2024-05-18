@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LunarDB/Moonlight/ParsedQuery.hpp"
-#include "LunarDB/Selenity/SystemCatalog.hpp"
 
 ///
 /// @brief Provide makeExecutor() and execute(query, deps) signatures under Specialization namespace.

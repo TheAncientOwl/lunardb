@@ -243,6 +243,7 @@ struct UserInit : public User
     using base_t = User;
 
     UserInit& name(std::string const& value);
+    UserInit& password(std::optional<std::string> const& value);
     UserInit& action(Primitives::EUserActionType const& value);
 };
 

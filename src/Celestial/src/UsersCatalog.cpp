@@ -19,7 +19,7 @@ LUNAR_SINGLETON_INIT_IMPL(UsersCatalog)
 Common::CppExtensions::Types::UniqueID UsersCatalog::createUser(std::string username, std::string password)
 {
     // 1. Check if username available
-    if (m_usernames.find(username) != m_usernames.end())
+    if (m_users_uids.find(username) != m_users_uids.end())
     {
         throw std::runtime_error(Common::CppExtensions::StringUtils::stringify(
             "User with", std::move(username), "username already exists"));
@@ -29,8 +29,9 @@ Common::CppExtensions::Types::UniqueID UsersCatalog::createUser(std::string user
     // TODO: Provide implementation
 
     // 3. Add user to internal data
-    std::ignore = m_usernames.insert(username);
     auto const new_id{Common::CppExtensions::Types::UniqueID::generate()};
+
+    std::ignore = m_users_uids.emplace(username, new_id);
     auto const map_result = m_users.emplace(
         new_id, Configuration::User{new_id, std::move(username), std::move(password), {}});
 
@@ -53,7 +54,7 @@ void UsersCatalog::removeUser(Common::CppExtensions::Types::UniqueID const& user
 
     // 3. Remove user from internal data
     std::ignore = m_users.erase(user_uid);
-    std::ignore = m_usernames.erase(user.name);
+    std::ignore = m_users_uids.erase(user.name);
 
     // 4. Remove user from disk
     // ?MAYBE: Mark user for deletion?
@@ -237,8 +238,8 @@ void UsersCatalog::loadFromDisk()
     else
     {
         std::ifstream usernames_file(getUsernamesFilePath(), std::ios::binary);
-        m_usernames.clear();
-        Common::CppExtensions::BinaryIO::Deserializer::deserialize(usernames_file, m_usernames);
+        m_users_uids.clear();
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(usernames_file, m_users_uids);
         usernames_file.close();
     }
 }
@@ -246,13 +247,26 @@ void UsersCatalog::loadFromDisk()
 void UsersCatalog::saveUserNamesToDisk() const
 {
     std::ofstream usernames_file(getUsernamesFilePath(), std::ios::trunc | std::ios::binary);
-    Common::CppExtensions::BinaryIO::Serializer::serialize(usernames_file, m_usernames);
+    Common::CppExtensions::BinaryIO::Serializer::serialize(usernames_file, m_users_uids);
     usernames_file.close();
 }
 
 UsersCatalog::~UsersCatalog()
 {
     saveToDisk();
+}
+
+Common::CppExtensions::Types::UniqueID UsersCatalog::getUserUID(std::string const& username) const
+{
+    auto it = m_users_uids.find(username);
+
+    if (it == m_users_uids.end())
+    {
+        throw std::runtime_error{
+            Common::CppExtensions::StringUtils::stringify("User", username, "does not exist")};
+    }
+
+    return it->second;
 }
 
 } // namespace LunarDB::Celestial::API

@@ -197,6 +197,7 @@ struct Schema
 struct User
 {
     std::string name;
+    std::optional<std::string> password;
     Primitives::EUserActionType action;
 };
 

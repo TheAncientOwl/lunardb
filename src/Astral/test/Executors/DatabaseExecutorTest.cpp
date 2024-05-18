@@ -2,6 +2,7 @@
 
 #include "LunarDB/Common/CppExtensions/testing/TempFileSystemGuards.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "LunarDB/Selenity/private/helpers/Operators.hpp"
 #include "QueryExecutors.hpp"
 
