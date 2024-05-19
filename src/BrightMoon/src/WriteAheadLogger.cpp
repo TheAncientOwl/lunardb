@@ -129,13 +129,15 @@ void WriteAheadLogger::onNaturalSystemExit()
 void WriteAheadLogger::log(TransactionData const& data)
 {
     // TODO: Provide implementation
-    throw std::runtime_error{"Not implemented yet..."};
+    throw std::runtime_error{
+        "[~/lunardb/src/BrightMoon/src/WriteAheadLogger.cpp:log] Not implemented yet..."};
 }
 
 void WriteAheadLogger::recover()
 {
     // TODO: Provide implementation
-    throw std::runtime_error{"Not implemented yet..."};
-}
+    throw std::runtime_error{
+        "[~/lunardb/src/BrightMoon/src/WriteAheadLogger.cpp:recover] Not implemented yet..."};
+};
 
 } // namespace LunarDB::BrightMoon::API

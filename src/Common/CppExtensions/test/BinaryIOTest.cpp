@@ -814,13 +814,12 @@ TEST(Common_CppExtensions_BinaryIOTest, UniqueID)
     static TempFileGuard const c_temp_file{TEMP_FILE};
 
     std::ofstream out{c_temp_file, std::ios::binary};
-    Common::CppExtensions::Types::UniqueID const out_value{
-        Common::CppExtensions::Types::UniqueID::generate()};
+    Common::CppExtensions::UniqueID const out_value{Common::CppExtensions::UniqueID::generate()};
     serialize(out, out_value);
     out.close();
 
     std::ifstream in{c_temp_file, std::ios::binary};
-    Common::CppExtensions::Types::UniqueID in_value{};
+    Common::CppExtensions::UniqueID in_value{};
     deserialize(in, in_value);
     in.close();
 

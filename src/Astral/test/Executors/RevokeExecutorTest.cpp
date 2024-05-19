@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "QueryExecutors.hpp"
@@ -11,9 +12,9 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_RevokeExecutorTest, revoke)
 {
-    // 1. System setup
-    std::filesystem::remove_all("/tmp/lunardb");
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
 
+    // 1. System setup
     auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
 
@@ -21,18 +22,17 @@ TEST(Astral_RevokeExecutorTest, revoke)
     system_catalog.createDatabase(c_database_name);
     system_catalog.useDatabase(c_database_name);
 
-    auto& database_in_use{system_catalog.getDatabaseInUse()};
-    auto const c_database_in_use_uid{database_in_use.getUID()};
+    auto database_in_use{system_catalog.getDatabaseInUse()};
+    ASSERT_TRUE(database_in_use != nullptr);
+    auto const c_database_in_use_uid{database_in_use->getUID()};
 
     auto const c_collection_name{"SomeCollection"s};
-    database_in_use.createCollection(c_collection_name);
-    auto const c_collection_uid{database_in_use.getCollectionUID(c_collection_name)};
+    database_in_use->createCollection(c_collection_name);
+    auto const c_collection_uid{database_in_use->getCollectionManager(c_collection_name)->getUID()};
 
     auto const c_username{"SomeUsername"s};
     auto const c_password{"SomePassword"s};
     auto const c_user_uid{users_catalog.createUser(c_username, c_password)};
-
-    system_catalog.saveToDisk();
 
     ASSERT_TRUE(std::filesystem::exists(system_catalog.getLunarHomePath()));
     ASSERT_TRUE(std::filesystem::exists(users_catalog.getUsersHomePath()));

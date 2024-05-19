@@ -3,10 +3,12 @@
 #include <array>
 #include <functional>
 #include <ostream>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 
-namespace LunarDB::Common::CppExtensions::Types {
+namespace LunarDB::Common::CppExtensions {
 
 class UniqueID
 {
@@ -41,6 +43,10 @@ public: // hashing
     };
     friend std::size_t Hash::operator()(UniqueID const&) const;
 
+public: // structures
+    template <typename Value>
+    using MapTo = std::unordered_map<UniqueID, Value, Hash>;
+
 private: // IO
     LUNAR_ENABLE_BINARY_IO(m_data, m_initialized);
 
@@ -54,4 +60,4 @@ private: // fields
     bool m_initialized{false};
 };
 
-} // namespace LunarDB::Common::CppExtensions::Types
+} // namespace LunarDB::Common::CppExtensions

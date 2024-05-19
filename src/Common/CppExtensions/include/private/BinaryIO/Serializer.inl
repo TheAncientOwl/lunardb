@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include "LunarDB/Common/CppExtensions/BinaryIO/Serializer.hpp"
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer {
@@ -99,6 +101,14 @@ void serialize(std::ostream& os, std::optional<T> const& opt)
     {
         serialize(os, false);
     }
+}
+
+template <typename T>
+void serialize(std::ostream& os, std::shared_ptr<T> const& ptr)
+{
+    assert(ptr != nullptr && "Cannot serialize nullptr");
+
+    serialize(os, *ptr);
 }
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Serializer

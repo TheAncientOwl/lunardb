@@ -22,12 +22,10 @@ void Database::execute(Moonlight::API::ParsedQuery const& parsed_query)
     {
     case Common::QueryData::Primitives::EDatabaseOperationType::Create: {
         system_catalog.createDatabase(query.name);
-        system_catalog.saveToDisk();
         break;
     }
     case Common::QueryData::Primitives::EDatabaseOperationType::Drop: {
         system_catalog.dropDatabase(query.name);
-        system_catalog.saveToDisk();
         break;
     }
     case Common::QueryData::Primitives::EDatabaseOperationType::Use: {
@@ -36,7 +34,9 @@ void Database::execute(Moonlight::API::ParsedQuery const& parsed_query)
     }
     case Common::QueryData::Primitives::EDatabaseOperationType::Backup: {
         // TODO: Provide implementation
-        throw std::runtime_error{"Not implemented yet..."};
+        throw std::runtime_error{
+            "[~/lunardb/src/Astral/src/Executors/DatabaseExecutor.cpp:backup] Not implemented "
+            "yet..."};
     }
     default:
         throw std::logic_error{"Cannot execute unknown query operation"};

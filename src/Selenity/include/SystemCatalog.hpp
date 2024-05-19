@@ -1,11 +1,15 @@
 #pragma once
 
 #include <filesystem>
+#include <memory>
 #include <optional>
+#include <string_view>
+#include <unordered_map>
 #include <vector>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
+#include "LunarDB/Selenity/CatalogEntry.hpp"
 #include "LunarDB/Selenity/DatabaseManager.hpp"
 
 namespace LunarDB::Selenity::API {
@@ -14,52 +18,42 @@ class SystemCatalog : public Common::CppExtensions::DesignPatterns::Singleton<Sy
 {
 public: // public API
     ///
-    /// @brief Create database config, store it to internal configs and save configuration to disk
-    /// @param [in] name -> database name
-    /// @throws std::runtime_error if such database config already exists
-    ///
-    void createDatabase(std::string name);
-
-    ///
-    /// @brief Remove database config from internal ocnfigs and save configuration to disk
-    /// @param [in] name -> database name
-    /// @throws std::runtime_error if such database config does not exist
-    ///
-    void dropDatabase(std::string_view name);
-
-    ///
-    /// @brief Choose which database config will be used as work database
-    /// @param [in] name -> database name
-    /// @throws std::runtime_error if such database config does not exist
-    ///
-    void useDatabase(std::string_view name);
-
-    ///
-    /// @return true if any database is used as work database
-    ///
-    bool usingDatabase() const;
-
-    ///
-    /// @brief Saves configuration data to disk
-    ///
-    void saveToDisk() const;
-
-    ///
-    /// @brief Loads configuration data to disk
-    ///
-    void loadFromDisk();
-
-    ///
     /// @brief Self explanatory
     /// @return LunarDB home path
     ///
     std::filesystem::path getLunarHomePath() const;
 
     ///
+    /// @brief Create database config, store it to internal configs and save configuration to disk
+    /// @param [in] name -> database name
+    /// @throws std::runtime_error if such database config already exists
+    ///
+    void createDatabase(std::string const& name);
+
+    ///
+    /// @brief Remove database config from internal ocnfigs and save configuration to disk
+    /// @param [in] name -> database name
+    /// @throws std::runtime_error if such database config does not exist
+    ///
+    void dropDatabase(std::string const& name);
+
+    ///
+    /// @brief Choose which database config will be used as work database
+    /// @param [in] name -> database name
+    /// @throws std::runtime_error if such database config does not exist
+    ///
+    void useDatabase(std::string name);
+
+    ///
     /// @brief Self explanatory
     /// @throw std::runtime_error if no database in use
     ///
-    Implementation::SystemCatalog::DatabaseManager& getDatabaseInUse();
+    std::shared_ptr<Implementation::DatabaseManager> getDatabaseInUse();
+
+    ///
+    /// @return true if any database is used as work database
+    ///
+    bool usingDatabase() const;
 
 public: // lifecycle
     ///
@@ -68,38 +62,30 @@ public: // lifecycle
     ///
     ~SystemCatalog();
 
-public: // basic encapsulation
-    LUNAR_PROVIDE_CONST_GETTER(configs, Configs);
-    LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(SystemCatalog);
-
 private: // singleton
     LUNAR_SINGLETON_INIT(SystemCatalog);
 
-private: // IO
-    LUNAR_ENABLE_BINARY_IO(m_configs);
-    friend std::ostream& operator<<(std::ostream&, SystemCatalog const&);
-
 private: // private API
-    ///
-    /// @param [in] name -> config name
-    /// @return iterator from m_configs to searched database config name
-    ///
-    auto findDatabaseManagerByName(std::string_view name) const;
+    void saveCatalogToDisk() const;
+    void loadCatalogFromDisk();
 
-    ///
-    /// @brief Self explanatory
-    ///
-    std::filesystem::path getLunarConfigFilePath() const;
-
-    ///
-    /// @brief Clears all data
-    ///
-    void clear();
+    std::filesystem::path getDatabasesHomePath() const;
+    std::filesystem::path getDatabasesCatalogFilePath() const;
 
 private: // fields
-    std::vector<Implementation::SystemCatalog::DatabaseManager> m_configs{};
+    // map db name -> db catalog entry
+    std::unordered_map<std::string, std::shared_ptr<Implementation::CatalogEntry>> m_databases_catalog{};
 
-    std::optional<std::size_t> m_config_in_use_index{std::nullopt};
+    // map database uid -> database manager
+    Common::CppExtensions::UniqueID::MapTo<std::shared_ptr<Implementation::DatabaseManager>>
+        m_database_managers{};
+
+    struct DatabaseInUse
+    {
+        std::string name;
+        Common::CppExtensions::UniqueID uid;
+    };
+    std::optional<DatabaseInUse> m_database_in_use{std::nullopt};
 };
 
 } // namespace LunarDB::Selenity::API

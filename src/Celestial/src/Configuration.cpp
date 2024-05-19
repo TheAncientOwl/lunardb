@@ -17,12 +17,10 @@ std::size_t Permission::Hash::operator()(Permission const& permission) const
     auto const type_hash{std::hash<std::uint8_t>{}(static_cast<std::uint8_t>(permission.type))};
     seed ^= type_hash;
 
-    auto const database_uid_hash{
-        Common::CppExtensions::Types::UniqueID::Hash{}(permission.database_uid)};
+    auto const database_uid_hash{Common::CppExtensions::UniqueID::Hash{}(permission.database_uid)};
     seed ^= (database_uid_hash << 1);
 
-    auto const collection_uid_hash{
-        Common::CppExtensions::Types::UniqueID::Hash{}(permission.collection_uid)};
+    auto const collection_uid_hash{Common::CppExtensions::UniqueID::Hash{}(permission.collection_uid)};
     seed ^= (collection_uid_hash << 2);
 
     return seed;

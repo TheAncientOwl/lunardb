@@ -16,7 +16,7 @@ LUNAR_SINGLETON_INIT_IMPL(UsersCatalog)
     loadFromDisk();
 }
 
-Common::CppExtensions::Types::UniqueID UsersCatalog::createUser(std::string username, std::string password)
+Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, std::string password)
 {
     // 1. Check if username available
     if (m_users_uids.find(username) != m_users_uids.end())
@@ -29,7 +29,7 @@ Common::CppExtensions::Types::UniqueID UsersCatalog::createUser(std::string user
     // TODO: Provide implementation
 
     // 3. Add user to internal data
-    auto const new_id{Common::CppExtensions::Types::UniqueID::generate()};
+    auto const new_id{Common::CppExtensions::UniqueID::generate()};
 
     std::ignore = m_users_uids.emplace(username, new_id);
     auto const map_result = m_users.emplace(
@@ -44,7 +44,7 @@ Common::CppExtensions::Types::UniqueID UsersCatalog::createUser(std::string user
     return new_id;
 }
 
-void UsersCatalog::removeUser(Common::CppExtensions::Types::UniqueID const& user_uid)
+void UsersCatalog::removeUser(Common::CppExtensions::UniqueID const& user_uid)
 {
     // 1. Get user data
     auto& user{getUser(user_uid)};
@@ -62,7 +62,7 @@ void UsersCatalog::removeUser(Common::CppExtensions::Types::UniqueID const& user
     saveUserNamesToDisk();
 }
 
-void UsersCatalog::updatePassword(Common::CppExtensions::Types::UniqueID const& user_uid, std::string new_password)
+void UsersCatalog::updatePassword(Common::CppExtensions::UniqueID const& user_uid, std::string new_password)
 {
     // 1. Get user internal data
     auto& user{getUser(user_uid)};
@@ -78,7 +78,7 @@ void UsersCatalog::updatePassword(Common::CppExtensions::Types::UniqueID const& 
 }
 
 void UsersCatalog::updatePermission(
-    Common::CppExtensions::Types::UniqueID const& user_uid,
+    Common::CppExtensions::UniqueID const& user_uid,
     Configuration::PermissionUpdate permission)
 {
     assert(
@@ -109,7 +109,7 @@ void UsersCatalog::updatePermission(
 }
 
 bool UsersCatalog::userHasPermission(
-    Common::CppExtensions::Types::UniqueID const& user_uid,
+    Common::CppExtensions::UniqueID const& user_uid,
     Configuration::Permission const& permission)
 {
     auto const& user{getUser(user_uid)};
@@ -121,18 +121,19 @@ std::pair<Configuration::EAuthState, Authentication::AuthKey> authenticateUser(
     std::string_view password)
 {
     // TODO: Provide implementation
-    throw std::runtime_error{"Not implemented yet..."};
+    throw std::runtime_error{
+        "[~/lunardb/src/Celestial/src/UsersCatalog.cpp:authenticateUser] Not implemented yet..."};
 }
 
 bool UsersCatalog::isUserAuthenticated(
-    Common::CppExtensions::Types::UniqueID const& user_uid,
+    Common::CppExtensions::UniqueID const& user_uid,
     Authentication::AuthKey const& auth_key) const
 {
     auto const it = m_authenticated_users.find(user_uid);
     return it != m_authenticated_users.end() && it->second == auth_key;
 }
 
-void UsersCatalog::deauthenticateUser(Common::CppExtensions::Types::UniqueID const& user_uid)
+void UsersCatalog::deauthenticateUser(Common::CppExtensions::UniqueID const& user_uid)
 {
     std::ignore = m_authenticated_users.erase(user_uid);
 }
@@ -150,8 +151,7 @@ std::filesystem::path UsersCatalog::getUsersHomePath() const
     return c_users_home_path;
 }
 
-std::filesystem::path UsersCatalog::getUserConfigurationFilePath(
-    Common::CppExtensions::Types::UniqueID user_uid) const
+std::filesystem::path UsersCatalog::getUserConfigurationFilePath(Common::CppExtensions::UniqueID user_uid) const
 {
     return getUsersHomePath() / (user_uid.toString() + ".cfg");
 }
@@ -174,7 +174,7 @@ void UsersCatalog::saveUserToDisk(Configuration::User const& user) const
     user_file.close();
 }
 
-Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::Types::UniqueID user_uid)
+Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::UniqueID user_uid)
 {
     namespace Deserializer = Common::CppExtensions::BinaryIO::Deserializer;
 
@@ -205,7 +205,7 @@ Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::Types:
     return user;
 }
 
-Configuration::User& UsersCatalog::getUser(Common::CppExtensions::Types::UniqueID user_uid)
+Configuration::User& UsersCatalog::getUser(Common::CppExtensions::UniqueID user_uid)
 {
     if (auto user_it = m_users.find(user_uid); user_it != m_users.end())
     {
@@ -256,7 +256,7 @@ UsersCatalog::~UsersCatalog()
     saveToDisk();
 }
 
-Common::CppExtensions::Types::UniqueID UsersCatalog::getUserUID(std::string const& username) const
+Common::CppExtensions::UniqueID UsersCatalog::getUserUID(std::string const& username) const
 {
     auto it = m_users_uids.find(username);
 

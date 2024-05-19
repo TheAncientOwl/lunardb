@@ -6,7 +6,7 @@
 #include <sstream>
 #include <utility>
 
-namespace LunarDB::Common::CppExtensions::Types {
+namespace LunarDB::Common::CppExtensions {
 
 UniqueID::UniqueID(UniqueID&& other) noexcept
     : m_data{std::move(other.m_data)}, m_initialized(std::exchange(other.m_initialized, false))
@@ -92,4 +92,4 @@ std::size_t UniqueID::Hash::operator()(UniqueID const& uid) const
     return data_hash ^ (uid.m_initialized << 1);
 }
 
-} // namespace LunarDB::Common::CppExtensions::Types
+} // namespace LunarDB::Common::CppExtensions

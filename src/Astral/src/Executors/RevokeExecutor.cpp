@@ -12,13 +12,13 @@ void Revoke::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'revoke' query");
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
-    auto& database_in_use{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
+    auto database_in_use{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
 
     auto const& query = parsed_query.get<Common::QueryData::Revoke>();
 
     auto const user_uid{users_catalog.getUserUID(query.from_user)};
-    auto const database_uid{database_in_use.getUID()};
-    auto const collection_uid{database_in_use.getCollectionUID(query.structure_name)};
+    auto const database_uid{database_in_use->getUID()};
+    auto const collection_uid{database_in_use->getCollectionManager(query.structure_name)->getUID()};
 
     std::for_each(
         query.permissions.begin(),

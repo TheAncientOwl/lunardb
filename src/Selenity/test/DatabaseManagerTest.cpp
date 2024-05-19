@@ -2,49 +2,40 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Selenity/DatabaseManager.hpp"
-#include "LunarDB/Selenity/helpers/Operators.hpp"
 
-namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests {
+using namespace std::string_literals;
+
+namespace LunarDB::Selenity::Implementation::Tests {
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 {
-    auto const c_file{"/tmp/lunardb_test_db_config.ldb"};
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
 
-    std::ofstream out(c_file, std::ios::binary);
-    DatabaseManager const out_config{"/tmp/lunardb/some_db_storage", "some_db"};
-    Common::CppExtensions::BinaryIO::Serializer::serialize(out, out_config);
-    out.close();
+    auto const c_name{"some_database"s};
+    auto const c_home{"/tmp/lunardb/some_database"s};
 
-    std::ifstream in(c_file, std::ios::binary);
-    DatabaseManager in_config{};
-    Common::CppExtensions::BinaryIO::Deserializer::deserialize(in, in_config);
-    in.close();
+    EXPECT_TRUE(false) << "Refactor when class implemented";
 
-    std::remove(c_file);
+    // DatabaseManager out_manager{Common::CppExtensions::UniqueID::generate(), c_name, c_home};
+    // out_manager.saveCatalogToDisk;
+    // out_manager.saveCatalogTo(out_file);
+    // out_file.close();
 
-    EXPECT_EQ(out_config, in_config);
+    // std::ifstream in_file(LUNAR_TESTING_HOME_PATH "/some_database.config", std::ios::binary);
+    // DatabaseManager in_manager{};
+    // in_manager.loadCatalogFrom(in_file);
+    // in_file.close();
+
+    // auto const c_collection_name{"some_collection"s};
+    // EXPECT_EQ(out_manager.getHomePath(), in_manager.getHomePath());
+    // EXPECT_EQ(out_manager.getUID(), in_manager.getUID());
+    // EXPECT_EQ(out_manager.getName(), in_manager.getName());
+    // EXPECT_THROW(
+    //     { std::ignore = out_manager.getCollectionManager(c_collection_name); }, std::runtime_error);
+    // EXPECT_THROW(
+    //     { std::ignore = in_manager.getCollectionManager(c_collection_name); }, std::runtime_error);
 }
 
-TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io_setters)
-{
-    auto const c_file{"/tmp/lunardb_test_db_config.ldb"};
-
-    std::ofstream out(c_file, std::ios::binary);
-    DatabaseManager out_config{"/tmp/lunardb/some_db_storage", "some_db"};
-    out_config.setHomePath("some/home_path");
-    out_config.setName("some_name");
-    Common::CppExtensions::BinaryIO::Serializer::serialize(out, out_config);
-    out.close();
-
-    std::ifstream in(c_file, std::ios::binary);
-    DatabaseManager in_config{};
-    Common::CppExtensions::BinaryIO::Deserializer::deserialize(in, in_config);
-    in.close();
-
-    std::remove(c_file);
-
-    EXPECT_EQ(out_config, in_config);
-}
-
-} // namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests
+} // namespace LunarDB::Selenity::Implementation::Tests

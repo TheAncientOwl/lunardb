@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
@@ -9,7 +10,8 @@ namespace LunarDB::Celestial::API::Tests {
 
 TEST(Celestial_UsersCatalog, crud)
 {
-    std::filesystem::remove_all("/tmp/lunardb");
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+
     auto const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
 
     auto& catalog{Celestial::API::UsersCatalog::Instance()};
@@ -20,8 +22,8 @@ TEST(Celestial_UsersCatalog, crud)
     auto const c_username2{"SomeUsername2"s};
     auto const c_password2{"SomePassword2"s};
 
-    auto const c_database_uid{Common::CppExtensions::Types::UniqueID::generate()};
-    auto const c_collection_uid{Common::CppExtensions::Types::UniqueID::generate()};
+    auto const c_database_uid{Common::CppExtensions::UniqueID::generate()};
+    auto const c_collection_uid{Common::CppExtensions::UniqueID::generate()};
     auto const c_insert_permission{Configuration::Permission{
         Configuration::Permission::EUserPermissionType::Insert, c_database_uid, c_collection_uid}};
     auto const c_update_permission{Configuration::Permission{
@@ -30,8 +32,8 @@ TEST(Celestial_UsersCatalog, crud)
         Configuration::Permission::EUserPermissionType::Delete, c_database_uid, c_collection_uid}};
 
     // 1. createUser
-    Common::CppExtensions::Types::UniqueID uid1{};
-    Common::CppExtensions::Types::UniqueID uid2{};
+    Common::CppExtensions::UniqueID uid1{};
+    Common::CppExtensions::UniqueID uid2{};
 
     EXPECT_NO_THROW({ uid1 = catalog.createUser(c_username1, c_password1); });
     EXPECT_THROW({ uid2 = catalog.createUser(c_username1, c_password1); }, std::runtime_error);

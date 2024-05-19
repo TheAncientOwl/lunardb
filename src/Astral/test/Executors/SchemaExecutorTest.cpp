@@ -2,6 +2,7 @@
 
 #include <filesystem>
 
+#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Common/QueryData/QueryData.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
@@ -13,7 +14,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_SchemaExecutorTest, create_schema)
 {
-    std::filesystem::remove_all("/tmp/lunardb");
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
 
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 

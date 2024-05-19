@@ -172,4 +172,15 @@ void deserialize(std::istream& is, std::optional<T>& opt)
     }
 }
 
+template <typename T>
+void deserialize(std::istream& is, std::shared_ptr<T>& ptr)
+{
+    if (ptr == nullptr)
+    {
+        ptr = std::make_shared<T>();
+    }
+
+    deserialize(is, *ptr);
+}
+
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer

@@ -33,10 +33,6 @@ std::filesystem::path SchemasCatalog::getSchemasHomePath() const
 
 std::filesystem::path SchemasCatalog::getSchemaFilePath(std::string schema_name) const
 {
-    std::transform(schema_name.begin(), schema_name.end(), schema_name.begin(), [](auto const c) {
-        return std::tolower(c);
-    });
-
     return getSchemasHomePath() / (schema_name + ".schema");
 }
 

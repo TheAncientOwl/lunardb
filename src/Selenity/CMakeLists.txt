@@ -5,9 +5,13 @@ add_lunar_library(
     API_HEADER_FILES
         include/SchemasCatalog.hpp
         include/SystemCatalog.hpp
-
         include/DatabaseManager.hpp
-        include/helpers/Operators.hpp
+        include/CatalogEntry.hpp
+
+        include/Collections/Configuration.hpp
+        include/Collections/BaseManager.hpp
+        include/Collections/TableManager.hpp
+        include/Collections/DocumentManager.hpp
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
@@ -16,6 +20,7 @@ add_lunar_library(
         src/DatabaseManager.cpp
         src/SchemasCatalog.cpp
         src/SystemCatalog.cpp
+        src/Collections/BaseManager.cpp
 )
 
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_SELENITY_TESTS)

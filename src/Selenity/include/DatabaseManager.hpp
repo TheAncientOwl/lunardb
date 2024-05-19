@@ -1,38 +1,55 @@
 #pragma once
 
 #include <filesystem>
-#include <iostream>
+#include <memory>
+#include <string>
+#include <string_view>
+#include <unordered_map>
 
-#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Common/CppExtensions/EncapsulationHelpers.hpp"
 #include "LunarDB/Common/CppExtensions/UniqueID.hpp"
+#include "LunarDB/Selenity/CatalogEntry.hpp"
+#include "LunarDB/Selenity/Collections/BaseManager.hpp"
 
-namespace LunarDB::Selenity::Implementation::SystemCatalog {
+namespace LunarDB::Selenity::Implementation {
 
 class DatabaseManager
 {
 public: // life cycle
-    DatabaseManager(std::filesystem::path home_path, std::string name);
-    LUNAR_PROVIDE_DEFAULT_LIFE_CYCLE_OF(DatabaseManager);
+    DatabaseManager(std::shared_ptr<CatalogEntry> catalog_entry);
+
+    DatabaseManager() = default;
+    ~DatabaseManager() = default;
+    DatabaseManager(DatabaseManager const&) = default;
+    DatabaseManager& operator=(DatabaseManager const&) = default;
+    DatabaseManager(DatabaseManager&&) noexcept = default;
+    DatabaseManager& operator=(DatabaseManager&&) noexcept = default;
 
 public: // public API
-    Common::CppExtensions::Types::UniqueID getCollectionUID(std::string const& collection_name) const;
-    Common::CppExtensions::Types::UniqueID getUID() const;
+    void createCollection(std::string const& collection_name);
+    void dropCollection(std::string const& collection_name);
 
-    void createCollection(std::string name);
+    Common::CppExtensions::UniqueID getUID() const;
+    std::filesystem::path const& getHomePath() const;
+    std::string_view getName() const;
 
-public: // basic encapsulation
-    LUNAR_PROVIDE_REF_GET_SET(home_path, HomePath);
-    LUNAR_PROVIDE_REF_GET_SET(name, Name);
-    LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(DatabaseManager);
+    std::shared_ptr<Collections::BaseManager> getCollectionManager(std::string const& collection_name);
 
-private: // binary IO
-    LUNAR_ENABLE_BINARY_IO(m_uid, m_home_path, m_name);
+private: // private API
+    void saveCatalogToDisk() const;
+    void loadCatalogFromDisk();
+
+    std::filesystem::path getCollectionsHomePath() const;
+    std::filesystem::path getCollectionsCatalogFilePath() const;
 
 private: // fields
-    Common::CppExtensions::Types::UniqueID m_uid;
-    std::filesystem::path m_home_path;
-    std::string m_name;
+    std::shared_ptr<CatalogEntry> m_catalog_info{};
+
+    // TODO: Refactor, patter also used in SystemCatalog
+    // map collection name -> catalog entry
+    std::unordered_map<std::string, std::shared_ptr<CatalogEntry>> m_collections_catalog;
+
+    // map collection uid -> collection manager
+    Common::CppExtensions::UniqueID::MapTo<std::shared_ptr<Collections::BaseManager>> m_collection_managers;
 };
 
-} // namespace LunarDB::Selenity::Implementation::SystemCatalog
+} // namespace LunarDB::Selenity::Implementation

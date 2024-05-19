@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <filesystem>
 #include <forward_list>
+#include <memory>
 #include <optional>
 #include <span>
 #include <string>
@@ -52,6 +53,9 @@ void deserialize(std::istream&, std::optional<T>&);
 
 template <typename T, std::size_t Size>
 void deserialize(std::istream&, std::array<T, Size>&);
+
+template <typename T>
+void deserialize(std::istream&, std::shared_ptr<T>&);
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Deserializer
 

@@ -21,20 +21,20 @@ public: // public API
     /// @param user
     /// @param password
     ///
-    Common::CppExtensions::Types::UniqueID createUser(std::string username, std::string password);
+    Common::CppExtensions::UniqueID createUser(std::string username, std::string password);
 
     ///
     /// @brief Self explanatory
     /// @param user_uid
     ///
-    void removeUser(Common::CppExtensions::Types::UniqueID const& user_uid);
+    void removeUser(Common::CppExtensions::UniqueID const& user_uid);
 
     ///
     /// @brief Self explanatory
     /// @param user_uid
     /// @param new_password
     ///
-    void updatePassword(Common::CppExtensions::Types::UniqueID const& user_uid, std::string new_password);
+    void updatePassword(Common::CppExtensions::UniqueID const& user_uid, std::string new_password);
 
     ///
     /// @brief Self explanatory
@@ -42,7 +42,7 @@ public: // public API
     /// @param permission
     ///
     void updatePermission(
-        Common::CppExtensions::Types::UniqueID const& user_uid,
+        Common::CppExtensions::UniqueID const& user_uid,
         Configuration::PermissionUpdate permission);
 
     ///
@@ -52,7 +52,7 @@ public: // public API
     /// @return true if the use has permission, false otherwise
     ///
     bool userHasPermission(
-        Common::CppExtensions::Types::UniqueID const& user_uid,
+        Common::CppExtensions::UniqueID const& user_uid,
         Configuration::Permission const& permission);
 
     ///
@@ -71,21 +71,21 @@ public: // public API
     /// @return true if user authenticated, false otherwise
     ///
     bool isUserAuthenticated(
-        Common::CppExtensions::Types::UniqueID const& user_uid,
+        Common::CppExtensions::UniqueID const& user_uid,
         Authentication::AuthKey const& auth_key) const;
 
     ///
     /// @brief Self explanatory
     /// @param user_uid
     ///
-    void deauthenticateUser(Common::CppExtensions::Types::UniqueID const& user_uid);
+    void deauthenticateUser(Common::CppExtensions::UniqueID const& user_uid);
 
     ///
     /// @brief Self explanatory
     /// @param username
     /// @return
     ///
-    Common::CppExtensions::Types::UniqueID getUserUID(std::string const& username) const;
+    Common::CppExtensions::UniqueID getUserUID(std::string const& username) const;
 
     ~UsersCatalog();
 
@@ -98,7 +98,7 @@ public: // public API
     /// @brief Self explanatory
     /// @param user_uid
     ///
-    std::filesystem::path getUserConfigurationFilePath(Common::CppExtensions::Types::UniqueID user_uid) const;
+    std::filesystem::path getUserConfigurationFilePath(Common::CppExtensions::UniqueID user_uid) const;
 
     ///
     /// @brief Self explanatory
@@ -140,7 +140,7 @@ private: // private API
     /// @return User configuration if user found
     /// @throw std::runtime_error if user not found
     ///
-    Configuration::User loadUserFromDisk(Common::CppExtensions::Types::UniqueID user_uid);
+    Configuration::User loadUserFromDisk(Common::CppExtensions::UniqueID user_uid);
 
     ///
     /// @brief Self explanatory
@@ -151,16 +151,12 @@ private: // private API
     /// @param user_uid
     /// @return Reference to user in internal structure
     ///
-    Configuration::User& getUser(Common::CppExtensions::Types::UniqueID user_uid);
+    Configuration::User& getUser(Common::CppExtensions::UniqueID user_uid);
 
 private: // fields
-    template <typename Value>
-    using UniqueIDMap =
-        std::unordered_map<Common::CppExtensions::Types::UniqueID, Value, Common::CppExtensions::Types::UniqueID::Hash>;
-
-    UniqueIDMap<Configuration::User> m_users;
-    UniqueIDMap<Authentication::AuthKey> m_authenticated_users;
-    std::unordered_map<std::string, Common::CppExtensions::Types::UniqueID> m_users_uids;
+    Common::CppExtensions::UniqueID::MapTo<Configuration::User> m_users;
+    Common::CppExtensions::UniqueID::MapTo<Authentication::AuthKey> m_authenticated_users;
+    std::unordered_map<std::string, Common::CppExtensions::UniqueID> m_users_uids;
 };
 
 } // namespace LunarDB::Celestial::API

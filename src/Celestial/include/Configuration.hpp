@@ -30,8 +30,8 @@ struct Permission
     using EUserPermissionType = Common::QueryData::Primitives::EUserPermissionType;
 
     EUserPermissionType type{EUserPermissionType::None};
-    Common::CppExtensions::Types::UniqueID database_uid;
-    Common::CppExtensions::Types::UniqueID collection_uid;
+    Common::CppExtensions::UniqueID database_uid;
+    Common::CppExtensions::UniqueID collection_uid;
 
     bool operator==(Permission const&) const;
     struct Hash
@@ -50,7 +50,7 @@ struct PermissionUpdate
 
 struct User
 {
-    Common::CppExtensions::Types::UniqueID uid;
+    Common::CppExtensions::UniqueID uid;
     std::string name;
     std::string password;
     std::unordered_set<Permission, Permission::Hash> permissions;
