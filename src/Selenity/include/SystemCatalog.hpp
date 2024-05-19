@@ -6,7 +6,7 @@
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
-#include "LunarDB/Selenity/DatabaseCatalog.hpp"
+#include "LunarDB/Selenity/DatabaseManager.hpp"
 
 namespace LunarDB::Selenity::API {
 
@@ -59,7 +59,7 @@ public: // public API
     /// @brief Self explanatory
     /// @throw std::runtime_error if no database in use
     ///
-    Implementation::SystemCatalog::DatabaseCatalog& getDatabaseInUse();
+    Implementation::SystemCatalog::DatabaseManager& getDatabaseInUse();
 
 public: // lifecycle
     ///
@@ -84,7 +84,7 @@ private: // private API
     /// @param [in] name -> config name
     /// @return iterator from m_configs to searched database config name
     ///
-    auto findDatabaseCatalogByName(std::string_view name) const;
+    auto findDatabaseManagerByName(std::string_view name) const;
 
     ///
     /// @brief Self explanatory
@@ -97,7 +97,7 @@ private: // private API
     void clear();
 
 private: // fields
-    std::vector<Implementation::SystemCatalog::DatabaseCatalog> m_configs{};
+    std::vector<Implementation::SystemCatalog::DatabaseManager> m_configs{};
 
     std::optional<std::size_t> m_config_in_use_index{std::nullopt};
 };

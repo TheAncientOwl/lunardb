@@ -9,11 +9,11 @@
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog {
 
-class DatabaseCatalog
+class DatabaseManager
 {
 public: // life cycle
-    DatabaseCatalog(std::filesystem::path home_path, std::string name);
-    LUNAR_PROVIDE_DEFAULT_LIFE_CYCLE_OF(DatabaseCatalog);
+    DatabaseManager(std::filesystem::path home_path, std::string name);
+    LUNAR_PROVIDE_DEFAULT_LIFE_CYCLE_OF(DatabaseManager);
 
 public: // public API
     Common::CppExtensions::Types::UniqueID getCollectionUID(std::string const& collection_name) const;
@@ -24,7 +24,7 @@ public: // public API
 public: // basic encapsulation
     LUNAR_PROVIDE_REF_GET_SET(home_path, HomePath);
     LUNAR_PROVIDE_REF_GET_SET(name, Name);
-    LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(DatabaseCatalog);
+    LUNAR_PROVIDE_DEFAULT_EQUALITY_CHECK(DatabaseManager);
 
 private: // binary IO
     LUNAR_ENABLE_BINARY_IO(m_uid, m_home_path, m_name);

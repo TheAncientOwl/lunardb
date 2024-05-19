@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LunarDB/Selenity/DatabaseCatalog.hpp"
+#include "LunarDB/Selenity/DatabaseManager.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace std {
@@ -18,9 +18,9 @@ std::ostream& operator<<(std::ostream& os, std::vector<T> const& rhs)
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog {
 
-std::ostream& operator<<(std::ostream& os, DatabaseCatalog const& rhs)
+std::ostream& operator<<(std::ostream& os, DatabaseManager const& rhs)
 {
-    os << "DatabaseCatalog{ " << "home_path: " << rhs.getHomePath() << ", name: " << rhs.getName()
+    os << "DatabaseManager{ " << "home_path: " << rhs.getHomePath() << ", name: " << rhs.getName()
        << " }";
     return os;
 }

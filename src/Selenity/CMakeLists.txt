@@ -6,14 +6,14 @@ add_lunar_library(
         include/SchemasCatalog.hpp
         include/SystemCatalog.hpp
 
-        include/DatabaseCatalog.hpp
-        include/private/helpers/Operators.hpp
+        include/DatabaseManager.hpp
+        include/helpers/Operators.hpp
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
 
     SOURCE_FILES
-        src/DatabaseCatalog.cpp
+        src/DatabaseManager.cpp
         src/SchemasCatalog.cpp
         src/SystemCatalog.cpp
 )

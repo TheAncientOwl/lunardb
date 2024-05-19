@@ -1,9 +1,9 @@
 set(TEST_SUITE_PREFIX Selenity)
 
 add_lunar_unit_test(
-    NAME DatabaseCatalogTest
+    NAME DatabaseManagerTest
     SOURCE_FILES 
-        test/DatabaseCatalogTest.cpp
+        test/DatabaseManagerTest.cpp
     DEPENDENCIES 
         LunarDB_Selenity
         LunarDB_Common_CppExtensions

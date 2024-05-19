@@ -2,7 +2,7 @@
 
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
-#include "LunarDB/Selenity/private/helpers/Operators.hpp"
+#include "LunarDB/Selenity/helpers/Operators.hpp"
 #include "QueryExecutors.hpp"
 
 namespace LunarDB::Astral::Tests {

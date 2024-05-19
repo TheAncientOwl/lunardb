@@ -2,22 +2,22 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Selenity/DatabaseCatalog.hpp"
-#include "LunarDB/Selenity/private/helpers/Operators.hpp"
+#include "LunarDB/Selenity/DatabaseManager.hpp"
+#include "LunarDB/Selenity/helpers/Operators.hpp"
 
 namespace LunarDB::Selenity::Implementation::SystemCatalog::Tests {
 
-TEST(Selenity_SystemCatalog_DatabaseCatalogTest, binary_io)
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 {
     auto const c_file{"/tmp/lunardb_test_db_config.ldb"};
 
     std::ofstream out(c_file, std::ios::binary);
-    DatabaseCatalog const out_config{"/tmp/lunardb/some_db_storage", "some_db"};
+    DatabaseManager const out_config{"/tmp/lunardb/some_db_storage", "some_db"};
     Common::CppExtensions::BinaryIO::Serializer::serialize(out, out_config);
     out.close();
 
     std::ifstream in(c_file, std::ios::binary);
-    DatabaseCatalog in_config{};
+    DatabaseManager in_config{};
     Common::CppExtensions::BinaryIO::Deserializer::deserialize(in, in_config);
     in.close();
 
@@ -26,19 +26,19 @@ TEST(Selenity_SystemCatalog_DatabaseCatalogTest, binary_io)
     EXPECT_EQ(out_config, in_config);
 }
 
-TEST(Selenity_SystemCatalog_DatabaseCatalogTest, binary_io_setters)
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io_setters)
 {
     auto const c_file{"/tmp/lunardb_test_db_config.ldb"};
 
     std::ofstream out(c_file, std::ios::binary);
-    DatabaseCatalog out_config{"/tmp/lunardb/some_db_storage", "some_db"};
+    DatabaseManager out_config{"/tmp/lunardb/some_db_storage", "some_db"};
     out_config.setHomePath("some/home_path");
     out_config.setName("some_name");
     Common::CppExtensions::BinaryIO::Serializer::serialize(out, out_config);
     out.close();
 
     std::ifstream in(c_file, std::ios::binary);
-    DatabaseCatalog in_config{};
+    DatabaseManager in_config{};
     Common::CppExtensions::BinaryIO::Deserializer::deserialize(in, in_config);
     in.close();
 
