@@ -97,7 +97,15 @@ std::shared_ptr<Collections::BaseManager> DatabaseManager::getCollectionManager(
         throw std::runtime_error("Collection does not exist");
     }
 
-    return m_collection_managers.find(catalog_entry_it->second->uid)->second;
+    assert(
+        m_collections_catalog.size() == m_collection_managers.size() &&
+        "Collection sizes differ, some data was lost");
+
+    auto const manager_it = m_collection_managers.find(catalog_entry_it->second->uid);
+
+    assert(manager_it != m_collection_managers.end() && "Collection manager not found");
+
+    return manager_it->second;
 }
 
 void DatabaseManager::saveCatalogToDisk() const
@@ -134,12 +142,20 @@ void DatabaseManager::loadCatalogFromDisk()
             auto name{entry->name};
             auto entry_ptr =
                 m_collections_catalog.emplace(std::move(name), std::move(entry)).first->second;
+
+            m_collection_managers.emplace(
+                entry_ptr->uid, std::make_shared<Collections::BaseManager>(entry_ptr));
         }
     }
     else
     {
         // TODO: log warning
     }
+}
+
+DatabaseManager::~DatabaseManager()
+{
+    saveCatalogToDisk();
 }
 
 } // namespace LunarDB::Selenity::Implementation

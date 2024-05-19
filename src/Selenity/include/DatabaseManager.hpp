@@ -18,9 +18,9 @@ public: // life cycle
     DatabaseManager(std::shared_ptr<CatalogEntry> catalog_entry);
 
     DatabaseManager() = default;
-    ~DatabaseManager() = default;
-    DatabaseManager(DatabaseManager const&) = default;
-    DatabaseManager& operator=(DatabaseManager const&) = default;
+    ~DatabaseManager();
+    DatabaseManager(DatabaseManager const&) = delete;
+    DatabaseManager& operator=(DatabaseManager const&) = delete;
     DatabaseManager(DatabaseManager&&) noexcept = default;
     DatabaseManager& operator=(DatabaseManager&&) noexcept = default;
 

@@ -79,8 +79,7 @@ void SystemCatalog::loadCatalogFromDisk()
                 m_databases_catalog.emplace(std::move(name), std::move(entry)).first->second;
 
             m_database_managers.emplace(
-                entry_ptr->uid,
-                std::make_shared<Implementation::DatabaseManager>(std::move(entry_ptr)));
+                entry_ptr->uid, std::make_shared<Implementation::DatabaseManager>(entry_ptr));
         }
     }
     else
