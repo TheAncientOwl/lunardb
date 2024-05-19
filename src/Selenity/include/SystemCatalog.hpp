@@ -6,7 +6,7 @@
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
-#include "LunarDB/Selenity/private/DatabaseCatalog.hpp"
+#include "LunarDB/Selenity/DatabaseCatalog.hpp"
 
 namespace LunarDB::Selenity::API {
 

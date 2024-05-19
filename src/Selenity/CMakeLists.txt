@@ -6,7 +6,7 @@ add_lunar_library(
         include/SchemasCatalog.hpp
         include/SystemCatalog.hpp
 
-        include/private/DatabaseCatalog.hpp
+        include/DatabaseCatalog.hpp
         include/private/helpers/Operators.hpp
 
     PRIVATE_DEPENDENCIES
