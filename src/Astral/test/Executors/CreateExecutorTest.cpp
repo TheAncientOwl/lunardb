@@ -1,10 +1,13 @@
 #include <gtest/gtest.h>
+#include <ranges>
 
 #include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
+#include "LunarDB/Moonlight/ParsedQuery.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
+#include "QueryExecutors.hpp"
 
 using namespace std::string_literals;
 
@@ -37,41 +40,43 @@ TEST(Astral_CreateExecutorTest, create)
     EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
     EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
 
-    std::shared_ptr<Selenity::API::Managers::DatabaseManager> manager{nullptr};
-    EXPECT_NO_THROW({ manager = system_catalog.getDatabaseInUse(); });
-
     auto const c_collection_name{"SomeCollection"s};
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
     auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
-    EXPECT_NO_THROW({
-        manager->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
-    });
-    EXPECT_THROW(
-        {
-            manager->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
-        },
-        std::runtime_error);
+    auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Create>();
+    parsed_query.get<Common::QueryData::Create>() =
+        Init::CreateInit{}
+            .is_volatile(false)
+            .structure_type(c_structure_type)
+            .single(Init::CreateInit::SingleInit{}
+                        .structure_name("SomeCollection")
+                        .schema_name(c_schema.name)
+                        .bindings(c_bindings)
+                        .blended(false))
+            .multiple(std::nullopt);
+    EXPECT_NO_THROW({ Astral::Implementation::Create::execute(parsed_query); });
+    EXPECT_THROW({ Astral::Implementation::Create::execute(parsed_query); }, std::runtime_error);
+
+    std::shared_ptr<Selenity::API::Managers::DatabaseManager> manager{nullptr};
+    EXPECT_NO_THROW({ manager = system_catalog.getDatabaseInUse(); });
     EXPECT_NO_THROW({ manager->getCollection(c_collection_name); });
-
-    manager->saveConfigs();
-
-    auto const manager_copy{
-        std::make_shared<Selenity::API::Managers::DatabaseManager>(manager->getConfig())};
-    manager_copy->loadConfigs();
-    EXPECT_NO_THROW({ manager_copy->getCollection(c_collection_name); });
-
     auto const& collection{manager->getCollection(c_collection_name)};
-    auto const& collection_copy{manager_copy->getCollection(c_collection_name)};
-
     auto const& config{collection->getConfig()};
-    auto const& config_copy{collection_copy->getConfig()};
 
-    EXPECT_EQ(config->bindings, config_copy->bindings);
-    EXPECT_EQ(config->collection_type, config_copy->collection_type);
-    EXPECT_EQ(config->home, config_copy->home);
-    EXPECT_EQ(config->name, config_copy->name);
-    EXPECT_EQ(config->schema, config_copy->schema);
-    EXPECT_EQ(config->uid, config_copy->uid);
+    EXPECT_TRUE(config->bindings.empty());
+    EXPECT_EQ(
+        config->collection_type,
+        Selenity::API::Managers::Configurations::CollectionConfiguration::ECollectionType::Document);
+    ASSERT_EQ(config->schema.fields.size(), c_schema.fields.size());
+    for (auto const index : std::ranges::iota_view{0u, config->schema.fields.size()})
+    {
+        auto const& config_field{config->schema.fields[index]};
+        auto const& schema_field{c_schema.fields[index]};
+
+        EXPECT_EQ(config_field.array, schema_field.array);
+        EXPECT_EQ(config_field.name, schema_field.name);
+        EXPECT_EQ(config_field.nullable, schema_field.nullable);
+    }
 }
 
 } // namespace LunarDB::Astral::Tests
