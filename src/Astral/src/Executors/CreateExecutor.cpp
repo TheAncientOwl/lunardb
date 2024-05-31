@@ -41,7 +41,6 @@ void Create::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'create' query");
 
-    // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Create>();
 
     assert(

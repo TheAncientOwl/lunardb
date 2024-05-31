@@ -7,10 +7,6 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::Implementation {
 
-namespace name {
-
-} // namespace name
-
 void User::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'user' query");
@@ -35,4 +31,3 @@ void User::execute(Moonlight::API::ParsedQuery const& parsed_query)
 }
 
 } // namespace LunarDB::Astral::Implementation
-  // TODO: Provide implementation

@@ -5,10 +5,6 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::Implementation {
 
-namespace name {
-
-} // namespace name
-
 void Commit::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE("Executing 'commit' query");
