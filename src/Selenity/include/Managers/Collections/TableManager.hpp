@@ -12,6 +12,13 @@ public: // lifecycle
 public: // CollectionEntry
     class CollectionEntry : public AbstractManager::ICollectionEntry
     {
+    public:
+        nlohmann::json const& getJSON() const override;
+
+    private:
+        nlohmann::json data{};
+
+        friend class Selenity::API::Managers::Collections::TableManager;
     };
 
 public: // public API

@@ -6,10 +6,7 @@
 
 namespace LunarDB::Selenity::API::Managers::Collections {
 
-DocumentManager::DocumentManager(std::shared_ptr<Configurations::CollectionConfiguration> config)
-    : AbstractManager(config)
-{
-}
+namespace {
 
 void fillRecurseJSON(
     nlohmann::json& json,
@@ -82,6 +79,13 @@ void insert(
     {
         // TODO: log error
     }
+}
+
+} // namespace
+
+DocumentManager::DocumentManager(std::shared_ptr<Configurations::CollectionConfiguration> config)
+    : AbstractManager(config)
+{
 }
 
 void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
