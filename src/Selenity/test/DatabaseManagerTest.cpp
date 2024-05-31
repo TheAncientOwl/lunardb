@@ -26,27 +26,27 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
         c_database_name, c_home, LunarDB::Common::CppExtensions::UniqueID::generate());
 
     auto const c_collection_name{"SomeCollection"s};
-    auto const c_schema_name{"SomeSchema"};
+    auto const c_schema1_name{"SomeSchema"};
     std::vector<Common::QueryData::Create::Single::Binding> c_bindings{};
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
-    auto const c_schema{Common::QueryData::Init::SchemaInit{}
-                            .name(c_schema_name)
-                            .fields({Common::QueryData::Init::SchemaInit::FieldInit{}
-                                         .array(false)
-                                         .name("Field1")
-                                         .nullable(false)
-                                         .type("String")})};
-    EXPECT_NO_THROW({ Selenity::API::SchemasCatalog::Instance().createSchema(c_schema); });
+    auto const c_schema1{Common::QueryData::Init::SchemaInit{}
+                             .name(c_schema1_name)
+                             .fields({Common::QueryData::Init::SchemaInit::FieldInit{}
+                                          .array(false)
+                                          .name("Field1")
+                                          .nullable(false)
+                                          .type("String")})};
+    EXPECT_NO_THROW({ Selenity::API::SchemasCatalog::Instance().createSchema(c_schema1); });
     EXPECT_NO_THROW({ Selenity::API::SystemCatalog::Instance().createDatabase(c_database_name); });
     EXPECT_NO_THROW({ Selenity::API::SystemCatalog::Instance().useDatabase(c_database_name); });
 
     DatabaseManager manager1{database_config};
     EXPECT_NO_THROW({
-        manager1.createCollection(c_collection_name, c_schema_name, c_structure_type, c_bindings);
+        manager1.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
     });
     EXPECT_THROW(
         {
-            manager1.createCollection(c_collection_name, c_schema_name, c_structure_type, c_bindings);
+            manager1.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
         },
         std::runtime_error);
     EXPECT_NO_THROW({ manager1.getCollection(c_collection_name); });
@@ -62,7 +62,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 
     EXPECT_THROW(
         {
-            manager2.createCollection(c_collection_name, c_schema_name, c_structure_type, c_bindings);
+            manager2.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
         },
         std::runtime_error);
     EXPECT_NO_THROW({ manager2.dropCollection(c_collection_name); });
@@ -78,7 +78,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 
     EXPECT_THROW({ manager3.dropCollection(c_collection_name); }, std::runtime_error);
     EXPECT_NO_THROW({
-        manager3.createCollection(c_collection_name, c_schema_name, c_structure_type, c_bindings);
+        manager3.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
     });
 }
 
@@ -92,7 +92,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
     namespace Init = Common::QueryData::Init;
-    Common::QueryData::Schema const c_schema =
+    Common::QueryData::Schema const c_schema1 =
         Init::SchemaInit{}
             .name("SomeSchema")
             .fields(std::vector<Common::QueryData::Schema::Field>{
@@ -102,9 +102,9 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
                 Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema1.name); });
 
     EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
     EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
@@ -116,11 +116,11 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
     auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
     EXPECT_NO_THROW({
-        manager->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
+        manager->createCollection(c_collection_name, c_schema1.name, c_structure_type, c_bindings);
     });
     EXPECT_THROW(
         {
-            manager->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
+            manager->createCollection(c_collection_name, c_schema1.name, c_structure_type, c_bindings);
         },
         std::runtime_error);
     EXPECT_NO_THROW({ manager->getCollection(c_collection_name); });
@@ -144,6 +144,69 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
     EXPECT_EQ(config->name, config_copy->name);
     EXPECT_EQ(config->schema, config_copy->schema);
     EXPECT_EQ(config->uid, config_copy->uid);
+}
+
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
+{
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+
+    auto const c_database_name{"somedatabase"s};
+
+    auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
+    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
+
+    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+
+    std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
+    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+
+    // create collection 1
+    namespace Init = Common::QueryData::Init;
+    Common::QueryData::Schema const c_schema1 =
+        Init::SchemaInit{}
+            .name("SomeSchema1")
+            .fields(std::vector<Common::QueryData::Schema::Field>{
+                Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_2").type("String").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema1.name); });
+
+    auto const c_collection_name1{"SomeCollection1"s};
+    auto const c_structure_type1{Common::QueryData::Primitives::EStructureType::Collection};
+    auto const c_bindings1{std::vector<Common::QueryData::Create::Single::Binding>{}};
+
+    EXPECT_NO_THROW({
+        database->createCollection(c_collection_name1, c_schema1.name, c_structure_type1, c_bindings1);
+    });
+
+    // create collection 2
+    namespace Init = Common::QueryData::Init;
+    Common::QueryData::Schema const c_schema2 =
+        Init::SchemaInit{}
+            .name("SomeSchema2")
+            .fields(std::vector<Common::QueryData::Schema::Field>{
+                Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema2.name); });
+
+    auto const c_collection_name2{"SomeCollection2"s};
+    auto const c_structure_type2{Common::QueryData::Primitives::EStructureType::Collection};
+    auto const c_bindings2{std::vector<Common::QueryData::Create::Single::Binding>{}};
+
+    EXPECT_NO_THROW({
+        database->createCollection(c_collection_name2, c_schema2.name, c_structure_type2, c_bindings2);
+    });
+
+    // rebind
+    EXPECT_NO_THROW({ database->rebind(c_collection_name2, "field_1", c_collection_name1); });
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Tests

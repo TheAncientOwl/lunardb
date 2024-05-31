@@ -32,6 +32,11 @@ public: // public API
 
     void dropCollection(std::string const& name);
 
+    void rebind(
+        std::string const& collection_name,
+        std::string const& field_name,
+        std::string const& to_collection_name);
+
     Common::CppExtensions::UniqueID const& getUID() const;
     std::string_view getName() const;
 
