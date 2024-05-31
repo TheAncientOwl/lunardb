@@ -91,6 +91,7 @@
     "any": "cpp",
     "filesystem": "cpp",
     "fstream": "cpp",
-    "codecvt": "cpp"
+    "codecvt": "cpp",
+    "valarray": "cpp"
   }
 }

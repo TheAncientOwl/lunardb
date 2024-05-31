@@ -56,6 +56,12 @@ public: // public API
     ///
     std::shared_ptr<Managers::DatabaseManager> getDatabaseInUse();
 
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> const& getCurrentSelection()
+        const;
+
+    void setCurrentSelection(
+        std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection);
+
     ///
     /// @return true if any database is used as work database
     ///
@@ -85,6 +91,9 @@ private: // fields
         Common::CppExtensions::UniqueID uid;
     };
     std::optional<DatabaseInUse> m_database_in_use{std::nullopt};
+
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>>
+        m_current_selection{};
 };
 
 } // namespace LunarDB::Selenity::API

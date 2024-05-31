@@ -122,4 +122,16 @@ std::shared_ptr<Managers::DatabaseManager> SystemCatalog::getDatabaseInUse()
     return m_catalog.id_to_manager.find(m_database_in_use->uid)->second;
 }
 
+std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> const& SystemCatalog::
+    getCurrentSelection() const
+{
+    return m_current_selection;
+}
+
+void SystemCatalog::setCurrentSelection(
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection)
+{
+    m_current_selection = std::move(selection);
+}
+
 } // namespace LunarDB::Selenity::API
