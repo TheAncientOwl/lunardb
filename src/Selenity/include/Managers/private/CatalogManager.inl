@@ -61,7 +61,7 @@ void CatalogManager<ManagerConfig, CatalogEntryConfig, CatalogEntryManager>::loa
             auto entry_ptr =
                 m_catalog.name_to_config.emplace(std::move(name), std::move(entry)).first->second;
             m_catalog.id_to_manager.emplace(
-                entry_ptr->uid, std::make_shared<CatalogEntryManager>(entry_ptr));
+                entry_ptr->uid, CatalogEntryManager::Factory::create(entry_ptr));
         }
     }
     else

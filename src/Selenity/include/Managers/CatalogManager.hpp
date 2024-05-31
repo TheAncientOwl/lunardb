@@ -15,7 +15,7 @@ public: // lifecycle
     CatalogManager(std::shared_ptr<ManagerConfig> config);
 
     CatalogManager() = default;
-    ~CatalogManager() = default;
+    virtual ~CatalogManager() = default;
     CatalogManager(CatalogManager const&) = delete;
     CatalogManager& operator=(CatalogManager const&) = delete;
     CatalogManager(CatalogManager&&) noexcept = default;

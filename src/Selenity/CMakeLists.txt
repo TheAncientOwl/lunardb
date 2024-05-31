@@ -13,11 +13,12 @@ add_lunar_library(
         include/Managers/CatalogManager.hpp
         include/Managers/Configurations.hpp
         include/Managers/DatabaseManager.hpp
-        
-        PRIVATE_DEPENDENCIES
+
+    PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
+        nlohmann_json::nlohmann_json
         
-        SOURCE_FILES
+    SOURCE_FILES
         src/Managers/DatabaseManager.cpp
         src/SchemasCatalog.cpp
         src/SystemCatalog.cpp

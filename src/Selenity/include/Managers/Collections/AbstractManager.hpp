@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LunarDB/Common/QueryData/QueryData.hpp"
 #include "LunarDB/Selenity/Managers/Configurations.hpp"
 
 namespace LunarDB::Selenity::API::Managers::Collections {
@@ -21,7 +22,9 @@ public: // public API
     Common::CppExtensions::UniqueID const& getUID() const;
     std::string_view getName() const;
 
-private: // fields
+    virtual void insert(std::vector<Common::QueryData::Insert::Object> const& objects) = 0;
+
+protected: // fields
     std::shared_ptr<Configurations::CollectionConfiguration> m_collection_config;
 };
 

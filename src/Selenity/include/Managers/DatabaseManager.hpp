@@ -23,6 +23,13 @@ public: // lifecycle
     DatabaseManager(DatabaseManager&&) noexcept = delete;
     DatabaseManager& operator=(DatabaseManager&&) noexcept = delete;
 
+public: // Factory
+    struct Factory
+    {
+        static std::shared_ptr<DatabaseManager> create(
+            std::shared_ptr<Configurations::DatabaseConfiguration> config);
+    };
+
 public: // public API
     void createCollection(
         std::string const& name,

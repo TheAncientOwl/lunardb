@@ -77,6 +77,7 @@ std::vector<CollectionConfiguration::Schema::Field> convert(
 CollectionConfiguration::Schema::Schema(Common::QueryData::Schema const& schema)
     : fields{convert(schema.fields)}
 {
+    fields.emplace(fields.begin(), "_rid", EFieldDataType::Rid, false, false);
 }
 
 } // namespace Implementation

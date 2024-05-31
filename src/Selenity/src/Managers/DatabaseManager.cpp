@@ -156,4 +156,10 @@ void DatabaseManager::rebind(
     saveConfigs();
 }
 
+std::shared_ptr<DatabaseManager> DatabaseManager::Factory::create(
+    std::shared_ptr<Configurations::DatabaseConfiguration> config)
+{
+    return std::make_shared<DatabaseManager>(config);
+}
+
 } // namespace LunarDB::Selenity::API::Managers

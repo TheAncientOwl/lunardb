@@ -7,4 +7,12 @@ TableManager::TableManager(std::shared_ptr<Configurations::CollectionConfigurati
 {
 }
 
+void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
+{
+    // TODO: Provide implementation
+    throw std::runtime_error{
+        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:insert] Not implemented "
+        "yet..."};
+}
+
 } // namespace LunarDB::Selenity::API::Managers::Collections

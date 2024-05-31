@@ -9,8 +9,8 @@ class DocumentManager : public AbstractManager
 public: // lifecycle
     DocumentManager(std::shared_ptr<Configurations::CollectionConfiguration> config);
 
-private: // fields
-    std::shared_ptr<Configurations::CollectionConfiguration> m_collection_config;
+public: // public API
+    void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

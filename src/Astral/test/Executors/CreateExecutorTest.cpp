@@ -67,11 +67,16 @@ TEST(Astral_CreateExecutorTest, create)
     EXPECT_EQ(
         config->collection_type,
         Selenity::API::Managers::Configurations::CollectionConfiguration::ECollectionType::Document);
-    ASSERT_EQ(config->schema.fields.size(), c_schema.fields.size());
-    for (auto const index : std::ranges::iota_view{0u, config->schema.fields.size()})
+    ASSERT_EQ(config->schema.fields.size(), c_schema.fields.size() + 1);
+    EXPECT_FALSE(config->schema.fields[0].array);
+    EXPECT_FALSE(config->schema.fields[0].nullable);
+    EXPECT_EQ(config->schema.fields[0].name, "_rid"s);
+    EXPECT_EQ(
+        config->schema.fields[0].type, Selenity::API::Managers::Configurations::EFieldDataType::Rid);
+    for (auto const index : std::ranges::iota_view{1u, config->schema.fields.size()})
     {
         auto const& config_field{config->schema.fields[index]};
-        auto const& schema_field{c_schema.fields[index]};
+        auto const& schema_field{c_schema.fields[index - 1]};
 
         EXPECT_EQ(config_field.array, schema_field.array);
         EXPECT_EQ(config_field.name, schema_field.name);
