@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 #include <gtest/gtest.h>
 
@@ -212,7 +213,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
     EXPECT_NO_THROW({ database->rebind(c_collection_name2, "field_1", c_collection_name); });
 }
 
-TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document)
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document_select)
 {
     LunarDB::Common::Testing::TempLunarHomeGuard _{};
 
@@ -281,6 +282,62 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document)
     EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
 
     EXPECT_NO_THROW({ collection->insert(objects); });
+
+    Common::QueryData::Select select_config =
+        Init::SelectInit{}
+            .from(c_collection_name)
+            .where(Common::QueryData::Init::WhereClauseInit{}.expression(
+                Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit{}.negated(false).data(
+                    {Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("1")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("1")})));
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selected_entries{};
+    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_EQ(selected_entries.size(), objects.size());
+
+    struct Object
+    {
+        std::string name;
+        std::string salary;
+        std::string birth_date;
+
+        bool operator<(Object const& rhs) const
+        {
+            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+        }
+    };
+
+    std::vector<Object> inserted_objects{};
+    inserted_objects.reserve(objects.size());
+    for (auto const& obj : objects)
+    {
+        inserted_objects.emplace_back(
+            std::get<std::string>(obj.entries.at("name")),
+            std::get<std::string>(obj.entries.at("salary")),
+            std::get<std::string>(obj.entries.at("birth_date")));
+    }
+
+    std::vector<Object> selected_objects{};
+    selected_objects.reserve(selected_entries.size());
+    for (auto const& obj : selected_entries)
+    {
+        auto const& json{obj->getJSON()};
+        selected_objects.emplace_back(json["name"], json["salary"], json["birth_date"]);
+    }
+
+    std::sort(inserted_objects.begin(), inserted_objects.end());
+    std::sort(selected_objects.begin(), selected_objects.end());
+
+    for (auto const index : std::ranges::iota_view{0u, inserted_objects.size()})
+    {
+        auto const& inserted{inserted_objects[index]};
+        auto const& selected{selected_objects[index]};
+
+        EXPECT_EQ(inserted.name, selected.name);
+        EXPECT_EQ(inserted.salary, selected.salary);
+        EXPECT_EQ(inserted.birth_date, selected.birth_date);
+    }
 
     auto const dummy_breakpoint{404};
 }

@@ -8,12 +8,13 @@ add_lunar_library(
 
         include/Managers/Collections/AbstractManager.hpp
         include/Managers/Collections/DocumentManager.hpp
+        include/Managers/Collections/EvaluateWhereClause.hpp
         include/Managers/Collections/TableManager.hpp
         include/Managers/private/CatalogManager.inl
         include/Managers/CatalogManager.hpp
         include/Managers/Configurations.hpp
         include/Managers/DatabaseManager.hpp
-
+        
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
         nlohmann_json::nlohmann_json
@@ -24,6 +25,7 @@ add_lunar_library(
         src/SystemCatalog.cpp
         src/Managers/Collections/AbstractManager.cpp
         src/Managers/Collections/DocumentManager.cpp
+        src/Managers/Collections/EvaluateWhereClause.cpp
         src/Managers/Collections/TableManager.cpp
         src/Managers/Configurations.cpp
 )

@@ -2,6 +2,7 @@
 #include <nlohmann/json.hpp>
 
 #include "LunarDB/Selenity/Managers/Collections/DocumentManager.hpp"
+#include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 
 namespace LunarDB::Selenity::API::Managers::Collections {
 
@@ -95,6 +96,52 @@ void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> cons
     {
         Collections::insert(documents_path, m_collection_config->schema, object);
     }
+}
+
+std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager::select(
+    Common::QueryData::Select const& config) const
+{
+    std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> out{};
+    auto const documents_path{m_collection_config->home / "data"};
+
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        return out;
+    }
+
+    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    {
+        if (!std::filesystem::is_regular_file(entry))
+        {
+            continue;
+        }
+
+        std::ifstream object_file(entry.path());
+        if (object_file.is_open())
+        {
+            auto collection_entry_ptr = std::make_unique<DocumentManager::CollectionEntry>();
+            object_file >> collection_entry_ptr->data;
+            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                collection_entry_ptr.release()};
+
+            if (WhereClause::evaluate(icollection_entry_ptr, config.where))
+            {
+                out.emplace_back(std::move(icollection_entry_ptr));
+            }
+            object_file.close();
+        }
+        else
+        {
+            // TODO: Log error
+        }
+    }
+
+    return out;
+}
+
+nlohmann::json const& DocumentManager::CollectionEntry::getJSON() const
+{
+    return data;
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

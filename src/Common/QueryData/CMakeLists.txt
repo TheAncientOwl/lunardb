@@ -11,10 +11,11 @@ add_lunar_library(
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
-
+        LunarDB_Selenity
+        
     SOURCE_FILES
         src/Primitives.cpp
-
+        
         src/helpers/Equality.cpp
         src/helpers/Init.cpp
         src/helpers/Ostream.cpp

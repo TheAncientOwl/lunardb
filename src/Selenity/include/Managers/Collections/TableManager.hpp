@@ -9,8 +9,16 @@ class TableManager : public AbstractManager
 public: // lifecycle
     TableManager(std::shared_ptr<Configurations::CollectionConfiguration> config);
 
+public: // CollectionEntry
+    class CollectionEntry : public AbstractManager::ICollectionEntry
+    {
+    };
+
 public: // public API
     void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
+
+    std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> select(
+        Common::QueryData::Select const& config) const override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections
