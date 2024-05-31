@@ -17,6 +17,7 @@ public: // Factory
     };
 
 public: // public API
+    std::shared_ptr<Configurations::CollectionConfiguration> const& getConfig() const;
     Common::CppExtensions::UniqueID const& getUID() const;
     std::string_view getName() const;
 

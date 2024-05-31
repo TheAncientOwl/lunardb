@@ -26,7 +26,9 @@ public: // lifecycle
 public: // public API
     void createCollection(
         std::string const& name,
-        Configurations::CollectionConfiguration::ECollectionType type);
+        std::string const& schema_name,
+        Common::QueryData::Primitives::EStructureType type,
+        std::vector<Common::QueryData::Create::Single::Binding> const& bindings);
 
     void dropCollection(std::string const& name);
 

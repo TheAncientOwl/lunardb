@@ -22,6 +22,8 @@ public: // lifecycle
     CatalogManager& operator=(CatalogManager&&) noexcept = default;
 
 public: // interface API
+    std::shared_ptr<ManagerConfig> const& getConfig() const;
+
     void saveConfigs() const;
     void loadConfigs();
 

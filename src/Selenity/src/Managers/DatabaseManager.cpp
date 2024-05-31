@@ -46,7 +46,9 @@ std::string_view DatabaseManager::getName() const
 
 void DatabaseManager::createCollection(
     std::string const& name,
-    Configurations::CollectionConfiguration::ECollectionType type)
+    std::string const& schema_name,
+    Common::QueryData::Primitives::EStructureType type,
+    std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
 {
     // TODO: WriteAheadLog
     if (m_catalog.name_to_config.contains(name))
@@ -54,13 +56,17 @@ void DatabaseManager::createCollection(
         throw std::runtime_error("Collection already exists");
     }
 
-    auto catalog_entry_ptr =
-        m_catalog.name_to_config
-            .emplace(
-                name,
-                std::make_shared<Configurations::CollectionConfiguration>(
-                    name, getDataHomePath() / name, Common::CppExtensions::UniqueID::generate(), type))
-            .first->second;
+    auto catalog_entry_ptr = m_catalog.name_to_config
+                                 .emplace(
+                                     name,
+                                     std::make_shared<Configurations::CollectionConfiguration>(
+                                         name,
+                                         getDataHomePath() / name,
+                                         Common::CppExtensions::UniqueID::generate(),
+                                         type,
+                                         schema_name,
+                                         bindings))
+                                 .first->second;
     std::filesystem::create_directories(catalog_entry_ptr->home);
 
     auto uid{catalog_entry_ptr->uid};

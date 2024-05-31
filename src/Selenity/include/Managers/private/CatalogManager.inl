@@ -70,4 +70,11 @@ void CatalogManager<ManagerConfig, CatalogEntryConfig, CatalogEntryManager>::loa
     }
 }
 
+template <typename ManagerConfig, typename CatalogEntryConfig, typename CatalogEntryManager>
+std::shared_ptr<ManagerConfig> const& CatalogManager<ManagerConfig, CatalogEntryConfig, CatalogEntryManager>::
+    getConfig() const
+{
+    return m_catalog.config;
+}
+
 } // namespace LunarDB::Selenity::API::Managers

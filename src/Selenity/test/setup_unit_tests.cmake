@@ -7,6 +7,7 @@ add_lunar_unit_test(
     DEPENDENCIES 
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_Common_QueryData
 )
 
 add_lunar_unit_test(
@@ -16,6 +17,7 @@ add_lunar_unit_test(
     DEPENDENCIES 
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_Common_QueryData
 )
 
 add_lunar_unit_test(
@@ -25,5 +27,6 @@ add_lunar_unit_test(
     DEPENDENCIES 
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_Common_QueryData
         LunarDB_Common_QueryData
 )

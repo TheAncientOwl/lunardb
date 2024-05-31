@@ -3,6 +3,8 @@
 #include "LunarDB/Celestial/UsersCatalog.hpp"
 #include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
+#include "LunarDB/Common/QueryData/helpers/Operators.hpp"
+#include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "QueryExecutors.hpp"
 
@@ -27,9 +29,21 @@ TEST(Astral_GrantExecutorTest, grant)
     auto const c_database_in_use_uid{database_in_use->getUID()};
 
     auto const c_collection_name{"SomeCollection"s};
+    auto const c_schema_name{"SomeSchema"};
+    std::vector<Common::QueryData::Create::Single::Binding> c_bindings{};
+    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
+    auto const c_schema{Common::QueryData::Init::SchemaInit{}
+                            .name(c_schema_name)
+                            .fields({Common::QueryData::Init::SchemaInit::FieldInit{}
+                                         .array(false)
+                                         .name("Field1")
+                                         .nullable(false)
+                                         .type("String")})};
+    Selenity::API::SchemasCatalog::Instance().createSchema(c_schema);
+
     auto const c_collection_type{
         Selenity::API::Managers::Configurations::CollectionConfiguration::ECollectionType::Document};
-    database_in_use->createCollection(c_collection_name, c_collection_type);
+    database_in_use->createCollection(c_collection_name, c_schema_name, c_structure_type, c_bindings);
     auto const c_collection_uid{database_in_use->getCollection(c_collection_name)->getUID()};
 
     auto const c_username{"SomeUsername"s};

@@ -35,4 +35,9 @@ std::string_view AbstractManager::getName() const
     return m_collection_config->name;
 }
 
+std::shared_ptr<Configurations::CollectionConfiguration> const& AbstractManager::getConfig() const
+{
+    return m_collection_config;
+}
+
 } // namespace LunarDB::Selenity::API::Managers::Collections
