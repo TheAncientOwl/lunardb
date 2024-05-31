@@ -27,8 +27,10 @@ TEST(Astral_GrantExecutorTest, grant)
     auto const c_database_in_use_uid{database_in_use->getUID()};
 
     auto const c_collection_name{"SomeCollection"s};
-    database_in_use->createCollection(c_collection_name);
-    auto const c_collection_uid{database_in_use->getCollectionManager(c_collection_name)->getUID()};
+    auto const c_collection_type{
+        Selenity::API::Managers::Configurations::CollectionConfiguration::ECollectionType::Document};
+    database_in_use->createCollection(c_collection_name, c_collection_type);
+    auto const c_collection_uid{database_in_use->getCollection(c_collection_name)->getUID()};
 
     auto const c_username{"SomeUsername"s};
     auto const c_password{"SomePassword"s};

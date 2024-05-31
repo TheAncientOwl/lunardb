@@ -18,7 +18,7 @@ void Revoke::execute(Moonlight::API::ParsedQuery const& parsed_query)
 
     auto const user_uid{users_catalog.getUserUID(query.from_user)};
     auto const database_uid{database_in_use->getUID()};
-    auto const collection_uid{database_in_use->getCollectionManager(query.structure_name)->getUID()};
+    auto const collection_uid{database_in_use->getCollection(query.structure_name)->getUID()};
 
     std::for_each(
         query.permissions.begin(),

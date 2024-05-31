@@ -9,12 +9,18 @@
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
-#include "LunarDB/Selenity/CatalogEntry.hpp"
-#include "LunarDB/Selenity/DatabaseManager.hpp"
+#include "LunarDB/Selenity/Managers/CatalogManager.hpp"
+#include "LunarDB/Selenity/Managers/Configurations.hpp"
+#include "LunarDB/Selenity/Managers/DatabaseManager.hpp"
 
 namespace LunarDB::Selenity::API {
 
-class SystemCatalog : public Common::CppExtensions::DesignPatterns::Singleton<SystemCatalog>
+class SystemCatalog
+    : public Common::CppExtensions::DesignPatterns::Singleton<SystemCatalog>
+    , public Managers::CatalogManager<
+          Managers::Configurations::NoConfiguration,
+          Managers::Configurations::DatabaseConfiguration,
+          Managers::DatabaseManager>
 {
 public: // public API
     ///
@@ -48,38 +54,31 @@ public: // public API
     /// @brief Self explanatory
     /// @throw std::runtime_error if no database in use
     ///
-    std::shared_ptr<Implementation::DatabaseManager> getDatabaseInUse();
+    std::shared_ptr<Managers::DatabaseManager> getDatabaseInUse();
 
     ///
     /// @return true if any database is used as work database
     ///
     bool usingDatabase() const;
 
+protected: // lifecycle
+    SystemCatalog() = default;
+
 public: // lifecycle
-    ///
-    /// @brief Self explanatory
-    /// @note Save data to disk
-    ///
     ~SystemCatalog();
 
 private: // singleton
     LUNAR_SINGLETON_INIT(SystemCatalog);
 
 private: // private API
-    void saveCatalogToDisk() const;
-    void loadCatalogFromDisk();
+    void loadConfiguration();
 
-    std::filesystem::path getDatabasesHomePath() const;
-    std::filesystem::path getDatabasesCatalogFilePath() const;
+public: // overrides
+    std::filesystem::path getHomePath() const override;
+    std::filesystem::path getDataHomePath() const override;
+    std::filesystem::path getCatalogFilePath() const override;
 
 private: // fields
-    // map db name -> db catalog entry
-    std::unordered_map<std::string, std::shared_ptr<Implementation::CatalogEntry>> m_databases_catalog{};
-
-    // map database uid -> database manager
-    Common::CppExtensions::UniqueID::MapTo<std::shared_ptr<Implementation::DatabaseManager>>
-        m_database_managers{};
-
     struct DatabaseInUse
     {
         std::string name;
