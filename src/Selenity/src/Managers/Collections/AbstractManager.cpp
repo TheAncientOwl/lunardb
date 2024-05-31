@@ -40,4 +40,19 @@ std::shared_ptr<Configurations::CollectionConfiguration> const& AbstractManager:
     return m_collection_config;
 }
 
+std::filesystem::path AbstractManager::getDataHomePath() const
+{
+    return m_collection_config->home / "data";
+}
+
+void AbstractManager::truncate() const
+{
+    auto const data_path{getDataHomePath()};
+    if (std::filesystem::exists(data_path))
+    {
+        std::filesystem::remove_all(data_path);
+        std::filesystem::create_directories(data_path);
+    }
+}
+
 } // namespace LunarDB::Selenity::API::Managers::Collections

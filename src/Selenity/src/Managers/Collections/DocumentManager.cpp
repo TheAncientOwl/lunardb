@@ -86,7 +86,7 @@ void insert(
 
 void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
 {
-    auto const documents_path{m_collection_config->home / "data"};
+    auto const documents_path{getDataHomePath()};
     if (!std::filesystem::exists(documents_path))
     {
         std::filesystem::create_directories(documents_path);
@@ -102,7 +102,7 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
     Common::QueryData::Select const& config) const
 {
     std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> out{};
-    auto const documents_path{m_collection_config->home / "data"};
+    auto const documents_path{getDataHomePath()};
 
     if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
     {

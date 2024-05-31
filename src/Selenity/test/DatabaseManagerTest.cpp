@@ -213,7 +213,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
     EXPECT_NO_THROW({ database->rebind(c_collection_name2, "field_1", c_collection_name); });
 }
 
-TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document_select)
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document_select_truncate)
 {
     LunarDB::Common::Testing::TempLunarHomeGuard _{};
 
@@ -338,6 +338,30 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document_select)
         EXPECT_EQ(inserted.salary, selected.salary);
         EXPECT_EQ(inserted.birth_date, selected.birth_date);
     }
+
+    std::size_t entries_count{0};
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, objects.size());
+
+    EXPECT_NO_THROW({ collection->truncate(); });
+    EXPECT_NO_THROW({ collection->truncate(); });
+    EXPECT_NO_THROW({ collection->truncate(); });
+
+    entries_count = 0;
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, 0);
 
     auto const dummy_breakpoint{404};
 }
