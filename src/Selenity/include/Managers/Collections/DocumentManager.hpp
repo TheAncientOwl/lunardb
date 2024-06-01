@@ -28,6 +28,8 @@ public: // public API
 
     std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> select(
         Common::QueryData::Select const& config) const override;
+
+    void deleteWhere(Common::QueryData::WhereClause const& where) override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

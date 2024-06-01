@@ -80,6 +80,7 @@ void insert(
         // TODO: log error
     }
 }
+
 } // namespace
 
 TableManager::TableManager(std::shared_ptr<Configurations::CollectionConfiguration> config)
@@ -145,6 +146,45 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
 nlohmann::json const& TableManager::CollectionEntry::getJSON() const
 {
     return data;
+}
+
+void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
+{
+    auto documents_path{getDataHomePath()};
+
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        // TODO: Log warning
+        return;
+    }
+
+    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    {
+        if (!std::filesystem::is_regular_file(entry))
+        {
+            continue;
+        }
+
+        std::ifstream object_file(entry.path());
+        if (object_file.is_open())
+        {
+            auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+            object_file >> collection_entry_ptr->data;
+            object_file.close();
+
+            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                collection_entry_ptr.release()};
+
+            if (WhereClause::evaluate(icollection_entry_ptr, where))
+            {
+                std::filesystem::remove(entry.path());
+            }
+        }
+        else
+        {
+            // TODO: Log error
+        }
+    }
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

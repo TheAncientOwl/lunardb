@@ -127,12 +127,12 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
             object_file >> collection_entry_ptr->data;
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
+            object_file.close();
 
             if (WhereClause::evaluate(icollection_entry_ptr, config.where))
             {
                 out.emplace_back(std::move(icollection_entry_ptr));
             }
-            object_file.close();
         }
         else
         {
@@ -146,6 +146,45 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
 nlohmann::json const& DocumentManager::CollectionEntry::getJSON() const
 {
     return data;
+}
+
+void DocumentManager::deleteWhere(Common::QueryData::WhereClause const& where)
+{
+    auto documents_path{getDataHomePath()};
+
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        // TODO: Log warning
+        return;
+    }
+
+    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    {
+        if (!std::filesystem::is_regular_file(entry))
+        {
+            continue;
+        }
+
+        std::ifstream object_file(entry.path());
+        if (object_file.is_open())
+        {
+            auto collection_entry_ptr = std::make_unique<DocumentManager::CollectionEntry>();
+            object_file >> collection_entry_ptr->data;
+            object_file.close();
+
+            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                collection_entry_ptr.release()};
+
+            if (WhereClause::evaluate(icollection_entry_ptr, where))
+            {
+                std::filesystem::remove(entry.path());
+            }
+        }
+        else
+        {
+            // TODO: Log error
+        }
+    }
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

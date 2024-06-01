@@ -45,6 +45,8 @@ public: // public API
     virtual std::vector<std::unique_ptr<ICollectionEntry>> select(
         Common::QueryData::Select const& config) const = 0;
 
+    virtual void deleteWhere(Common::QueryData::WhereClause const& where) = 0;
+
     std::filesystem::path getDataHomePath() const;
 
     void truncate() const;
