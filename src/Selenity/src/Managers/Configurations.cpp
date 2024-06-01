@@ -26,6 +26,7 @@ CollectionConfiguration::ECollectionType convert(Common::QueryData::Primitives::
     case Common::QueryData::Primitives::EStructureType::Table:
         return CollectionConfiguration::ECollectionType::Table;
     case Common::QueryData::Primitives::EStructureType::None:
+        [[fallthrough]];
     default:
         assert(false && "Structure type not supported, logics implementation error");
     }

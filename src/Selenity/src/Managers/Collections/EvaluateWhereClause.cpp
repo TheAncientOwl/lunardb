@@ -57,6 +57,7 @@ FieldData convert(std::string const& value, Configurations::EFieldDataType to_ty
             throw std::runtime_error("Value '"s + value + "' out of Float range; " + e.what());
         }
     case Configurations::EFieldDataType::None:
+        [[fallthrough]];
     default:
         assert(false && "Trying to convert not supported field data type");
         break;
