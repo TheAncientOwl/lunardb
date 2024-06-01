@@ -1610,7 +1610,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_select_update_sele
     EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
 
     auto const c_collection_name{"SomeCollection"s};
-    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
+    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Table};
     auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
 
     EXPECT_NO_THROW({
