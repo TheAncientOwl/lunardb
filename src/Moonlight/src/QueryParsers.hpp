@@ -3,8 +3,8 @@
 #include <string>
 #include <utility>
 
+#include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "ParsedQuery.hpp"
-#include "QueryExtractor.hpp"
 
 ///
 /// @brief Provide makeParser() and parse(query) signatures under Specialization namespace.

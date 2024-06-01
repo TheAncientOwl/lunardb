@@ -2,7 +2,7 @@
 
 #include "Errors.hpp"
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
-#include "QueryExtractor.hpp"
+#include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation {

@@ -47,6 +47,8 @@ public: // public API
 
     virtual void deleteWhere(Common::QueryData::WhereClause const& where) = 0;
 
+    virtual void update(Common::QueryData::Update const& config) = 0;
+
     std::filesystem::path getDataHomePath() const;
 
     void truncate() const;

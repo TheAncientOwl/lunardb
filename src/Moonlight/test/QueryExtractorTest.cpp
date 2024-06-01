@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "Errors.hpp"
-#include "QueryExtractor.hpp"
+#include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "Utils.hpp"
 
 namespace LunarDB::Moonlight::Implementation::Tests {

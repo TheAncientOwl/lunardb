@@ -187,4 +187,8 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
     }
 }
 
+void TableManager::update(Common::QueryData::Update const& config)
+{
+}
+
 } // namespace LunarDB::Selenity::API::Managers::Collections

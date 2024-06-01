@@ -86,7 +86,12 @@ CollectionConfiguration::Schema::Fields::const_iterator CollectionConfiguration:
 {
     auto it = std::find_if(
         fields.begin(), fields.end(), [name](auto const& field) { return name == field.name; });
-    assert(it != fields.end() && "Trying to access unknown field");
+
+    using namespace std::string_literals;
+    if (it == fields.end())
+    {
+        throw std::runtime_error("Field '"s + std::string(name) + "' does not exist");
+    }
 
     return it;
 }

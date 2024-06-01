@@ -30,6 +30,8 @@ public: // public API
         Common::QueryData::Select const& config) const override;
 
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
+
+    void update(Common::QueryData::Update const& config) override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

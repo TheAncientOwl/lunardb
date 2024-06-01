@@ -17,6 +17,7 @@ add_lunar_library(
         
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
+        LunarDB_Moonlight
         nlohmann_json::nlohmann_json
         
     SOURCE_FILES
