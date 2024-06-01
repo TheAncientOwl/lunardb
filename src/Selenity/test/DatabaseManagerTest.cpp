@@ -369,7 +369,15 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_select_truncate
 
         bool operator<(Object const& rhs) const
         {
-            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
         }
     };
 
@@ -522,7 +530,15 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete)
 
         bool operator<(Object const& rhs) const
         {
-            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
         }
     };
 
@@ -675,7 +691,15 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete)
 
         bool operator<(Object const& rhs) const
         {
-            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
         }
     };
 
@@ -829,7 +853,511 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced)
 
         bool operator<(Object const& rhs) const
         {
-            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
+        }
+    };
+
+    std::vector<Object> inserted_objects{};
+    inserted_objects.reserve(objects.size());
+    for (auto const& obj : objects)
+    {
+        inserted_objects.emplace_back(
+            std::get<std::string>(obj.entries.at("name")),
+            std::get<std::string>(obj.entries.at("salary")),
+            std::get<std::string>(obj.entries.at("birth_date")));
+    }
+
+    std::vector<Object> selected_objects{};
+    selected_objects.reserve(selected_entries.size());
+    for (auto const& obj : selected_entries)
+    {
+        auto const& json{obj->getJSON()};
+        selected_objects.emplace_back(json["name"], json["salary"], json["birth_date"]);
+    }
+
+    std::sort(inserted_objects.begin(), inserted_objects.end());
+    std::sort(selected_objects.begin(), selected_objects.end());
+
+    for (auto const index : std::ranges::iota_view{0u, inserted_objects.size()})
+    {
+        auto const& inserted{inserted_objects[index]};
+        auto const& selected{selected_objects[index]};
+
+        EXPECT_EQ(inserted.name, selected.name);
+        EXPECT_EQ(inserted.salary, selected.salary);
+        EXPECT_EQ(inserted.birth_date, selected.birth_date);
+    }
+
+    std::size_t entries_count{0};
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, objects.size());
+
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+
+    entries_count = 0;
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, 0);
+
+    auto const dummy_breakpoint{404};
+}
+
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced)
+{
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+
+    auto const c_database_name{"somedatabase"s};
+
+    auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
+    system_catalog.loadConfigs();
+    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
+    schemas_catalog.clearCache();
+
+    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+
+    std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
+    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+
+    // create collection
+    namespace Init = Common::QueryData::Init;
+    Common::QueryData::Schema const c_schema =
+        Init::SchemaInit{}
+            .name("SomeSchema")
+            .fields(std::vector<Common::QueryData::Schema::Field>{
+                Init::SchemaInit::FieldInit{}.name("salary").type("float").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("name").type("string").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("birth_date").type("datetime").nullable(false).array(false)});
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+
+    auto const c_collection_name{"SomeCollection"s};
+    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Table};
+    auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
+
+    EXPECT_NO_THROW({
+        database->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
+    });
+
+    // objects
+    std::vector<Common::QueryData::Insert::Object> objects{};
+
+    auto& obj1 = objects.emplace_back();
+    obj1.entries.emplace("salary", "4000");
+    obj1.entries.emplace("name", "Bob");
+    obj1.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj2 = objects.emplace_back();
+    obj2.entries.emplace("salary", "4000");
+    obj2.entries.emplace("name", "Bob");
+    obj2.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj3 = objects.emplace_back();
+    obj3.entries.emplace("salary", "4000");
+    obj3.entries.emplace("name", "Bob");
+    obj3.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj4 = objects.emplace_back();
+    obj4.entries.emplace("salary", "4000");
+    obj4.entries.emplace("name", "Bob");
+    obj4.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj5 = objects.emplace_back();
+    obj5.entries.emplace("salary", "4000");
+    obj5.entries.emplace("name", "Bob");
+    obj5.entries.emplace("birth_date", "09/10/1985");
+
+    std::shared_ptr<Managers::Collections::AbstractManager> collection{nullptr};
+    EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
+
+    EXPECT_NO_THROW({ collection->insert(objects); });
+
+    Common::QueryData::Select select_config =
+        Init::SelectInit{}
+            .from(c_collection_name)
+            .where(Common::QueryData::Init::WhereClauseInit{}.expression(
+                Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit{}.negated(false).data(
+                    {Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("salary")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("4000")})));
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selected_entries{};
+    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_EQ(selected_entries.size(), objects.size());
+
+    struct Object
+    {
+        std::string name;
+        std::string salary;
+        std::string birth_date;
+
+        bool operator<(Object const& rhs) const
+        {
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
+        }
+    };
+
+    std::vector<Object> inserted_objects{};
+    inserted_objects.reserve(objects.size());
+    for (auto const& obj : objects)
+    {
+        inserted_objects.emplace_back(
+            std::get<std::string>(obj.entries.at("name")),
+            std::get<std::string>(obj.entries.at("salary")),
+            std::get<std::string>(obj.entries.at("birth_date")));
+    }
+
+    std::vector<Object> selected_objects{};
+    selected_objects.reserve(selected_entries.size());
+    for (auto const& obj : selected_entries)
+    {
+        auto const& json{obj->getJSON()};
+        selected_objects.emplace_back(json["name"], json["salary"], json["birth_date"]);
+    }
+
+    std::sort(inserted_objects.begin(), inserted_objects.end());
+    std::sort(selected_objects.begin(), selected_objects.end());
+
+    for (auto const index : std::ranges::iota_view{0u, inserted_objects.size()})
+    {
+        auto const& inserted{inserted_objects[index]};
+        auto const& selected{selected_objects[index]};
+
+        EXPECT_EQ(inserted.name, selected.name);
+        EXPECT_EQ(inserted.salary, selected.salary);
+        EXPECT_EQ(inserted.birth_date, selected.birth_date);
+    }
+
+    std::size_t entries_count{0};
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, objects.size());
+
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+
+    entries_count = 0;
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, 0);
+
+    auto const dummy_breakpoint{404};
+}
+
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced_more)
+{
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+
+    auto const c_database_name{"somedatabase"s};
+
+    auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
+    system_catalog.loadConfigs();
+    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
+    schemas_catalog.clearCache();
+
+    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+
+    std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
+    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+
+    // create collection
+    namespace Init = Common::QueryData::Init;
+    Common::QueryData::Schema const c_schema =
+        Init::SchemaInit{}
+            .name("SomeSchema")
+            .fields(std::vector<Common::QueryData::Schema::Field>{
+                Init::SchemaInit::FieldInit{}.name("salary").type("float").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("name").type("string").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("birth_date").type("datetime").nullable(false).array(false)});
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+
+    auto const c_collection_name{"SomeCollection"s};
+    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
+    auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
+
+    EXPECT_NO_THROW({
+        database->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
+    });
+
+    // objects
+    std::vector<Common::QueryData::Insert::Object> objects{};
+
+    auto& obj1 = objects.emplace_back();
+    obj1.entries.emplace("salary", "4000");
+    obj1.entries.emplace("name", "Bob");
+    obj1.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj2 = objects.emplace_back();
+    obj2.entries.emplace("salary", "4001");
+    obj2.entries.emplace("name", "Andrey");
+    obj2.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj3 = objects.emplace_back();
+    obj3.entries.emplace("salary", "4000");
+    obj3.entries.emplace("name", "Bob");
+    obj3.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj4 = objects.emplace_back();
+    obj4.entries.emplace("salary", "4000");
+    obj4.entries.emplace("name", "Bob");
+    obj4.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj5 = objects.emplace_back();
+    obj5.entries.emplace("salary", "4000");
+    obj5.entries.emplace("name", "Bob");
+    obj5.entries.emplace("birth_date", "09/10/1985");
+
+    std::shared_ptr<Managers::Collections::AbstractManager> collection{nullptr};
+    EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
+
+    EXPECT_NO_THROW({ collection->insert(objects); });
+
+    Common::QueryData::Select select_config =
+        Init::SelectInit{}
+            .from(c_collection_name)
+            .where(Common::QueryData::Init::WhereClauseInit{}.expression(
+                Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit{}.negated(false).data(
+                    {Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("salary")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("4000"),
+                     Common::QueryData::Primitives::EBooleanOperator::Or,
+                     Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("name")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("Andrey")})));
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selected_entries{};
+    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_EQ(selected_entries.size(), objects.size());
+
+    struct Object
+    {
+        std::string name;
+        std::string salary;
+        std::string birth_date;
+
+        bool operator<(Object const& rhs) const
+        {
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
+        }
+    };
+
+    std::vector<Object> inserted_objects{};
+    inserted_objects.reserve(objects.size());
+    for (auto const& obj : objects)
+    {
+        inserted_objects.emplace_back(
+            std::get<std::string>(obj.entries.at("name")),
+            std::get<std::string>(obj.entries.at("salary")),
+            std::get<std::string>(obj.entries.at("birth_date")));
+    }
+
+    std::vector<Object> selected_objects{};
+    selected_objects.reserve(selected_entries.size());
+    for (auto const& obj : selected_entries)
+    {
+        auto const& json{obj->getJSON()};
+        selected_objects.emplace_back(json["name"], json["salary"], json["birth_date"]);
+    }
+
+    std::sort(inserted_objects.begin(), inserted_objects.end());
+    std::sort(selected_objects.begin(), selected_objects.end());
+
+    for (auto const index : std::ranges::iota_view{0u, inserted_objects.size()})
+    {
+        auto const& inserted{inserted_objects[index]};
+        auto const& selected{selected_objects[index]};
+
+        EXPECT_EQ(inserted.name, selected.name);
+        EXPECT_EQ(inserted.salary, selected.salary);
+        EXPECT_EQ(inserted.birth_date, selected.birth_date);
+    }
+
+    std::size_t entries_count{0};
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, objects.size());
+
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+    EXPECT_NO_THROW({ collection->deleteWhere(select_config.where); });
+
+    entries_count = 0;
+    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
+    {
+        if (std::filesystem::is_regular_file(entry))
+        {
+            ++entries_count;
+        }
+    }
+    EXPECT_EQ(entries_count, 0);
+
+    auto const dummy_breakpoint{404};
+}
+
+TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced_more)
+{
+    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+
+    auto const c_database_name{"somedatabase"s};
+
+    auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
+    system_catalog.loadConfigs();
+    auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
+    schemas_catalog.clearCache();
+
+    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+
+    std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
+    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+
+    // create collection
+    namespace Init = Common::QueryData::Init;
+    Common::QueryData::Schema const c_schema =
+        Init::SchemaInit{}
+            .name("SomeSchema")
+            .fields(std::vector<Common::QueryData::Schema::Field>{
+                Init::SchemaInit::FieldInit{}.name("salary").type("float").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("name").type("string").nullable(false).array(false),
+                Init::SchemaInit::FieldInit{}.name("birth_date").type("datetime").nullable(false).array(false)});
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+
+    auto const c_collection_name{"SomeCollection"s};
+    auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Table};
+    auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
+
+    EXPECT_NO_THROW({
+        database->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
+    });
+
+    // objects
+    std::vector<Common::QueryData::Insert::Object> objects{};
+
+    auto& obj1 = objects.emplace_back();
+    obj1.entries.emplace("salary", "4000");
+    obj1.entries.emplace("name", "Bob");
+    obj1.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj2 = objects.emplace_back();
+    obj2.entries.emplace("salary", "4001");
+    obj2.entries.emplace("name", "Andrey");
+    obj2.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj3 = objects.emplace_back();
+    obj3.entries.emplace("salary", "4000");
+    obj3.entries.emplace("name", "Bob");
+    obj3.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj4 = objects.emplace_back();
+    obj4.entries.emplace("salary", "4000");
+    obj4.entries.emplace("name", "Bob");
+    obj4.entries.emplace("birth_date", "09/10/1985");
+
+    auto& obj5 = objects.emplace_back();
+    obj5.entries.emplace("salary", "4000");
+    obj5.entries.emplace("name", "Bob");
+    obj5.entries.emplace("birth_date", "09/10/1985");
+
+    std::shared_ptr<Managers::Collections::AbstractManager> collection{nullptr};
+    EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
+
+    EXPECT_NO_THROW({ collection->insert(objects); });
+
+    Common::QueryData::Select select_config =
+        Init::SelectInit{}
+            .from(c_collection_name)
+            .where(Common::QueryData::Init::WhereClauseInit{}.expression(
+                Common::QueryData::Init::WhereClauseInit::BooleanExpressionInit{}.negated(false).data(
+                    {Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("salary")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("4000"),
+                     Common::QueryData::Primitives::EBooleanOperator::Or,
+                     Common::QueryData::Init::WhereClauseInit::BinaryExpressionInit{}
+                         .lhs("name")
+                         .operation(Common::QueryData::Primitives::EBinaryOperator::Equals)
+                         .rhs("Andrey")})));
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selected_entries{};
+    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_EQ(selected_entries.size(), objects.size());
+
+    struct Object
+    {
+        std::string name;
+        std::string salary;
+        std::string birth_date;
+
+        bool operator<(Object const& rhs) const
+        {
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
         }
     };
 
@@ -982,7 +1510,15 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_document_select_tr
 
         bool operator<(Object const& rhs) const
         {
-            return name < rhs.name && salary < rhs.salary && birth_date < rhs.birth_date;
+            if (name != rhs.name)
+            {
+                return name < rhs.name;
+            }
+            if (salary != rhs.salary)
+            {
+                return salary < rhs.salary;
+            }
+            return birth_date < rhs.birth_date;
         }
     };
 
