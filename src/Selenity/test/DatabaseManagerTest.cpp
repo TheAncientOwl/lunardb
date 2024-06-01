@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/CppExtensions/UniqueID.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
@@ -16,7 +16,7 @@ namespace LunarDB::Selenity::API::Managers::Tests {
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
     auto const c_home{"/tmp/lunardb/databases/somedatabase"s};
@@ -86,7 +86,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -151,7 +151,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, table)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -216,7 +216,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -280,7 +280,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_select_truncate)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -441,7 +441,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_select_truncate
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -602,7 +602,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -763,7 +763,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -925,7 +925,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced)
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -1087,7 +1087,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced_more)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -1254,7 +1254,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_delete_enhanced
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced_more)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -1421,7 +1421,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_delete_enhanced_mo
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_document_select_truncate)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 
@@ -1582,7 +1582,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table_insert_document_select_tr
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, insert_document_extended)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 

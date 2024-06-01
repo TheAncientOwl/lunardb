@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
@@ -13,7 +13,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_RevokeExecutorTest, revoke)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     // 1. System setup
     auto& system_catalog{Selenity::API::SystemCatalog::Instance()};

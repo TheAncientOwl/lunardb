@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <ranges>
 
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 #include "LunarDB/Moonlight/ParsedQuery.hpp"
@@ -15,7 +15,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_CreateExecutorTest, create)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 

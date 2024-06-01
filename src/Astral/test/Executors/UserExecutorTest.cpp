@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "QueryExecutors.hpp"
@@ -10,7 +10,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_UserExecutorTest, create_remove)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
 

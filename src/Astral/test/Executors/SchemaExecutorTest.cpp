@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/QueryData.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
@@ -14,7 +14,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_SchemaExecutorTest, create_schema)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
@@ -10,7 +10,7 @@ namespace LunarDB::Celestial::API::Tests {
 
 TEST(Celestial_UsersCatalog, crud)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
 

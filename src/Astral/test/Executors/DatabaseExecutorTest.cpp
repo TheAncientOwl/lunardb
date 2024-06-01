@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 #include "QueryExecutors.hpp"
@@ -11,7 +11,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_DatabaseExecutorTest, create_drop_use)
 {
-    Common::Testing::TempLunarHomeGuard _{};
+    Common::Testing::LunarTestGuard _{};
 
     // 1. setup
     auto& catalog{Selenity::API::SystemCatalog::Instance()};

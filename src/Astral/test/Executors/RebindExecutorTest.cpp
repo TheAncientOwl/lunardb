@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Celestial/UsersCatalog.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
@@ -13,7 +13,7 @@ namespace LunarDB::Astral::Tests {
 
 TEST(Astral_RebindExecutorTest, rebind)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     auto const c_database_name{"somedatabase"s};
 

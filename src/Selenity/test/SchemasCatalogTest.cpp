@@ -1,7 +1,7 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/QueryData.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
@@ -12,7 +12,7 @@ namespace LunarDB::Selenity::API::Tests {
 
 TEST(Selenity_SchemasCatalogTest, schemas)
 {
-    LunarDB::Common::Testing::TempLunarHomeGuard _{};
+    LunarDB::Common::Testing::LunarTestGuard _{};
 
     // 1. setup
     auto& schemas_catalog{SchemasCatalog::Instance()};

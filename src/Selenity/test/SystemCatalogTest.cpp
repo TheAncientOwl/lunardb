@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
-#include "LunarDB/Common/CppExtensions/Testing/TempLunarHomeGuard.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
@@ -11,7 +11,7 @@ namespace LunarDB::Selenity::API::Tests {
 
 TEST(Selenity_SystemCatalog_SystemCatalogTest, create_drop)
 {
-    Common::Testing::TempLunarHomeGuard _{};
+    Common::Testing::LunarTestGuard _{};
 
     // 1. setup
     auto& catalog{Selenity::API::SystemCatalog::Instance()};

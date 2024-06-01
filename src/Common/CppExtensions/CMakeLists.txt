@@ -22,7 +22,7 @@ add_lunar_library(
         include/private/Singleton.inl
         include/private/StringUtils.inl
 
-        include/Testing/TempLunarHomeGuard.hpp
+        include/Testing/LunarTestGuard.hpp
 
     SOURCE_FILES
         src/StringUtils.cpp
