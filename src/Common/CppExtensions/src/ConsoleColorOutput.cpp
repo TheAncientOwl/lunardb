@@ -82,4 +82,9 @@ std::ostream& reset(std::ostream& os)
     return os << "\033[0m";
 }
 
+std::ostream& black(std::ostream& os)
+{
+    return os << "\033[38;5;0m";
+}
+
 } // namespace LunarDB::Common::CppExtensions::ConsoleColorOutput

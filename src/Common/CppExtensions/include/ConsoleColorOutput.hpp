@@ -19,6 +19,9 @@ std::ostream& light_red(std::ostream&);
 std::ostream& pink(std::ostream&);
 std::ostream& yellow(std::ostream&);
 std::ostream& white(std::ostream&);
+std::ostream& black(std::ostream&);
 std::ostream& reset(std::ostream&);
 
 } // namespace LunarDB::Common::CppExtensions::ConsoleColorOutput
+
+#define ccolor LunarDB::Common::CppExtensions::ConsoleColorOutput

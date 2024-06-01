@@ -38,6 +38,8 @@ int main()
               << ">> yellow: " << "The quick brown fox jumps over the lazy dog." << std::endl;
     std::cout << white << std::setw(c_label_width) << std::left
               << ">> white: " << "The quick brown fox jumps over the lazy dog." << std::endl;
+    std::cout << black << std::setw(c_label_width) << std::left
+              << ">> black: " << "The quick brown fox jumps over the lazy dog." << std::endl;
     std::cout << reset << std::setw(c_label_width) << std::left
               << ">> reset: " << "The quick brown fox jumps over the lazy dog." << std::endl;
 
