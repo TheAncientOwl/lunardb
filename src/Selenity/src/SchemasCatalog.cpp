@@ -88,4 +88,9 @@ void SchemasCatalog::saveToDisk() const
     }
 }
 
+void SchemasCatalog::clearCache()
+{
+    m_schemas_cache.clear();
+}
+
 } // namespace LunarDB::Selenity::API

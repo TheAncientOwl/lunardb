@@ -128,7 +128,7 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, config.where))
+            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
             {
                 out.emplace_back(std::move(icollection_entry_ptr));
             }
@@ -175,7 +175,7 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, where))
+            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
             {
                 std::filesystem::remove(entry.path());
             }

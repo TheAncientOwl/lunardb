@@ -9,6 +9,7 @@ namespace LunarDB::Selenity::API::Managers::Collections::WhereClause {
 
 bool evaluate(
     std::unique_ptr<AbstractManager::ICollectionEntry> const& entry,
+    Configurations::CollectionConfiguration::Schema const& schema,
     Common::QueryData::WhereClause const& where_clause);
 
 } // namespace LunarDB::Selenity::API::Managers::Collections::WhereClause

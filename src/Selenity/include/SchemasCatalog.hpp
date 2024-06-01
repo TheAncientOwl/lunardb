@@ -22,6 +22,8 @@ public:
 
     void createSchema(Common::QueryData::Schema schema);
 
+    void clearCache();
+
     ~SchemasCatalog();
 
 private: // singleton

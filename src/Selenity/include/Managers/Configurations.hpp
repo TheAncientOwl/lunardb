@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <string_view>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/DefinePrimitive.hpp"
@@ -56,7 +57,7 @@ struct CollectionConfiguration : public BaseManagerConfiguration
 
         bool operator==(Schema const&) const = default;
 
-    public: // fields
+    public: // Field
         struct Field
         {
             std::string name;
@@ -68,7 +69,12 @@ struct CollectionConfiguration : public BaseManagerConfiguration
 
             LUNAR_ENABLE_BINARY_IO(name, type, nullable, array);
         };
+        using Fields = std::vector<Field>;
 
+    public: // API
+        Fields::const_iterator getField(std::string_view name) const;
+
+    public: // fields
         std::vector<Field> fields;
 
     private: // IO

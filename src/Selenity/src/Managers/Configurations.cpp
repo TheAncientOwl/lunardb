@@ -80,6 +80,16 @@ CollectionConfiguration::Schema::Schema(Common::QueryData::Schema const& schema)
     fields.emplace(fields.begin(), "_rid", EFieldDataType::Rid, false, false);
 }
 
+CollectionConfiguration::Schema::Fields::const_iterator CollectionConfiguration::Schema::getField(
+    std::string_view name) const
+{
+    auto it = std::find_if(
+        fields.begin(), fields.end(), [name](auto const& field) { return name == field.name; });
+    assert(it != fields.end() && "Trying to access unknown field");
+
+    return it;
+}
+
 } // namespace Implementation
 
 } // namespace LunarDB::Selenity::API::Managers::Configurations
