@@ -24,12 +24,29 @@ add_lunar_library(
 
         include/Testing/LunarTestGuard.hpp
 
+        include/ConsoleColorOutput.hpp
+        
     SOURCE_FILES
         src/StringUtils.cpp
         src/BinaryIO.cpp
         src/UniqueID.cpp
-)
-
+        src/ConsoleColorOutput.cpp
+        )
+        
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_COMMON_CPP_EXTENSION_TESTS)
     include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
 endif()
+        
+        
+add_lunar_executable(
+    NAME Common_ConsoleColorOutput_Showcase
+    INCLUDE_PATH Common/ConsoleColorOutput_Showcase
+    
+    API_HEADER_FILES
+
+    PRIVATE_DEPENDENCIES
+        LunarDB_Common_CppExtensions
+    
+    SOURCE_FILES
+        test/ConsoleColorOutputShowcase.cpp
+)
