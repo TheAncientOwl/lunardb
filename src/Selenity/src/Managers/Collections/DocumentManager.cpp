@@ -1,13 +1,18 @@
+#include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <nlohmann/json.hpp>
 #include <sstream>
+#include <stack>
 #include <string>
 
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/DocumentManager.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
+
+using namespace std::string_literals;
 
 namespace LunarDB::Selenity::API::Managers::Collections {
 
@@ -86,97 +91,155 @@ void insert(
     }
 }
 
-template <typename Numeric>
-    requires std::is_same_v<Numeric, int> || std::is_same_v<Numeric, float>
+std::uint8_t precedence(char operation)
+{
+    if (operation == '+' || operation == '-')
+    {
+        return 1;
+    }
+    if (operation == '*' || operation == '/')
+    {
+        return 2;
+    }
+    return 0;
+}
+
+template <typename T>
+concept NumericType = requires() { std::is_same_v<T, int> || std::is_same_v<T, float>; };
+
+template <NumericType Numeric>
+Numeric applyOperation(Numeric lhs, Numeric rhs, char operation)
+{
+    switch (operation)
+    {
+    case '+':
+        return lhs + rhs;
+    case '-':
+        return lhs - rhs;
+    case '*':
+        return lhs * rhs;
+    case '/':
+        if (rhs == 0)
+        {
+            throw std::runtime_error("Divison by 0");
+        }
+        return lhs / rhs;
+    case '%':
+        if constexpr (std::is_same_v<Numeric, int>)
+        {
+            return lhs % rhs;
+        }
+        else
+        {
+            return std::fmod(lhs, rhs);
+        }
+        break;
+    default:
+        throw std::runtime_error("Invalid operation '"s + operation + "'");
+    }
+}
+
+template <NumericType Numeric>
 Numeric solveNumericExpression(std::string_view expression, std::string_view key, Numeric key_numeric)
 {
     using namespace std::string_view_literals;
     using namespace std::string_literals;
 
-    Numeric out{0};
-
     Moonlight::Implementation::QueryExtractor extractor{expression};
-
     assert(!extractor.empty() && "Invalid update expression");
 
-    auto const first{extractor.extractOne()};
-    if (first == key)
-    {
-        out = key_numeric;
-    }
-    else
-    {
-        if constexpr (std::is_same_v<Numeric, int>)
-        {
-            out = std::stoi(std::string(first));
-        }
-        else
-        {
-            out = std::stof(std::string(first));
-        }
-    }
+    std::stack<Numeric> values{};
+    std::stack<char> operations{};
 
     while (!extractor.empty())
     {
-        auto const [operation, operand_sv] = extractor.extractTuple<2>();
+        auto const token = extractor.extractOne();
 
-        if (operation.length() != 1)
+        // Current token is an opening brace, push to operators stack
+        if (token.length() == 1 && token.front() == '(')
         {
-            throw std::runtime_error("Invalid operation '"s + std::string(operation) + "'");
+            operations.push('(');
         }
-
-        if (operand_sv.empty())
+        // Current token is the field that will be modified, push its numeric value to the stack
+        else if (token == key)
         {
-            throw std::runtime_error(
-                "Missing value in expression '"s + std::string(expression) + "'");
+            values.push(key_numeric);
         }
-
-        Numeric operand_numeric{0};
-        if (operand_sv == key)
+        // Current token is numeric, push to stack
+        else if (std::all_of(token.begin(), token.end(), [](char const c) { return std::isdigit(c); }))
         {
-            operand_numeric = key_numeric;
-        }
-        else if constexpr (std::is_same_v<Numeric, int>)
-        {
-            operand_numeric = std::stoi(std::string(operand_sv));
-        }
-        else
-        {
-            operand_numeric = std::stof(std::string(operand_sv));
-        }
-
-        // TODO: Refactor with operators precedence and parantheses
-        switch (operation.front())
-        {
-        case '+':
-            out += operand_numeric;
-            break;
-        case '-':
-            out -= operand_numeric;
-            break;
-        case '*':
-            out *= operand_numeric;
-            break;
-        case '/':
-            out /= operand_numeric;
-            break;
-        case '%':
             if constexpr (std::is_same_v<Numeric, int>)
             {
-                out %= operand_numeric;
+                values.push(std::stoi(std::string(token)));
             }
             else
             {
-                out = std::fmod(out, operand_numeric);
+                values.push(std::stof(std::string(token)));
             }
-            break;
-        default:
-            throw std::runtime_error("Invalid operation '"s + std::string(operation) + "'");
-            break;
+        }
+        // Current token is a closing brace, solve entire brace
+        else if (token.length() == 1 && token.front() == ')')
+        {
+            while (!operations.emplace() && operations.top() != '(')
+            {
+                auto const value2{values.top()};
+                values.pop();
+
+                auto const value1{values.top()};
+                values.pop();
+
+                auto const operation{operations.top()};
+                operations.pop();
+
+                values.push(applyOperation(value1, value2, operation));
+            }
+
+            // Pop opening brace
+            if (!operations.empty())
+            {
+                operations.pop();
+            }
+        }
+        // Current token is an operator
+        // TODO: enforce it to be an operator
+        else if (token.length() == 1)
+        {
+            // While top of 'operations' has same or greater precedence to current token, which is
+            // an operator, apply operator on top of 'operations' to top two elements in values stack
+            while (!operations.empty() && precedence(operations.top()) >= precedence(token.front()))
+            {
+                auto const value2{values.top()};
+                values.pop();
+
+                auto const value1{values.top()};
+                values.pop();
+
+                auto const operation{operations.top()};
+                operations.pop();
+
+                values.push(applyOperation(value1, value2, operation));
+            }
+
+            operations.push(token.front());
         }
     }
 
-    return out;
+    // Entire expression has been parsed, apply remaining operations to remaining values
+    while (!operations.empty())
+    {
+        auto const value2{values.top()};
+        values.pop();
+
+        auto const value1{values.top()};
+        values.pop();
+
+        auto const operation(operations.top());
+        operations.pop();
+
+        values.push(applyOperation(value1, value2, operation));
+    }
+
+    return values.top();
 }
 
 void update(
