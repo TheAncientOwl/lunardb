@@ -92,6 +92,11 @@
     "filesystem": "cpp",
     "fstream": "cpp",
     "codecvt": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "csignal": "cpp",
+    "complex": "cpp",
+    "future": "cpp",
+    "cinttypes": "cpp",
+    "typeindex": "cpp"
   }
 }
