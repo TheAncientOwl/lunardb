@@ -17,24 +17,26 @@ void Logger::log(ELogLevel level, ELunarModule module, Args&&... args)
     std::ostringstream ss{};
 
     ss << "[" << hms << "] |";
-    ss << std::right << std::setw(9) << LogLevel::toString(level) << " |";
-    ss << std::right << std::setw(11) << LunarModule::toString(module) << " | ";
+    ss << std::right << std::setw(9) << LogLevel::toString(level) << " | ";
+    ss << std::right << std::setw(15) << LunarModule::toString(module) << " | ";
     ((ss << std::forward<Args>(args) << " "), ...);
-    ss << '\n';
+    // ss << '\n';
 
-    m_log_queue.push(ss.str());
-    m_log_queue_size++;
+    m_log << ss.str() << std::endl;
+    // m_log_queue.push(ss.str());
+    // m_log_queue_size++;
 
-    static constexpr std::size_t c_max_log_queue_size{25};
-    if (m_log_queue_size >= c_max_log_queue_size)
-    {
-        m_log_queue_size -= c_max_log_queue_size;
-        for (auto const _ : std::ranges::iota_view{0u, c_max_log_queue_size})
-        {
-            m_log << m_log_queue.front();
-            m_log_queue.pop();
-        }
-    }
+    // static constexpr std::size_t c_max_log_queue_size{25};
+    // static constexpr std::size_t c_max_log_queue_size{1};
+    // if (m_log_queue_size >= c_max_log_queue_size)
+    // {
+    //     m_log_queue_size -= c_max_log_queue_size;
+    //     for (auto const _ : std::ranges::iota_view{0u, c_max_log_queue_size})
+    //     {
+    //         m_log << m_log_queue.front();
+    //         m_log_queue.pop();
+    //     }
+    // }
 }
 
 } // namespace LunarDB::Crescentum::API

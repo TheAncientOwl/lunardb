@@ -244,7 +244,12 @@ Common::QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpressio
 
         try
         {
-            auto operator_ = Common::QueryData::Primitives::BooleanOperator::toLiteral(word);
+            // auto operator_ = Common::QueryData::Primitives::BooleanOperator::toLiteral(word);
+            auto operator_ = Common::QueryData::Primitives::EBooleanOperator::And;
+            // TODO: Provide implementation
+            throw std::runtime_error{
+                "[~/lunardb/src/Moonlight/src/Utils.cpp:BooleanOperator::toLiteral] Not "
+                "implemented yet..."};
             out.data.push_back(operator_);
             continue;
         }
@@ -253,8 +258,13 @@ Common::QueryData::WhereClause::BooleanExpression recursiveParseBooleanExpressio
             Common::QueryData::WhereClause::BinaryExpression expression{};
 
             expression.lhs = word;
-            expression.operation = Common::QueryData::Primitives::BinaryOperator::toLiteral(
-                extractWord(str, ' ', ESplitModifier::None));
+            expression.operation = Common::QueryData::Primitives::EBinaryOperator::Equals;
+            // expression.operation = Common::QueryData::Primitives::BinaryOperator::toLiteral(
+            //     extractWord(str, ' ', ESplitModifier::None));
+            // TODO: Provide implementation
+            throw std::runtime_error{
+                "[~/lunardb/src/Moonlight/src/Utils.cpp:BinaryOperator::toLiteral] Not implemented "
+                "yet..."};
 
             switch (expression.operation)
             {

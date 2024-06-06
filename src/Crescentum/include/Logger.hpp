@@ -27,7 +27,8 @@ DEFINE_LUNAR_PRIMITIVE(LunarModule,
     BrightMoon = 4,
     Selenity = 5,
     Celestial = 6,
-    Crescentum = 7
+    Crescentum = 7,
+    LunarDB_SRV = 8
 )
 // clang-format on
 
@@ -62,6 +63,7 @@ private:
 #define MODULE_SELENITY LunarDB::Crescentum::API::ELunarModule::Selenity
 #define MODULE_CELESTIAL LunarDB::Crescentum::API::ELunarModule::Celestial
 #define MODULE_CRESCENTUM LunarDB::Crescentum::API::ELunarModule::Crescentum
+#define MODULE_LUNARDB_SRV LunarDB::Crescentum::API::ELunarModule::LunarDB_SRV
 
 #define LUNAR_DECLARE_LOGGER_MODULE(module) auto const lunar_logger_module{module};
 

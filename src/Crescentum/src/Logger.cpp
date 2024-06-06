@@ -24,7 +24,8 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(LunarModule,
     { Literal::BrightMoon, "BrightMoon" },
     { Literal::Selenity, "Selenity" },
     { Literal::Celestial, "Celestial" },
-    { Literal::Crescentum, "Crescentum" }
+    { Literal::Crescentum, "Crescentum" },
+    { Literal::LunarDB_SRV, "LunarDB_Server" }
 )
 // clang-format on
 
@@ -37,10 +38,15 @@ LUNAR_SINGLETON_INIT_IMPL(Logger)
         std::filesystem::create_directories(c_logs_dir_path);
     }
 
-    auto const c_log_file_path{
-        c_logs_dir_path /
-        ("session." + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) +
-         ".log")};
+    auto const c_log_file_path{c_logs_dir_path / "lunardb.log"};
+    if (std::filesystem::exists(c_log_file_path))
+    {
+        std::filesystem::rename(
+            c_log_file_path,
+            c_logs_dir_path /
+                ("session." +
+                 std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".log"));
+    }
 
     m_log.open(c_log_file_path);
     m_log_start_time = std::chrono::system_clock::now();
