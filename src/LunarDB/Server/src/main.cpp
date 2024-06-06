@@ -1,6 +1,9 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
+#include <ranges>
+#include <sstream>
 #include <string>
 #include <thread>
 
@@ -90,12 +93,53 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
         CLOG_VERBOSE("Parsing success, start execution");
 
         LunarDB::Astral::API::executeQuery(parsed_query);
-        auto const message{getSuccessMessage(parsed_query)};
 
-        CLOG_VERBOSE("Execution success, sending success message:", message);
+        if (parsed_query.type() == LunarDB::Common::QueryData::Primitives::EQueryType::Select)
+        {
+            auto& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
+            auto const& current_selection{system_catalog.getCurrentSelection()};
 
-        ws.write(boost::beast::net::buffer(message));
-        CLOG_VERBOSE("Success message sent");
+            CLOG_VERBOSE("Jsonifying current selection");
+
+            std::stringstream ss{};
+            ss << R"({ "selection": [ )";
+
+            if (!current_selection.empty())
+            {
+                auto const select_fields =
+                    [&fields = parsed_query.get<LunarDB::Common::QueryData::Select>().fields](
+                        auto const& obj) -> nlohmann::json {
+                    auto const& obj_json{obj->getJSON()};
+                    nlohmann::json out{};
+
+                    for (auto const& field : fields)
+                    {
+                        out[field] = obj_json[field];
+                    }
+
+                    return out;
+                };
+
+                ss << select_fields(current_selection[0]).dump();
+                for (auto const index : std::ranges::iota_view{1u, current_selection.size()})
+                {
+                    ss << ", " << select_fields(current_selection[index]).dump();
+                }
+            }
+            ss << "] }";
+            auto current_selection_str{std::move(ss.str())};
+
+            CLOG_VERBOSE("Sending current selection:", current_selection_str);
+            ws.write(boost::beast::net::buffer(current_selection_str));
+            system_catalog.clearCurrentSelection();
+        }
+        else
+        {
+            auto const message{getSuccessMessage(parsed_query)};
+            CLOG_VERBOSE("Execution success, sending success message:", message);
+            ws.write(boost::beast::net::buffer(message));
+            CLOG_VERBOSE("Success message sent");
+        }
     }
     catch (std::exception const& e)
     {
@@ -116,6 +160,8 @@ int main()
 
     boost::asio::io_context ioc{1};
     boost::asio::ip::tcp::acceptor acceptor{ioc, {address, port}};
+
+    CLOG_INFO("WebSocket started running on 127.0.0.1:8083");
 
     while (true)
     {

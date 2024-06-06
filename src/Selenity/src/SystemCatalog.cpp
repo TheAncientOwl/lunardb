@@ -134,4 +134,9 @@ void SystemCatalog::setCurrentSelection(
     m_current_selection = std::move(selection);
 }
 
+void SystemCatalog::clearCurrentSelection()
+{
+    m_current_selection.clear();
+}
+
 } // namespace LunarDB::Selenity::API

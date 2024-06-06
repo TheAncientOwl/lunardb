@@ -62,6 +62,8 @@ public: // public API
     void setCurrentSelection(
         std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection);
 
+    void clearCurrentSelection();
+
     ///
     /// @return true if any database is used as work database
     ///
