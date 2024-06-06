@@ -131,7 +131,10 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
 
             CLOG_VERBOSE("Sending current selection:", current_selection_str);
             ws.write(boost::beast::net::buffer(current_selection_str));
+
+            CLOG_VERBOSE("Clearing current selection...");
             system_catalog.clearCurrentSelection();
+            CLOG_VERBOSE("Current selection cleared");
         }
         else
         {
