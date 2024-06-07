@@ -8,6 +8,7 @@
 #include <thread>
 
 #include "LunarDB/Astral/QueryExecutor.hpp"
+#include "LunarDB/Common/CppExtensions/Timer.hpp"
 #include "LunarDB/Common/CppExtensions/UniqueID.hpp"
 #include "LunarDB/Moonlight/QueryParser.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
@@ -83,16 +84,21 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
 {
     auto const uid{LunarDB::Common::CppExtensions::UniqueID::generate()};
     CLOG_VERBOSE("Start query handling, uid:", uid);
+    LunarDB::Common::CppExtensions::Timer query_timer{};
+
+    LunarDB::Common::CppExtensions::Timer timer{};
 
     try
     {
-        CLOG_VERBOSE("Start parsing");
-
+        CLOG_VERBOSE("Start query parsing");
+        timer.reset();
         auto const parsed_query = LunarDB::Moonlight::API::parseQuery(query);
+        CLOG_VERBOSE("Parsing success, elapsed", timer.elapsed());
 
-        CLOG_VERBOSE("Parsing success, start execution");
-
+        CLOG_VERBOSE("Start query execution");
+        timer.reset();
         LunarDB::Astral::API::executeQuery(parsed_query);
+        CLOG_VERBOSE("Execution success, elapsed", timer.elapsed());
 
         if (parsed_query.type() == LunarDB::Common::QueryData::Primitives::EQueryType::Select)
         {
@@ -100,7 +106,7 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
             auto const& current_selection{system_catalog.getCurrentSelection()};
 
             CLOG_VERBOSE("Jsonifying current selection");
-
+            timer.reset();
             std::stringstream ss{};
             ss << R"({ "selection": [ )";
 
@@ -127,10 +133,13 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
                 }
             }
             ss << "] }";
+            CLOG_VERBOSE("Current selection jsonifyed, elapsed", timer.elapsed());
             auto current_selection_str{std::move(ss.str())};
 
             CLOG_VERBOSE("Sending current selection:", current_selection_str);
+            timer.reset();
             ws.write(boost::beast::net::buffer(current_selection_str));
+            CLOG_VERBOSE("Current selection sent, elapsed", timer.elapsed());
 
             CLOG_VERBOSE("Clearing current selection...");
             system_catalog.clearCurrentSelection();
@@ -150,7 +159,7 @@ void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::
         ws.write(boost::beast::net::buffer(std::string(e.what())));
     }
 
-    CLOG_VERBOSE("End query handling, uid", uid);
+    CLOG_VERBOSE("End query handling, uid", uid, "elapsed", query_timer.elapsed());
 }
 
 int main()
