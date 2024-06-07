@@ -68,6 +68,61 @@ TEST(Moonlight_UpdateParserTest, success01)
     EXPECT_SUCCESS(query, expected);
 }
 
+TEST(Moonlight_UpdateParserTest, success02)
+{
+    auto const query =
+        R"(update structure StructureName                    )"
+        R"(     where (                                      )"
+        R"(         name like "*escu"                        )"
+        R"(         and salary between 5500 and 6000         )"
+        R"(         or (                                     )"
+        R"(                !(                                )"
+        R"(                   salary < 5000                  )"
+        R"(                   or salary >= 5200              )"
+        R"(                )                                 )"
+        R"(                or salary > 6500                  )"
+        R"(                and profession in [Prof1, Prof2]  )"
+        R"(                or birth_date >= 10/20/1989       )"
+        R"(             )                                    )"
+        R"(      )                                           )"
+        R"(     modify [                                     )"
+        R"(         history1 => %%[{"username1":"user1","message1":"m1","time":12345}]%%,              )"
+        R"(         history2 => %%[{"username2":"user2","message2":"m2","time":12345}]%%        )"
+        R"(     ]                                            )";
+
+    auto const expected = Init::UpdateInit{}
+        .structure_name("StructureName")
+        .where(Where{}.expression(
+            BooleanExpression{}
+            .negated(false)
+            .data({
+                BinaryExpression{}.negated(false).lhs("name").operation(BinaryOperator::Like).rhs("*escu"),
+                BooleanOperator::And,
+                BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::Between).rhs("5500 and 6000"),
+                BooleanOperator::Or,
+                BooleanExpression{}.negated(false).data({
+                    BooleanExpression{}.negated(true).data({
+                        BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::LessThan).rhs("5000"),
+                        BooleanOperator::Or,
+                        BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::GreaterThanEqualTo).rhs("5200"),
+                    }),
+                    BooleanOperator::Or,
+                    BinaryExpression{}.negated(false).lhs("salary").operation(BinaryOperator::GreaterThan).rhs("6500"),
+                    BooleanOperator::And,
+                    BinaryExpression{}.negated(false).lhs("profession").operation(BinaryOperator::In).rhs("[Prof1, Prof2]"),
+                    BooleanOperator::Or,
+                    BinaryExpression{}.negated(false).lhs("birth_date").operation(BinaryOperator::GreaterThanEqualTo).rhs("10/20/1989")
+                })
+                })
+        ))
+        .modify(std::vector<Update::Modify>{
+        Init::UpdateInit::ModifyInit{}.field("history1").expression(R"(%%[{"username1":"user1","message1":"m1","time":12345}]%%)"),
+            Init::UpdateInit::ModifyInit{}.field("history2").expression(R"(%%[{"username2":"user2","message2":"m2","time":12345}]%%)")
+    });
+
+    EXPECT_SUCCESS(query, expected);
+}
+
 TEST(Moonlight_UpdateParserTest, fail01)
 {
     // same field twice

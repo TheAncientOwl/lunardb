@@ -44,11 +44,13 @@ public: // methods
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
     /// @param [in] sep -> List elements separator, default ','
     /// @param [in] bound_chars -> Characters that define the list, Ex. { '[', ']' }
+    /// @param [in] raw_percent_percent -> Wether portions between %% portion_example %% should be added raw to the word
     /// @return List of words as string_views
     ///
     [[nodiscard]] std::vector<std::string_view> extractList(
         char sep = ',',
-        std::pair<char, char> bound_chars = {'[', ']'});
+        std::pair<char, char> bound_chars = {'[', ']'},
+        bool raw_percent_percent = false);
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -56,13 +58,15 @@ public: // methods
     /// @param [in] parser -> Function string_view -> T
     /// @param [in] sep -> List elements separator, default ','
     /// @param [in] bound_chars -> Characters that define the list, Ex. { '[', ']' }
+    /// @param [in] raw_percent_percent -> Wether portions between %% portion_example %% should be added raw to the word
     /// @return List of parsed words to T
     ///
     template <typename T>
     [[nodiscard]] std::vector<T> extractList(
         std::function<T(std::string_view)> parser,
         char sep = ',',
-        std::pair<char, char> bound_chars = {'[', ']'});
+        std::pair<char, char> bound_chars = {'[', ']'},
+        bool raw_percent_percent = false);
 
     ///
     /// @brief Removes list sequence like [ word1, word2, ..., word3 ].
@@ -142,9 +146,10 @@ template <typename T>
 inline std::vector<T> QueryExtractor::extractList(
     std::function<T(std::string_view)> parser,
     char sep,
-    std::pair<char, char> bound_chars)
+    std::pair<char, char> bound_chars,
+    bool raw_percent_percent)
 {
-    auto const values = extractList(sep, bound_chars);
+    auto const values = extractList(sep, bound_chars, raw_percent_percent);
 
     std::vector<T> out{};
     out.reserve(values.size());

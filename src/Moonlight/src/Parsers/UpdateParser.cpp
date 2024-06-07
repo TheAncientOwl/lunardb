@@ -65,7 +65,8 @@ API::ParsedQuery Update::parse(QueryExtractor extractor)
     auto const modify = extractor.extractOne();
     Errors::assertKeywordEquals(modify, "modify");
 
-    out.modify = extractor.extractList<Common::QueryData::Update::Modify>(parseModify);
+    out.modify =
+        extractor.extractList<Common::QueryData::Update::Modify>(parseModify, ',', {'[', ']'}, true);
     if (!extractor.empty())
     {
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);

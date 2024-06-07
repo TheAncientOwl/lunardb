@@ -22,12 +22,14 @@ enum class ESplitModifier
 /// @param [in] str -> String to be splitted
 /// @param [in] sep -> Separator
 /// @param [in] modifier -> EscapeQuotes if quotes should be escaped using '\'
+/// @param [in] raw_percent_percent -> Wether portions between %% portion_example %% should be added raw to the word
 /// @return std::vector<std::string_view> splits
 ///
 [[nodiscard]] std::vector<std::string_view> split(
     std::string_view str,
     char sep = ',',
-    ESplitModifier modifier = ESplitModifier::None);
+    ESplitModifier modifier = ESplitModifier::None,
+    bool raw_percent_percent = false);
 
 ///
 /// @brief Extract first word separated by sep char.
@@ -35,12 +37,14 @@ enum class ESplitModifier
 /// @param [in] str -> String to be extracted from
 /// @param [in] sep -> Separator
 /// @param [in] modifier -> EscapeQuotes if quotes should be escaped using '\'
+/// @param [in] raw_percent_percent -> Wether portions between %% portion_example %% should be added raw to the word
 /// @return extracted word
 ///
 [[nodiscard]] std::string_view extractWord(
     std::string_view& str,
     char sep = ' ',
-    ESplitModifier modifier = ESplitModifier::None);
+    ESplitModifier modifier = ESplitModifier::None,
+    bool raw_percent_percent = false);
 
 ///
 /// @brief Self explanatory.

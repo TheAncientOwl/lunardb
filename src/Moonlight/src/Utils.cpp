@@ -12,11 +12,12 @@ namespace LunarDB::Moonlight::Utils {
 namespace CppExtensions = LunarDB::Common::CppExtensions;
 namespace StringUtils = CppExtensions::StringUtils;
 
-std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier)
+std::string_view extractWord(std::string_view& str, char sep, ESplitModifier modifier, bool raw_percent_percent)
 {
     std::string_view out{};
 
-    bool quoted_string{false};
+    bool is_quoted_string{false};
+    bool is_percent_percent{false};
     auto const c_end{std::cend(str)};
     auto const c_begin{std::cbegin(str)};
 
@@ -28,11 +29,15 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
         auto const current_char{*word_end};
         auto const prev_char{word_end != c_begin ? *std::prev(word_end) : ' '};
 
-        if (modifier == ESplitModifier::EscapeQuotes && current_char == '"' && prev_char != '\\')
+        if (raw_percent_percent && current_char == '%' && prev_char == '%')
         {
-            quoted_string = !quoted_string;
+            is_percent_percent = !is_percent_percent;
         }
-        else if (current_char == sep && !quoted_string)
+        else if (modifier == ESplitModifier::EscapeQuotes && current_char == '"' && prev_char != '\\')
+        {
+            is_quoted_string = !is_quoted_string;
+        }
+        else if (current_char == sep && !(is_quoted_string || is_percent_percent))
         {
             std::string_view word{word_begin, word_end};
 
@@ -80,7 +85,7 @@ std::string_view extractWord(std::string_view& str, char sep, ESplitModifier mod
     return out;
 }
 
-std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifier modifier)
+std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifier modifier, bool raw_percent_percent)
 {
     std::vector<std::string_view> out{};
 
@@ -93,7 +98,7 @@ std::vector<std::string_view> split(std::string_view str, char sep, ESplitModifi
     std::string_view word{};
     do
     {
-        word = extractWord(str, sep, modifier);
+        word = extractWord(str, sep, modifier, raw_percent_percent);
         out.push_back(word);
 
         if (!str.empty() && str.front() == sep)

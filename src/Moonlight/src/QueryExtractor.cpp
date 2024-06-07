@@ -43,7 +43,10 @@ std::string_view QueryExtractor::extractOne()
     }
 }
 
-std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<char, char> bound_chars)
+std::vector<std::string_view> QueryExtractor::extractList(
+    char sep,
+    std::pair<char, char> bound_chars,
+    bool raw_percent_percent)
 {
     if (m_data.empty())
     {
@@ -59,7 +62,21 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
     m_data.remove_prefix(1);
     StringUtils::ltrim(m_data);
 
-    auto const closed_square_bracket_pos = m_data.find_first_of(bound_chars.second);
+    bool percent_percent{false};
+    auto closed_square_bracket_pos{std::string_view::npos};
+    for (std::size_t index = 1; index < m_data.length(); ++index)
+    {
+        if (m_data[index] == bound_chars.second && !percent_percent)
+        {
+            closed_square_bracket_pos = index;
+            break;
+        }
+        else if (m_data[index] == '%' && m_data[index - 1] == '%')
+        {
+            percent_percent = !percent_percent;
+        }
+    }
+
     if (closed_square_bracket_pos == std::string_view::npos)
     {
         std::string str{};
@@ -71,7 +88,7 @@ std::vector<std::string_view> QueryExtractor::extractList(char sep, std::pair<ch
     m_data.remove_prefix(closed_square_bracket_pos + 1);
     StringUtils::ltrim(m_data);
 
-    return Utils::split(list_str, sep);
+    return Utils::split(list_str, sep, Utils::ESplitModifier::EscapeQuotes, raw_percent_percent);
 }
 
 std::string_view QueryExtractor::data() const

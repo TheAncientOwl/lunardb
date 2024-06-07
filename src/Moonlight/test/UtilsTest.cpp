@@ -36,6 +36,11 @@ TEST(Moonlight_UtilsTest, split02)
         "field3"
     };
 
+    EXPECT_EQ(out.size(), expected.size());
+    for (std::size_t index = 0; index < std::min(out.size(), expected.size()); index++)
+    {
+        EXPECT_EQ(out[index], expected[index]);
+    }
     EXPECT_EQ(out, expected);
 }
 
@@ -54,6 +59,11 @@ TEST(Moonlight_UtilsTest, split03)
         R"(and commas")"
     };
 
+    EXPECT_EQ(out.size(), expected.size());
+    for (std::size_t index = 0; index < std::min(out.size(), expected.size()); index++)
+    {
+        EXPECT_EQ(out[index], expected[index]);
+    }
     EXPECT_EQ(out, expected);
 }
 
@@ -71,6 +81,11 @@ TEST(Moonlight_UtilsTest, split04)
         R"(some other string \"with quotes\", and commas)",
     };
 
+    EXPECT_EQ(out.size(), expected.size());
+    for (std::size_t index = 0; index < std::min(out.size(), expected.size()); index++)
+    {
+        EXPECT_EQ(out[index], expected[index]);
+    }
     EXPECT_EQ(out, expected);
 }
 
@@ -119,6 +134,25 @@ TEST(Moonlight_UtilsTest, split07)
     };
 
     EXPECT_EQ(out, expected);
+}
+
+TEST(Moonlight_UtilsTest, split08)
+{
+    auto const str = R"(history1 => %%[{"username1":"user1","message1":"m1","time":12345}]%%, history2 => %%[{"username2":"user2","message2":"m2","time":12345}]%%)";
+
+    auto const out = split(str, ',', ESplitModifier::EscapeQuotes, true);
+
+    std::vector<std::string_view> expected = {
+        R"(history1 => %%[{"username1":"user1","message1":"m1","time":12345}]%%)",
+        R"(history2 => %%[{"username2":"user2","message2":"m2","time":12345}]%%)",
+    };
+
+    EXPECT_EQ(out, expected);
+    EXPECT_EQ(out.size(), expected.size());
+    for (std::size_t index = 0; index < std::min(out.size(), expected.size()); index++)
+    {
+        EXPECT_EQ(out[index], expected[index]);
+    }
 }
 
 TEST(Moonlight_UtilsTest, parseResolutionOperator)
