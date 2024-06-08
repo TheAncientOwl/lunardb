@@ -1,166 +1,13 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-#include <iostream>
-#include <nlohmann/json.hpp>
-#include <ranges>
-#include <sstream>
 #include <string>
-#include <thread>
 
-#include "LunarDB/Astral/QueryExecutor.hpp"
-#include "LunarDB/Common/CppExtensions/Timer.hpp"
-#include "LunarDB/Common/CppExtensions/UniqueID.hpp"
-#include "LunarDB/Moonlight/QueryParser.hpp"
+#include "LunarDB/Crescentum/Logger.hpp"
+#include "LunarDB/LunarDB/Common/QueryHandlingUtils.hpp"
 #include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
-#include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_LUNARDB_SRV)
-
-using namespace std::string_literals;
-
-std::string getSuccessMessage(LunarDB::Moonlight::API::ParsedQuery const& parsed_query)
-{
-    switch (parsed_query.type())
-    {
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Database: {
-        auto const& query_data = parsed_query.get<LunarDB::Common::QueryData::Database>();
-        switch (query_data.operation_type)
-        {
-        case LunarDB::Common::QueryData::Primitives::EDatabaseOperationType::Create:
-            return "Database created successfully";
-            break;
-        case LunarDB::Common::QueryData::Primitives::EDatabaseOperationType::Drop:
-            return "Database dropped successfully";
-            break;
-        case LunarDB::Common::QueryData::Primitives::EDatabaseOperationType::Use:
-            return "Using database '"s + query_data.name + "' for following transactions";
-            break;
-        default:
-            return "Done";
-            break;
-        }
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Schema: {
-        return "Schema created successfully";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Create: {
-        auto const& query_data = parsed_query.get<LunarDB::Common::QueryData::Create>();
-        if (static_cast<bool>(query_data.single))
-        {
-            return "Collection created successfully";
-        }
-        else if (static_cast<bool>(query_data.multiple))
-        {
-            return "Collections created successfully";
-        }
-        return "Done";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Rebind: {
-        return "Rebind successfully";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Insert: {
-        return "Objects inserted successfully";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Delete: {
-        return "Objects deleted successfully";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Update: {
-        return "Objects updated successfully";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Select: {
-        return "[table]";
-    }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Commit: {
-        return "Changes commited successfully";
-    }
-    default:
-        return "Done";
-        break;
-    }
-}
-
-void handleQuery(std::string_view query, boost::beast::websocket::stream<boost::asio::ip::tcp::socket>& ws)
-{
-    auto const uid{LunarDB::Common::CppExtensions::UniqueID::generate()};
-    CLOG_VERBOSE("Start query handling, uid:", uid);
-    LunarDB::Common::CppExtensions::Timer query_timer{};
-
-    LunarDB::Common::CppExtensions::Timer timer{};
-
-    try
-    {
-        CLOG_VERBOSE("Start query parsing");
-        timer.reset();
-        auto const parsed_query = LunarDB::Moonlight::API::parseQuery(query);
-        CLOG_VERBOSE("Parsing success, elapsed", timer.elapsedExtended());
-
-        CLOG_VERBOSE("Start query execution");
-        timer.reset();
-        LunarDB::Astral::API::executeQuery(parsed_query);
-        CLOG_VERBOSE("Execution success, elapsed", timer.elapsedExtended());
-
-        if (parsed_query.type() == LunarDB::Common::QueryData::Primitives::EQueryType::Select)
-        {
-            auto& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
-            auto const& current_selection{system_catalog.getCurrentSelection()};
-
-            CLOG_VERBOSE("Jsonifying current selection");
-            timer.reset();
-            std::stringstream ss{};
-            ss << R"({ "selection": [ )";
-
-            if (!current_selection.empty())
-            {
-                auto const select_fields =
-                    [&fields = parsed_query.get<LunarDB::Common::QueryData::Select>().fields](
-                        auto const& obj) -> nlohmann::json {
-                    auto const& obj_json{obj->getJSON()};
-                    nlohmann::json out{};
-
-                    for (auto const& field : fields)
-                    {
-                        out[field] = obj_json[field];
-                    }
-
-                    return out;
-                };
-
-                ss << select_fields(current_selection[0]).dump();
-                for (auto const index : std::ranges::iota_view{1u, current_selection.size()})
-                {
-                    ss << ", " << select_fields(current_selection[index]).dump();
-                }
-            }
-            ss << "] }";
-            CLOG_VERBOSE("Current selection jsonifyed, elapsed", timer.elapsedExtended());
-            auto current_selection_str{std::move(ss.str())};
-
-            CLOG_VERBOSE("Sending current selection:", current_selection_str);
-            timer.reset();
-            ws.write(boost::beast::net::buffer(current_selection_str));
-            CLOG_VERBOSE("Current selection sent, elapsed", timer.elapsedExtended());
-
-            CLOG_VERBOSE("Clearing current selection...");
-            system_catalog.clearCurrentSelection();
-            CLOG_VERBOSE("Current selection cleared");
-        }
-        else
-        {
-            auto const message{getSuccessMessage(parsed_query)};
-            CLOG_VERBOSE("Execution success, sending success message:", message);
-            ws.write(boost::beast::net::buffer(message));
-            CLOG_VERBOSE("Success message sent");
-        }
-    }
-    catch (std::exception const& e)
-    {
-        CLOG_VERBOSE("Failed to handle query, cause:", e.what());
-        ws.write(boost::beast::net::buffer(std::string(e.what())));
-    }
-
-    CLOG_VERBOSE("End query handling, uid", uid, "elapsed", query_timer.elapsedExtended());
-}
 
 int main()
 {
@@ -173,7 +20,7 @@ int main()
     boost::asio::io_context ioc{1};
     boost::asio::ip::tcp::acceptor acceptor{ioc, {address, port}};
 
-    CLOG_INFO("WebSocket started running on 127.0.0.1:8083");
+    CLOG_INFO("Server started on 127.0.0.1:8083");
 
     while (true)
     {
@@ -181,34 +28,37 @@ int main()
         {
             boost::asio::ip::tcp::socket socket{ioc};
 
-            CLOG_INFO("Accepting socket");
+            CLOG_INFO("Waiting for client socket connection...");
             acceptor.accept(socket);
-            CLOG_INFO("Socket accepted");
+            CLOG_INFO("Client socket connected");
 
             boost::beast::websocket::stream<boost::asio::ip::tcp::socket> ws{std::move(socket)};
 
-            CLOG_VERBOSE("Accepting websocket");
+            CLOG_VERBOSE("Waiting for client websocket connection...");
             ws.accept();
-            CLOG_VERBOSE("Websocket accepted");
+            CLOG_INFO("Client websocket socket connected");
 
             while (true)
             {
                 boost::beast::flat_buffer buffer{};
 
-                CLOG_INFO("Reading query");
+                CLOG_INFO("Waiting for query...");
                 ws.read(buffer);
 
-                auto const out = boost::beast::buffers_to_string(buffer.cdata());
-                CLOG_VERBOSE("Received query ->", out);
+                auto const query = boost::beast::buffers_to_string(buffer.cdata());
+                CLOG_VERBOSE("Received query ->", query);
 
-                handleQuery(out, ws);
+                LunarDB::Common::QueryHandlingUtils::handleQuery(
+                    query, lunar_logger_module, [&ws](std::string const& message) mutable {
+                        ws.write(boost::beast::net::buffer(message));
+                    });
             }
         }
         catch (boost::system::system_error const& e)
         {
             if (e.code() == boost::beast::websocket::error::closed)
             {
-                CLOG_INFO("Connection ended gracefully");
+                CLOG_INFO("Socket connection ended gracefully");
             }
             else
             {
