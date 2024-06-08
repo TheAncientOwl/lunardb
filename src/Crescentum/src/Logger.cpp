@@ -25,7 +25,8 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(LunarModule,
     { Literal::Selenity, "Selenity" },
     { Literal::Celestial, "Celestial" },
     { Literal::Crescentum, "Crescentum" },
-    { Literal::LunarDB_SRV, "LunarDB_Server" }
+    { Literal::LunarDB_SRV, "LunarDB_Server" },
+    { Literal::LunarDB_CLI, "LunarDB_CLI" },
 )
 // clang-format on
 

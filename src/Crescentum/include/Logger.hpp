@@ -28,7 +28,8 @@ DEFINE_LUNAR_PRIMITIVE(LunarModule,
     Selenity = 5,
     Celestial = 6,
     Crescentum = 7,
-    LunarDB_SRV = 8
+    LunarDB_SRV = 8,
+    LunarDB_CLI = 9,
 )
 // clang-format on
 

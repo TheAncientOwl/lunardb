@@ -5,6 +5,7 @@ add_lunar_executable(
     API_HEADER_FILES
 
     PRIVATE_DEPENDENCIES
+        LunarDB_Common_Utils
         LunarDB_Common_QueryData
         LunarDB_Common_CppExtensions
         LunarDB_Astral
@@ -16,4 +17,5 @@ add_lunar_executable(
 
     SOURCE_FILES
         src/main.cpp
+        src/QueryPrompt.cpp
 )
