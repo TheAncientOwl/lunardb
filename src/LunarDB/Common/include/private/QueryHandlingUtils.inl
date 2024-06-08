@@ -16,11 +16,13 @@ namespace LunarDB::Common::QueryHandlingUtils {
 
 std::string getSuccessMessage(LunarDB::Moonlight::API::ParsedQuery const& parsed_query);
 
-template <typename MessageWriter>
+template <typename OnSuccess, typename OnSelection, typename OnError>
 void handleQuery(
     std::string_view query,
     LunarDB::Crescentum::API::ELunarModule lunar_logger_module,
-    MessageWriter&& message_writer)
+    OnSuccess&& on_success,
+    OnSelection&& on_selection,
+    OnError&& on_error)
 {
     auto const get_query_identifier = []() {
         std::ostringstream oss{};
@@ -86,7 +88,7 @@ void handleQuery(
 
             CLOG_VERBOSE("[Handler] Sending current selection:", current_selection_str);
             timer.reset();
-            message_writer(current_selection_str);
+            on_selection(current_selection_str);
             CLOG_VERBOSE(
                 "[Handler] Sending current selection finished, elapsed", timer.elapsedExtended());
 
@@ -98,14 +100,14 @@ void handleQuery(
         {
             auto const message{LunarDB::Common::QueryHandlingUtils::getSuccessMessage(parsed_query)};
             CLOG_VERBOSE("Execution success, sending success message:", message);
-            message_writer(message);
+            on_success(message);
             CLOG_VERBOSE("Success message sent");
         }
     }
     catch (std::exception const& e)
     {
         CLOG_VERBOSE("Failed to handle query, cause:", e.what());
-        message_writer(e.what());
+        on_error(e.what());
     }
 
     CLOG_VERBOSE(query_identifier, "-> Processing finished, elapsed", query_timer.elapsedExtended());

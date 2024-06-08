@@ -48,10 +48,12 @@ int main()
                 auto const query = boost::beast::buffers_to_string(buffer.cdata());
                 CLOG_VERBOSE("Received query ->", query);
 
+                auto socket_writer = [&ws](std::string const& message) mutable {
+                    ws.write(boost::beast::net::buffer(message));
+                };
+
                 LunarDB::Common::QueryHandlingUtils::handleQuery(
-                    query, lunar_logger_module, [&ws](std::string const& message) mutable {
-                        ws.write(boost::beast::net::buffer(message));
-                    });
+                    query, lunar_logger_module, socket_writer, socket_writer, socket_writer);
             }
         }
         catch (boost::system::system_error const& e)

@@ -128,6 +128,11 @@ std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionE
     return m_current_selection;
 }
 
+std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>>&& SystemCatalog::extractCurrentSelection()
+{
+    return std::move(m_current_selection);
+}
+
 void SystemCatalog::setCurrentSelection(
     std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection)
 {

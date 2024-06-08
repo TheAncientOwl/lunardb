@@ -59,6 +59,8 @@ public: // public API
     std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> const& getCurrentSelection()
         const;
 
+    std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>>&& extractCurrentSelection();
+
     void setCurrentSelection(
         std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection);
 

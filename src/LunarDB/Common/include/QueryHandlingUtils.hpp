@@ -9,11 +9,13 @@ namespace LunarDB::Common::QueryHandlingUtils {
 
 std::string getSuccessMessage(LunarDB::Moonlight::API::ParsedQuery const& parsed_query);
 
-template <typename MessageWriter>
+template <typename OnSuccess, typename OnSelection, typename OnError>
 void handleQuery(
     std::string_view query,
     LunarDB::Crescentum::API::ELunarModule lunar_logger_module,
-    MessageWriter&& message_writer);
+    OnSuccess&& on_success,
+    OnSelection&& on_selection,
+    OnError&& on_error);
 
 } // namespace LunarDB::Common::QueryHandlingUtils
 

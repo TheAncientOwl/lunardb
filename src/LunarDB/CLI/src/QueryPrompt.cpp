@@ -1,14 +1,18 @@
-#include "QueryPrompt.hpp"
+#include <string>
 
-#include <iostream>
+#include "QueryPrompt.hpp"
 
 namespace LunarDB::CLI {
 
-std::string readQuery()
+QueryPrompt::QueryPrompt(std::istream& is) : m_is{is}
+{
+}
+
+std::string QueryPrompt::readQuery()
 {
     std::string query{};
 
-    std::getline(std::cin, query);
+    std::getline(m_is, query);
 
     return query;
 }
