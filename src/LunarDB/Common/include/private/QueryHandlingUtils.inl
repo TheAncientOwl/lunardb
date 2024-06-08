@@ -50,8 +50,17 @@ void handleQuery(
         LunarDB::Astral::API::executeQuery(parsed_query);
         CLOG_VERBOSE("[Handler] Finished query execution, elapsed", timer.elapsedExtended());
 
-        if (parsed_query.type() == LunarDB::Common::QueryData::Primitives::EQueryType::Select)
+        if (parsed_query.type() != LunarDB::Common::QueryData::Primitives::EQueryType::Select)
         {
+            auto const message{LunarDB::Common::QueryHandlingUtils::getSuccessMessage(parsed_query)};
+            CLOG_VERBOSE("Execution finished, sending success message:", message);
+            on_success(std::move(message));
+            CLOG_VERBOSE("Success message sent");
+        }
+        else
+        {
+            auto query_fields{parsed_query.get<LunarDB::Common::QueryData::Select>().fields};
+
             auto& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
             auto const& current_selection{system_catalog.getCurrentSelection()};
 
@@ -61,13 +70,11 @@ void handleQuery(
             oss << R"({ "selection": [ )";
             if (!current_selection.empty())
             {
-                auto const select_fields =
-                    [&fields = parsed_query.get<LunarDB::Common::QueryData::Select>().fields](
-                        auto const& obj) -> nlohmann::json {
+                auto const select_fields = [&query_fields](auto const& obj) -> nlohmann::json {
                     auto const& obj_json{obj->getJSON()};
                     nlohmann::json out{};
 
-                    for (auto const& field : fields)
+                    for (auto const& field : query_fields)
                     {
                         out[field] = obj_json[field];
                     }
@@ -82,13 +89,13 @@ void handleQuery(
                 }
             }
             oss << "] }";
+            auto current_selection_str{std::move(oss.str())};
             CLOG_VERBOSE(
                 "[Handler] Jsonifying current selection finished, elapsed", timer.elapsedExtended());
-            auto current_selection_str{std::move(oss.str())};
 
             CLOG_VERBOSE("[Handler] Sending current selection:", current_selection_str);
             timer.reset();
-            on_selection(current_selection_str);
+            on_selection(std::move(current_selection_str), std::move(query_fields));
             CLOG_VERBOSE(
                 "[Handler] Sending current selection finished, elapsed", timer.elapsedExtended());
 
@@ -96,18 +103,11 @@ void handleQuery(
             system_catalog.clearCurrentSelection();
             CLOG_VERBOSE("Current selection cleared");
         }
-        else
-        {
-            auto const message{LunarDB::Common::QueryHandlingUtils::getSuccessMessage(parsed_query)};
-            CLOG_VERBOSE("Execution success, sending success message:", message);
-            on_success(message);
-            CLOG_VERBOSE("Success message sent");
-        }
     }
     catch (std::exception const& e)
     {
         CLOG_VERBOSE("Failed to handle query, cause:", e.what());
-        on_error(e.what());
+        on_error(std::string(e.what()));
     }
 
     CLOG_VERBOSE(query_identifier, "-> Processing finished, elapsed", query_timer.elapsedExtended());
