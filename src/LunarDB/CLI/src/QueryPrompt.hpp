@@ -5,14 +5,13 @@
 
 namespace LunarDB::CLI {
 
-std::string readQuery();
-
 class QueryPrompt
 {
 public:
     QueryPrompt(std::istream& is);
 
     std::string readQuery();
+    bool done() const;
 
 private:
     std::istream& m_is;

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -19,43 +20,52 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_LUNARDB_SRV);
 void writeMessage(std::string const& message)
 {
     std::cout << ccolor::dark_gray << "[" << ccolor::green << "Success" << ccolor::dark_gray << "] "
-              << ccolor::lime << message << std::endl;
+              << ccolor::lime << message << ccolor::reset << std::endl;
 }
 
 void writeSelection(std::string const& selection)
 {
     std::cout << ccolor::dark_gray << "[" << ccolor::purple << "Selection" << ccolor::dark_gray
-              << "] " << ccolor::pink << selection << std::endl;
+              << "] " << ccolor::pink << selection << ccolor::reset << std::endl;
 }
 
 void writeError(std::string const& error)
 {
     std::cout << ccolor::dark_gray << "[" << ccolor::dark_red << "Error" << ccolor::dark_gray
-              << "] " << ccolor::light_red << error << std::endl;
+              << "] " << ccolor::light_red << error << ccolor::reset << std::endl;
 }
 
 int main(int argc, char const* argv[])
 {
-    std::cout << ccolor::dark_gray << "[" << ccolor::purple << "LunarDB" << ccolor::dark_gray
-              << "]: " << ccolor::green << "Version alpha.1.0_rc01" << ccolor::reset << std::endl;
-
     LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
 
-    LunarDB::CLI::QueryPrompt prompt{std::cin};
+    std::istream* input_stream_ptr{&std::cin};
+    std::ifstream input_file{};
+    if (argc >= 2)
+    {
+        input_file.open(argv[1]);
+        input_stream_ptr = &input_file;
+    }
+    LunarDB::CLI::QueryPrompt prompt{*input_stream_ptr};
 
-    while (true)
+    do
     {
         std::cout << ccolor::dark_red << "root" << ccolor::dark_gray << "@" << ccolor::purple
                   << "lunardb" << ccolor::dark_gray << "$ " << ccolor::light_gray;
 
         auto const query = prompt.readQuery();
 
+        if (input_stream_ptr == &input_file)
+        {
+            std::cout << query << std::endl;
+        }
+
         auto message_writer = [](std::string const& message) { std::cout << message << std::endl; };
 
         LunarDB::Common::QueryHandlingUtils::handleQuery(
             query, lunar_logger_module, writeMessage, writeSelection, writeError);
-    }
+    } while (!prompt.done());
 
     LunarDB::Selenity::API::SystemCatalog::Instance().saveConfigs();
 

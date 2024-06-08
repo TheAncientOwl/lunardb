@@ -1,1 +1,1 @@
-./build/src/LunarDB/CLI/LunarDB_CLI.debug
+./build/src/LunarDB/CLI/LunarDB_CLI.debug "$@"
