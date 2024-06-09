@@ -64,7 +64,7 @@ std::vector<std::string_view> QueryExtractor::extractList(
 
     bool percent_percent{false};
     auto closed_square_bracket_pos{std::string_view::npos};
-    for (std::size_t index = 1; index < m_data.length(); ++index)
+    for (std::size_t index = 0; index < m_data.length(); ++index)
     {
         if (m_data[index] == bound_chars.second && !percent_percent)
         {
