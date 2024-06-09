@@ -112,6 +112,11 @@ API::ParsedQuery Schema::parse(QueryExtractor extractor)
         throw Errors::buildInvalidQueryFormatError(c_query_prefix);
     }
 
+    if (out.fields.empty() && out.inherits.empty())
+    {
+        throw Errors::buildError("Missing fields nor inherited schema");
+    }
+
     return out_parsed_query;
 }
 

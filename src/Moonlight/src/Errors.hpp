@@ -11,7 +11,7 @@ template <typename... Args>
 [[nodiscard]] ParserError buildError(Args&&... args)
 {
     return std::runtime_error{
-        Common::CppExtensions::StringUtils::stringify("Missing ", std::forward<Args>(args)...)};
+        Common::CppExtensions::StringUtils::stringify(std::forward<Args>(args)...)};
 }
 
 [[nodiscard]] ParserError buildUnknownKeywordError(std::string_view keyword);
