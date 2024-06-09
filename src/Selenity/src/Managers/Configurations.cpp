@@ -69,7 +69,17 @@ std::vector<CollectionConfiguration::Schema::Field> convert(
 
     for (auto const& field : fields)
     {
-        out.emplace_back(field.name, FieldDataType::toLiteral(field.type), field.nullable, field.array);
+        EFieldDataType type{EFieldDataType::Rid};
+        try
+        {
+            auto const in_type{FieldDataType::toLiteral(field.type)};
+            type = in_type;
+        }
+        catch (std::exception const& e)
+        {
+        }
+
+        out.emplace_back(field.name, type, field.nullable, field.array);
     }
 
     return out;
