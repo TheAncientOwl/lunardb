@@ -75,6 +75,15 @@ Common::QueryData::Schema const& SchemasCatalog::getSchema(std::string schema_na
 
 void SchemasCatalog::createSchema(Common::QueryData::Schema schema)
 {
+    for (auto const& inheirted_schema_name : schema.inherits)
+    {
+        auto const& inherited_schema = SchemasCatalog::Instance().getSchema(inheirted_schema_name);
+        for (auto const& field : inherited_schema.fields)
+        {
+            schema.fields.push_back(field);
+        }
+    }
+
     saveSchemaToDisk(schema);
     auto schema_name{schema.name};
     m_schemas_cache.emplace(std::move(schema_name), std::move(schema));

@@ -196,8 +196,9 @@ struct Schema
 
     std::string name;
     std::vector<Field> fields;
+    std::vector<std::string> inherits;
 
-    LUNAR_ENABLE_BINARY_IO(name, fields);
+    LUNAR_ENABLE_BINARY_IO(name, fields, inherits);
 };
 
 struct User

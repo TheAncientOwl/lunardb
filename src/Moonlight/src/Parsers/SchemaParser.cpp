@@ -2,6 +2,8 @@
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
 
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
+
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
 
@@ -95,6 +97,13 @@ API::ParsedQuery Schema::parse(QueryExtractor extractor)
     Errors::assertKeywordEquals(schema, "schema");
 
     out.name = Errors::assertNotEmpty(schema_name, "schema name");
+
+    if (Common::CppExtensions::StringUtils::startsWithIgnoreCase(extractor.data(), "inherits"))
+    {
+        auto const [inherits, schema] = extractor.extractTuple<2>();
+        out.inherits.emplace_back(schema);
+    }
+
     out.fields = extractor.extractList<Common::QueryData::Schema::Field>(
         parseField, ';', std::make_pair('{', '}'));
 
