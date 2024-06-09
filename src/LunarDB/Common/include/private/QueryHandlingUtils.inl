@@ -40,15 +40,15 @@ void handleQuery(
     {
         LunarDB::Common::CppExtensions::Timer timer{};
 
-        CLOG_VERBOSE("[Handler] Starting query parsing...");
+        CLOG_VERBOSE("Starting query parsing...");
         timer.reset();
         auto const parsed_query = LunarDB::Moonlight::API::parseQuery(query);
-        CLOG_VERBOSE("[Handler] Finished query parsing, elapsed", timer.elapsedExtended());
+        CLOG_VERBOSE("Finished query parsing, elapsed", timer.elapsedExtended());
 
-        CLOG_VERBOSE("[Handler] Starting query execution...");
+        CLOG_VERBOSE("Starting query execution...");
         timer.reset();
         LunarDB::Astral::API::executeQuery(parsed_query);
-        CLOG_VERBOSE("[Handler] Finished query execution, elapsed", timer.elapsedExtended());
+        CLOG_VERBOSE("Finished query execution, elapsed", timer.elapsedExtended());
 
         if (parsed_query.type() != LunarDB::Common::QueryData::Primitives::EQueryType::Select)
         {
@@ -64,7 +64,7 @@ void handleQuery(
             auto& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
             auto const& current_selection{system_catalog.getCurrentSelection()};
 
-            CLOG_VERBOSE("[Handler] Jsonifying current selection...");
+            CLOG_VERBOSE("Jsonifying current selection...");
             timer.reset();
             std::stringstream oss{};
             oss << R"({ "selection": [ )";
@@ -90,14 +90,12 @@ void handleQuery(
             }
             oss << "] }";
             auto current_selection_str{std::move(oss.str())};
-            CLOG_VERBOSE(
-                "[Handler] Jsonifying current selection finished, elapsed", timer.elapsedExtended());
+            CLOG_VERBOSE("Jsonifying current selection finished, elapsed", timer.elapsedExtended());
 
-            CLOG_VERBOSE("[Handler] Sending current selection:", current_selection_str);
+            CLOG_VERBOSE("Sending current selection:", current_selection_str);
             timer.reset();
             on_selection(std::move(current_selection_str), std::move(query_fields));
-            CLOG_VERBOSE(
-                "[Handler] Sending current selection finished, elapsed", timer.elapsedExtended());
+            CLOG_VERBOSE("Sending current selection finished, elapsed", timer.elapsedExtended());
 
             CLOG_VERBOSE("Clearing current selection...");
             system_catalog.clearCurrentSelection();

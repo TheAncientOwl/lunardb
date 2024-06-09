@@ -14,11 +14,47 @@ void Logger::log(ELogLevel level, ELunarModule module, Args&&... args)
     auto const logging_time{now - m_log_start_time};
     auto const hms{std::chrono::hh_mm_ss{logging_time}};
 
+    auto const get_log_level = [](auto const log_level) {
+        auto const str = LogLevel::toString(log_level);
+        auto color = ccolor::dark_gray;
+
+        switch (log_level)
+        {
+        case ELogLevel::Info:
+            color = ccolor::dark_aqua;
+            break;
+        case ELogLevel::Verbose:
+            color = ccolor::reset;
+            break;
+        case ELogLevel::Warning:
+            color = ccolor::gold;
+            break;
+        case ELogLevel::Error:
+            color = ccolor::dark_red;
+            break;
+        case ELogLevel::Critical:
+            color = ccolor::light_red;
+            break;
+        case ELogLevel::Debug:
+            color = ccolor::yellow;
+            break;
+        default:
+            break;
+        }
+
+        return std::make_pair(str, color);
+    };
+
+    auto const [lvl_str, lvl_color] = get_log_level(level);
+    auto static constexpr c_sep_color = ccolor::dark_gray;
+
     std::ostringstream ss{};
 
-    ss << "[" << hms << "] |";
-    ss << std::right << std::setw(9) << LogLevel::toString(level) << " | ";
-    ss << std::right << std::setw(15) << LunarModule::toString(module) << " | ";
+    ss << c_sep_color << "[" << lvl_color << hms << c_sep_color << "] |";
+    ss << lvl_color << std::right << std::setw(9) << lvl_str << c_sep_color << " | ";
+    ss << lvl_color << std::right << std::setw(15) << LunarModule::toString(module) << c_sep_color
+       << " | ";
+    ss << lvl_color;
     ((ss << std::forward<Args>(args) << " "), ...);
     // ss << '\n';
 

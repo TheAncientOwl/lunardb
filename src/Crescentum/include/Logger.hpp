@@ -4,6 +4,7 @@
 #include <fstream>
 #include <queue>
 
+#include "LunarDB/Common/CppExtensions/ConsoleColorOutput.hpp"
 #include "LunarDB/Common/CppExtensions/DefinePrimitive.hpp"
 #include "LunarDB/Common/CppExtensions/Singleton.hpp"
 
