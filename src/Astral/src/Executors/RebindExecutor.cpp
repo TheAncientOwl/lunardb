@@ -16,9 +16,9 @@ void Rebind::execute(Moonlight::API::ParsedQuery const& parsed_query)
     if (static_cast<bool>(query.clean))
     {
         // TODO: Provide implementation
-        throw std::runtime_error{
-            "[~/lunardb/src/Astral/src/Executors/RebindExecutor.cpp:clean_rebind] Not implemented "
-            "yet..."};
+        // throw std::runtime_error{
+        //     "[~/lunardb/src/Astral/src/Executors/RebindExecutor.cpp:clean_rebind] Not implemented
+        //     " "yet..."};
     }
 
     Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->rebind(
