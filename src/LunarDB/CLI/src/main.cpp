@@ -127,7 +127,7 @@ int main(int argc, char const* argv[])
     do
     {
         std::cout << ccolor::dark_red << "root" << ccolor::dark_gray << "@" << ccolor::purple
-                  << "lunardb" << ccolor::dark_gray << "$ " << ccolor::light_gray;
+                  << "lunardb" << ccolor::dark_gray << "$ " << ccolor::black;
 
         auto const query = prompt.readQuery();
         std::string_view query_sv{query};
@@ -146,8 +146,8 @@ int main(int argc, char const* argv[])
         LunarDB::Common::QueryHandlingUtils::handleQuery(
             query, lunar_logger_module, on_success, on_selection, on_error);
         auto const elapsed{timer.elapsedExtended()};
-        std::cout << ccolor::dark_gray << '[' << ccolor::dark_aqua << "Elapsed" << ccolor::dark_gray
-                  << "] " << ccolor::light_aqua << elapsed << std::endl;
+        std::cout << ccolor::dark_gray << '[' << ccolor::light_blue << "Elapsed"
+                  << ccolor::dark_gray << "] " << ccolor::dark_aqua << elapsed << std::endl;
     } while (!prompt.done());
 
     std::cout << ccolor::reset << std::endl;
