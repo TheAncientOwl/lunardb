@@ -12,6 +12,7 @@
 #include "LunarDB/Astral/QueryExecutor.hpp"
 #include "LunarDB/Common/CppExtensions/ConsoleColorOutput.hpp"
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/Timer.hpp"
 #include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/LunarDB/Common/QueryHandlingUtils.hpp"
 #include "LunarDB/Moonlight/QueryParser.hpp"
@@ -141,11 +142,15 @@ int main(int argc, char const* argv[])
             std::cout << query << std::endl;
         }
 
+        LunarDB::Common::CppExtensions::Timer timer{};
         LunarDB::Common::QueryHandlingUtils::handleQuery(
             query, lunar_logger_module, on_success, on_selection, on_error);
+        auto const elapsed{timer.elapsedExtended()};
+        std::cout << ccolor::dark_gray << '[' << ccolor::dark_aqua << "Elapsed" << ccolor::dark_gray
+                  << "] " << ccolor::light_aqua << elapsed << std::endl;
     } while (!prompt.done());
 
-    std::cout << std::endl;
+    std::cout << ccolor::reset << std::endl;
 
     LunarDB::Selenity::API::SystemCatalog::Instance().saveConfigs();
 
