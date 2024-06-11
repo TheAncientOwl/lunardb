@@ -4,10 +4,12 @@
 #include <fstream>
 #include <iomanip>
 #include <nlohmann/json.hpp>
+#include <ranges>
 #include <sstream>
 #include <stack>
 #include <string>
 
+#include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 #include "LunarDB/Selenity/Managers/Collections/TableManager.hpp"
@@ -18,6 +20,7 @@ namespace LunarDB::Selenity::API::Managers::Collections {
 
 namespace {
 
+// TODO: Move in separate file
 void fillRecurseJSON(
     nlohmann::json& json,
     Configurations::CollectionConfiguration::Schema& collection_schema,
@@ -60,6 +63,7 @@ void fillRecurseJSON(
     }
 }
 
+// TODO: Refactor to take table file stream as input
 void insert(
     std::filesystem::path const& home,
     Configurations::CollectionConfiguration::Schema& collection_schema,
@@ -70,27 +74,60 @@ void insert(
 
     nlohmann::json json{};
     json["_rid"] = rid_str;
+    json["_del"] = "0";
     fillRecurseJSON(json, collection_schema, object);
 
-    auto const document_file_path{home / (rid_str + ".ldbdoc")};
+    auto const document_file_path{home / "data.ldbtbl"};
     auto const parent_path{document_file_path.parent_path()};
     if (!std::filesystem::exists(parent_path))
     {
         std::filesystem::create_directories(parent_path);
     }
 
-    std::ofstream document(document_file_path);
-    if (document.is_open())
+    std::ofstream table_file(document_file_path, std::ios::out | std::ios::app | std::ios::binary);
+    if (table_file.is_open())
     {
-        document << json.dump(4);
-        document.close();
+        auto const bson{nlohmann::json::to_bson(json)};
+        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+        table_file.close();
+
+        std::uint64_t entries_count{0};
+        auto const file_path{home / "metadata.ldb"};
+
+        {
+            std::ifstream metadata_file(file_path, std::ios::binary);
+            if (metadata_file.is_open())
+            {
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(
+                    metadata_file, entries_count);
+                metadata_file.close();
+            }
+        }
+
+        entries_count++;
+
+        {
+            std::ofstream metadata_file(file_path, std::ios::binary);
+            if (metadata_file.is_open())
+            {
+                Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
+                metadata_file.close();
+            }
+            else
+            {
+                // TODO: Log error
+                throw std::runtime_error("could not open metadata");
+            }
+        }
     }
     else
     {
         // TODO: log error
+        throw std::runtime_error("could not open table file");
     }
 }
 
+// TODO: Move in separate file
 std::uint8_t precedence(char operation)
 {
     if (operation == '+' || operation == '-')
@@ -330,6 +367,7 @@ TableManager::TableManager(std::shared_ptr<Configurations::CollectionConfigurati
 {
 }
 
+// TODO: Refactor to pass table file stream to Collections::insert
 void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
 {
     auto const documents_path{getDataHomePath()};
@@ -344,6 +382,7 @@ void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& 
     }
 }
 
+// TODO: Refactor
 std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::select(
     Common::QueryData::Select const& config) const
 {
@@ -355,30 +394,41 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
         return out;
     }
 
-    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    std::uint64_t entries_count{0};
+    auto const file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
     {
-        if (!std::filesystem::is_regular_file(entry))
-        {
-            continue;
-        }
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
 
-        std::ifstream object_file(entry.path());
-        if (object_file.is_open())
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::ifstream table_file(table_file_path, std::ios::binary);
+        if (table_file.is_open())
         {
-            auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
-            object_file >> collection_entry_ptr->data;
-            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
-                collection_entry_ptr.release()};
-            object_file.close();
-
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                out.emplace_back(std::move(icollection_entry_ptr));
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                if (collection_entry_ptr->data["_del"] == 1)
+                {
+                    continue;
+                }
+
+                std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                    collection_entry_ptr.release()};
+
+                if (WhereClause::evaluate(
+                        icollection_entry_ptr, m_collection_config->schema, config.where))
+                {
+                    out.emplace_back(std::move(icollection_entry_ptr));
+                }
             }
-        }
-        else
-        {
-            // TODO: Log error
+            table_file.close();
         }
     }
 
@@ -390,6 +440,7 @@ nlohmann::json const& TableManager::CollectionEntry::getJSON() const
     return data;
 }
 
+// TODO: Refactor
 void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
 {
     auto documents_path{getDataHomePath()};
@@ -400,35 +451,56 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
         return;
     }
 
-    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    std::uint64_t entries_count{0};
+    auto const file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
     {
-        if (!std::filesystem::is_regular_file(entry))
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::fstream table_file(table_file_path, std::ios::in | std::ios::out | std::ios::binary);
+        if (table_file.is_open())
         {
-            continue;
-        }
-
-        std::ifstream object_file(entry.path());
-        if (object_file.is_open())
-        {
-            auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
-            object_file >> collection_entry_ptr->data;
-            object_file.close();
-
-            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
-                collection_entry_ptr.release()};
-
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                std::filesystem::remove(entry.path());
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                if (collection_entry_ptr->data["_del"] == 1)
+                {
+                    continue;
+                }
+                std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                    collection_entry_ptr.release()};
+
+                if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
+                {
+                    collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
+                        icollection_entry_ptr.release()));
+                    collection_entry_ptr->data["_del"] = "1";
+                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+
+                    auto const current_pos = table_file.tellg();
+
+                    table_file.seekp(
+                        -(static_cast<std::uint64_t>(bson.size()) + sizeof(std::size_t)),
+                        std::ios::cur);
+                    Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+                    table_file.seekg(current_pos, std::ios::beg);
+                }
             }
-        }
-        else
-        {
-            // TODO: Log error
+            table_file.close();
         }
     }
 }
 
+// TODO: Refactor
 void TableManager::update(Common::QueryData::Update const& config)
 {
     auto documents_path{getDataHomePath()};
@@ -439,45 +511,53 @@ void TableManager::update(Common::QueryData::Update const& config)
         return;
     }
 
-    for (auto const& entry : std::filesystem::directory_iterator(documents_path))
+    std::uint64_t entries_count{0};
+    auto const file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
     {
-        if (!std::filesystem::is_regular_file(entry))
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::fstream table_file(table_file_path, std::ios::in | std::ios::out | std::ios::binary);
+        if (table_file.is_open())
         {
-            continue;
-        }
-
-        std::fstream object_file{};
-        object_file.open(entry.path(), std::ios::in);
-        if (object_file.is_open())
-        {
-            auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
-            object_file >> collection_entry_ptr->data;
-            object_file.close();
-
-            std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
-                collection_entry_ptr.release()};
-
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                object_file.open(entry.path(), std::ios::out | std::ios::trunc);
-                if (object_file.is_open())
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                if (collection_entry_ptr->data["_del"] == 1)
+                {
+                    continue;
+                }
+                std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                    collection_entry_ptr.release()};
+
+                if (WhereClause::evaluate(
+                        icollection_entry_ptr, m_collection_config->schema, config.where))
                 {
                     collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
                         icollection_entry_ptr.release()));
                     Collections::update(
                         collection_entry_ptr->data, m_collection_config->schema, config.modify);
-                    object_file << collection_entry_ptr->data;
-                    object_file.close();
-                }
-                else
-                {
-                    // TODO: Log error
+                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+
+                    auto const current_pos = table_file.tellg();
+
+                    table_file.seekp(
+                        -(static_cast<std::uint64_t>(bson.size()) + sizeof(std::size_t)),
+                        std::ios::cur);
+                    Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+                    table_file.seekg(current_pos, std::ios::beg);
                 }
             }
-        }
-        else
-        {
-            // TODO: Log error
+            table_file.close();
         }
     }
 }
