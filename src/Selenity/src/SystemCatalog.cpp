@@ -1,3 +1,10 @@
+#include <filesystem>
+#include <fstream>
+#include <nlohmann/json.hpp>
+#include <string>
+#include <string_view>
+
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Selenity::API {
@@ -14,20 +21,17 @@ SystemCatalog::~SystemCatalog()
 
 std::filesystem::path SystemCatalog::getLunarHomePath() const
 {
-    // TODO: Get path from config.
-    // !NOTE: Not windows compatible? config path should fix this
-    std::filesystem::path const c_lunar_home{"/tmp/lunardb"};
-    if (!std::filesystem::exists(c_lunar_home))
+    if (!m_config.home_path.empty() && !std::filesystem::exists(m_config.home_path))
     {
-        std::filesystem::create_directories(c_lunar_home);
+        std::filesystem::create_directories(m_config.home_path);
     }
-    return c_lunar_home;
+    return m_config.home_path;
 }
 
 std::filesystem::path SystemCatalog::getHomePath() const
 {
     auto const c_data_home_path{getLunarHomePath() / "databases"};
-    if (!std::filesystem::exists(c_data_home_path))
+    if (!m_config.home_path.empty() && !std::filesystem::exists(c_data_home_path))
     {
         std::filesystem::create_directories(c_data_home_path);
     }
@@ -48,6 +52,7 @@ void SystemCatalog::loadConfiguration()
 {
     m_database_in_use = std::nullopt;
     loadConfigs();
+    loadSystemConfiguration();
 }
 
 void SystemCatalog::createDatabase(std::string const& name)
@@ -142,6 +147,65 @@ void SystemCatalog::setCurrentSelection(
 void SystemCatalog::clearCurrentSelection()
 {
     m_current_selection.clear();
+}
+
+void SystemCatalog::loadSystemConfiguration()
+{
+    auto const config_file_path{std::filesystem::current_path() / "lunardb.config.json"};
+    if (!std::filesystem::exists(config_file_path))
+    {
+        m_config = Config{};
+        m_config.home_path = std::filesystem::current_path() / "lunardb";
+
+        if (!std::filesystem::exists(m_config.home_path))
+        {
+            std::filesystem::create_directories(m_config.home_path);
+        }
+
+        nlohmann::json config{};
+
+        config["home_path"] = m_config.home_path;
+
+        std::ofstream config_file(config_file_path);
+        if (config_file.is_open())
+        {
+            config_file << config.dump(4);
+            config_file.close();
+        }
+        else
+        {
+            // TODO: Log error
+        }
+    }
+    else
+    {
+        std::ifstream config_file(config_file_path);
+        if (config_file.is_open())
+        {
+            nlohmann::json config{};
+            config_file >> config;
+            config_file.close();
+
+            auto const get_value_if_existing =
+                [&config, &config_file_path](std::string_view key) -> std::string {
+                if (config.contains(key))
+                {
+                    return config[key];
+                }
+                else
+                {
+                    throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+                        "\"", key, "\" key does not exist in ", config_file_path)};
+                }
+            };
+
+            m_config.home_path = get_value_if_existing("home_path");
+        }
+        else
+        {
+            // TODO: Log error
+        }
+    }
 }
 
 } // namespace LunarDB::Selenity::API

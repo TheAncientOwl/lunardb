@@ -11,8 +11,8 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_LUNARDB_SRV)
 
 int main()
 {
-    LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
+    LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
 
     auto const address = boost::asio::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(8083);

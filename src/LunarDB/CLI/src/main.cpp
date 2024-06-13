@@ -112,8 +112,8 @@ auto const on_error = [](auto error) {
 
 int main(int argc, char const* argv[])
 {
-    LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
+    LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
 
     std::istream* input_stream_ptr{&std::cin};
     std::ifstream input_file{};

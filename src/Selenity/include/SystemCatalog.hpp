@@ -83,21 +83,31 @@ private: // singleton
 private: // private API
     void loadConfiguration();
 
+    void loadSystemConfiguration();
+
 public: // overrides
     std::filesystem::path getHomePath() const override;
     std::filesystem::path getDataHomePath() const override;
     std::filesystem::path getCatalogFilePath() const override;
 
-private: // fields
+private: // data structures
     struct DatabaseInUse
     {
         std::string name;
         Common::CppExtensions::UniqueID uid;
     };
+    struct Config
+    {
+        std::filesystem::path home_path{};
+    };
+
+private: // fields
     std::optional<DatabaseInUse> m_database_in_use{std::nullopt};
 
     std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>>
         m_current_selection{};
+
+    Config m_config;
 };
 
 } // namespace LunarDB::Selenity::API
