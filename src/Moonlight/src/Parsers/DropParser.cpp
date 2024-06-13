@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"drop"};
 
 API::ParsedQuery Drop::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'drop' query");
+    CLOG_VERBOSE("Drop::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Drop>();
     auto& out = out_parsed_query.get<Common::QueryData::Drop>();

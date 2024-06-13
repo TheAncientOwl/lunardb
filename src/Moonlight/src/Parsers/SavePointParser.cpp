@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"savepoint"};
 
 API::ParsedQuery SavePoint::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'savepoint' query");
+    CLOG_VERBOSE("SavePoint::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::SavePoint>();
     auto& out = out_parsed_query.get<Common::QueryData::SavePoint>();

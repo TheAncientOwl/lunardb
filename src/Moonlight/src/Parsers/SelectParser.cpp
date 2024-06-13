@@ -36,7 +36,7 @@ Common::QueryData::Select::Order parseOrderBy(std::string_view str)
 
 API::ParsedQuery Select::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'select' query");
+    CLOG_VERBOSE("Select::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Select>();
     auto& out = out_parsed_query.get<Common::QueryData::Select>();

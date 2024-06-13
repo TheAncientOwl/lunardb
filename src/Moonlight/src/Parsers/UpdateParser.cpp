@@ -39,7 +39,7 @@ Common::QueryData::Update::Modify parseModify(std::string_view str)
 
 API::ParsedQuery Update::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'update' query");
+    CLOG_VERBOSE("Update::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Update>();
     auto& out = out_parsed_query.get<Common::QueryData::Update>();

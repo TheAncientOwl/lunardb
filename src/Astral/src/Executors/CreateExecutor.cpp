@@ -39,7 +39,7 @@ void createMultiple(Common::QueryData::Create const& config)
 
 void Create::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'create' query");
+    CLOG_VERBOSE("Create::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Create>();
 

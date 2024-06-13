@@ -10,7 +10,8 @@ namespace LunarDB::Astral::Implementation {
 
 void Revoke::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'revoke' query");
+    CLOG_VERBOSE("Revoke::execute()");
+
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
     auto database_in_use{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
 

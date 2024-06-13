@@ -10,7 +10,8 @@ namespace LunarDB::Astral::Implementation {
 
 void Grant::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'grant' query");
+    CLOG_VERBOSE("Grant::execute()");
+
     auto& users_catalog{Celestial::API::UsersCatalog::Instance()};
     auto database_in_use{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
 

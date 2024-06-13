@@ -7,7 +7,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Migrate::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'migrate' query");
+    CLOG_VERBOSE("Migrate::execute()");
 
     // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Migrate>();

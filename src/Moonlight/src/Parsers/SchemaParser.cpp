@@ -83,7 +83,7 @@ Common::QueryData::Schema::Field parseField(std::string_view str)
 
 API::ParsedQuery Schema::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'schema' query");
+    CLOG_VERBOSE("Schema::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Schema>();
     auto& out = out_parsed_query.get<Common::QueryData::Schema>();

@@ -17,7 +17,7 @@ constexpr auto c_query_prefix{"revoke"};
 
 API::ParsedQuery Revoke::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'revoke' query");
+    CLOG_VERBOSE("Revoke::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Revoke>();
     auto& out = out_parsed_query.get<Common::QueryData::Revoke>();

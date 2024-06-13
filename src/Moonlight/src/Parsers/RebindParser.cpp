@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"rebind"};
 
 API::ParsedQuery Rebind::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'rebind' query");
+    CLOG_VERBOSE("Rebind::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rebind>();
     auto& out = out_parsed_query.get<Common::QueryData::Rebind>();

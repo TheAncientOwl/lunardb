@@ -8,7 +8,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Database::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'database' query");
+    CLOG_VERBOSE("Database::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Database>();
 

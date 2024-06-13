@@ -7,7 +7,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Commit::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'commit' query");
+    CLOG_VERBOSE("Commit::execute()");
 
     // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Commit>();

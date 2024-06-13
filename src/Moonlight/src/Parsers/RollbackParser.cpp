@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"rollback"};
 
 API::ParsedQuery Rollback::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'rollback' query");
+    CLOG_VERBOSE("Rollback::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rollback>();
     auto& out = out_parsed_query.get<Common::QueryData::Rollback>();

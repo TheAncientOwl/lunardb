@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"rename"};
 
 API::ParsedQuery Rename::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'rename' query");
+    CLOG_VERBOSE("Rename::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Rename>();
     auto& out = out_parsed_query.get<Common::QueryData::Rename>();

@@ -7,7 +7,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Rename::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'rename' query");
+    CLOG_VERBOSE("Rename::execute()");
 
     // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Rename>();

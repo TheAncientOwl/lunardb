@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Drop::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'drop' query");
+    CLOG_VERBOSE("Drop::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Drop>();
 

@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"truncate"};
 
 API::ParsedQuery Truncate::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'truncate' query");
+    CLOG_VERBOSE("Truncate::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Truncate>();
     auto& out = out_parsed_query.get<Common::QueryData::Truncate>();

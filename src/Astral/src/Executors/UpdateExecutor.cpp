@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Update::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'update' query");
+    CLOG_VERBOSE("Update::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Update>();
 

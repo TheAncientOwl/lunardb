@@ -18,7 +18,7 @@ ParsedQuery parseQuery(std::string_view query)
     namespace DataStructures = CppExtensions::DataStructures;
     namespace StringUtils = CppExtensions::StringUtils;
 
-    CLOG_VERBOSE("Parsing query: ", query);
+    CLOG_VERBOSE("parseQuery(): Parsing query ->", query);
 
     StringUtils::trim(query);
 
@@ -50,11 +50,12 @@ ParsedQuery parseQuery(std::string_view query)
     if (static_cast<bool>(parser_opt))
     {
         auto const parsed_query{parser_opt.value()(query)};
-        CLOG_VERBOSE("Query parsed successfully: ", query);
+        CLOG_VERBOSE("parseQuery(): Query parsed successfully ->", query);
         return parsed_query;
     }
     else
     {
+        CLOG_VERBOSE("parseQuery(): Invalid query syntax ->", query);
         throw Errors::buildError("Invalid query syntax");
     }
 }

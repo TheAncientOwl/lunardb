@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Rebind::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'rebind' query");
+    CLOG_VERBOSE("Rebind::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Rebind>();
 

@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Truncate::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'truncate' query");
+    CLOG_VERBOSE("Truncate::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Truncate>();
 

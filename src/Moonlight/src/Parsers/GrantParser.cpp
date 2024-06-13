@@ -17,7 +17,7 @@ constexpr auto c_query_prefix{"grant"};
 
 API::ParsedQuery Grant::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'grant' query");
+    CLOG_VERBOSE("Grant::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Grant>();
     auto& out = out_parsed_query.get<Common::QueryData::Grant>();

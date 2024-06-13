@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Delete::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'delete' query");
+    CLOG_VERBOSE("Delete::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Delete>();
 

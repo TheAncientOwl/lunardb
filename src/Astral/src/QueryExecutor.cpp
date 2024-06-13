@@ -13,7 +13,7 @@ namespace LunarDB::Astral::API {
 void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
 {
     CLOG_VERBOSE(
-        "Executing query: ",
+        "executeQuery(): Executing query ->",
         LunarDB::Common::QueryData::Primitives::QueryType::toString(parsed_query.type()));
 
     namespace DataStructures = LunarDB::Common::CppExtensions::DataStructures;
@@ -47,13 +47,15 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
     {
         executor_opt.value()(parsed_query);
         CLOG_VERBOSE(
+            "executeQuery(): ",
             LunarDB::Common::QueryData::Primitives::QueryType::toString(parsed_query.type()),
             "Query executed successfully");
     }
     else
     {
-        CLOG_CRITICAL("Unknown query type: ", static_cast<std::uint64_t>(parsed_query.type()));
-        // TODO: Add throw statement...
+        CLOG_CRITICAL(
+            "parseQuery(): Unknown query type: ", static_cast<std::uint64_t>(parsed_query.type()));
+        throw std::runtime_error{"Invalid query type"};
     }
 }
 

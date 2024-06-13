@@ -9,7 +9,8 @@ namespace LunarDB::Astral::Implementation {
 
 void Schema::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'schema' query");
+    CLOG_VERBOSE("Schema::execute()");
+
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
     auto const& query = parsed_query.get<Common::QueryData::Schema>();

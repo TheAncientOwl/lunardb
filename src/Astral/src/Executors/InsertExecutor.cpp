@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Insert::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'insert' query");
+    CLOG_VERBOSE("Insert::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Insert>();
 

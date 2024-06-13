@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"user"};
 
 API::ParsedQuery User::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'user' query");
+    CLOG_VERBOSE("User::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::User>();
     auto& out = out_parsed_query.get<Common::QueryData::User>();

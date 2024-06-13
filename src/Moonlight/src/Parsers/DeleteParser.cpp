@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"delete"};
 
 API::ParsedQuery Delete::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'delete' query");
+    CLOG_VERBOSE("Delete::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Delete>();
     auto& out = out_parsed_query.get<Common::QueryData::Delete>();

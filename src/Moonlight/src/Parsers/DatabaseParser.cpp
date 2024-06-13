@@ -17,7 +17,7 @@ constexpr auto c_query_prefix{"database"};
 
 API::ParsedQuery Database::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'database' query");
+    CLOG_VERBOSE("Database::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Database>();
     auto& out = out_parsed_query.get<Common::QueryData::Database>();

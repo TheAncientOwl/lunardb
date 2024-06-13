@@ -39,7 +39,7 @@ Mapping parseMapping(std::string_view str)
 
 API::ParsedQuery Migrate::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'migrate' query");
+    CLOG_VERBOSE("Migrate::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Migrate>();
     auto& out = out_parsed_query.get<Common::QueryData::Migrate>();

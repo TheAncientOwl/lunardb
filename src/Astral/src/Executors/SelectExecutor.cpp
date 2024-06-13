@@ -9,7 +9,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Select::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'select' query");
+    CLOG_VERBOSE("Select::execute()");
 
     auto const& query = parsed_query.get<Common::QueryData::Select>();
 

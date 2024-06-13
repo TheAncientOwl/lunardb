@@ -163,7 +163,7 @@ Common::QueryData::Create::Multiple parseMultiple(QueryExtractor extractor)
 
 API::ParsedQuery Create::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'create' query");
+    CLOG_VERBOSE("Create::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Create>();
     auto& out = out_parsed_query.get<Common::QueryData::Create>();

@@ -7,7 +7,7 @@ namespace LunarDB::Astral::Implementation {
 
 void SavePoint::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'savepoint' query");
+    CLOG_VERBOSE("SavePoint::execute()");
 
     // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::SavePoint>();

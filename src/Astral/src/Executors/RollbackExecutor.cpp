@@ -7,7 +7,7 @@ namespace LunarDB::Astral::Implementation {
 
 void Rollback::execute(Moonlight::API::ParsedQuery const& parsed_query)
 {
-    CLOG_VERBOSE("Executing 'rollback' query");
+    CLOG_VERBOSE("Rollback::execute()");
 
     // TODO: Provide implementation
     auto const& query = parsed_query.get<Common::QueryData::Rollback>();

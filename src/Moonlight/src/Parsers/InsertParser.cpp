@@ -139,7 +139,7 @@ std::vector<Common::QueryData::Insert::Object> parseObjects(std::string_view str
 
 API::ParsedQuery Insert::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'insert' query");
+    CLOG_VERBOSE("Insert::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Insert>();
     auto& out = out_parsed_query.get<Common::QueryData::Insert>();

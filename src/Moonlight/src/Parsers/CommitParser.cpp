@@ -15,7 +15,7 @@ constexpr auto c_query_prefix{"commit"};
 
 API::ParsedQuery Commit::parse(QueryExtractor extractor)
 {
-    CLOG_VERBOSE("Parsing 'commit' query");
+    CLOG_VERBOSE("Commit::parse()");
 
     auto out_parsed_query = API::ParsedQuery::make<Common::QueryData::Commit>();
 
