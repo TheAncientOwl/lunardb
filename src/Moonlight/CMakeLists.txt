@@ -10,8 +10,8 @@ add_lunar_library(
     PRIVATE_DEPENDENCIES
         LunarDB_Common_QueryData
         LunarDB_Common_CppExtensions
-        LunarDB_Common_Simdjson
         LunarDB_Crescentum
+        simdjson::simdjson
 
     SOURCE_FILES
         src/ParsedQuery.cpp

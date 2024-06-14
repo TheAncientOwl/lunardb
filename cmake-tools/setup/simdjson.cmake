@@ -1,0 +1,1 @@
+CPMAddPackage("gh:simdjson/simdjson@3.9.4")
