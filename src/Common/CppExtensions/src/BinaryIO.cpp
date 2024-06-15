@@ -21,8 +21,7 @@ void serialize(std::ostream& os, std::string const& str)
 template <>
 void serialize(std::ostream& os, std::filesystem::path const& path)
 {
-    std::string_view const path_sv{path.c_str()};
-    serialize(os, path_sv);
+    serialize(os, path.string());
 }
 
 } // namespace Serializer
