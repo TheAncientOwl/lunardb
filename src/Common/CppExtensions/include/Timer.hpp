@@ -1,6 +1,8 @@
 #pragma once
 
 #include <chrono>
+#include <string>
+
 namespace LunarDB::Common::CppExtensions {
 
 class Timer

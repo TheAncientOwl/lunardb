@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-#include "LunarDB/Celestial/UsersCatalog.hpp"
 #include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Common/QueryData/helpers/Init.hpp"
 #include "LunarDB/Common/QueryData/helpers/Operators.hpp"

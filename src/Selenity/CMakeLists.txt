@@ -18,7 +18,6 @@ add_lunar_library(
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
         LunarDB_Moonlight
-        nlohmann_json::nlohmann_json
         
     SOURCE_FILES
         src/Managers/DatabaseManager.cpp
@@ -34,3 +33,5 @@ add_lunar_library(
 if (LUNAR_ENABLE_TESTING AND LUNAR_BUILD_SELENITY_TESTS)
     include(${CMAKE_CURRENT_SOURCE_DIR}/test/setup_unit_tests.cmake)
 endif()
+
+target_link_libraries(LunarDB_Selenity PUBLIC nlohmann_json::nlohmann_json)

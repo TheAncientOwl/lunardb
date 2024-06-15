@@ -36,8 +36,9 @@ std::string Timer::elapsedExtended() const
 
     std::ostringstream oss{};
 
-    oss << hours << ":" << minutes << ":" << seconds << ":" << milliseconds << ":" << microseconds
-        << ":" << nanoseconds;
+    oss << hours.count() << "h:" << minutes.count() << "m:" << seconds.count()
+        << "s:" << milliseconds.count() << "ms:" << microseconds.count()
+        << "us:" << nanoseconds.count() << "ns";
 
     return oss.str();
 }
