@@ -10,7 +10,7 @@ add_lunar_library(
         LunarDB_Common_CppExtensions
         LunarDB_Selenity
         LunarDB_Crescentum
-        LunarDB_Celestial
+        # LunarDB_Celestial
 
     SOURCE_FILES
         src/QueryExecutor.cpp

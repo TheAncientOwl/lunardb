@@ -37,7 +37,7 @@ UniqueID UniqueID::generate()
 
     std::random_device random_device{};
     std::mt19937 generator(random_device());
-    std::uniform_int_distribution<unsigned char> distribution(0, 255);
+    std::uniform_int_distribution<std::uint16_t> distribution(0, 255);
 
     for (auto& byte : uuid)
     {

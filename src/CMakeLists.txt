@@ -1,6 +1,6 @@
 add_subdirectory(Astral)
 add_subdirectory(BrightMoon)
-add_subdirectory(Celestial)
+# add_subdirectory(Celestial)
 add_subdirectory(Common)
 add_subdirectory(Crescentum)
 add_subdirectory(Moonlight)
