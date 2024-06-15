@@ -17,6 +17,7 @@
   "C_Cpp.default.cStandard": "c17",
   "C_Cpp.doxygen.generatedStyle": "///",
   "C_Cpp.enhancedColorization": "enabled",
+  "cmake.preferredGenerators": ["Ninja", "Visual Studio 17 2022"],
   "files.associations": {
     "*.rmd": "markdown",
     "array": "cpp",
