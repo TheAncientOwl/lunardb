@@ -105,6 +105,12 @@
     "source_location": "cpp",
     "rope": "cpp",
     "shared_mutex": "cpp",
-    "cfenv": "cpp"
+    "cfenv": "cpp",
+    "barrier": "cpp",
+    "csetjmp": "cpp",
+    "slist": "cpp",
+    "latch": "cpp",
+    "scoped_allocator": "cpp",
+    "syncstream": "cpp"
   }
 }

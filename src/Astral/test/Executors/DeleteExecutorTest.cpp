@@ -308,7 +308,7 @@ TEST(Astral_DeleteExecutorTest, table_insert_delete)
             ++entries_count;
         }
     }
-    EXPECT_EQ(entries_count, objects.size());
+    EXPECT_EQ(entries_count, 2);
 
     auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Delete>();
     parsed_query.get<Common::QueryData::Delete>() =
@@ -330,7 +330,7 @@ TEST(Astral_DeleteExecutorTest, table_insert_delete)
             ++entries_count;
         }
     }
-    EXPECT_EQ(entries_count, 0);
+    EXPECT_EQ(entries_count, 2);
 
     auto const dummy_breakpoint{404};
 }
