@@ -14,7 +14,7 @@ add_lunar_executable(
         LunarDB_Crescentum
         LunarDB_Moonlight
         LunarDB_Selenity
-        Boost::system
+        Boost::beast
 
     SOURCE_FILES
         src/main.cpp

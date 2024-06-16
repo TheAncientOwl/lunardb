@@ -1,7 +1,7 @@
 #include "Errors.hpp"
-#include "LunarDB/Common/Simdjson/simdjson.hpp"
 #include "QueryParsers.hpp"
 #include "Utils.hpp"
+#include "simdjson.h"
 
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)

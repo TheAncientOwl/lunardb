@@ -87,7 +87,7 @@ void insert(
     std::ofstream table_file(document_file_path, std::ios::out | std::ios::app | std::ios::binary);
     if (table_file.is_open())
     {
-        auto const bson{nlohmann::json::to_bson(json)};
+        auto bson{nlohmann::json::to_bson(json)};
         LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
         table_file.close();
 

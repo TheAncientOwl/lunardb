@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <tuple>
 
 namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts {
@@ -144,6 +146,7 @@ template <typename T>
 concept IterableSerializable =
     Container::Sizeable<T> && Container::Beginable<T> && Container::Endable<T> &&
     Container::BeginDerefable<T> && Container::NeqableBeginAndEnd<T> &&
-    !Container::BeginDerefToVoid<T> && Container::BeginAndEndCopyConstructibleAndDestructible<T>;
+    !Container::BeginDerefToVoid<T> && Container::BeginAndEndCopyConstructibleAndDestructible<T> &&
+    !std::is_same_v<T, std::string> && !std::is_same_v<T, std::string_view>;
 
 } // namespace LunarDB::Common::CppExtensions::BinaryIO::Concepts

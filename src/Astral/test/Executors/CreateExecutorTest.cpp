@@ -33,12 +33,12 @@ TEST(Astral_CreateExecutorTest, create)
                 Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
 
-    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
-    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
 
     auto const c_collection_name{"SomeCollection"s};
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
@@ -54,12 +54,12 @@ TEST(Astral_CreateExecutorTest, create)
                         .bindings(c_bindings)
                         .blended(false))
             .multiple(std::nullopt);
-    EXPECT_NO_THROW({ Astral::Implementation::Create::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Create::execute(parsed_query); });
     EXPECT_THROW({ Astral::Implementation::Create::execute(parsed_query); }, std::runtime_error);
 
     std::shared_ptr<Selenity::API::Managers::DatabaseManager> manager{nullptr};
-    EXPECT_NO_THROW({ manager = system_catalog.getDatabaseInUse(); });
-    EXPECT_NO_THROW({ manager->getCollection(c_collection_name); });
+    ASSERT_NO_THROW({ manager = system_catalog.getDatabaseInUse(); });
+    ASSERT_NO_THROW({ manager->getCollection(c_collection_name); });
     auto const& collection{manager->getCollection(c_collection_name)};
     auto const& config{collection->getConfig()};
 

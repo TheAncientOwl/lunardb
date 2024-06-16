@@ -63,7 +63,7 @@ TEST(Astral_RevokeExecutorTest, revoke)
                     Common::QueryData::Primitives::EUserPermissionType::Select,
                     Common::QueryData::Primitives::EUserPermissionType::Update});
 
-        EXPECT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
+        ASSERT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
     }
 
     // 2. Testing
@@ -76,10 +76,10 @@ TEST(Astral_RevokeExecutorTest, revoke)
                 Common::QueryData::Primitives::EUserPermissionType::Insert,
                 Common::QueryData::Primitives::EUserPermissionType::Update});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Revoke::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Revoke::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Revoke::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Revoke::execute(parsed_query); });
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_TRUE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -88,7 +88,7 @@ TEST(Astral_RevokeExecutorTest, revoke)
                 c_collection_uid}));
     });
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -96,7 +96,7 @@ TEST(Astral_RevokeExecutorTest, revoke)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -104,7 +104,7 @@ TEST(Astral_RevokeExecutorTest, revoke)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -112,7 +112,7 @@ TEST(Astral_RevokeExecutorTest, revoke)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{

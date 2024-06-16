@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iomanip>
 #include <ranges>
 #include <sstream>
 
@@ -50,7 +51,8 @@ void Logger::log(ELogLevel level, ELunarModule module, Args&&... args)
 
     std::ostringstream ss{};
 
-    ss << c_sep_color << "[" << lvl_color << hms << c_sep_color << "] |";
+    ss << c_sep_color << "[" << lvl_color << hms.hours().count() << ":" << hms.minutes().count()
+       << ":" << hms.seconds().count() << c_sep_color << "] |";
     ss << lvl_color << std::right << std::setw(9) << lvl_str << c_sep_color << " | ";
     ss << lvl_color << std::right << std::setw(15) << LunarModule::toString(module) << c_sep_color
        << " | ";

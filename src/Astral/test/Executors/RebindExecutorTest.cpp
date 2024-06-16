@@ -20,11 +20,11 @@ TEST(Astral_RebindExecutorTest, rebind)
     auto& system_catalog{Selenity::API::SystemCatalog::Instance()};
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
-    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
-    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
 
     std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
-    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+    ASSERT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
 
     // create collection 1
     namespace Init = Common::QueryData::Init;
@@ -38,15 +38,15 @@ TEST(Astral_RebindExecutorTest, rebind)
                 Init::SchemaInit::FieldInit{}.name("field_4").type("DateTime").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_5").type("Integer").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema1.name); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema1); });
+    ASSERT_NO_THROW({ schemas_catalog.getSchema(c_schema1.name); });
 
     auto const c_collection_name1{"SomeCollection1"s};
     auto const c_structure_type1{Common::QueryData::Primitives::EStructureType::Collection};
     auto const c_bindings1{std::vector<Common::QueryData::Create::Single::Binding>{}};
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         database->createCollection(c_collection_name1, c_schema1.name, c_structure_type1, c_bindings1);
     });
 
@@ -58,15 +58,15 @@ TEST(Astral_RebindExecutorTest, rebind)
             .fields(std::vector<Common::QueryData::Schema::Field>{
                 Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_10").type("Float").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema2.name); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema2); });
+    ASSERT_NO_THROW({ schemas_catalog.getSchema(c_schema2.name); });
 
     auto const c_collection_name2{"SomeCollection2"s};
     auto const c_structure_type2{Common::QueryData::Primitives::EStructureType::Collection};
     auto const c_bindings2{std::vector<Common::QueryData::Create::Single::Binding>{}};
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         database->createCollection(c_collection_name2, c_schema2.name, c_structure_type2, c_bindings2);
     });
 
@@ -77,7 +77,7 @@ TEST(Astral_RebindExecutorTest, rebind)
                                                         .field("field_1")
                                                         .bind_structure_name(c_collection_name1)
                                                         .clean(std::nullopt);
-    EXPECT_NO_THROW({ Astral::Implementation::Rebind::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Rebind::execute(parsed_query); });
 
     parsed_query.get<Common::QueryData::Rebind>() = Common::QueryData::Init::RebindInit{}
                                                         .structure_name(c_collection_name2)
