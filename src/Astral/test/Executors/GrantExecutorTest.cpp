@@ -66,10 +66,10 @@ TEST(Astral_GrantExecutorTest, grant)
                 Common::QueryData::Primitives::EUserPermissionType::Select,
                 Common::QueryData::Primitives::EUserPermissionType::Update});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Grant::execute(parsed_query); });
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_TRUE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -77,7 +77,7 @@ TEST(Astral_GrantExecutorTest, grant)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_TRUE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -85,7 +85,7 @@ TEST(Astral_GrantExecutorTest, grant)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_TRUE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -94,7 +94,7 @@ TEST(Astral_GrantExecutorTest, grant)
                 c_collection_uid}));
     });
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
@@ -102,7 +102,7 @@ TEST(Astral_GrantExecutorTest, grant)
                 c_database_in_use_uid,
                 c_collection_uid}));
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{

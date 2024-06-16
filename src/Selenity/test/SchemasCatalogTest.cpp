@@ -50,23 +50,23 @@ TEST(Selenity_SchemasCatalogTest, schemas)
                 Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").nullable(false).array(false)});
 
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema1); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema1); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({
         EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
     });
 
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(schema2); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema2); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema2); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(schema2); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({
         EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
     });
 

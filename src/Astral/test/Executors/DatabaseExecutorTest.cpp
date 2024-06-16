@@ -23,10 +23,10 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
         Common::QueryData::Init::DatabaseInit{}
             .name(c_database_name)
             .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Create);
-    EXPECT_NO_THROW({ Astral::Implementation::Database::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Database::execute(parsed_query); });
     EXPECT_THROW({ Astral::Implementation::Database::execute(parsed_query); }, std::runtime_error);
 
-    EXPECT_NO_THROW({ catalog.useDatabase(c_database_name); });
+    ASSERT_NO_THROW({ catalog.useDatabase(c_database_name); });
     ASSERT_TRUE(catalog.getDatabaseInUse() != nullptr);
     auto const database_home_path = catalog.getDatabaseInUse()->getHomePath();
     EXPECT_TRUE(std::filesystem::exists(database_home_path));
@@ -58,7 +58,7 @@ TEST(Astral_DatabaseExecutorTest, create_drop_use)
         Common::QueryData::Init::DatabaseInit{}
             .name(c_database_name)
             .operation_type(Common::QueryData::Primitives::EDatabaseOperationType::Drop);
-    EXPECT_NO_THROW({ Astral::Implementation::Database::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Database::execute(parsed_query); });
     EXPECT_THROW({ Astral::Implementation::Database::execute(parsed_query); }, std::runtime_error);
     EXPECT_THROW({ catalog.useDatabase(c_database_name); }, std::runtime_error);
     EXPECT_FALSE(std::filesystem::exists(database_home_path));

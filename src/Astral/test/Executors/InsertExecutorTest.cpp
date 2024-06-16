@@ -22,11 +22,11 @@ TEST(Astral_InsertExecutorTest, document_insert)
     system_catalog.loadConfigs();
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
-    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
-    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
 
     std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
-    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+    ASSERT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
 
     // create collection
     namespace Init = Common::QueryData::Init;
@@ -37,15 +37,15 @@ TEST(Astral_InsertExecutorTest, document_insert)
                 Init::SchemaInit::FieldInit{}.name("salary").type("float").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("name").type("string").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("birth_date").type("datetime").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
 
     auto const c_collection_name{"SomeCollection"s};
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Collection};
     auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         database->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
     });
 
@@ -78,12 +78,12 @@ TEST(Astral_InsertExecutorTest, document_insert)
     obj5.entries.emplace("birth_date", "09/10/1985");
 
     std::shared_ptr<Selenity::API::Managers::Collections::AbstractManager> collection{nullptr};
-    EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
+    ASSERT_NO_THROW({ collection = database->getCollection(c_collection_name); });
 
     auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Insert>();
     parsed_query.get<Common::QueryData::Insert>() =
         Common::QueryData::Init::InsertInit{}.into(c_collection_name).objects(objects);
-    EXPECT_NO_THROW({ Astral::Implementation::Insert::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Insert::execute(parsed_query); });
 
     Common::QueryData::Select select_config =
         Init::SelectInit{}
@@ -96,7 +96,7 @@ TEST(Astral_InsertExecutorTest, document_insert)
                          .rhs("1")})));
     std::vector<std::unique_ptr<Selenity::API::Managers::Collections::AbstractManager::ICollectionEntry>>
         selected_entries{};
-    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_NO_THROW({ selected_entries = collection->select(select_config); });
     ASSERT_EQ(selected_entries.size(), objects.size());
 
     struct Object
@@ -155,11 +155,11 @@ TEST(Astral_InsertExecutorTest, table_insert)
     system_catalog.loadConfigs();
     auto& schemas_catalog{Selenity::API::SchemasCatalog::Instance()};
 
-    EXPECT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
-    EXPECT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.createDatabase(c_database_name); });
+    ASSERT_NO_THROW({ system_catalog.useDatabase(c_database_name); });
 
     std::shared_ptr<Selenity::API::Managers::DatabaseManager> database{nullptr};
-    EXPECT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
+    ASSERT_NO_THROW({ database = system_catalog.getDatabaseInUse(); });
 
     // create collection
     namespace Init = Common::QueryData::Init;
@@ -170,15 +170,15 @@ TEST(Astral_InsertExecutorTest, table_insert)
                 Init::SchemaInit::FieldInit{}.name("salary").type("float").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("name").type("string").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("birth_date").type("datetime").nullable(false).array(false)});
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
-    EXPECT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.createSchema(c_schema); });
+    ASSERT_NO_THROW({ schemas_catalog.getSchema(c_schema.name); });
 
     auto const c_collection_name{"SomeCollection"s};
     auto const c_structure_type{Common::QueryData::Primitives::EStructureType::Table};
     auto const c_bindings{std::vector<Common::QueryData::Create::Single::Binding>{}};
 
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         database->createCollection(c_collection_name, c_schema.name, c_structure_type, c_bindings);
     });
 
@@ -211,12 +211,12 @@ TEST(Astral_InsertExecutorTest, table_insert)
     obj5.entries.emplace("birth_date", "09/10/1985");
 
     std::shared_ptr<Selenity::API::Managers::Collections::AbstractManager> collection{nullptr};
-    EXPECT_NO_THROW({ collection = database->getCollection(c_collection_name); });
+    ASSERT_NO_THROW({ collection = database->getCollection(c_collection_name); });
 
     auto parsed_query = Moonlight::API::ParsedQuery::make<Common::QueryData::Insert>();
     parsed_query.get<Common::QueryData::Insert>() =
         Common::QueryData::Init::InsertInit{}.into(c_collection_name).objects(objects);
-    EXPECT_NO_THROW({ Astral::Implementation::Insert::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Insert::execute(parsed_query); });
 
     Common::QueryData::Select select_config =
         Init::SelectInit{}
@@ -229,7 +229,7 @@ TEST(Astral_InsertExecutorTest, table_insert)
                          .rhs("1")})));
     std::vector<std::unique_ptr<Selenity::API::Managers::Collections::AbstractManager::ICollectionEntry>>
         selected_entries{};
-    EXPECT_NO_THROW({ selected_entries = collection->select(select_config); });
+    ASSERT_NO_THROW({ selected_entries = collection->select(select_config); });
     ASSERT_EQ(selected_entries.size(), objects.size());
 
     struct Object

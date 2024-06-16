@@ -42,13 +42,13 @@ TEST(Astral_SchemaExecutorTest, create_schema)
                 Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").nullable(false).array(false)});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({
         EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
     });
 
@@ -64,13 +64,13 @@ TEST(Astral_SchemaExecutorTest, create_schema)
                 Init::SchemaInit::FieldInit{}.name("field_11").type("Float32").nullable(false).array(false),
                 Init::SchemaInit::FieldInit{}.name("field_12").type("Float64").nullable(false).array(false)});
 
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::Schema::execute(parsed_query); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({ std::ignore = schemas_catalog.getSchema(c_schema1_name); });
+    ASSERT_NO_THROW({
         EXPECT_TRUE(std::filesystem::exists(schemas_catalog.getSchemaFilePath(c_schema1_name)));
     });
 

@@ -35,7 +35,7 @@ TEST(Celestial_UsersCatalog, crud)
     Common::CppExtensions::UniqueID uid1{};
     Common::CppExtensions::UniqueID uid2{};
 
-    EXPECT_NO_THROW({ uid1 = catalog.createUser(c_username1, c_password1); });
+    ASSERT_NO_THROW({ uid1 = catalog.createUser(c_username1, c_password1); });
     EXPECT_THROW({ uid2 = catalog.createUser(c_username1, c_password1); }, std::runtime_error);
     EXPECT_FALSE(uid1.toString().empty());
     EXPECT_TRUE(std::filesystem::exists(c_lunar_home / "users" / (uid1.toString() + ".cfg")));
@@ -43,17 +43,17 @@ TEST(Celestial_UsersCatalog, crud)
     EXPECT_EQ(uid1, catalog.getUserUID(c_username1));
 
     // 2. updatePassword
-    EXPECT_NO_THROW({ catalog.updatePassword(uid1, "SomeUpdatedPassword1"); });
+    ASSERT_NO_THROW({ catalog.updatePassword(uid1, "SomeUpdatedPassword1"); });
     EXPECT_THROW({ catalog.updatePassword(uid2, "SomeUpdatedPassword2"); }, std::runtime_error);
 
     // 3. updatePermission
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         catalog.updatePermission(
             uid1,
             Configuration::PermissionUpdate{
                 Configuration::EPermissionUpdateType::Grant, c_insert_permission});
     });
-    EXPECT_NO_THROW({
+    ASSERT_NO_THROW({
         catalog.updatePermission(
             uid1,
             Configuration::PermissionUpdate{
@@ -75,7 +75,7 @@ TEST(Celestial_UsersCatalog, crud)
     EXPECT_THROW({ catalog.userHasPermission(uid2, c_insert_permission); }, std::runtime_error);
 
     // 4. removeUser
-    EXPECT_NO_THROW({ catalog.removeUser(uid1); });
+    ASSERT_NO_THROW({ catalog.removeUser(uid1); });
     EXPECT_THROW({ catalog.removeUser(uid1); }, std::runtime_error);
 
     EXPECT_THROW({ catalog.updatePassword(uid1, "SomeUpdatedPassword1"); }, std::runtime_error);

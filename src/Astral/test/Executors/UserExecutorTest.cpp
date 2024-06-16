@@ -21,7 +21,7 @@ TEST(Astral_UserExecutorTest, create_remove)
             .action(Common::QueryData::Primitives::EUserActionType::Create)
             .password("passwd1234");
 
-    EXPECT_NO_THROW({ Astral::Implementation::User::execute(parsed_query); });
+    ASSERT_NO_THROW({ Astral::Implementation::User::execute(parsed_query); });
     EXPECT_THROW({ Astral::Implementation::User::execute(parsed_query); }, std::runtime_error);
 
     auto const uid{users_catalog.getUserUID("some_name")};
