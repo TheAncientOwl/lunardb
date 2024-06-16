@@ -17,7 +17,7 @@
   "C_Cpp.default.cStandard": "c17",
   "C_Cpp.doxygen.generatedStyle": "///",
   "C_Cpp.enhancedColorization": "enabled",
-  "cmake.preferredGenerators": ["Ninja", "Visual Studio 17 2022"],
+  "cmake.preferredGenerators": ["Ninja"],
   "files.associations": {
     "*.rmd": "markdown",
     "array": "cpp",
@@ -99,6 +99,12 @@
     "future": "cpp",
     "cinttypes": "cpp",
     "typeindex": "cpp",
-    "*.ipp": "cpp"
+    "*.ipp": "cpp",
+    "strstream": "cpp",
+    "coroutine": "cpp",
+    "source_location": "cpp",
+    "rope": "cpp",
+    "shared_mutex": "cpp",
+    "cfenv": "cpp"
   }
 }

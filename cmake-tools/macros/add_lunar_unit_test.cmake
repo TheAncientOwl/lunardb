@@ -18,7 +18,7 @@ macro(add_lunar_unit_test)
             ${CMAKE_CURRENT_SOURCE_DIR}/src
             ${LUNAR_BUILD_INCLUDE_DIR}
     )
-    
+
     target_link_libraries(${TEST_NAME}
         PRIVATE
             gtest
@@ -26,5 +26,6 @@ macro(add_lunar_unit_test)
             ${ARG_DEPENDENCIES}
     )
 
-    gtest_discover_tests(${TEST_NAME})
+    # gtest_discover_tests(${TEST_NAME})
+    gtest_add_tests(TARGET ${TEST_NAME})
 endmacro()

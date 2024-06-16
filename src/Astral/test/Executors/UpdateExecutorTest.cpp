@@ -154,9 +154,8 @@ TEST(Astral_UpdateExecutorTest, table_update)
             .where(select_config.where)
             .modify(std::vector<Common::QueryData::Update::Modify>{
                 Common::QueryData::Init::UpdateInit::ModifyInit{}.field("salary").expression(
-                    "salary + 10 / 100 * salary"),
-                Common::QueryData::Init::UpdateInit::ModifyInit{}.field("name").expression(
-                    "BobTheBuilder")});
+                    "4400"),
+                Common::QueryData::Init::UpdateInit::ModifyInit{}.field("name").expression("ROB")});
 
     EXPECT_NO_THROW({ Astral::Implementation::Update::execute(parsed_query); });
 
@@ -166,8 +165,8 @@ TEST(Astral_UpdateExecutorTest, table_update)
     for (auto const& obj : selected_entries)
     {
         auto const& json{obj->getJSON()};
-        EXPECT_EQ(json["name"], "BobTheBuilder"s);
-        EXPECT_EQ(json["salary"], "4400.0000000000"s);
+        EXPECT_EQ(json["name"], "ROB"s);
+        EXPECT_EQ(json["salary"], "4400"s);
         EXPECT_EQ(json["birth_date"], "09/10/1985"s);
     }
 

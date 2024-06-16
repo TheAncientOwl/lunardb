@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Selenity::API {
@@ -21,11 +22,18 @@ SystemCatalog::~SystemCatalog()
 
 std::filesystem::path SystemCatalog::getLunarHomePath() const
 {
-    if (!m_config.home_path.empty() && !std::filesystem::exists(m_config.home_path))
+#ifdef LUNAR_ENABLE_TESTING
+    std::filesystem::path lunar_home_path{LUNAR_TESTING_HOME_PATH};
+#else
+    auto const& lunar_home_path{m_config.home_path};
+#endif
+
+    if (!lunar_home_path.empty() && !std::filesystem::exists(lunar_home_path))
     {
-        std::filesystem::create_directories(m_config.home_path);
+        std::filesystem::create_directories(lunar_home_path);
     }
-    return m_config.home_path;
+
+    return lunar_home_path;
 }
 
 std::filesystem::path SystemCatalog::getHomePath() const

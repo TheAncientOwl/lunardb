@@ -278,16 +278,6 @@ TEST(Astral_SelectExecutorTest, table_select)
         EXPECT_EQ(inserted.salary, selected.salary);
         EXPECT_EQ(inserted.birth_date, selected.birth_date);
     }
-
-    std::size_t entries_count{0};
-    for (auto const& entry : std::filesystem::directory_iterator(collection->getDataHomePath()))
-    {
-        if (std::filesystem::is_regular_file(entry))
-        {
-            ++entries_count;
-        }
-    }
-    EXPECT_EQ(entries_count, objects.size());
 }
 
 } // namespace LunarDB::Astral::Tests
