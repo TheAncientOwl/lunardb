@@ -4,6 +4,7 @@ add_lunar_library(
 
     API_HEADER_FILES
         include/QueryParser.hpp
+        include/QueryParsers.hpp
         include/ParsedQuery.hpp
         include/QueryExtractor.hpp
 

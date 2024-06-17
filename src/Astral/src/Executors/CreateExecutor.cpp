@@ -1,7 +1,7 @@
 #include <cassert>
 
+#include "LunarDB/Astral/QueryExecutors.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
-#include "QueryExecutors.hpp"
 
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)

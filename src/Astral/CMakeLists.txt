@@ -4,6 +4,7 @@ add_lunar_library(
 
     API_HEADER_FILES
         include/QueryExecutor.hpp
+        include/QueryExecutors.hpp
 
     PRIVATE_DEPENDENCIES
         LunarDB_Common_QueryData

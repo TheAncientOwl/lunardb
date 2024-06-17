@@ -60,7 +60,7 @@ TEST(Moonlight_UpdateParserTest, success01)
                 })
                 })
         ))
-        .modify(std::vector<Update::Modify>{
+        .modify(std::vector<Common::QueryData::Update::Modify>{
         Init::UpdateInit::ModifyInit{}.field("field1").expression("field1 * 1.5 + 2"),
             Init::UpdateInit::ModifyInit{}.field("field2").expression(R"(field3 + "_some_suffix")")
     });
@@ -115,7 +115,7 @@ TEST(Moonlight_UpdateParserTest, success02)
                 })
                 })
         ))
-        .modify(std::vector<Update::Modify>{
+        .modify(std::vector<Common::QueryData::Update::Modify>{
         Init::UpdateInit::ModifyInit{}.field("history1").expression(R"(%%[{"username1":"user1","message1":"m1","time":12345}]%%)"),
             Init::UpdateInit::ModifyInit{}.field("history2").expression(R"(%%[{"username2":"user2","message2":"m2","time":12345}]%%)")
     });

@@ -1,18 +1,18 @@
 #pragma once
 
-#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
+#include "LunarDB/Common/CppExtensions/FlatMap.hpp"
 
 namespace LunarDB::Common::CppExtensions::DataStructures {
 
-template <Item Data, std::size_t Size>
+template <Concepts::Item Data, std::size_t Size>
 template <typename... Args>
-ItemArray<Data, Size>::ItemArray(Args&&... args) : m_data{std::forward<Args>(args)...}
+FlatMap<Data, Size>::FlatMap(Args&&... args) : m_data{std::forward<Args>(args)...}
 {
 }
 
-template <Item Data, std::size_t Size>
+template <Concepts::Item Data, std::size_t Size>
 template <typename Callable>
-std::optional<typename Data::second_type> ItemArray<Data, Size>::find_if(Callable&& callable) const
+std::optional<typename Data::second_type> FlatMap<Data, Size>::find_if(Callable&& callable) const
 {
     auto const it = std::find_if(std::cbegin(m_data), std::cend(m_data), callable);
 

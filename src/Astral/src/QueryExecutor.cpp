@@ -1,14 +1,22 @@
 #include <algorithm>
 #include <array>
 
-#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
-#include "QueryExecutor.hpp"
-#include "QueryExecutors.hpp"
+#include "LunarDB/Astral/QueryExecutor.hpp"
+#include "LunarDB/Astral/QueryExecutors.hpp"
 
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::API {
+
+LUNAR_SINGLETON_INIT_IMPL(QueryExecutorsManager)
+{
+}
+
+void QueryExecutorsManager::addExecutor(Implementation::ExecutorBundle bundle)
+{
+    m_parsers.emplace(std::move(bundle));
+}
 
 void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
 {
@@ -18,28 +26,10 @@ void executeQuery(Moonlight::API::ParsedQuery const& parsed_query)
 
     namespace DataStructures = LunarDB::Common::CppExtensions::DataStructures;
 
-    static const DataStructures::ItemArray<Implementation::ExecutorBundle, 18> s_executors{
-        Implementation::Create::makeExecutor(),
-        Implementation::Drop::makeExecutor(),
-        Implementation::Migrate::makeExecutor(),
-        Implementation::Truncate::makeExecutor(),
-        Implementation::Rename::makeExecutor(),
-        Implementation::Select::makeExecutor(),
-        Implementation::Insert::makeExecutor(),
-        Implementation::Update::makeExecutor(),
-        Implementation::Delete::makeExecutor(),
-        Implementation::Grant::makeExecutor(),
-        Implementation::Revoke::makeExecutor(),
-        Implementation::Commit::makeExecutor(),
-        Implementation::Rollback::makeExecutor(),
-        Implementation::SavePoint::makeExecutor(),
-        Implementation::Database::makeExecutor(),
-        Implementation::Rebind::makeExecutor(),
-        Implementation::Schema::makeExecutor(),
-        Implementation::User::makeExecutor()};
+    auto const& executors{QueryExecutorsManager::Instance()};
 
     auto const executor_opt =
-        s_executors.find_if([&parsed_query](Implementation::ExecutorBundle const& query_executor) {
+        executors.find_if([&parsed_query](Implementation::ExecutorBundle const& query_executor) {
             return parsed_query.type() == query_executor.first;
         });
 

@@ -26,7 +26,7 @@ TEST(Moonlight_SchemaParserTest, success01)
         "}";
     auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
-        .fields(std::vector<Schema::Field>{
+        .fields(std::vector<Common::QueryData::Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_1").type("Rid").nullable(false).array(false),
             Init::SchemaInit::FieldInit{}.name("field_2").type("String").nullable(false).array(false),
             Init::SchemaInit::FieldInit{}.name("field_3").type("Boolean").nullable(false).array(false),
@@ -62,7 +62,7 @@ TEST(Moonlight_SchemaParserTest, success02)
         "}";
     auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
-        .fields(std::vector<Schema::Field>{
+        .fields(std::vector<Common::QueryData::Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_opt_1").type("Rid").nullable(true).array(false),
             Init::SchemaInit::FieldInit{}.name("field_opt_2").type("String").nullable(true).array(false),
             Init::SchemaInit::FieldInit{}.name("field_opt_3").type("Boolean").nullable(true).array(false),
@@ -99,7 +99,7 @@ TEST(Moonlight_SchemaParserTest, success03)
         "}";
     auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
-        .fields(std::vector<Schema::Field>{
+        .fields(std::vector<Common::QueryData::Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_arr_1").type("Rid").nullable(false).array(true),
             Init::SchemaInit::FieldInit{}.name("field_arr_2").type("String").nullable(false).array(true),
             Init::SchemaInit::FieldInit{}.name("field_arr_3").type("Boolean").nullable(false).array(true),
@@ -126,7 +126,7 @@ TEST(Moonlight_SchemaParserTest, success04)
         "}";
     auto const expected = Init::SchemaInit{}
         .name("SomeSchema")
-        .fields(std::vector<Schema::Field>{
+        .fields(std::vector<Common::QueryData::Schema::Field>{
         Init::SchemaInit::FieldInit{}.name("field_1").type("SomeOtherSchema1").nullable(false).array(false),
             Init::SchemaInit::FieldInit{}.name("field_2").type("SomeOtherSchema2").nullable(true).array(false),
             Init::SchemaInit::FieldInit{}.name("field_3").type("SomeOtherSchema3").nullable(false).array(true) });

@@ -42,7 +42,7 @@ TEST(Moonlight_MigrateParserTest, success03)
     auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
-        .mappings(std::vector<Migrate::Mapping>{
+        .mappings(std::vector<Common::QueryData::Migrate::Mapping>{
             { "old_field1", "new_field1" },
             { "old_field2", "new_field2" },
             { "old_field3", "new_field3" },
@@ -63,7 +63,7 @@ TEST(Moonlight_MigrateParserTest, success04)
     auto const expected = Init::MigrateInit{}
         .structure_name("SomeStructure")
         .new_schema_name("NewSchema")
-        .mappings(std::vector<Migrate::Mapping>{
+        .mappings(std::vector<Common::QueryData::Migrate::Mapping>{
             { "old_field1", "new_field1" },
             { "old_field2", "new_field2" },
             { "old_field3", "new_field3" }});

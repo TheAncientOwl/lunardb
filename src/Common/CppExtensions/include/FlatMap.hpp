@@ -2,35 +2,27 @@
 
 #include <algorithm>
 #include <array>
-#include <concepts>
 #include <functional>
 #include <optional>
 
-namespace LunarDB::Common::CppExtensions::DataStructures {
+#include "LunarDB/Common/CppExtensions/Concepts/Item.hpp"
 
-///
-/// @brief Enforces .first and .second members on a type.
-///
-template <typename T>
-concept Item = requires(T t) {
-    { t.first } -> std::convertible_to<typename T::first_type>;
-    { t.second } -> std::convertible_to<typename T::second_type>;
-};
+namespace LunarDB::Common::CppExtensions::DataStructures {
 
 ///
 /// @brief Provide an array<Data, Size> with utility find method.
 /// @tparam Data Items type
 /// @tparam Size Number of elements
 ///
-template <Item Data, std::size_t Size>
-class ItemArray
+template <Concepts::Item Data, std::size_t Size>
+class FlatMap
 {
 public: // methods
     ///
     /// @brief Self explanatory.
     ///
     template <typename... Args>
-    ItemArray(Args&&... args);
+    FlatMap(Args&&... args);
 
     ///
     /// @brief Self explanatory.
@@ -47,4 +39,4 @@ private: // fields
 
 } // namespace LunarDB::Common::CppExtensions::DataStructures
 
-#include "LunarDB/Common/CppExtensions/private/ItemArray.inl"
+#include "LunarDB/Common/CppExtensions/private/FlatMap.inl"

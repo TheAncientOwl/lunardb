@@ -4,7 +4,7 @@
 #include <ostream>
 #include <string_view>
 
-#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
+#include "LunarDB/Common/CppExtensions/FlatMap.hpp"
 #include "LunarDB/Common/CppExtensions/LiteralToStringMap.hpp"
 
 ///

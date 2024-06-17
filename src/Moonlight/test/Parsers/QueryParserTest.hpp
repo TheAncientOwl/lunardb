@@ -13,10 +13,12 @@
 /// @note QUERY_TYPE macro must be defined per unit in order to use following macros.
 ///
 
-#define EXPECT_SUCCESS(query, expected)                          \
-    auto const parsed_query = Moonlight::API::parseQuery(query); \
-    auto const& out = parsed_query.get<QUERY_TYPE>();            \
+#define EXPECT_SUCCESS(query, expected)                                           \
+    auto const parsed_query = Moonlight::API::parseQuery(query);                  \
+    auto const& out = parsed_query.get<LunarDB::Common::QueryData::QUERY_TYPE>(); \
     EXPECT_EQ(out, expected)
 
-#define EXPECT_FAIL(query) \
-    EXPECT_THROW(Moonlight::API::parseQuery(query).get<QUERY_TYPE>(), Moonlight::Errors::ParserError)
+#define EXPECT_FAIL(query)                                                               \
+    EXPECT_THROW(                                                                        \
+        Moonlight::API::parseQuery(query).get<LunarDB::Common::QueryData::QUERY_TYPE>(), \
+        Moonlight::Errors::ParserError)

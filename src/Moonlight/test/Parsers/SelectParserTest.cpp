@@ -109,7 +109,7 @@ TEST(Moonlight_SelectParserTest, success02)
                 })
         ))
         .fields(std::vector<std::string>{"field1", "field2", "field3", "field4"})
-        .order_by(std::vector<Select::Order>{
+        .order_by(std::vector<Common::QueryData::Select::Order>{
         Init::SelectInit::OrderInit{}.field("field1").type(Primitives::EOrderType::Asc),
             Init::SelectInit::OrderInit{}.field("field2").type(Primitives::EOrderType::Desc),
             Init::SelectInit::OrderInit{}.field("field3").type(Primitives::EOrderType::Asc),

@@ -8,8 +8,11 @@ add_lunar_library(
         include/BinaryIO/Serializer.hpp
         include/BinaryIO.hpp
 
+        include/Concepts/Item.hpp
+
         include/DefinePrimitive.hpp
-        include/ItemArray.hpp
+        include/FlatMap.hpp
+        include/DynamicFlatMap.hpp
         include/LiteralToStringMap.hpp
         include/Singleton.hpp
         include/StringUtils.hpp
@@ -18,7 +21,8 @@ add_lunar_library(
 
         include/private/BinaryIO/Deserializer.inl
         include/private/BinaryIO/Serializer.inl
-        include/private/ItemArray.inl
+        include/private/FlatMap.inl
+        include/private/DynamicFlatMap.inl
         include/private/LiteralToStringMap.inl
         include/private/Singleton.inl
         include/private/StringUtils.inl

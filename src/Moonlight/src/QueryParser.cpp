@@ -2,15 +2,23 @@
 #include <array>
 
 #include "Errors.hpp"
-#include "LunarDB/Common/CppExtensions/ItemArray.hpp"
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
+#include "LunarDB/Moonlight/QueryParsers.hpp"
 #include "QueryParser.hpp"
-#include "QueryParsers.hpp"
 
 #include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_MOONLIGHT)
 
 namespace LunarDB::Moonlight::API {
+
+LUNAR_SINGLETON_INIT_IMPL(QueryParsersManager)
+{
+}
+
+void QueryParsersManager::addParser(Implementation::ParserBundle bundle)
+{
+    m_parsers.emplace(std::move(bundle));
+}
 
 ParsedQuery parseQuery(std::string_view query)
 {
@@ -22,30 +30,11 @@ ParsedQuery parseQuery(std::string_view query)
 
     StringUtils::trim(query);
 
-    static const DataStructures::ItemArray<Implementation::ParserBundle, 18> s_parsers{
-        Implementation::Create::makeParser(),
-        Implementation::Drop::makeParser(),
-        Implementation::Migrate::makeParser(),
-        Implementation::Truncate::makeParser(),
-        Implementation::Rename::makeParser(),
-        Implementation::Select::makeParser(),
-        Implementation::Insert::makeParser(),
-        Implementation::Update::makeParser(),
-        Implementation::Delete::makeParser(),
-        Implementation::Grant::makeParser(),
-        Implementation::Revoke::makeParser(),
-        Implementation::Commit::makeParser(),
-        Implementation::Rollback::makeParser(),
-        Implementation::SavePoint::makeParser(),
-        Implementation::Database::makeParser(),
-        Implementation::Rebind::makeParser(),
-        Implementation::Schema::makeParser(),
-        Implementation::User::makeParser()};
+    auto const& parsers{QueryParsersManager::Instance()};
 
-    auto const parser_opt =
-        s_parsers.find_if([query](Implementation::ParserBundle const& query_parser) {
-            return StringUtils::startsWithIgnoreCase(query, query_parser.first);
-        });
+    auto const parser_opt = parsers.find_if([query](Implementation::ParserBundle const& query_parser) {
+        return StringUtils::startsWithIgnoreCase(query, query_parser.first);
+    });
 
     if (static_cast<bool>(parser_opt))
     {

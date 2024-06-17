@@ -65,9 +65,11 @@ TEST(Moonlight_InsertParserTest, success01)
         R"(    }                                                             )"
         R"(]                                                                 )";
 
-    std::vector<Insert::Object> objects{};
+    using Object = Common::QueryData::Insert::Object;
 
-    auto address = Insert::Object{};
+    std::vector<Object> objects{};
+
+    auto address = Object{};
     address.entries.emplace("street", "Some Street");
     address.entries.emplace("number", "5");
 
@@ -99,7 +101,7 @@ TEST(Moonlight_InsertParserTest, success01)
     obj4.entries.emplace("address", address);
     obj4.entries.emplace("rands", std::vector<std::string>{"1", "11", "111"});
 
-    auto obj = Insert::Object{};
+    auto obj = Object{};
     obj.entries.emplace("X", "1");
     obj.entries.emplace("Y", "2");
 
@@ -110,7 +112,7 @@ TEST(Moonlight_InsertParserTest, success01)
     obj5.entries.emplace("birth_date", "09/10/1985");
     obj5.entries.emplace("address", address);
     obj5.entries.emplace("rands", std::vector<std::string>{"1", "11", "111"});
-    obj5.entries.emplace("objs", std::vector<Insert::Object>{obj, obj});
+    obj5.entries.emplace("objs", std::vector<Object>{obj, obj});
 
     auto const expected = Init::InsertInit{}
         .into("SomeStructure")
