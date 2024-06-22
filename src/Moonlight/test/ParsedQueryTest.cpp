@@ -30,6 +30,7 @@ TEST(Moonlight_ParsedQueryTest, makeParsedQueries)
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Rebind);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(Schema);
     EXPECT_MAKE_PARSED_QUERY_SUCCESS(User);
+    EXPECT_MAKE_PARSED_QUERY_SUCCESS(Auth);
 }
 // clang-format on
 

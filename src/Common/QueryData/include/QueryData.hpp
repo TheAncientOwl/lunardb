@@ -208,4 +208,9 @@ struct User
     Primitives::EUserActionType action;
 };
 
+struct Auth
+{
+    std::string username;
+};
+
 } // namespace LunarDB::Common::QueryData

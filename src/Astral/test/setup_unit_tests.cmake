@@ -21,6 +21,16 @@ add_lunar_unit_test(
 )
 
 add_lunar_unit_test(
+    NAME AuthExecutorTest 
+    SOURCE_FILES test/Executors/AuthExecutorTest.cpp 
+    DEPENDENCIES 
+        LunarDB_Astral
+        LunarDB_Moonlight
+        LunarDB_Selenity
+        LunarDB_Common_CppExtensions
+)
+
+add_lunar_unit_test(
     NAME MigrateExecutorTest 
     SOURCE_FILES test/Executors/MigrateExecutorTest.cpp 
     DEPENDENCIES 

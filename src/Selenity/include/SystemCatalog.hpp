@@ -13,6 +13,9 @@
 #include "LunarDB/Selenity/Managers/Configurations.hpp"
 #include "LunarDB/Selenity/Managers/DatabaseManager.hpp"
 
+#define LUNARDB_ROOT_USER "root"
+#define LUNARDB_NO_USER ""
+
 namespace LunarDB::Selenity::API {
 
 class SystemCatalog
@@ -56,6 +59,12 @@ public: // public API
     ///
     std::shared_ptr<Managers::DatabaseManager> getDatabaseInUse();
 
+    ///
+    /// @brief Self explanatory
+    /// @throw std::runtime_error if no database in use
+    ///
+    std::shared_ptr<Managers::DatabaseManager> const getDatabaseInUse() const;
+
     std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> const& getCurrentSelection()
         const;
 
@@ -65,6 +74,9 @@ public: // public API
         std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> selection);
 
     void clearCurrentSelection();
+
+    void setCurrentUser(std::string user);
+    std::string const& getCurrentUser() const;
 
     ///
     /// @return true if any database is used as work database
@@ -103,6 +115,8 @@ private: // data structures
 
 private: // fields
     std::optional<DatabaseInUse> m_database_in_use{std::nullopt};
+
+    std::string m_current_user{LUNARDB_NO_USER};
 
     std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>>
         m_current_selection{};

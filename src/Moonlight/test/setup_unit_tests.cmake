@@ -50,6 +50,14 @@ add_lunar_unit_test(
 )
 
 add_lunar_unit_test(
+    NAME AuthParserTest 
+    SOURCE_FILES test/Parsers/AuthParserTest.cpp 
+    DEPENDENCIES 
+        LunarDB_Moonlight
+        LunarDB_Common_QueryData
+)
+
+add_lunar_unit_test(
     NAME MigrateParserTest 
     SOURCE_FILES test/Parsers/MigrateParserTest.cpp 
     DEPENDENCIES 

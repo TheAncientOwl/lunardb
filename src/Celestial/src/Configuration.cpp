@@ -4,6 +4,22 @@
 
 namespace LunarDB::Celestial::API::Configuration {
 
+// clang-format off
+DEFINE_LUNAR_PRIMITIVE_IMPL(AuthState,
+    {Literal::Unknown, "Unknown"},
+    {Literal::Authenticated, "Authenticated"},
+    {Literal::NotAuthenticated, "NotAuthenticated"},
+    {Literal::WrongPassword, "WrongPassword"},
+    {Literal::UnknwonUser, "UnknwonUser"}
+)
+
+DEFINE_LUNAR_PRIMITIVE_IMPL(PermissionUpdateType,
+    {Literal::Unknown, "Unknown"},
+    {Literal::Grant, "Grant"},
+    {Literal::Revoke, "Revoke"}
+)
+// clang-format on
+
 bool Permission::operator==(Permission const& rhs) const
 {
     return type == rhs.type && database_uid == rhs.database_uid &&

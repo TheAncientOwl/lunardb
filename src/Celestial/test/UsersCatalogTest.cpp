@@ -8,6 +8,11 @@ using namespace std::string_literals;
 
 namespace LunarDB::Celestial::API::Tests {
 
+std::ostream& operator<<(std::ostream& os, Configuration::EAuthState auth_state)
+{
+    return os << Configuration::AuthState::toString(auth_state);
+}
+
 TEST(Celestial_UsersCatalog, crud)
 {
     LunarDB::Common::Testing::LunarTestGuard _{};
@@ -92,7 +97,73 @@ TEST(Celestial_UsersCatalog, crud)
 
 TEST(Celestial_UsersCatalog, authentication)
 {
-    // TODO: Provide implementation
+    LunarDB::Common::Testing::LunarTestGuard _{};
+
+    auto const c_lunar_home{Selenity::API::SystemCatalog::Instance().getLunarHomePath()};
+
+    auto& catalog{Celestial::API::UsersCatalog::Instance()};
+
+    auto const c_username1{"SomeUsername1"s};
+    auto const c_password1{"SomePassword1"s};
+
+    auto const c_database_uid{Common::CppExtensions::UniqueID::generate()};
+    auto const c_collection_uid{Common::CppExtensions::UniqueID::generate()};
+    auto const c_insert_permission{Configuration::Permission{
+        Configuration::Permission::EUserPermissionType::Insert, c_database_uid, c_collection_uid}};
+    auto const c_update_permission{Configuration::Permission{
+        Configuration::Permission::EUserPermissionType::Update, c_database_uid, c_collection_uid}};
+    auto const c_delete_permission{Configuration::Permission{
+        Configuration::Permission::EUserPermissionType::Delete, c_database_uid, c_collection_uid}};
+
+    // 1. createUser
+    Common::CppExtensions::UniqueID uid1{};
+
+    ASSERT_NO_THROW({ uid1 = catalog.createUser(c_username1, c_password1); });
+    EXPECT_FALSE(uid1.toString().empty());
+    EXPECT_TRUE(std::filesystem::exists(c_lunar_home / "users" / (uid1.toString() + ".cfg")));
+    EXPECT_TRUE(std::filesystem::exists(c_lunar_home / "users" / "usernames.db"));
+    EXPECT_EQ(uid1, catalog.getUserUID(c_username1));
+
+    // 2. updatePassword
+    ASSERT_NO_THROW({ catalog.updatePassword(uid1, "SomeUpdatedPassword1"); });
+
+    // 3. updatePermission
+    ASSERT_NO_THROW({
+        catalog.updatePermission(
+            uid1,
+            Configuration::PermissionUpdate{
+                Configuration::EPermissionUpdateType::Grant, c_insert_permission});
+    });
+    ASSERT_NO_THROW({
+        catalog.updatePermission(
+            uid1,
+            Configuration::PermissionUpdate{
+                Configuration::EPermissionUpdateType::Grant, c_update_permission});
+    });
+
+    // 3. userHasPermission
+    EXPECT_TRUE(catalog.userHasPermission(uid1, c_insert_permission));
+    EXPECT_TRUE(catalog.userHasPermission(uid1, c_update_permission));
+    EXPECT_FALSE(catalog.userHasPermission(uid1, c_delete_permission));
+
+    // 4. auth
+    {
+        auto const [auth_state, auth_key] =
+            catalog.authenticateUser(c_username1, "SomeUpdatedPassword1");
+        EXPECT_EQ(auth_state, Configuration::EAuthState::Authenticated);
+    }
+    {
+        auto const [auth_state, auth_key] = catalog.authenticateUser(c_username1, "wrong-password");
+        EXPECT_EQ(auth_state, Configuration::EAuthState::WrongPassword);
+    }
+    {
+        auto const [auth_state, auth_key] = catalog.authenticateUser(c_username1, "somePassword1");
+        EXPECT_EQ(auth_state, Configuration::EAuthState::WrongPassword);
+    }
+    {
+        auto const [auth_state, auth_key] = catalog.authenticateUser("UnknownUser", c_password1);
+        EXPECT_EQ(auth_state, Configuration::EAuthState::UnknwonUser);
+    }
 }
 
 } // namespace LunarDB::Celestial::API::Tests

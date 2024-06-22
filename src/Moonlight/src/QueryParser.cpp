@@ -77,5 +77,6 @@ PROVIDE_PARSER_BUNLDER(Database, "database")
 PROVIDE_PARSER_BUNLDER(Rebind, "rebind")
 PROVIDE_PARSER_BUNLDER(Schema, "schema")
 PROVIDE_PARSER_BUNLDER(User, "user")
+PROVIDE_PARSER_BUNLDER(Auth, "auth")
 
 } // namespace LunarDB::Moonlight::Implementation

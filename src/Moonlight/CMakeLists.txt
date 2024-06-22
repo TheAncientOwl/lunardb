@@ -21,6 +21,7 @@ add_lunar_library(
         src/Utils.cpp
         src/Errors.cpp
 
+        src/Parsers/AuthParser.cpp
         src/Parsers/CreateParser.cpp
         src/Parsers/DropParser.cpp
         src/Parsers/MigrateParser.cpp

@@ -247,4 +247,11 @@ struct UserInit : public User
     UserInit& action(Primitives::EUserActionType const& value);
 };
 
+struct AuthInit : public Auth
+{
+    using base_t = Auth;
+
+    AuthInit& username(std::string const& value);
+};
+
 } // namespace LunarDB::Common::QueryData::Init

@@ -312,4 +312,9 @@ UserInit& UserInit::action(Primitives::EUserActionType const& value)
     return base_t::action = value, *this;
 }
 
+AuthInit& AuthInit::username(std::string const& username)
+{
+    return base_t::username = username, *this;
+}
+
 } // namespace LunarDB::Common::QueryData::Init

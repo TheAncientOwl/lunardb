@@ -86,7 +86,10 @@ std::string getSuccessMessage(LunarDB::Moonlight::API::ParsedQuery const& parsed
         return "Schema created successfully";
     }
     case EQueryType::User: {
-        return "User operation efectuated successfully";
+        return "User operation effectuated successfully";
+    }
+    case EQueryType::Auth: {
+        return "Authentication: OK";
     }
     default:
         return "Done";

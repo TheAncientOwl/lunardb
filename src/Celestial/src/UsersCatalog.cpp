@@ -116,13 +116,38 @@ bool UsersCatalog::userHasPermission(
     return user.permissions.find(permission) != user.permissions.end();
 }
 
-std::pair<Configuration::EAuthState, Authentication::AuthKey> authenticateUser(
+std::pair<Configuration::EAuthState, Authentication::AuthKey> UsersCatalog::authenticateUser(
     std::string_view username,
     std::string_view password)
 {
-    // TODO: Provide implementation
-    throw std::runtime_error{
-        "[~/lunardb/src/Celestial/src/UsersCatalog.cpp:authenticateUser] Not implemented yet..."};
+    std::string_view correct_password{};
+
+    if (username == "root")
+    {
+        correct_password = m_root_password;
+    }
+    else
+    {
+        auto const user_it =
+            std::find_if(m_users.begin(), m_users.end(), [username](auto const& item) {
+                Configuration::User const& user = item.second;
+                return Common::CppExtensions::StringUtils::equalsIgnoreCase(username, user.name);
+            });
+
+        if (user_it != m_users.end())
+        {
+            correct_password = user_it->second.password;
+        }
+        else
+        {
+            return std::make_pair(Configuration::EAuthState::UnknwonUser, Authentication::AuthKey{});
+        }
+    }
+
+    return std::make_pair(
+        password == correct_password ? Configuration::EAuthState::Authenticated
+                                     : Configuration::EAuthState::WrongPassword,
+        Authentication::AuthKey{});
 }
 
 bool UsersCatalog::isUserAuthenticated(
@@ -274,6 +299,35 @@ Common::CppExtensions::UniqueID UsersCatalog::getUserUID(std::string const& user
     }
 
     return it->second;
+}
+
+void UsersCatalog::setRootPassword(std::string root_password)
+{
+    m_root_password = std::move(root_password);
+}
+
+std::string_view UsersCatalog::getRootPassword() const
+{
+    return m_root_password;
+}
+
+Configuration::User const& UsersCatalog::getUserConfiguration(std::string const& username) const
+{
+    auto const uuid_it = m_users_uids.find(username);
+
+    if (uuid_it == m_users_uids.end())
+    {
+        throw std::runtime_error{"Unknown user X01; Please contact developer"};
+    }
+
+    auto const user_it = m_users.find(uuid_it->second);
+
+    if (uuid_it == m_users_uids.end())
+    {
+        throw std::runtime_error{"Unknown user X02; Please contact developer"};
+    }
+
+    return user_it->second;
 }
 
 } // namespace LunarDB::Celestial::API

@@ -16,6 +16,7 @@ add_lunar_library(
     SOURCE_FILES
         src/QueryExecutor.cpp
 
+        src/Executors/AuthExecutor.cpp
         src/Executors/CreateExecutor.cpp
         src/Executors/DropExecutor.cpp
         src/Executors/MigrateExecutor.cpp

@@ -231,4 +231,8 @@ PROVIDE_OSTREAM_OUTPUT_OPERATOR(User,
     FIELD_SEP(password),
     FIELD(action)
 )
+
+PROVIDE_OSTREAM_OUTPUT_OPERATOR(Auth,
+    FIELD(username)
+)
 // clang-format on

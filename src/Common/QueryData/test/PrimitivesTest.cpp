@@ -26,6 +26,8 @@ TEST(Common_QueryData_PrimitivesTest, QueryType)
     EXPECT_EQ(EQueryType::Database, toLiteral(toString(EQueryType::Database)));
     EXPECT_EQ(EQueryType::Rebind, toLiteral(toString(EQueryType::Rebind)));
     EXPECT_EQ(EQueryType::Schema, toLiteral(toString(EQueryType::Schema)));
+    EXPECT_EQ(EQueryType::User, toLiteral(toString(EQueryType::User)));
+    EXPECT_EQ(EQueryType::Auth, toLiteral(toString(EQueryType::Auth)));
 }
 
 TEST(Common_QueryData_PrimitivesTest, StructureType)

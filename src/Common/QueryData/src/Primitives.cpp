@@ -21,7 +21,9 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(QueryType,
     { Literal::SavePoint, "SavePoint" },
     { Literal::Database, "Database" },
     { Literal::Rebind, "Rebind" },
-    { Literal::Schema, "Schema" }
+    { Literal::Schema, "Schema" },
+    { Literal::User, "User" },
+    { Literal::Auth, "Auth" }
 )
 
 DEFINE_LUNAR_PRIMITIVE_IMPL(StructureType,
@@ -46,10 +48,17 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(OrderType,
 DEFINE_LUNAR_PRIMITIVE_IMPL(UserPermissionType,
     { Literal::None, "None" },
     { Literal::Create, "Create" },
-    { Literal::Update, "Update" },
+    { Literal::Drop, "Drop" },
+    { Literal::Migrate, "Migrate" },
+    { Literal::Truncate, "Truncate" },
+    { Literal::Rename, "Rename" },
+    { Literal::Select, "Select" },
     { Literal::Insert, "Insert" },
+    { Literal::Update, "Update" },
     { Literal::Delete, "Delete" },
-    { Literal::Select, "Select" }
+    { Literal::Rebind, "Rebind" },
+    { Literal::Schema, "Schema" },
+    { Literal::Database, "Database" }
 )
 
 DEFINE_LUNAR_PRIMITIVE_IMPL(DatabaseOperationType,

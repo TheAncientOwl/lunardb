@@ -16,13 +16,14 @@ namespace LunarDB::Common::QueryHandlingUtils {
 
 std::string getSuccessMessage(LunarDB::Moonlight::API::ParsedQuery const& parsed_query);
 
-template <typename OnSuccess, typename OnSelection, typename OnError>
+template <typename OnSuccess, typename OnSelection, typename OnError, typename AfterParsing>
 void handleQuery(
     std::string_view query,
     LunarDB::Crescentum::API::ELunarModule lunar_logger_module,
     OnSuccess&& on_success,
     OnSelection&& on_selection,
-    OnError&& on_error)
+    OnError&& on_error,
+    AfterParsing&& after_parsing)
 {
     auto const get_query_identifier = []() {
         std::ostringstream oss{};
@@ -44,6 +45,8 @@ void handleQuery(
         timer.reset();
         auto const parsed_query = LunarDB::Moonlight::API::parseQuery(query);
         CLOG_VERBOSE("Finished query parsing, elapsed", timer.elapsedExtended());
+
+        after_parsing(parsed_query);
 
         CLOG_VERBOSE("Starting query execution...");
         timer.reset();

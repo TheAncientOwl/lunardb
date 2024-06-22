@@ -24,7 +24,8 @@ DEFINE_LUNAR_PRIMITIVE(QueryType,
     Database = 15,
     Rebind = 16,
     Schema = 17,
-    User = 18
+    User = 18,
+    Auth = 19,
 )
 
 DEFINE_LUNAR_PRIMITIVE(StructureType,
@@ -49,10 +50,17 @@ DEFINE_LUNAR_PRIMITIVE(OrderType,
 DEFINE_LUNAR_PRIMITIVE(UserPermissionType,
     None = 0,
     Create = 1,
-    Update = 2,
-    Insert = 3,
-    Delete = 4,
-    Select = 5
+    Drop = 2,
+    Migrate = 3,
+    Truncate = 4,
+    Rename = 5,
+    Select = 6,
+    Insert = 7,
+    Update = 8,
+    Delete = 9,
+    Rebind = 10,
+    Schema = 11,
+    Database = 12
 )
 
 DEFINE_LUNAR_PRIMITIVE(DatabaseOperationType,

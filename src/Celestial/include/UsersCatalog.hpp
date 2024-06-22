@@ -105,6 +105,12 @@ public: // public API
     ///
     std::filesystem::path getUsernamesFilePath() const;
 
+    void setRootPassword(std::string root_password);
+
+    std::string_view getRootPassword() const;
+
+    Configuration::User const& getUserConfiguration(std::string const& username) const;
+
 private: // singleton
     LUNAR_SINGLETON_INIT(UsersCatalog);
 
@@ -157,6 +163,8 @@ private: // fields
     Common::CppExtensions::UniqueID::MapTo<Configuration::User> m_users;
     Common::CppExtensions::UniqueID::MapTo<Authentication::AuthKey> m_authenticated_users;
     std::unordered_map<std::string, Common::CppExtensions::UniqueID> m_users_uids;
+
+    std::string m_root_password{""};
 };
 
 } // namespace LunarDB::Celestial::API

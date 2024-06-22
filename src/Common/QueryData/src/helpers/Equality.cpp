@@ -169,4 +169,8 @@ PROVIDE_EQUALITY_OPERATOR(User,
     FIELD(password),
     FIELD(action)
 )
+
+PROVIDE_EQUALITY_OPERATOR(Auth,
+    FIELD(username)
+)
 // clang-format on

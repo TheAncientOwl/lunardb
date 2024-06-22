@@ -135,6 +135,16 @@ std::shared_ptr<Managers::DatabaseManager> SystemCatalog::getDatabaseInUse()
     return m_catalog.id_to_manager.find(m_database_in_use->uid)->second;
 }
 
+std::shared_ptr<Managers::DatabaseManager> const SystemCatalog::getDatabaseInUse() const
+{
+    if (!static_cast<bool>(m_database_in_use))
+    {
+        throw std::runtime_error("No database in use");
+    }
+
+    return m_catalog.id_to_manager.find(m_database_in_use->uid)->second;
+}
+
 std::vector<std::unique_ptr<Managers::Collections::AbstractManager::ICollectionEntry>> const& SystemCatalog::
     getCurrentSelection() const
 {
@@ -214,6 +224,16 @@ void SystemCatalog::loadSystemConfiguration()
             // TODO: Log error
         }
     }
+}
+
+void SystemCatalog::setCurrentUser(std::string user)
+{
+    m_current_user = std::move(user);
+}
+
+std::string const& SystemCatalog::getCurrentUser() const
+{
+    return m_current_user;
 }
 
 } // namespace LunarDB::Selenity::API
