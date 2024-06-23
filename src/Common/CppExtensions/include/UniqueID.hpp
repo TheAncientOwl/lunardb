@@ -28,6 +28,8 @@ public: // public API
 
     ///
     /// @brief Self explanatory
+    /// @return UID in format 8f674453-a065-4138-969d-10b6b83b94cc
+    /// @return UID in format OOOOOOOO-OOOO-OOOO-OOOO-OOOOOOOOOOOO
     ///
     std::string toString() const;
 

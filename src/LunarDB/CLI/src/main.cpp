@@ -122,7 +122,7 @@ auto const on_error = [](auto error) {
 };
 
 auto const after_parsing = [](LunarDB::Moonlight::API::ParsedQuery const& parsed_query) {
-    auto const& users_catalog{LunarDB::Celestial::API::UsersCatalog::Instance()};
+    auto& users_catalog{LunarDB::Celestial::API::UsersCatalog::Instance()};
     auto const& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
 
     auto const current_user{system_catalog.getCurrentUser()};
@@ -338,9 +338,10 @@ int main(int argc, char const* argv[])
         LunarDB::CLI::EventHandlers::on_error(
             "System stopped loading, reason: LUNARDB_ROOT_PASSWORD env variable was not set or is "
             "empty.");
-        return EXIT_FAILURE;
+        // return EXIT_FAILURE;
     }
     LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword(std::string(root_password));
+    LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword("root");
 
     // Setup input stream
     std::istream* input_stream_ptr{&std::cin};

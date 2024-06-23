@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -62,7 +63,7 @@ public: // public API
     /// @return {authentication operation state, auth key to send to the user}
     ///
     std::pair<Configuration::EAuthState, Authentication::AuthKey> authenticateUser(
-        std::string_view username,
+        std::string const& username,
         std::string_view password);
 
     ///
@@ -109,7 +110,7 @@ public: // public API
 
     std::string_view getRootPassword() const;
 
-    Configuration::User const& getUserConfiguration(std::string const& username) const;
+    Configuration::User const& getUserConfiguration(std::string const& username);
 
 private: // singleton
     LUNAR_SINGLETON_INIT(UsersCatalog);
@@ -142,6 +143,15 @@ private: // private API
     ///
     /// @brief Self explanatory
     /// @note Data encryption
+    /// @param path
+    /// @return User configuration if user found
+    /// @throw std::runtime_error if user not found
+    ///
+    Configuration::User loadUserFromDisk(std::filesystem::path const& user_file_path);
+
+    ///
+    /// @brief Self explanatory
+    /// @note Data encryption
     /// @param user_uid
     /// @return User configuration if user found
     /// @throw std::runtime_error if user not found
@@ -157,12 +167,22 @@ private: // private API
     /// @param user_uid
     /// @return Reference to user in internal structure
     ///
-    Configuration::User& getUser(Common::CppExtensions::UniqueID user_uid);
+    Configuration::User& getUserFromUID(Common::CppExtensions::UniqueID user_uid);
+
+    ///
+    /// @brief Self explanatory
+    /// @note Strategy:
+    ///     1. Get user UID
+    ///     2. Call getUserFromName(UID)
+    /// @param username
+    /// @return Reference to user in internal structure
+    ///
+    Configuration::User& getUserFromName(std::string const& username);
 
 private: // fields
-    Common::CppExtensions::UniqueID::MapTo<Configuration::User> m_users;
+    Common::CppExtensions::UniqueID::MapTo<Configuration::User> m_uid_to_config_cache;
     Common::CppExtensions::UniqueID::MapTo<Authentication::AuthKey> m_authenticated_users;
-    std::unordered_map<std::string, Common::CppExtensions::UniqueID> m_users_uids;
+    std::unordered_map<std::string, Common::CppExtensions::UniqueID> m_name_to_uid;
 
     std::string m_root_password{""};
 };

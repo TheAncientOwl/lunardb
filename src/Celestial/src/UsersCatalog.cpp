@@ -19,7 +19,7 @@ LUNAR_SINGLETON_INIT_IMPL(UsersCatalog)
 Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, std::string password)
 {
     // 1. Check if username available
-    if (m_users_uids.find(username) != m_users_uids.end())
+    if (m_name_to_uid.find(username) != m_name_to_uid.end())
     {
         throw std::runtime_error(Common::CppExtensions::StringUtils::stringify(
             "User with", std::move(username), "username already exists"));
@@ -31,8 +31,8 @@ Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, s
     // 3. Add user to internal data
     auto const new_id{Common::CppExtensions::UniqueID::generate()};
 
-    std::ignore = m_users_uids.emplace(username, new_id);
-    auto const map_result = m_users.emplace(
+    std::ignore = m_name_to_uid.emplace(username, new_id);
+    auto const map_result = m_uid_to_config_cache.emplace(
         new_id, Configuration::User{new_id, std::move(username), std::move(password), {}});
 
     assert(map_result.second && "[Create User] Map insert failed");
@@ -47,14 +47,14 @@ Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, s
 void UsersCatalog::removeUser(Common::CppExtensions::UniqueID const& user_uid)
 {
     // 1. Get user data
-    auto& user{getUser(user_uid)};
+    auto& user{getUserFromUID(user_uid)};
 
     // 2. WriteAheadLog
     // TODO: Provide implementation
 
     // 3. Remove user from internal data
-    std::ignore = m_users.erase(user_uid);
-    std::ignore = m_users_uids.erase(user.name);
+    std::ignore = m_uid_to_config_cache.erase(user_uid);
+    std::ignore = m_name_to_uid.erase(user.name);
 
     // 4. Remove user from disk
     // ?MAYBE: Mark user for deletion?
@@ -65,7 +65,7 @@ void UsersCatalog::removeUser(Common::CppExtensions::UniqueID const& user_uid)
 void UsersCatalog::updatePassword(Common::CppExtensions::UniqueID const& user_uid, std::string new_password)
 {
     // 1. Get user internal data
-    auto& user{getUser(user_uid)};
+    auto& user{getUserFromUID(user_uid)};
 
     // 2. WriteAheadLog
     // TODO: Provide implementation
@@ -86,7 +86,7 @@ void UsersCatalog::updatePermission(
         "Error, 'Unknown' update type issued");
 
     // 1. Get user internal data
-    auto& user{getUser(user_uid)};
+    auto& user{getUserFromUID(user_uid)};
 
     // 2. WriteAheadLog
     // TODO: Provide implementation
@@ -112,12 +112,12 @@ bool UsersCatalog::userHasPermission(
     Common::CppExtensions::UniqueID const& user_uid,
     Configuration::Permission const& permission)
 {
-    auto const& user{getUser(user_uid)};
+    auto const& user{getUserFromUID(user_uid)};
     return user.permissions.find(permission) != user.permissions.end();
 }
 
 std::pair<Configuration::EAuthState, Authentication::AuthKey> UsersCatalog::authenticateUser(
-    std::string_view username,
+    std::string const& username,
     std::string_view password)
 {
     std::string_view correct_password{};
@@ -128,17 +128,11 @@ std::pair<Configuration::EAuthState, Authentication::AuthKey> UsersCatalog::auth
     }
     else
     {
-        auto const user_it =
-            std::find_if(m_users.begin(), m_users.end(), [username](auto const& item) {
-                Configuration::User const& user = item.second;
-                return Common::CppExtensions::StringUtils::equalsIgnoreCase(username, user.name);
-            });
-
-        if (user_it != m_users.end())
+        try
         {
-            correct_password = user_it->second.password;
+            correct_password = getUserConfiguration(username).password;
         }
-        else
+        catch (std::exception const& e)
         {
             return std::make_pair(Configuration::EAuthState::UnknwonUser, Authentication::AuthKey{});
         }
@@ -189,23 +183,55 @@ void UsersCatalog::saveUserToDisk(Configuration::User const& user) const
 
     std::ofstream user_file(getUserConfigurationFilePath(user.uid), std::ios::trunc | std::ios::binary);
 
-    auto const encrypted_name{Common::Cryptography::AES256::Instance().encrypt(
-        Common::Cryptography::AES256::ByteArray(user.name.begin(), user.name.end()))};
+    // TODO: Fix cryptography
+    // auto const encrypted_name{Common::Cryptography::AES256::Instance().encrypt(
+    //     Common::Cryptography::AES256::ByteArray(user.name.begin(), user.name.end()))};
 
-    auto const encrypted_password{Common::Cryptography::AES256::Instance().encrypt(
-        Common::Cryptography::AES256::ByteArray(user.password.begin(), user.password.end()))};
+    // auto const encrypted_password{Common::Cryptography::AES256::Instance().encrypt(
+    //     Common::Cryptography::AES256::ByteArray(user.password.begin(), user.password.end()))};
 
-    Serializer::serialize(user_file, encrypted_name);
-    Serializer::serialize(user_file, encrypted_password);
+    // Serializer::serialize(user_file, encrypted_name);
+    // Serializer::serialize(user_file, encrypted_password);
+    Serializer::serialize(user_file, user.name);
+    Serializer::serialize(user_file, user.password);
     Serializer::serialize(user_file, user.permissions);
+    Serializer::serialize(user_file, user.uid);
 
     user_file.close();
 }
 
-Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::UniqueID user_uid)
+Configuration::User UsersCatalog::loadUserFromDisk(std::filesystem::path const& user_file_path)
 {
     namespace Deserializer = Common::CppExtensions::BinaryIO::Deserializer;
 
+    std::ifstream user_file(user_file_path, std::ios::binary);
+
+    Configuration::User user{};
+
+    // TODO: Fix cryptography
+    // auto encrypted_username{Common::Cryptography::AES256::ByteArray{}};
+    // auto encrypted_password{Common::Cryptography::AES256::ByteArray{}};
+
+    // Deserializer::deserialize(user_file, encrypted_username);
+    // Deserializer::deserialize(user_file, encrypted_password);
+    Deserializer::deserialize(user_file, user.name);
+    Deserializer::deserialize(user_file, user.password);
+    Deserializer::deserialize(user_file, user.permissions);
+    Deserializer::deserialize(user_file, user.uid);
+
+    // auto const decrypted_username{Common::Cryptography::AES256::Instance().decrypt(encrypted_username)};
+    // user.name = std::string(decrypted_username.begin(), decrypted_username.end());
+
+    // auto const decrypted_password{Common::Cryptography::AES256::Instance().decrypt(encrypted_password)};
+    // user.password = std::string(decrypted_password.begin(), decrypted_password.end());
+
+    user_file.close();
+
+    return user;
+}
+
+Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::UniqueID user_uid)
+{
     auto const user_file_path{getUserConfigurationFilePath(user_uid)};
 
     if (!std::filesystem::exists(user_file_path))
@@ -214,39 +240,24 @@ Configuration::User UsersCatalog::loadUserFromDisk(Common::CppExtensions::Unique
             "Configuration file for user '", user_uid, "' missing"));
     }
 
-    std::ifstream user_file(getUserConfigurationFilePath(user_uid), std::ios::binary);
-
-    Configuration::User user{};
-    user.uid = std::move(user_uid);
-
-    auto encrypted_username{Common::Cryptography::AES256::ByteArray{}};
-    auto encrypted_password{Common::Cryptography::AES256::ByteArray{}};
-
-    Deserializer::deserialize(user_file, encrypted_username);
-    Deserializer::deserialize(user_file, encrypted_password);
-    Deserializer::deserialize(user_file, user.permissions);
-
-    auto const decrypted_username{Common::Cryptography::AES256::Instance().decrypt(encrypted_username)};
-    user.name = std::string(decrypted_username.begin(), decrypted_username.end());
-
-    auto const decrypted_password{Common::Cryptography::AES256::Instance().decrypt(encrypted_password)};
-    user.password = std::string(decrypted_password.begin(), decrypted_password.end());
-
-    user_file.close();
-
-    return user;
+    return loadUserFromDisk(user_file_path);
 }
 
-Configuration::User& UsersCatalog::getUser(Common::CppExtensions::UniqueID user_uid)
+Configuration::User& UsersCatalog::getUserFromUID(Common::CppExtensions::UniqueID user_uid)
 {
-    if (auto user_it = m_users.find(user_uid); user_it != m_users.end())
+    if (auto user_it = m_uid_to_config_cache.find(user_uid); user_it != m_uid_to_config_cache.end())
     {
         return user_it->second;
     }
     else
     {
-        return m_users.emplace(user_uid, loadUserFromDisk(user_uid)).first->second;
+        return m_uid_to_config_cache.emplace(user_uid, loadUserFromDisk(user_uid)).first->second;
     }
+}
+
+Configuration::User& UsersCatalog::getUserFromName(std::string const& username)
+{
+    return getUserFromUID(getUserUID(username));
 }
 
 std::filesystem::path UsersCatalog::getUsernamesFilePath() const
@@ -269,9 +280,11 @@ void UsersCatalog::loadFromDisk()
     }
     else
     {
+        m_name_to_uid.clear();
+        m_uid_to_config_cache.clear();
+
         std::ifstream usernames_file(getUsernamesFilePath(), std::ios::binary);
-        m_users_uids.clear();
-        Common::CppExtensions::BinaryIO::Deserializer::deserialize(usernames_file, m_users_uids);
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(usernames_file, m_name_to_uid);
         usernames_file.close();
     }
 }
@@ -279,7 +292,7 @@ void UsersCatalog::loadFromDisk()
 void UsersCatalog::saveUserNamesToDisk() const
 {
     std::ofstream usernames_file(getUsernamesFilePath(), std::ios::trunc | std::ios::binary);
-    Common::CppExtensions::BinaryIO::Serializer::serialize(usernames_file, m_users_uids);
+    Common::CppExtensions::BinaryIO::Serializer::serialize(usernames_file, m_name_to_uid);
     usernames_file.close();
 }
 
@@ -290,13 +303,15 @@ UsersCatalog::~UsersCatalog()
 
 Common::CppExtensions::UniqueID UsersCatalog::getUserUID(std::string const& username) const
 {
-    auto it = m_users_uids.find(username);
+    auto it = m_name_to_uid.find(username);
 
-    if (it == m_users_uids.end())
+    if (it == m_name_to_uid.end())
     {
         throw std::runtime_error{
             Common::CppExtensions::StringUtils::stringify("User", username, "does not exist")};
     }
+
+    auto dummy = it->second.toString();
 
     return it->second;
 }
@@ -311,23 +326,9 @@ std::string_view UsersCatalog::getRootPassword() const
     return m_root_password;
 }
 
-Configuration::User const& UsersCatalog::getUserConfiguration(std::string const& username) const
+Configuration::User const& UsersCatalog::getUserConfiguration(std::string const& username)
 {
-    auto const uuid_it = m_users_uids.find(username);
-
-    if (uuid_it == m_users_uids.end())
-    {
-        throw std::runtime_error{"Unknown user X01; Please contact developer"};
-    }
-
-    auto const user_it = m_users.find(uuid_it->second);
-
-    if (uuid_it == m_users_uids.end())
-    {
-        throw std::runtime_error{"Unknown user X02; Please contact developer"};
-    }
-
-    return user_it->second;
+    return getUserFromName(username);
 }
 
 } // namespace LunarDB::Celestial::API
