@@ -12,10 +12,10 @@ TEST(Moonlight_RevokeParserTest, success01)
     auto const query = "revoke [ select,  update, insert, delete ] from UserName on SomeCollection";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Update,
+            Primitives::EUserPermissionType::Select,
             Primitives::EUserPermissionType::Insert,
+            Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Delete,
-            Primitives::EUserPermissionType::Select
             })
         .from_user("UserName")
         .structure_name("SomeCollection");
@@ -28,9 +28,9 @@ TEST(Moonlight_RevokeParserTest, success02)
     auto const query = "revoke    [               update,      insert,    delete  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
-            Primitives::EUserPermissionType::Delete
+            Primitives::EUserPermissionType::Update,
+            Primitives::EUserPermissionType::Delete,
             })
         .from_user("UserName")
         .structure_name("SomeCollection");
@@ -43,9 +43,9 @@ TEST(Moonlight_RevokeParserTest, success03)
     auto const query = "revoke    [      update,               delete,    insert  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
-            Primitives::EUserPermissionType::Delete
+            Primitives::EUserPermissionType::Update,
+            Primitives::EUserPermissionType::Delete,
             })
         .from_user("UserName")
         .structure_name("SomeCollection");
@@ -58,9 +58,9 @@ TEST(Moonlight_RevokeParserTest, success04)
     auto const query = "revoke [ update, insert, delete ] from UserName on SomeStructure";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
-            Primitives::EUserPermissionType::Delete
+            Primitives::EUserPermissionType::Update,
+            Primitives::EUserPermissionType::Delete,
             })
         .from_user("UserName")
         .structure_name("SomeStructure");
@@ -73,9 +73,9 @@ TEST(Moonlight_RevokeParserTest, success05)
     auto const query = "revoke [  update, insert,  delete, update ] from UserName on SomeStructure";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
-            Primitives::EUserPermissionType::Delete
+            Primitives::EUserPermissionType::Update,
+            Primitives::EUserPermissionType::Delete,
             })
         .from_user("UserName")
         .structure_name("SomeStructure");
