@@ -8,6 +8,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -18,6 +19,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -28,6 +30,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -38,6 +41,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -48,6 +52,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -58,6 +63,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -68,6 +74,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -78,6 +85,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -88,6 +96,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -98,6 +107,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -108,6 +118,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -118,6 +129,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -128,6 +140,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -138,6 +151,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -148,6 +162,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -158,6 +173,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -168,6 +184,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -178,6 +195,7 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )
 
 add_lunar_unit_test(
@@ -188,4 +206,5 @@ add_lunar_unit_test(
         LunarDB_Moonlight
         LunarDB_Selenity
         LunarDB_Common_CppExtensions
+        LunarDB_BrightMoon
 )

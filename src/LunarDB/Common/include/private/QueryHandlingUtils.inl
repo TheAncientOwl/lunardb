@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "LunarDB/Astral/QueryExecutor.hpp"
+#include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Common/CppExtensions/Timer.hpp"
 #include "LunarDB/Common/CppExtensions/UniqueID.hpp"
 #include "LunarDB/Moonlight/QueryParser.hpp"
@@ -25,6 +26,7 @@ void handleQuery(
     OnError&& on_error,
     AfterParsing&& after_parsing)
 {
+    auto& wal{LunarDB::BrightMoon::API::WriteAheadLogger::Instance()};
     auto const get_query_identifier = []() {
         std::ostringstream oss{};
         auto const uid{LunarDB::Common::CppExtensions::UniqueID::generate()};
@@ -49,8 +51,10 @@ void handleQuery(
         after_parsing(parsed_query);
 
         CLOG_VERBOSE("Starting query execution...");
+        wal.openTransaction(parsed_query.type());
         timer.reset();
         LunarDB::Astral::API::executeQuery(parsed_query);
+        wal.closeTransaction(parsed_query.type());
         CLOG_VERBOSE("Finished query execution, elapsed", timer.elapsedExtended());
 
         if (parsed_query.type() != LunarDB::Common::QueryData::Primitives::EQueryType::Select)

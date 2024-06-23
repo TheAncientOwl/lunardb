@@ -9,6 +9,7 @@
 #include <stack>
 #include <string>
 
+#include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
@@ -67,7 +68,9 @@ void fillRecurseJSON(
 void insert(
     std::filesystem::path const& home,
     Configurations::CollectionConfiguration::Schema& collection_schema,
-    Common::QueryData::Insert::Object const& object)
+    Common::QueryData::Insert::Object const& object,
+    std::shared_ptr<LunarDB::Selenity::API::Managers::Configurations::CollectionConfiguration> const& config)
+
 {
     auto const rid{Common::CppExtensions::UniqueID::generate()};
     auto const rid_str{rid.toString()};
@@ -76,6 +79,10 @@ void insert(
     json["_rid"] = rid_str;
     json["_del"] = "0";
     fillRecurseJSON(json, collection_schema, object);
+    LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
+    wal_data.collection = config->name;
+    wal_data.json = json.dump();
+    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
 
     auto const document_file_path{home / "data.ldbtbl"};
     auto const parent_path{document_file_path.parent_path()};
@@ -378,7 +385,7 @@ void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& 
 
     for (auto const& object : objects)
     {
-        Collections::insert(documents_path, m_collection_config->schema, object);
+        Collections::insert(documents_path, m_collection_config->schema, object, m_collection_config);
     }
 }
 
@@ -480,6 +487,11 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
 
                 if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
                 {
+                    LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
+                    wal_data.collection = m_collection_config->name;
+                    wal_data.old_json = icollection_entry_ptr->getJSON().dump();
+                    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
+
                     collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
                         icollection_entry_ptr.release()));
                     collection_entry_ptr->data["_del"] = "1";
@@ -546,6 +558,11 @@ void TableManager::update(Common::QueryData::Update const& config)
                     Collections::update(
                         collection_entry_ptr->data, m_collection_config->schema, config.modify);
                     bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+
+                    LunarDB::BrightMoon::API::Transactions::UpdateTransactionData wal_data{};
+                    wal_data.collection = m_collection_config->name;
+                    wal_data.old_json = collection_entry_ptr->getJSON().dump();
+                    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
 
                     auto const current_pos = table_file.tellg();
 

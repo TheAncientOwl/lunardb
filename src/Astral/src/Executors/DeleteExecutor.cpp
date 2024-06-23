@@ -1,8 +1,7 @@
 #include "LunarDB/Astral/QueryExecutors.hpp"
-
+#include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
-#include "LunarDB/Crescentum/Logger.hpp"
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_ASTRAL)
 
 namespace LunarDB::Astral::Implementation {

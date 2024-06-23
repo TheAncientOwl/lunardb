@@ -381,5 +381,7 @@ int main(int argc, char const* argv[])
         input_file.close();
     }
 
+    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().onNaturalSystemExit();
+
     return EXIT_SUCCESS;
 }

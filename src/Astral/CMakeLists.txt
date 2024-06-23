@@ -12,6 +12,7 @@ add_lunar_library(
         LunarDB_Selenity
         LunarDB_Crescentum
         LunarDB_Celestial
+        LunarDB_BrightMoon
 
     SOURCE_FILES
         src/QueryExecutor.cpp

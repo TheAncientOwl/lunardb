@@ -8,6 +8,8 @@
 #include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
+// #define LUNAR_ENABLE_TESTING
+
 namespace LunarDB::Selenity::API {
 
 LUNAR_SINGLETON_INIT_IMPL(SystemCatalog)
