@@ -9,10 +9,9 @@ using namespace Common::QueryData;
 // clang-format off
 TEST(Moonlight_RevokeParserTest, success01)
 {
-    auto const query = "revoke [ select, create, update, insert, delete ] from UserName on SomeCollection";
+    auto const query = "revoke [ select,  update, insert, delete ] from UserName on SomeCollection";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
             Primitives::EUserPermissionType::Delete,
@@ -26,10 +25,9 @@ TEST(Moonlight_RevokeParserTest, success01)
 
 TEST(Moonlight_RevokeParserTest, success02)
 {
-    auto const query = "revoke    [      create,         update,      insert,    delete  ]    from         UserName    on SomeCollection;";
+    auto const query = "revoke    [               update,      insert,    delete  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
             Primitives::EUserPermissionType::Delete
@@ -42,10 +40,9 @@ TEST(Moonlight_RevokeParserTest, success02)
 
 TEST(Moonlight_RevokeParserTest, success03)
 {
-    auto const query = "revoke    [      update,         create,      delete,    insert  ]    from         UserName    on SomeCollection;";
+    auto const query = "revoke    [      update,               delete,    insert  ]    from         UserName    on SomeCollection;";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
             Primitives::EUserPermissionType::Delete
@@ -73,10 +70,9 @@ TEST(Moonlight_RevokeParserTest, success04)
 
 TEST(Moonlight_RevokeParserTest, success05)
 {
-    auto const query = "revoke [ create, update, insert, create, delete, update ] from UserName on SomeStructure";
+    auto const query = "revoke [  update, insert,  delete, update ] from UserName on SomeStructure";
     auto const expected = Init::RevokeInit{}
         .permissions({
-            Primitives::EUserPermissionType::Create,
             Primitives::EUserPermissionType::Update,
             Primitives::EUserPermissionType::Insert,
             Primitives::EUserPermissionType::Delete
@@ -89,30 +85,30 @@ TEST(Moonlight_RevokeParserTest, success05)
 
 TEST(Moonlight_RevokeParserTest, fail01)
 {
-    EXPECT_FAIL("revoke select, create, update, insert, delete ] from UserName on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete from UserName on StructureName");
-    EXPECT_FAIL("revoke select, create, update, insert, delete from UserName on StructureName");
-    EXPECT_FAIL("revoke [ select create, update, insert, delete ] from UserName on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] UserName on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from");
-    EXPECT_FAIL("revoke [ select, create, update, other, insert, delete ] from UserName on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from User Name on StructureName");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from UserName on Structure Name");
+    EXPECT_FAIL("revoke select,  update, insert, delete ] from UserName on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete from UserName on StructureName");
+    EXPECT_FAIL("revoke select,  update, insert, delete from UserName on StructureName");
+    EXPECT_FAIL("revoke [ select  update, insert, delete ] from UserName on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] UserName on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from");
+    EXPECT_FAIL("revoke [ select,  update, other, insert, delete ] from UserName on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from User Name on StructureName");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from UserName on Structure Name");
     EXPECT_FAIL("revoke [ ] from UserName on StructureName");
     EXPECT_FAIL("revoke [ ] from UserName");
     EXPECT_FAIL("revoke select from UserName on StructureName");
 
-    EXPECT_FAIL("revoke select, create, update, insert, delete ] from UserName on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete from UserName on StructureName;");
-    EXPECT_FAIL("revoke select, create, update, insert, delete from UserName on StructureName;");
-    EXPECT_FAIL("revoke [ select create, update, insert, delete ] from UserName on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] UserName on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from;");
-    EXPECT_FAIL("revoke [ select, create, update, other, insert, delete ] from UserName on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from User Name on StructureName;");
-    EXPECT_FAIL("revoke [ select, create, update, insert, delete ] from UserName on Structure Name;");
+    EXPECT_FAIL("revoke select,  update, insert, delete ] from UserName on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete from UserName on StructureName;");
+    EXPECT_FAIL("revoke select,  update, insert, delete from UserName on StructureName;");
+    EXPECT_FAIL("revoke [ select  update, insert, delete ] from UserName on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] UserName on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from;");
+    EXPECT_FAIL("revoke [ select,  update, other, insert, delete ] from UserName on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from User Name on StructureName;");
+    EXPECT_FAIL("revoke [ select,  update, insert, delete ] from UserName on Structure Name;");
     EXPECT_FAIL("revoke [ ] from UserName on StructureName;");
     EXPECT_FAIL("revoke [ ] from UserName;");
     EXPECT_FAIL("revoke select from UserName on StructureName;");

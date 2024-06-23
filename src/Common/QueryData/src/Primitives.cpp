@@ -47,8 +47,6 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(OrderType,
 
 DEFINE_LUNAR_PRIMITIVE_IMPL(UserPermissionType,
     { Literal::None, "None" },
-    { Literal::Create, "Create" },
-    { Literal::Drop, "Drop" },
     { Literal::Migrate, "Migrate" },
     { Literal::Truncate, "Truncate" },
     { Literal::Rename, "Rename" },
@@ -56,9 +54,6 @@ DEFINE_LUNAR_PRIMITIVE_IMPL(UserPermissionType,
     { Literal::Insert, "Insert" },
     { Literal::Update, "Update" },
     { Literal::Delete, "Delete" },
-    { Literal::Rebind, "Rebind" },
-    { Literal::Schema, "Schema" },
-    { Literal::Database, "Database" }
 )
 
 DEFINE_LUNAR_PRIMITIVE_IMPL(DatabaseOperationType,

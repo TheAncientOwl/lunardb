@@ -63,7 +63,6 @@ TEST(Common_QueryData_PrimitivesTest, UserPermissionType)
     using namespace UserPermissionType;
 
     EXPECT_EQ(EUserPermissionType::None, toLiteral(toString(EUserPermissionType::None)));
-    EXPECT_EQ(EUserPermissionType::Create, toLiteral(toString(EUserPermissionType::Create)));
     EXPECT_EQ(EUserPermissionType::Update, toLiteral(toString(EUserPermissionType::Update)));
     EXPECT_EQ(EUserPermissionType::Insert, toLiteral(toString(EUserPermissionType::Insert)));
     EXPECT_EQ(EUserPermissionType::Delete, toLiteral(toString(EUserPermissionType::Delete)));

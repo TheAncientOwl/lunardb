@@ -11,7 +11,7 @@
 #define LUNAR_TESTING_HOME_PATH "/tmp/lunardb"
 #endif
 
-// #define LUNAR_ENABLE_TESTING
+#define LUNAR_ENABLE_TESTING
 
 namespace LunarDB::Common::Testing {
 

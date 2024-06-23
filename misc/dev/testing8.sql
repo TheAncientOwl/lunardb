@@ -16,6 +16,9 @@ insert into sometable objects [
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
 user remove testuser01;
 user create testuser01 password 1234;
+
+grant [ select, insert, migrate, truncate, rename, update, delete ] to testuser01 on sometable;
+
 auth testuser01;
 
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];

@@ -49,8 +49,6 @@ DEFINE_LUNAR_PRIMITIVE(OrderType,
 
 DEFINE_LUNAR_PRIMITIVE(UserPermissionType,
     None = 0,
-    Create = 1,
-    Drop = 2,
     Migrate = 3,
     Truncate = 4,
     Rename = 5,
@@ -58,9 +56,6 @@ DEFINE_LUNAR_PRIMITIVE(UserPermissionType,
     Insert = 7,
     Update = 8,
     Delete = 9,
-    Rebind = 10,
-    Schema = 11,
-    Database = 12
 )
 
 DEFINE_LUNAR_PRIMITIVE(DatabaseOperationType,

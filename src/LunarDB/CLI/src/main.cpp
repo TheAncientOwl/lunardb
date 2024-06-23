@@ -151,19 +151,6 @@ auto const after_parsing = [](LunarDB::Moonlight::API::ParsedQuery const& parsed
             throw std::runtime_error{"Permission denied. Only root user can issue this command"};
         }
         break;
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Drop: {
-        auto const& query = parsed_query.get<Common::QueryData::Drop>();
-        auto const& user_config = users_catalog.getUserConfiguration(current_user);
-        auto const current_database = system_catalog.getDatabaseInUse();
-        if (!user_config.permissions.contains(LunarDB::Celestial::API::Configuration::Permission{
-                LunarDB::Common::QueryData::Primitives::EUserPermissionType::Drop,
-                current_database->getUID(),
-                current_database->getCollection(query.structure_name)->getUID()}))
-        {
-            throw std::runtime_error{"Permission denied"};
-        }
-        break;
-    }
     case LunarDB::Common::QueryData::Primitives::EQueryType::Migrate: {
         auto const& query = parsed_query.get<Common::QueryData::Migrate>();
         auto const& user_config = users_catalog.getUserConfiguration(current_user);
@@ -255,19 +242,6 @@ auto const after_parsing = [](LunarDB::Moonlight::API::ParsedQuery const& parsed
         }
         break;
     }
-    case LunarDB::Common::QueryData::Primitives::EQueryType::Rebind: {
-        auto const& query = parsed_query.get<Common::QueryData::Rebind>();
-        auto const& user_config = users_catalog.getUserConfiguration(current_user);
-        auto const current_database = system_catalog.getDatabaseInUse();
-        if (!user_config.permissions.contains(LunarDB::Celestial::API::Configuration::Permission{
-                LunarDB::Common::QueryData::Primitives::EUserPermissionType::Rebind,
-                current_database->getUID(),
-                current_database->getCollection(query.structure_name)->getUID()}))
-        {
-            throw std::runtime_error{"Permission denied"};
-        }
-        break;
-    }
     default:
         break;
     }
@@ -338,10 +312,9 @@ int main(int argc, char const* argv[])
         LunarDB::CLI::EventHandlers::on_error(
             "System stopped loading, reason: LUNARDB_ROOT_PASSWORD env variable was not set or is "
             "empty.");
-        // return EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
     LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword(std::string(root_password));
-    LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword("root");
 
     // Setup input stream
     std::istream* input_stream_ptr{&std::cin};

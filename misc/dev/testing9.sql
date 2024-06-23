@@ -16,6 +16,9 @@ insert into sometable objects [
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
 user remove testuser01;
 user create testuser01 password 1234;
+
+grant [ select, insert, migrate, truncate, rename, update, delete ] to testuser01 on sometable;
+
 auth testuser01;
 
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
@@ -43,6 +46,26 @@ insert into sometable objects [
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
 truncate structure sometable;
 select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
+insert into sometable objects [  
+  { "field1": "val1", "field2": "11" }  
+  { "field1": "val2", "field2": "22" }
+  { "field1": "val3", "field2": "33" }
+  { "field1": "val4", "field2": "44" }
+];
+select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
 
 migrate structure sometable to table_schema2;
 rename structure from sometable to SomeTable;
+
+auth root;
+revoke [ insert ] from testuser01 on sometable;
+
+auth testuser01;
+select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];
+insert into sometable objects [  
+  { "field1": "val1", "field2": "11" }  
+  { "field1": "val2", "field2": "22" }
+  { "field1": "val3", "field2": "33" }
+  { "field1": "val4", "field2": "44" }
+];
+select from structure sometable where ( 1 == 1 ) fields [ field1, field2 ];

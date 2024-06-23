@@ -108,14 +108,6 @@ TEST(Astral_RevokeExecutorTest, revoke)
         EXPECT_FALSE(users_catalog.userHasPermission(
             c_user_uid,
             Celestial::API::Configuration::Permission{
-                Common::QueryData::Primitives::EUserPermissionType::Create,
-                c_database_in_use_uid,
-                c_collection_uid}));
-    });
-    ASSERT_NO_THROW({
-        EXPECT_FALSE(users_catalog.userHasPermission(
-            c_user_uid,
-            Celestial::API::Configuration::Permission{
                 Common::QueryData::Primitives::EUserPermissionType::Delete,
                 c_database_in_use_uid,
                 c_collection_uid}));
