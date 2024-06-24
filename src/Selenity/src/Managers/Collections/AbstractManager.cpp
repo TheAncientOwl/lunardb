@@ -42,7 +42,12 @@ std::shared_ptr<Configurations::CollectionConfiguration> const& AbstractManager:
 
 std::filesystem::path AbstractManager::getDataHomePath() const
 {
-    return m_collection_config->home / "data";
+    auto const data_home_path{m_collection_config->home / "data"};
+    if (!std::filesystem::exists(data_home_path))
+    {
+        std::filesystem::create_directories(data_home_path);
+    }
+    return data_home_path;
 }
 
 void AbstractManager::truncate() const

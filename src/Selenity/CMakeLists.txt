@@ -18,6 +18,8 @@ add_lunar_library(
     PRIVATE_DEPENDENCIES
         LunarDB_Common_CppExtensions
         LunarDB_Moonlight
+        LunarDB_BrightMoon
+        LunarDB_Crescentum
         
     SOURCE_FILES
         src/Managers/DatabaseManager.cpp

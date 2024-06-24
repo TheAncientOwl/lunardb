@@ -49,6 +49,10 @@ public: // public API
 
     virtual void update(Common::QueryData::Update const& config) = 0;
 
+    virtual void undoInsert(nlohmann::json json, bool is_last_call) = 0;
+    virtual void undoUpdate(nlohmann::json json, bool is_last_call) = 0;
+    virtual void undoDelete(nlohmann::json json, bool is_last_call) = 0;
+
     std::filesystem::path getDataHomePath() const;
 
     void truncate() const;
