@@ -253,7 +253,7 @@ void WriteAheadLogger::recover()
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
                 system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
-            collection->undoInsert(json);
+            collection->undoInsert(json, logs.empty());
         }
         else if (log.starts_with("Delete"))
         {
@@ -267,7 +267,7 @@ void WriteAheadLogger::recover()
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
                 system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
-            collection->undoDelete(json);
+            collection->undoDelete(json, logs.empty());
         }
         else if (log.starts_with("Update"))
         {
@@ -281,7 +281,7 @@ void WriteAheadLogger::recover()
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
                 system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
-            collection->undoUpdate(json);
+            collection->undoUpdate(json, logs.empty());
         }
         else
         {

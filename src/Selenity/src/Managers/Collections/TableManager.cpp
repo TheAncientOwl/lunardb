@@ -8,13 +8,18 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
+#include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 #include "LunarDB/Selenity/Managers/Collections/TableManager.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
+
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_SELENITY);
 
 using namespace std::string_literals;
 
@@ -348,7 +353,14 @@ void update(
                 auto const value_float{std::stof(value_str)};
                 auto const solved{solveNumericExpression(modify.expression, modify.field, value_float)};
                 std::ostringstream oss{};
-                oss << std::fixed << std::setprecision(10) << solved;
+                if (solved == int(solved))
+                {
+                    oss << std::fixed << std::setprecision(0) << solved;
+                }
+                else
+                {
+                    oss << std::fixed << std::setprecision(10) << solved;
+                }
                 value = oss.str();
             }
             catch (std::invalid_argument const& e)
@@ -560,9 +572,6 @@ void TableManager::update(Common::QueryData::Update const& config)
                 {
                     collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
                         icollection_entry_ptr.release()));
-                    Collections::update(
-                        collection_entry_ptr->data, m_collection_config->schema, config.modify);
-                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
 
                     LunarDB::BrightMoon::API::Transactions::UpdateTransactionData wal_data{};
                     wal_data.database =
@@ -570,6 +579,10 @@ void TableManager::update(Common::QueryData::Update const& config)
                     wal_data.collection = m_collection_config->name;
                     wal_data.old_json = collection_entry_ptr->getJSON().dump();
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
+
+                    Collections::update(
+                        collection_entry_ptr->data, m_collection_config->schema, config.modify);
+                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
 
                     auto const current_pos = table_file.tellg();
 
@@ -586,28 +599,271 @@ void TableManager::update(Common::QueryData::Update const& config)
     }
 }
 
-void TableManager::undoInsert(nlohmann::json json)
+void TableManager::undoInsert(nlohmann::json json, bool is_last_call)
 {
-    // TODO: Provide implementation
-    throw std::runtime_error{
-        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoInsert] Not "
-        "implemented yet..."};
+    CLOG_VERBOSE("TableManager::undoInsert(): begin");
+
+    static std::unordered_set<std::string> s_inserted_rids{};
+
+    s_inserted_rids.emplace(json["_rid"]);
+    if (!is_last_call)
+    {
+        return;
+    }
+
+    auto documents_path{getDataHomePath()};
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        CLOG_ERROR("TableManager::undoInsert(): Could not open file:", documents_path);
+        return;
+    }
+
+    std::uint64_t entries_count{0};
+    auto const metadata_file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(metadata_file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
+    {
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::fstream table_file(table_file_path, std::ios::in | std::ios::out | std::ios::binary);
+        if (table_file.is_open())
+        {
+            auto const undo_size = s_inserted_rids.size();
+            std::size_t undo_number{0};
+
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
+            {
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+
+                if (auto const rid_it = s_inserted_rids.find(collection_entry_ptr->data["_rid"]);
+                    rid_it != s_inserted_rids.end())
+                {
+                    auto const rid{*rid_it};
+                    CLOG_INFO("TableManager::undoInsert(): RID:", rid);
+                    collection_entry_ptr->data["_del"] = "1";
+                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+
+                    auto const current_pos = table_file.tellg();
+
+                    table_file.seekp(
+                        -(static_cast<std::uint64_t>(bson.size()) + sizeof(std::size_t)),
+                        std::ios::cur);
+                    Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+                    table_file.seekg(current_pos, std::ios::beg);
+
+                    undo_number++;
+                    CLOG_INFO(
+                        "TableManager::undoInsert(): ",
+                        undo_number,
+                        "out of",
+                        undo_size,
+                        "changes undone");
+                    s_inserted_rids.erase(rid_it);
+
+                    CLOG_INFO("TableManager::undoInsert(): finished successfully RID:", rid);
+                }
+            }
+            table_file.close();
+        }
+        else
+        {
+            CLOG_ERROR("TableManager::undoInsert(): Could not open data file", table_file_path);
+        }
+        metadata_file.close();
+    }
+    else
+    {
+        CLOG_ERROR("TableManager::undoInsert(): Could not open metadata file", metadata_file_path);
+    }
+
+    s_inserted_rids.clear();
+    CLOG_VERBOSE("TableManager::undoInsert(): end");
 }
 
-void TableManager::undoUpdate(nlohmann::json json)
+void TableManager::undoUpdate(nlohmann::json json, bool is_last_call)
 {
-    // TODO: Provide implementation
-    throw std::runtime_error{
-        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoUpdate] Not "
-        "implemented yet..."};
+    CLOG_VERBOSE("TableManager::undoUpdate(): begin");
+
+    static std::unordered_map<std::string, nlohmann::json> s_updated_rids{};
+
+    std::string rid{json["_rid"]};
+    s_updated_rids.emplace(std::move(rid), std::move(json));
+    if (!is_last_call)
+    {
+        return;
+    }
+
+    auto documents_path{getDataHomePath()};
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        CLOG_ERROR("TableManager::undoUpdate(): Could not open file:", documents_path);
+        return;
+    }
+
+    std::uint64_t entries_count{0};
+    auto const metadata_file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(metadata_file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
+    {
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::fstream table_file(table_file_path, std::ios::in | std::ios::out | std::ios::binary);
+        if (table_file.is_open())
+        {
+            auto const undo_size = s_updated_rids.size();
+            std::size_t undo_number{0};
+
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
+            {
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+
+                if (auto const rid_it = s_updated_rids.find(collection_entry_ptr->data["_rid"]);
+                    rid_it != s_updated_rids.end())
+                {
+                    auto const rid{rid_it->first};
+                    CLOG_INFO("TableManager::undoUpdate(): RID:", rid);
+                    bson = nlohmann::json::to_bson(rid_it->second);
+
+                    auto const current_pos = table_file.tellg();
+
+                    table_file.seekp(
+                        -(static_cast<std::uint64_t>(bson.size()) + sizeof(std::size_t)),
+                        std::ios::cur);
+                    Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+                    table_file.seekg(current_pos, std::ios::beg);
+
+                    undo_number++;
+                    CLOG_INFO(
+                        "TableManager::undoUpdate(): ",
+                        undo_number,
+                        "out of",
+                        undo_size,
+                        "changes undone");
+                    s_updated_rids.erase(rid_it);
+
+                    CLOG_INFO("TableManager::undoUpdate(): finished successfully RID:", rid);
+                }
+            }
+            table_file.close();
+        }
+        else
+        {
+            CLOG_ERROR("TableManager::undoUpdate(): Could not open data file", table_file_path);
+        }
+        metadata_file.close();
+    }
+    else
+    {
+        CLOG_ERROR("TableManager::undoUpdate(): Could not open metadata file", metadata_file_path);
+    }
+
+    s_updated_rids.clear();
+    CLOG_VERBOSE("TableManager::undoUpdate(): end");
 }
 
-void TableManager::undoDelete(nlohmann::json json)
+void TableManager::undoDelete(nlohmann::json json, bool is_last_call)
 {
-    // TODO: Provide implementation
-    throw std::runtime_error{
-        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoDelete] Not "
-        "implemented yet..."};
+    CLOG_VERBOSE("TableManager::undoDelete(): begin");
+
+    static std::unordered_set<std::string> s_deleted_rids{};
+
+    s_deleted_rids.emplace(json["_rid"]);
+    if (!is_last_call)
+    {
+        return;
+    }
+
+    auto documents_path{getDataHomePath()};
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        CLOG_ERROR("TableManager::undoDelete(): Could not open file:", documents_path);
+        return;
+    }
+
+    std::uint64_t entries_count{0};
+    auto const metadata_file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(metadata_file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
+    {
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::fstream table_file(table_file_path, std::ios::in | std::ios::out | std::ios::binary);
+        if (table_file.is_open())
+        {
+            auto const undo_size = s_deleted_rids.size();
+            std::size_t undo_number{0};
+
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
+            {
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+
+                if (auto const rid_it = s_deleted_rids.find(collection_entry_ptr->data["_rid"]);
+                    rid_it != s_deleted_rids.end())
+                {
+                    auto const rid{*rid_it};
+                    CLOG_INFO("TableManager::undoDelete(): RID:", rid);
+                    collection_entry_ptr->data["_del"] = "0";
+                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+
+                    auto const current_pos = table_file.tellg();
+
+                    table_file.seekp(
+                        -(static_cast<std::uint64_t>(bson.size()) + sizeof(std::size_t)),
+                        std::ios::cur);
+                    Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+                    table_file.seekg(current_pos, std::ios::beg);
+
+                    undo_number++;
+                    CLOG_INFO(
+                        "TableManager::undoDelete(): ",
+                        undo_number,
+                        "out of",
+                        undo_size,
+                        "changes undone");
+                    s_deleted_rids.erase(rid_it);
+
+                    CLOG_INFO("TableManager::undoDelete(): finished successfully RID:", rid);
+                }
+            }
+            table_file.close();
+        }
+        else
+        {
+            CLOG_ERROR("TableManager::undoDelete(): Could not open data file", table_file_path);
+        }
+        metadata_file.close();
+    }
+    else
+    {
+        CLOG_ERROR("TableManager::undoDelete(): Could not open metadata file", metadata_file_path);
+    }
+
+    s_deleted_rids.clear();
+    CLOG_VERBOSE("TableManager::undoDelete(): end");
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

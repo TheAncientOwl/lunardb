@@ -7,4 +7,5 @@ lunardb.config.json
 lunardb/*
 external/*
 out/*
-misc/scenarios/wal/document/*sql
+misc/scenarios/wal/v1/document/*sql
+misc/scenarios/wal/v1/table/*sql

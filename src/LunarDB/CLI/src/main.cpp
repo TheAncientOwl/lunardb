@@ -296,6 +296,24 @@ bool handleAuthentication(std::string_view root_password)
     }
 }
 
+void handleCrashRecovery()
+{
+    if (LunarDB::BrightMoon::API::WriteAheadLogger::Instance().getRecoveryFlag() ==
+        LunarDB::BrightMoon::API::ERecoveryFlag::Recover)
+    {
+        std::cout << ccolor::dark_gray << '[' << ccolor::dark_red << "BrightMoon" << ccolor::dark_gray
+                  << "] " << ccolor::light_red << "Crash recovery process started" << std::endl;
+        LunarDB::Common::CppExtensions::Timer timer{};
+        LunarDB::BrightMoon::API::WriteAheadLogger::Instance().recover();
+        std::cout << ccolor::dark_gray << '[' << ccolor::dark_red << "BrightMoon"
+                  << ccolor::dark_gray << "] " << ccolor::light_red
+                  << "Crash recovery process finished successfully" << std::endl;
+        auto const elapsed{timer.elapsedExtended()};
+        std::cout << ccolor::dark_gray << '[' << ccolor::light_blue << "Elapsed"
+                  << ccolor::dark_gray << "] " << ccolor::dark_aqua << elapsed << std::endl;
+    }
+}
+
 } // namespace LunarDB::CLI
 
 int main(int argc, char const* argv[])
@@ -303,7 +321,8 @@ int main(int argc, char const* argv[])
     // Setup singletons
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
     LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
-    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().recover();
+
+    LunarDB::CLI::handleCrashRecovery();
 
     LUNARDB_ADD_EXTRA_QUERY(Auth);
 

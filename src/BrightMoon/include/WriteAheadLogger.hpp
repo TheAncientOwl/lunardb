@@ -29,6 +29,12 @@ public: // public API
     void onNaturalSystemExit();
     void recover();
 
+    ///
+    /// @brief Reads the recovery flag from disk.
+    /// @return saved ERecoveryFlag
+    ///
+    ERecoveryFlag getRecoveryFlag() const;
+
 private: // singleton
     LUNAR_SINGLETON_INIT(WriteAheadLogger);
 
@@ -41,12 +47,6 @@ private: // methods
     /// @param[in] flag
     ///
     void setRecoveryFlag(ERecoveryFlag flag) const;
-
-    ///
-    /// @brief Reads the recovery flag from disk.
-    /// @return saved ERecoveryFlag
-    ///
-    ERecoveryFlag getRecoveryFlag() const;
 
 private: // fields
     std::ofstream m_log{};

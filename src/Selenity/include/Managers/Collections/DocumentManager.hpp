@@ -31,9 +31,9 @@ public: // public API
     void update(Common::QueryData::Update const& config) override;
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
 
-    void undoInsert(nlohmann::json json) override;
-    void undoUpdate(nlohmann::json json) override;
-    void undoDelete(nlohmann::json json) override;
+    void undoInsert(nlohmann::json json, bool is_last_call) override;
+    void undoUpdate(nlohmann::json json, bool is_last_call) override;
+    void undoDelete(nlohmann::json json, bool is_last_call) override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

@@ -505,7 +505,7 @@ void DocumentManager::update(Common::QueryData::Update const& config)
     }
 }
 
-void DocumentManager::undoInsert(nlohmann::json json)
+void DocumentManager::undoInsert(nlohmann::json json, bool is_last_call)
 {
     CLOG_VERBOSE("DocumentManager::undoInsert(): begin");
 
@@ -526,7 +526,7 @@ void DocumentManager::undoInsert(nlohmann::json json)
     CLOG_VERBOSE("DocumentManager::undoInsert(): end");
 }
 
-void DocumentManager::undoUpdate(nlohmann::json json)
+void DocumentManager::undoUpdate(nlohmann::json json, bool is_last_call)
 {
     CLOG_VERBOSE("DocumentManager::undoUpdate(): begin");
 
@@ -558,7 +558,7 @@ void DocumentManager::undoUpdate(nlohmann::json json)
     CLOG_VERBOSE("DocumentManager::undoUpdate(): end");
 }
 
-void DocumentManager::undoDelete(nlohmann::json json)
+void DocumentManager::undoDelete(nlohmann::json json, bool is_last_call)
 {
     CLOG_VERBOSE("DocumentManager::undoDelete(): begin");
 
