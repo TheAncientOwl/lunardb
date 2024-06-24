@@ -24,14 +24,16 @@ public: // CollectionEntry
     };
 
 public: // public API
-    void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
-
     std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> select(
         Common::QueryData::Select const& config) const override;
 
+    void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
+    void update(Common::QueryData::Update const& config) override;
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
 
-    void update(Common::QueryData::Update const& config) override;
+    void undoInsert(nlohmann::json json) override;
+    void undoUpdate(nlohmann::json json) override;
+    void undoDelete(nlohmann::json json) override;
 };
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

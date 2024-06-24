@@ -11,6 +11,7 @@
 #include <string_view>
 
 #include "LunarDB/Astral/QueryExecutor.hpp"
+#include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Celestial/UsersCatalog.hpp"
 #include "LunarDB/Common/CppExtensions/ConsoleColorOutput.hpp"
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
@@ -302,6 +303,7 @@ int main(int argc, char const* argv[])
     // Setup singletons
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
     LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
+    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().recover();
 
     LUNARDB_ADD_EXTRA_QUERY(Auth);
 

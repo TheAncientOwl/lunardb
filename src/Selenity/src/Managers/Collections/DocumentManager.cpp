@@ -9,9 +9,13 @@
 #include <string>
 
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
+#include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/DocumentManager.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
+
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_SELENITY);
 
 using namespace std::string_literals;
 
@@ -74,6 +78,8 @@ void insert(
     json["_rid"] = rid_str;
     fillRecurseJSON(json, collection_schema, object);
     LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
+    wal_data.database =
+        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
     wal_data.collection = config->name;
     wal_data.json = json.dump();
     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -93,7 +99,7 @@ void insert(
     }
     else
     {
-        // TODO: log error
+        CLOG_ERROR("DocumentManager::namespace::insert(): Could not create file", document_file_path);
     }
 }
 
@@ -339,10 +345,6 @@ DocumentManager::DocumentManager(std::shared_ptr<Configurations::CollectionConfi
 void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
 {
     auto const documents_path{getDataHomePath()};
-    if (!std::filesystem::exists(documents_path))
-    {
-        std::filesystem::create_directories(documents_path);
-    }
 
     for (auto const& object : objects)
     {
@@ -426,6 +428,8 @@ void DocumentManager::deleteWhere(Common::QueryData::WhereClause const& where)
             if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
             {
                 LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
+                wal_data.database =
+                    LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
                 wal_data.collection = m_collection_config->name;
                 wal_data.old_json = icollection_entry_ptr->getJSON().dump();
                 LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -477,6 +481,8 @@ void DocumentManager::update(Common::QueryData::Update const& config)
                         icollection_entry_ptr.release()));
 
                     LunarDB::BrightMoon::API::Transactions::UpdateTransactionData wal_data{};
+                    wal_data.database =
+                        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
                     wal_data.collection = m_collection_config->name;
                     wal_data.old_json = collection_entry_ptr->getJSON().dump();
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -497,6 +503,91 @@ void DocumentManager::update(Common::QueryData::Update const& config)
             // TODO: Log error
         }
     }
+}
+
+void DocumentManager::undoInsert(nlohmann::json json)
+{
+    CLOG_VERBOSE("DocumentManager::undoInsert(): begin");
+
+    auto const uid = json["_rid"];
+    auto const record_file_path{getDataHomePath() / (std::string(uid) + ".ldbdoc")};
+
+    if (std::filesystem::exists(record_file_path))
+    {
+        CLOG_INFO("DocumentManager::undoInsert(): Removing file", record_file_path);
+        std::filesystem::remove(record_file_path);
+        CLOG_INFO("DocumentManager::undoInsert(): File", record_file_path, "successfully removed");
+    }
+    else
+    {
+        CLOG_INFO("DocumentManager::undoInsert(): File", record_file_path, "no longer exists");
+    }
+
+    CLOG_VERBOSE("DocumentManager::undoInsert(): end");
+}
+
+void DocumentManager::undoUpdate(nlohmann::json json)
+{
+    CLOG_VERBOSE("DocumentManager::undoUpdate(): begin");
+
+    auto const uid = json["_rid"];
+    auto const record_file_path{getDataHomePath() / (std::string(uid) + ".ldbdoc")};
+
+    if (std::filesystem::exists(record_file_path))
+    {
+        CLOG_INFO("DocumentManager::undoUpdate(): File", record_file_path, "already exists.");
+        CLOG_INFO("DocumentManager::undoUpdate(): Removing file", record_file_path);
+        std::filesystem::remove(record_file_path);
+        CLOG_INFO("DocumentManager::undoUpdate(): File", record_file_path, "successfully removed");
+    }
+
+    CLOG_INFO("DocumentManager::undoUpdate(): Creating file", record_file_path);
+
+    std::ofstream document(record_file_path);
+    if (document.is_open())
+    {
+        document << json.dump(4);
+        document.close();
+        CLOG_INFO("DocumentManager::undoUpdate(): File", record_file_path, "created successfully");
+    }
+    else
+    {
+        CLOG_ERROR("DocumentManager::undoUpdate(): Could not create file", record_file_path);
+    }
+
+    CLOG_VERBOSE("DocumentManager::undoUpdate(): end");
+}
+
+void DocumentManager::undoDelete(nlohmann::json json)
+{
+    CLOG_VERBOSE("DocumentManager::undoDelete(): begin");
+
+    auto const uid = json["_rid"];
+    auto const record_file_path{getDataHomePath() / (std::string(uid) + ".ldbdoc")};
+
+    if (std::filesystem::exists(record_file_path))
+    {
+        CLOG_INFO("DocumentManager::undoDelete(): File", record_file_path, "already exists.");
+        CLOG_INFO("DocumentManager::undoDelete(): Removing file", record_file_path);
+        std::filesystem::remove(record_file_path);
+        CLOG_INFO("DocumentManager::undoDelete(): File", record_file_path, "successfully removed");
+    }
+
+    CLOG_INFO("DocumentManager::undoDelete(): Creating file", record_file_path);
+
+    std::ofstream document(record_file_path);
+    if (document.is_open())
+    {
+        document << json.dump(4);
+        document.close();
+        CLOG_INFO("DocumentManager::undoDelete(): File", record_file_path, "created successfully");
+    }
+    else
+    {
+        CLOG_ERROR("DocumentManager::undoDelete(): Could not create file", record_file_path);
+    }
+
+    CLOG_VERBOSE("DocumentManager::undoDelete(): end");
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

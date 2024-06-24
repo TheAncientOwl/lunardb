@@ -14,6 +14,7 @@
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 #include "LunarDB/Selenity/Managers/Collections/TableManager.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
 
@@ -80,6 +81,8 @@ void insert(
     json["_del"] = "0";
     fillRecurseJSON(json, collection_schema, object);
     LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
+    wal_data.database =
+        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
     wal_data.collection = config->name;
     wal_data.json = json.dump();
     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -488,6 +491,8 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
                 if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
                 {
                     LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
+                    wal_data.database =
+                        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
                     wal_data.collection = m_collection_config->name;
                     wal_data.old_json = icollection_entry_ptr->getJSON().dump();
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -560,6 +565,8 @@ void TableManager::update(Common::QueryData::Update const& config)
                     bson = nlohmann::json::to_bson(collection_entry_ptr->data);
 
                     LunarDB::BrightMoon::API::Transactions::UpdateTransactionData wal_data{};
+                    wal_data.database =
+                        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
                     wal_data.collection = m_collection_config->name;
                     wal_data.old_json = collection_entry_ptr->getJSON().dump();
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
@@ -577,6 +584,30 @@ void TableManager::update(Common::QueryData::Update const& config)
             table_file.close();
         }
     }
+}
+
+void TableManager::undoInsert(nlohmann::json json)
+{
+    // TODO: Provide implementation
+    throw std::runtime_error{
+        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoInsert] Not "
+        "implemented yet..."};
+}
+
+void TableManager::undoUpdate(nlohmann::json json)
+{
+    // TODO: Provide implementation
+    throw std::runtime_error{
+        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoUpdate] Not "
+        "implemented yet..."};
+}
+
+void TableManager::undoDelete(nlohmann::json json)
+{
+    // TODO: Provide implementation
+    throw std::runtime_error{
+        "[~/lunardb/src/Selenity/src/Managers/Collections/TableManager.cpp:undoDelete] Not "
+        "implemented yet..."};
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections

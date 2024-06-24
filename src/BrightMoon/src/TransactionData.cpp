@@ -33,7 +33,7 @@ std::string TruncateTransactionData::toString() const
 {
     std::ostringstream oss{};
 
-    oss << "Truncate " << structure_name;
+    oss << "Truncate " << database << " " << structure_name;
 
     return oss.str();
 }
@@ -42,7 +42,8 @@ std::string RenameTransactionData::toString() const
 {
     std::ostringstream oss{};
 
-    oss << "Rename " << Common::QueryData::Primitives::RenameType::toString(rename.type) << " "
+    oss << "Rename " << database << " "
+        << Common::QueryData::Primitives::RenameType::toString(rename.type) << " "
         << rename.old_name << " " << rename.new_name;
 
     return oss.str();
@@ -52,7 +53,7 @@ std::string InsertTransactionData::toString() const
 {
     std::ostringstream oss{};
 
-    oss << "Insert " << collection << " -> json: " << json;
+    oss << "Insert " << database << " " << collection << " -> json: " << json;
 
     return oss.str();
 }
@@ -61,7 +62,7 @@ std::string UpdateTransactionData::toString() const
 {
     std::ostringstream oss{};
 
-    oss << "Update " << collection << " -> old: " << old_json;
+    oss << "Update " << database << " " << collection << " -> old: " << old_json;
 
     return oss.str();
 }
@@ -70,7 +71,7 @@ std::string DeleteTransactionData::toString() const
 {
     std::ostringstream oss{};
 
-    oss << "Delete " << collection << " -> old: " << old_json;
+    oss << "Delete " << database << " " << collection << " -> old: " << old_json;
 
     return oss.str();
 }

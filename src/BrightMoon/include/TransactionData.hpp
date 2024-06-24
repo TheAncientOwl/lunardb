@@ -49,6 +49,7 @@ struct MigrateTransactionData : public TransactionData
 
 struct TruncateTransactionData : public TransactionData
 {
+    std::string database{};
     std::string structure_name{};
     std::string toString() const override;
     LUNARDB_PROVIDE_STRUCT_DEFAULT_LIFECYCLE(TruncateTransactionData);
@@ -56,6 +57,7 @@ struct TruncateTransactionData : public TransactionData
 
 struct RenameTransactionData : public TransactionData
 {
+    std::string database{};
     Common::QueryData::Rename rename{};
     std::string toString() const override;
     LUNARDB_PROVIDE_STRUCT_DEFAULT_LIFECYCLE(RenameTransactionData);
@@ -63,6 +65,7 @@ struct RenameTransactionData : public TransactionData
 
 struct InsertTransactionData : public TransactionData
 {
+    std::string database{};
     std::string collection{};
     std::string json{};
     std::string toString() const override;
@@ -71,6 +74,7 @@ struct InsertTransactionData : public TransactionData
 
 struct UpdateTransactionData : public TransactionData
 {
+    std::string database{};
     std::string collection{};
     std::string old_json{};
     std::string toString() const override;
@@ -79,6 +83,7 @@ struct UpdateTransactionData : public TransactionData
 
 struct DeleteTransactionData : public TransactionData
 {
+    std::string database{};
     std::string collection{};
     std::string old_json{};
     std::string toString() const override;

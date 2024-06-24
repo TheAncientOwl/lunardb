@@ -1,6 +1,5 @@
 #pragma once
 
-#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <optional>
@@ -23,21 +22,35 @@ DEFINE_LUNAR_PRIMITIVE(RecoveryFlag,
 
 class WriteAheadLogger : public Common::CppExtensions::DesignPatterns::Singleton<WriteAheadLogger>
 {
-public:
+public: // public API
     void openTransaction(LunarDB::Common::QueryData::Primitives::EQueryType const type);
     void closeTransaction(LunarDB::Common::QueryData::Primitives::EQueryType const type);
     void log(Transactions::TransactionData const& data);
     void onNaturalSystemExit();
     void recover();
 
-private:
+private: // singleton
     LUNAR_SINGLETON_INIT(WriteAheadLogger);
 
-private:
+private: // methods
+    std::filesystem::path getHomePath() const;
+    std::filesystem::path getRecoveryFlagFilePath() const;
+
+    ///
+    /// @brief Saves the recovery flag to disk.
+    /// @param[in] flag
+    ///
+    void setRecoveryFlag(ERecoveryFlag flag) const;
+
+    ///
+    /// @brief Reads the recovery flag from disk.
+    /// @return saved ERecoveryFlag
+    ///
+    ERecoveryFlag getRecoveryFlag() const;
+
+private: // fields
     std::ofstream m_log{};
-    std::chrono::_V2::system_clock::time_point m_log_start_time{};
     std::optional<std::filesystem::path> m_recovery_file_path{};
-    ERecoveryFlag m_recovery_flag{false};
     Common::CppExtensions::UniqueID m_current_transaction_uid{};
 };
 
