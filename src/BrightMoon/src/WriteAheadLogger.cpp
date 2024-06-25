@@ -225,7 +225,12 @@ void WriteAheadLogger::recover()
 
         if (pos == 0 && !current_line.empty())
         {
-            logs.emplace(current_line.rbegin(), current_line.rend());
+            auto line = std::string{current_line.rbegin(), current_line.rend()};
+            if (!LunarDB::Common::CppExtensions::StringUtils::startsWithIgnoreCase(
+                    line, "OPEN_TRANSACTION"))
+            {
+                logs.emplace(std::move(line));
+            }
         }
     }
 
@@ -285,7 +290,7 @@ void WriteAheadLogger::recover()
         }
         else
         {
-            CLOG_ERROR("Unsupported undo operation");
+            CLOG_ERROR("Unsupported undo operation", log);
         }
     }
 };

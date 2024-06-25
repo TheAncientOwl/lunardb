@@ -9,3 +9,4 @@ external/*
 out/*
 misc/scenarios/wal/v1/document/*sql
 misc/scenarios/wal/v1/table/*sql
+misc/scenarios/wal/v2/large

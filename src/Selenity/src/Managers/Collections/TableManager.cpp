@@ -126,6 +126,7 @@ void insert(
             if (metadata_file.is_open())
             {
                 Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
+                metadata_file.flush();
                 metadata_file.close();
             }
             else
