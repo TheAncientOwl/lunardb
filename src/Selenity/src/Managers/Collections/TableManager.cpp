@@ -126,6 +126,7 @@ void insert(
             if (metadata_file.is_open())
             {
                 Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
+                metadata_file.flush();
                 metadata_file.close();
             }
             else
@@ -637,18 +638,17 @@ void TableManager::undoInsert(nlohmann::json json, bool is_last_call)
 
             for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
                 std::vector<std::uint8_t> bson{};
                 Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
-                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                auto json_entry = nlohmann::json::from_bson(bson);
 
-                if (auto const rid_it = s_inserted_rids.find(collection_entry_ptr->data["_rid"]);
+                if (auto const rid_it = s_inserted_rids.find(json_entry["_rid"]);
                     rid_it != s_inserted_rids.end())
                 {
                     auto const rid{*rid_it};
                     CLOG_INFO("TableManager::undoInsert(): RID:", rid);
-                    collection_entry_ptr->data["_del"] = "1";
-                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+                    json_entry["_del"] = "1";
+                    bson = nlohmann::json::to_bson(json_entry);
 
                     auto const current_pos = table_file.tellg();
 
@@ -727,12 +727,11 @@ void TableManager::undoUpdate(nlohmann::json json, bool is_last_call)
 
             for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
                 std::vector<std::uint8_t> bson{};
                 Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
-                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                auto json_data = nlohmann::json::from_bson(bson);
 
-                if (auto const rid_it = s_updated_rids.find(collection_entry_ptr->data["_rid"]);
+                if (auto const rid_it = s_updated_rids.find(json_data["_rid"]);
                     rid_it != s_updated_rids.end())
                 {
                     auto const rid{rid_it->first};
@@ -815,18 +814,17 @@ void TableManager::undoDelete(nlohmann::json json, bool is_last_call)
 
             for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
-                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
                 std::vector<std::uint8_t> bson{};
                 Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
-                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+                auto json_data = nlohmann::json::from_bson(bson);
 
-                if (auto const rid_it = s_deleted_rids.find(collection_entry_ptr->data["_rid"]);
+                if (auto const rid_it = s_deleted_rids.find(json_data["_rid"]);
                     rid_it != s_deleted_rids.end())
                 {
                     auto const rid{*rid_it};
                     CLOG_INFO("TableManager::undoDelete(): RID:", rid);
-                    collection_entry_ptr->data["_del"] = "0";
-                    bson = nlohmann::json::to_bson(collection_entry_ptr->data);
+                    json_data["_del"] = "0";
+                    bson = nlohmann::json::to_bson(json_data);
 
                     auto const current_pos = table_file.tellg();
 
