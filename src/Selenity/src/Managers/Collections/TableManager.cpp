@@ -6,15 +6,14 @@
 #include <nlohmann/json.hpp>
 #include <ranges>
 #include <sstream>
-#include <stack>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Common.hpp"
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Crescentum/Logger.hpp"
-#include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 #include "LunarDB/Selenity/Managers/Collections/TableManager.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
@@ -26,49 +25,6 @@ using namespace std::string_literals;
 namespace LunarDB::Selenity::API::Managers::Collections {
 
 namespace {
-
-// TODO: Move in separate file
-void fillRecurseJSON(
-    nlohmann::json& json,
-    Configurations::CollectionConfiguration::Schema& collection_schema,
-    Common::QueryData::Insert::Object const& object)
-{
-    // TODO: Check object structure with schema and add to schema where necessary
-    using Object = Common::QueryData::Insert::Object;
-
-    for (auto const& [key, value] : object.entries)
-    {
-        if (std::holds_alternative<std::string>(value))
-        {
-            json[key] = std::get<std::string>(value);
-        }
-        else if (std::holds_alternative<Object>(value))
-        {
-            fillRecurseJSON(json[key], collection_schema, std::get<Object>(value));
-        }
-        else if (std::holds_alternative<std::vector<std::string>>(value))
-        {
-            json[key] = std::get<std::vector<std::string>>(value);
-        }
-        else if (std::holds_alternative<std::vector<Object>>(value))
-        {
-            nlohmann::json array = nlohmann::json::array();
-
-            for (auto const& arr_object : std::get<std::vector<Object>>(value))
-            {
-                auto& arr_json_item = array.emplace_back();
-                fillRecurseJSON(arr_json_item, collection_schema, arr_object);
-            }
-
-            json[key] = std::move(array);
-        }
-        else
-        {
-            // TODO: Log error
-            assert(false && "Object writing failure, unknown variant alternative");
-        }
-    }
-}
 
 // TODO: Refactor to take table file stream as input
 void insert(
@@ -84,7 +40,7 @@ void insert(
     nlohmann::json json{};
     json["_rid"] = rid_str;
     json["_del"] = "0";
-    fillRecurseJSON(json, collection_schema, object);
+    jsonify(object, json, collection_schema);
     LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
     wal_data.database =
         LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
@@ -143,158 +99,6 @@ void insert(
     }
 }
 
-// TODO: Move in separate file
-std::uint8_t precedence(char operation)
-{
-    if (operation == '+' || operation == '-')
-    {
-        return 1;
-    }
-    if (operation == '*' || operation == '/')
-    {
-        return 2;
-    }
-    return 0;
-}
-
-template <typename T>
-concept NumericType = requires() { std::is_same_v<T, int> || std::is_same_v<T, float>; };
-
-template <NumericType Numeric>
-Numeric applyOperation(Numeric lhs, Numeric rhs, char operation)
-{
-    switch (operation)
-    {
-    case '+':
-        return lhs + rhs;
-    case '-':
-        return lhs - rhs;
-    case '*':
-        return lhs * rhs;
-    case '/':
-        if (rhs == 0)
-        {
-            throw std::runtime_error("Divison by 0");
-        }
-        return lhs / rhs;
-    case '%':
-        if constexpr (std::is_same_v<Numeric, int>)
-        {
-            return lhs % rhs;
-        }
-        else
-        {
-            return std::fmod(lhs, rhs);
-        }
-        break;
-    default:
-        throw std::runtime_error("Invalid operation '"s + operation + "'");
-    }
-}
-
-template <NumericType Numeric>
-Numeric solveNumericExpression(std::string_view expression, std::string_view key, Numeric key_numeric)
-{
-    using namespace std::string_view_literals;
-    using namespace std::string_literals;
-
-    Moonlight::Implementation::QueryExtractor extractor{expression};
-    assert(!extractor.empty() && "Invalid update expression");
-
-    std::stack<Numeric> values{};
-    std::stack<char> operations{};
-
-    while (!extractor.empty())
-    {
-        auto const token = extractor.extractOne();
-
-        // Current token is an opening brace, push to operators stack
-        if (token.length() == 1 && token.front() == '(')
-        {
-            operations.push('(');
-        }
-        // Current token is the field that will be modified, push its numeric value to the stack
-        else if (token == key)
-        {
-            values.push(key_numeric);
-        }
-        // Current token is numeric, push to stack
-        else if (std::all_of(token.begin(), token.end(), [](char const c) { return std::isdigit(c); }))
-        {
-            if constexpr (std::is_same_v<Numeric, int>)
-            {
-                values.push(std::stoi(std::string(token)));
-            }
-            else
-            {
-                values.push(std::stof(std::string(token)));
-            }
-        }
-        // Current token is a closing brace, solve entire brace
-        else if (token.length() == 1 && token.front() == ')')
-        {
-            while (!operations.emplace() && operations.top() != '(')
-            {
-                auto const value2{values.top()};
-                values.pop();
-
-                auto const value1{values.top()};
-                values.pop();
-
-                auto const operation{operations.top()};
-                operations.pop();
-
-                values.push(applyOperation(value1, value2, operation));
-            }
-
-            // Pop opening brace
-            if (!operations.empty())
-            {
-                operations.pop();
-            }
-        }
-        // Current token is an operator
-        // TODO: enforce it to be an operator
-        else if (token.length() == 1)
-        {
-            // While top of 'operations' has same or greater precedence to current token, which is
-            // an operator, apply operator on top of 'operations' to top two elements in values stack
-            while (!operations.empty() && precedence(operations.top()) >= precedence(token.front()))
-            {
-                auto const value2{values.top()};
-                values.pop();
-
-                auto const value1{values.top()};
-                values.pop();
-
-                auto const operation{operations.top()};
-                operations.pop();
-
-                values.push(applyOperation(value1, value2, operation));
-            }
-
-            operations.push(token.front());
-        }
-    }
-
-    // Entire expression has been parsed, apply remaining operations to remaining values
-    while (!operations.empty())
-    {
-        auto const value2{values.top()};
-        values.pop();
-
-        auto const value1{values.top()};
-        values.pop();
-
-        auto const operation(operations.top());
-        operations.pop();
-
-        values.push(applyOperation(value1, value2, operation));
-    }
-
-    return values.top();
-}
-
 void update(
     nlohmann::json& json,
     Configurations::CollectionConfiguration::Schema const& schema,
@@ -332,7 +136,8 @@ void update(
             try
             {
                 auto const value_int{std::stoi(value_str)};
-                auto const solved{solveNumericExpression(modify.expression, modify.field, value_int)};
+                auto const solved{
+                    Calculus::solveNumericExpression(modify.expression, modify.field, value_int)};
                 value = std::to_string(solved);
             }
             catch (std::invalid_argument const& e)
@@ -352,7 +157,8 @@ void update(
             try
             {
                 auto const value_float{std::stof(value_str)};
-                auto const solved{solveNumericExpression(modify.expression, modify.field, value_float)};
+                auto const solved{
+                    Calculus::solveNumericExpression(modify.expression, modify.field, value_float)};
                 std::ostringstream oss{};
                 if (solved == int(solved))
                 {
