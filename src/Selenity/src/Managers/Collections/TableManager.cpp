@@ -26,79 +26,6 @@ namespace LunarDB::Selenity::API::Managers::Collections {
 
 namespace {
 
-// TODO: Refactor to take table file stream as input
-void insert(
-    std::filesystem::path const& home,
-    Configurations::CollectionConfiguration::Schema& collection_schema,
-    Common::QueryData::Insert::Object const& object,
-    std::shared_ptr<LunarDB::Selenity::API::Managers::Configurations::CollectionConfiguration> const& config)
-
-{
-    auto const rid{Common::CppExtensions::UniqueID::generate()};
-    auto const rid_str{rid.toString()};
-
-    nlohmann::json json{};
-    json["_rid"] = rid_str;
-    json["_del"] = "0";
-    jsonify(object, json, collection_schema);
-    LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
-    wal_data.database =
-        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
-    wal_data.collection = config->name;
-    wal_data.json = json.dump();
-    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
-
-    auto const document_file_path{home / "data.ldbtbl"};
-    auto const parent_path{document_file_path.parent_path()};
-    if (!std::filesystem::exists(parent_path))
-    {
-        std::filesystem::create_directories(parent_path);
-    }
-
-    std::ofstream table_file(document_file_path, std::ios::out | std::ios::app | std::ios::binary);
-    if (table_file.is_open())
-    {
-        auto bson{nlohmann::json::to_bson(json)};
-        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
-        table_file.close();
-
-        std::uint64_t entries_count{0};
-        auto const file_path{home / "metadata.ldb"};
-
-        {
-            std::ifstream metadata_file(file_path, std::ios::binary);
-            if (metadata_file.is_open())
-            {
-                Common::CppExtensions::BinaryIO::Deserializer::deserialize(
-                    metadata_file, entries_count);
-                metadata_file.close();
-            }
-        }
-
-        entries_count++;
-
-        {
-            std::ofstream metadata_file(file_path, std::ios::binary);
-            if (metadata_file.is_open())
-            {
-                Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
-                metadata_file.flush();
-                metadata_file.close();
-            }
-            else
-            {
-                // TODO: Log error
-                throw std::runtime_error("could not open metadata");
-            }
-        }
-    }
-    else
-    {
-        // TODO: log error
-        throw std::runtime_error("could not open table file");
-    }
-}
-
 void update(
     nlohmann::json& json,
     Configurations::CollectionConfiguration::Schema const& schema,
@@ -196,19 +123,78 @@ TableManager::TableManager(std::shared_ptr<Configurations::CollectionConfigurati
 {
 }
 
-// TODO: Refactor to pass table file stream to Collections::insert
 void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
 {
-    auto const documents_path{getDataHomePath()};
-    if (!std::filesystem::exists(documents_path))
+    auto const data_home_path{getDataHomePath()};
+    auto const table_file_path{data_home_path / "data.ldbtbl"};
+    auto const metadata_file_path{data_home_path / "metadata.ldb"};
+
+    if (!std::filesystem::exists(metadata_file_path))
     {
-        std::filesystem::create_directories(documents_path);
+        std::ofstream metadata_file(metadata_file_path, std::ios::out | std::ios::binary);
+        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, 0);
+        metadata_file.close();
+    }
+
+    std::ofstream table_file(table_file_path, std::ios::out | std::ios::app | std::ios::binary);
+
+    if (!table_file.is_open())
+    {
+        CLOG_ERROR("TableManager::insert(): Could not open file", table_file_path);
+        return;
+    }
+
+    std::size_t entries_count{0};
+    {
+        std::ifstream metadata_file(metadata_file_path, std::ios::in | std::ios::binary);
+        if (!metadata_file.is_open())
+        {
+            CLOG_ERROR("TableManager::insert(): Could not open file to read", metadata_file_path);
+            return;
+        }
+        LunarDB::Common::CppExtensions::BinaryIO::Deserializer::deserialize(
+            metadata_file, entries_count);
+    }
+
+    std::ofstream metadata_file(metadata_file_path, std::ios::out | std::ios::binary);
+
+    if (!metadata_file.is_open())
+    {
+        CLOG_ERROR("TableManager::insert(): Could not open file to write", metadata_file_path);
+        return;
     }
 
     for (auto const& object : objects)
     {
-        Collections::insert(documents_path, m_collection_config->schema, object, m_collection_config);
+        auto const rid{Common::CppExtensions::UniqueID::generate()};
+        auto const rid_str{rid.toString()};
+
+        nlohmann::json json{};
+        json["_rid"] = rid_str;
+        json["_del"] = "0";
+        jsonify(object, json, m_collection_config->schema);
+
+        LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
+        wal_data.database =
+            LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
+        wal_data.collection = m_collection_config->name;
+        wal_data.json = json.dump();
+        LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
+
+        auto bson{nlohmann::json::to_bson(json)};
+        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+        ++entries_count;
+        metadata_file.seekp(0, std::ios::beg);
+        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
+        metadata_file.flush();
     }
+
+    metadata_file.flush();
+    table_file.flush();
+
+    metadata_file.close();
+    table_file.close();
 }
 
 // TODO: Refactor
@@ -274,12 +260,6 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
 {
     auto documents_path{getDataHomePath()};
 
-    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
-    {
-        // TODO: Log warning
-        return;
-    }
-
     std::uint64_t entries_count{0};
     auto const file_path{getDataHomePath() / "metadata.ldb"};
     std::fstream metadata_file{};
@@ -340,12 +320,6 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
 void TableManager::update(Common::QueryData::Update const& config)
 {
     auto documents_path{getDataHomePath()};
-
-    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
-    {
-        // TODO: Log warning
-        return;
-    }
 
     std::uint64_t entries_count{0};
     auto const file_path{getDataHomePath() / "metadata.ldb"};
