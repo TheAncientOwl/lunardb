@@ -10,7 +10,8 @@ namespace LunarDB::Selenity::API::Managers::Collections {
 void jsonify(
     LunarDB::Common::QueryData::Insert::Object const& in_obj,
     nlohmann::json& out_obj,
-    Configurations::CollectionConfiguration::Schema const& collection_schema);
+    Configurations::CollectionConfiguration::Schema const& collection_schema,
+    bool permissive = false);
 
 namespace Calculus {
 
