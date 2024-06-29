@@ -95,7 +95,6 @@ std::pair<FieldData, FieldData> getLhsRhs(
 
     auto const contains_dotted =
         [](std::istringstream& iss, auto const& json, auto&& contains_dotted) -> bool {
-        auto dummy{json.dump()};
         std::string token{};
         if (std::getline(iss, token, '.'))
         {
@@ -131,7 +130,6 @@ std::pair<FieldData, FieldData> getLhsRhs(
         for (auto const index : std::ranges::iota_view{0u, path.size() - 1})
         {
             {
-                auto dummy{final_json->dump()};
                 auto const final_collection_name{final_collection_name_oss.str()};
             }
 
@@ -139,12 +137,9 @@ std::pair<FieldData, FieldData> getLhsRhs(
             final_collection_name_oss << "_" << path[index];
 
             {
-                auto dummy{final_json->dump()};
                 auto const final_collection_name{final_collection_name_oss.str()};
             }
         }
-
-        auto dummy{final_json->dump()};
 
         auto const final_collection_name{final_collection_name_oss.str()};
         auto collection = database->getCollection(final_collection_name);

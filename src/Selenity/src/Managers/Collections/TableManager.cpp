@@ -522,8 +522,6 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
 // TODO: Refactor
 void TableManager::overwrite(nlohmann::json& updated_json)
 {
-    auto dummy404{updated_json.dump()};
-
     std::string const& rid{updated_json["_rid"]};
     auto documents_path{getDataHomePath()};
 
@@ -562,8 +560,6 @@ void TableManager::overwrite(nlohmann::json& updated_json)
                 auto database = Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
                 auto& entry_json = collection_entry_ptr->getJSON();
 
-                auto dummy001 = updated_json.dump();
-
                 std::unordered_map<std::string, std::string> rids{};
                 for (auto const& [field, collection_uid] : m_collection_config->schema.bindings)
                 {
@@ -585,7 +581,6 @@ void TableManager::overwrite(nlohmann::json& updated_json)
                     collection_table_ptr->overwrite(updated_json[field]);
                     updated_json[field] = rid;
                 }
-                auto dummy002 = updated_json.dump();
 
                 bson = nlohmann::json::to_bson(updated_json);
 
@@ -668,7 +663,6 @@ void TableManager::update(Common::QueryData::Update const& config)
                         m_collection_config->schema,
                         m_collection_config->name,
                         config.modify);
-                    auto dummy01{json.dump()};
 
                     for (auto const& [field, rid] : rids)
                     {
@@ -677,11 +671,9 @@ void TableManager::update(Common::QueryData::Update const& config)
                         auto collection_table_ptr =
                             std::dynamic_pointer_cast<LunarDB::Selenity::API::Managers::Collections::TableManager>(
                                 collection_ptr);
-                        auto dummy007{json[field].dump()};
                         collection_table_ptr->overwrite(json[field]);
                         json[field] = rid;
                     }
-                    auto dummy02 = json.dump();
 
                     bson = nlohmann::json::to_bson(collection_entry_ptr->data);
 

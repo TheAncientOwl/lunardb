@@ -182,7 +182,6 @@ void WriteAheadLogger::recover()
     auto file_size = log_file.tellg();
 
     CLOG_VERBOSE("::recover(): Reading last failed transaction logs");
-    int dummy{0};
     for (auto pos = file_size - std::streampos{1}, end = std::streamoff{0}; pos >= end; pos -= 1)
     {
         log_file.seekg(pos);
@@ -208,12 +207,10 @@ void WriteAheadLogger::recover()
                     return;
                 }
                 logs.emplace(std::move(line));
-                dummy++;
             }
             else
             {
                 logs.emplace(std::move(line));
-                dummy++;
             }
 
             current_line.clear();
@@ -253,7 +250,6 @@ void WriteAheadLogger::recover()
                 extractor.extractTuple<5>();
 
             nlohmann::json json = nlohmann::json::parse(extractor.data());
-            auto dummy = json.dump();
 
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
@@ -267,7 +263,6 @@ void WriteAheadLogger::recover()
                 extractor.extractTuple<5>();
 
             nlohmann::json json = nlohmann::json::parse(extractor.data());
-            auto dummy = json.dump();
 
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
@@ -281,7 +276,6 @@ void WriteAheadLogger::recover()
                 extractor.extractTuple<5>();
 
             nlohmann::json json = nlohmann::json::parse(extractor.data());
-            auto dummy = json.dump();
 
             system_catalog.useDatabase(std::string(database_name));
             auto collection =
