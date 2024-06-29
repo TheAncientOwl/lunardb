@@ -33,6 +33,7 @@ public: // CollectionEntry
 
     public: // interface API
         virtual nlohmann::json const& getJSON() const = 0;
+        virtual nlohmann::json& getJSON() = 0;
     };
 
 public: // public API

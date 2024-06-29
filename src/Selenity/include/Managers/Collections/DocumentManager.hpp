@@ -16,6 +16,7 @@ public: // CollectionEntry
     {
     public:
         nlohmann::json const& getJSON() const override;
+        nlohmann::json& getJSON() override;
 
     private:
         nlohmann::json data{};

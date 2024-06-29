@@ -283,6 +283,65 @@ void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& 
     table_file.close();
 }
 
+void TableManager::selectEntry(std::string const& rid, nlohmann::json& out_json)
+{
+    auto const documents_path{getDataHomePath()};
+
+    if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
+    {
+        return;
+    }
+
+    std::uint64_t entries_count{0};
+    auto const file_path{getDataHomePath() / "metadata.ldb"};
+    std::fstream metadata_file{};
+    metadata_file.open(file_path, std::ios::in | std::ios::binary);
+
+    if (metadata_file.is_open())
+    {
+        Common::CppExtensions::BinaryIO::Deserializer::deserialize(metadata_file, entries_count);
+        metadata_file.close();
+
+        auto const table_file_path(documents_path / "data.ldbtbl");
+        std::ifstream table_file(table_file_path, std::ios::binary);
+        if (table_file.is_open())
+        {
+            for (auto const _ : std::ranges::iota_view{0u, entries_count})
+            {
+                auto collection_entry_ptr = std::make_unique<TableManager::CollectionEntry>();
+                std::vector<std::uint8_t> bson{};
+                Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
+                collection_entry_ptr->data = nlohmann::json::from_bson(bson);
+
+                if (collection_entry_ptr->data["_del"] == 1 || collection_entry_ptr->data["_rid"] != rid)
+                {
+                    continue;
+                }
+
+                std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
+                    collection_entry_ptr.release()};
+
+                auto database = Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+                auto& json = icollection_entry_ptr->getJSON();
+
+                for (auto const& [field, collection_uid] : m_collection_config->schema.bindings)
+                {
+                    auto collection =
+                        std::reinterpret_pointer_cast<LunarDB::Selenity::API::Managers::Collections::TableManager>(
+                            database->getCollection(collection_uid));
+                    std::string rid{json[field]};
+                    collection->selectEntry(rid, json[field]);
+                }
+
+                out_json = std::move(icollection_entry_ptr->getJSON());
+
+                return;
+            }
+            table_file.close();
+        }
+    }
+}
+
 // TODO: Refactor
 std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::select(
     Common::QueryData::Select const& config) const
@@ -323,6 +382,20 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
                 std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                     collection_entry_ptr.release()};
 
+                auto database = Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+                auto& json = icollection_entry_ptr->getJSON();
+                auto dummy = json.dump();
+
+                for (auto const& [field, collection_uid] : m_collection_config->schema.bindings)
+                {
+                    auto collection =
+                        std::reinterpret_pointer_cast<LunarDB::Selenity::API::Managers::Collections::TableManager>(
+                            database->getCollection(collection_uid));
+                    std::string rid{json[field]};
+                    collection->selectEntry(rid, json[field]);
+                    auto dummy = json.dump();
+                }
+
                 if (WhereClause::evaluate(
                         icollection_entry_ptr, m_collection_config->schema, config.where))
                 {
@@ -337,6 +410,11 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
 }
 
 nlohmann::json const& TableManager::CollectionEntry::getJSON() const
+{
+    return data;
+}
+
+nlohmann::json& TableManager::CollectionEntry::getJSON()
 {
     return data;
 }

@@ -219,6 +219,11 @@ nlohmann::json const& DocumentManager::CollectionEntry::getJSON() const
     return data;
 }
 
+nlohmann::json& DocumentManager::CollectionEntry::getJSON()
+{
+    return data;
+}
+
 void DocumentManager::deleteWhere(Common::QueryData::WhereClause const& where)
 {
     auto documents_path{getDataHomePath()};

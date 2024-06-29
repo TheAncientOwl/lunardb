@@ -92,6 +92,8 @@ void handleQuery(
                                 [&iss](auto& json, auto&& follow_path) mutable -> std::string {
                                 std::string token{};
 
+                                auto dummy = json.dump();
+
                                 if (std::getline(iss, token, '.'))
                                 {
                                     return follow_path(json[token], follow_path);

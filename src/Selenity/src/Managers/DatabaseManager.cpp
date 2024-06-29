@@ -136,6 +136,16 @@ std::shared_ptr<Collections::AbstractManager> DatabaseManager::getCollection(std
     return manager_it->second;
 }
 
+std::shared_ptr<Collections::AbstractManager> DatabaseManager::getCollection(
+    Common::CppExtensions::UniqueID const& collection_uid)
+{
+    auto const manager_it = m_catalog.id_to_manager.find(collection_uid);
+
+    assert(manager_it != m_catalog.id_to_manager.end() && "Collection manager not found");
+
+    return manager_it->second;
+}
+
 void DatabaseManager::rebind(
     std::string const& collection_name,
     std::string const& field_name,
