@@ -11,7 +11,7 @@ void jsonify(
     LunarDB::Common::QueryData::Insert::Object const& in_obj,
     nlohmann::json& out_json,
     std::string const& collection_name,
-    Configurations::CollectionConfiguration::Schema const& collection_schema,
+    Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Primitives::EStructureType const collection_type);
 
 namespace Calculus {

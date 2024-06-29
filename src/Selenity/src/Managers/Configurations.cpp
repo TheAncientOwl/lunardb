@@ -131,6 +131,14 @@ CollectionConfiguration::Schema::Fields::const_iterator CollectionConfiguration:
     return it;
 }
 
+CollectionConfiguration::Schema::Fields::const_iterator CollectionConfiguration::Schema::addField(
+    std::string name,
+    EFieldDataType type)
+{
+    fields.emplace_back(std::move(name), type, true, false);
+    return std::prev(fields.end());
+}
+
 } // namespace Implementation
 
 } // namespace LunarDB::Selenity::API::Managers::Configurations

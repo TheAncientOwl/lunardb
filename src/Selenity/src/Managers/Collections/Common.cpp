@@ -12,7 +12,7 @@ void jsonifyEntry(
     nlohmann::json& out_json,
     Configurations::CollectionConfiguration::Schema::Fields::const_iterator entry_config,
     std::string const& collection_name,
-    Configurations::CollectionConfiguration::Schema const& collection_schema,
+    Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Primitives::EStructureType collection_type)
 {
     using Object = Common::QueryData::Insert::Object;
@@ -166,16 +166,45 @@ void jsonify(
     LunarDB::Common::QueryData::Insert::Object const& in_obj,
     nlohmann::json& out_json,
     std::string const& collection_name,
-    Configurations::CollectionConfiguration::Schema const& collection_schema,
+    Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Primitives::EStructureType const collection_type)
 {
     // TODO: Add new field when jsonifying collections.
-    for (auto const& [key, value] : in_obj.entries)
+    switch (collection_type)
     {
-        auto const& entry_config = collection_schema.getField(key);
+    case Common::QueryData::Primitives::EStructureType::Table: {
+        for (auto const& [key, value] : in_obj.entries)
+        {
+            auto const& entry_config = collection_schema.getField(key);
 
-        jsonifyEntry(
-            value, out_json[key], entry_config, collection_name, collection_schema, collection_type);
+            jsonifyEntry(
+                value, out_json[key], entry_config, collection_name, collection_schema, collection_type);
+        }
+        break;
+    }
+    case Common::QueryData::Primitives::EStructureType::Collection: {
+        for (auto const& [key, value] : in_obj.entries)
+        {
+            LunarDB::Selenity::API::Managers::Configurations::CollectionConfiguration::Schema::Fields::const_iterator
+                entry_config{};
+
+            try
+            {
+                entry_config = collection_schema.getField(key);
+            }
+            catch (std::exception const& e)
+            {
+                entry_config = collection_schema.addField(
+                    key, LunarDB::Selenity::API::Managers::Configurations::EFieldDataType::String);
+            }
+
+            jsonifyEntry(
+                value, out_json[key], entry_config, collection_name, collection_schema, collection_type);
+        }
+        break;
+    }
+    default:
+        break;
     }
 }
 

@@ -76,6 +76,7 @@ struct CollectionConfiguration : public BaseManagerConfiguration
 
     public: // API
         Fields::const_iterator getField(std::string_view name) const;
+        Fields::const_iterator addField(std::string name, EFieldDataType type);
 
     public: // fields
         std::vector<Field> fields;
