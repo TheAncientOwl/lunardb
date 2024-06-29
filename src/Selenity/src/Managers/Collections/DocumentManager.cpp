@@ -68,85 +68,123 @@ void insert(
     }
 }
 
+// TODO: Find better approach
+std::string removeSubstring(std::string_view str, const std::string& toRemove)
+{
+    std::string out{str};
+    auto pos = out.find(toRemove);
+    while (pos != std::string::npos)
+    {
+        out.erase(pos, toRemove.length());
+        pos = out.find(toRemove);
+    }
+    return out;
+}
+
 void update(
     nlohmann::json& json,
     Configurations::CollectionConfiguration::Schema const& schema,
+    std::string const& collection_name,
     std::vector<Common::QueryData::Update::Modify> const& modify_list)
 {
     using namespace std::string_literals;
 
+    auto database = LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+
     for (auto const& modify : modify_list)
     {
-        auto const& field{schema.getField(modify.field)};
-        switch (field->type)
+        if (auto dot_it = modify.field.find('.'); dot_it == std::string::npos)
         {
-        case Configurations::EFieldDataType::Rid:
-            throw std::runtime_error("Cannot set reserved _rid field");
-        case Configurations::EFieldDataType::DateTime:
-            // TODO: Provide implementation
-            throw std::runtime_error{
-                "[~/lunardb/src/Selenity/src/Managers/Collections/"
-                "DocumentManager.cpp:UpdateDateTime] Not implemented yet..."};
-        case Configurations::EFieldDataType::String:
-            json[modify.field] = modify.expression;
-            break;
-        case Configurations::EFieldDataType::Boolean:
-            if (modify.expression == "true" || modify.expression == "false")
+            auto const& field{schema.getField(modify.field)};
+            switch (field->type)
             {
+            case Configurations::EFieldDataType::Rid:
+                throw std::runtime_error("Cannot set reserved _rid field");
+            case Configurations::EFieldDataType::DateTime:
+                // TODO: Provide implementation
+                throw std::runtime_error{
+                    "[~/lunardb/src/Selenity/src/Managers/Collections/"
+                    "DocumentManager.cpp:UpdateDateTime] Not implemented yet..."};
+            case Configurations::EFieldDataType::String:
                 json[modify.field] = modify.expression;
+                break;
+            case Configurations::EFieldDataType::Boolean:
+                if (modify.expression == "true" || modify.expression == "false")
+                {
+                    json[modify.field] = modify.expression;
+                }
+                else
+                {
+                    throw std::runtime_error("Invalid boolean value '"s + modify.expression + "'");
+                }
+            case Configurations::EFieldDataType::Integer: {
+                auto& value{json[modify.field]};
+                auto const value_str{value.template get<std::string>()};
+                try
+                {
+                    auto const value_int{std::stoi(value_str)};
+                    auto const solved{Calculus::solveNumericExpression(
+                        modify.expression, modify.field, value_int)};
+                    value = std::to_string(solved);
+                }
+                catch (std::invalid_argument const& e)
+                {
+                    throw std::runtime_error(
+                        "Cannot convert '"s + value_str + "' to Integer; " + e.what());
+                }
+                catch (std::out_of_range const& e)
+                {
+                    throw std::runtime_error(
+                        "Value '"s + value_str + "' out of Integer range; " + e.what());
+                }
+                break;
             }
-            else
-            {
-                throw std::runtime_error("Invalid boolean value '"s + modify.expression + "'");
+            case Configurations::EFieldDataType::Float: {
+                auto& value{json[modify.field]};
+                auto const value_str{value.template get<std::string>()};
+                try
+                {
+                    auto const value_float{std::stof(value_str)};
+                    auto const solved{Calculus::solveNumericExpression(
+                        modify.expression, modify.field, value_float)};
+                    std::ostringstream oss{};
+                    oss << std::fixed << std::setprecision(10) << solved;
+                    value = oss.str();
+                }
+                catch (std::invalid_argument const& e)
+                {
+                    throw std::runtime_error(
+                        "Cannot convert '"s + value_str + "' to Float; " + e.what());
+                }
+                catch (std::out_of_range const& e)
+                {
+                    throw std::runtime_error(
+                        "Value '"s + value_str + "' out of Float range; " + e.what());
+                }
+                break;
             }
-        case Configurations::EFieldDataType::Integer: {
-            auto& value{json[modify.field]};
-            auto const value_str{value.template get<std::string>()};
-            try
-            {
-                auto const value_int{std::stoi(value_str)};
-                auto const solved{
-                    Calculus::solveNumericExpression(modify.expression, modify.field, value_int)};
-                value = std::to_string(solved);
+            case Configurations::EFieldDataType::None:
+                [[fallthrough]];
+            default:
+                assert(false && "Encountered unknown field data type");
+                break;
             }
-            catch (std::invalid_argument const& e)
-            {
-                throw std::runtime_error("Cannot convert '"s + value_str + "' to Integer; " + e.what());
-            }
-            catch (std::out_of_range const& e)
-            {
-                throw std::runtime_error(
-                    "Value '"s + value_str + "' out of Integer range; " + e.what());
-            }
-            break;
         }
-        case Configurations::EFieldDataType::Float: {
-            auto& value{json[modify.field]};
-            auto const value_str{value.template get<std::string>()};
-            try
-            {
-                auto const value_float{std::stof(value_str)};
-                auto const solved{
-                    Calculus::solveNumericExpression(modify.expression, modify.field, value_float)};
-                std::ostringstream oss{};
-                oss << std::fixed << std::setprecision(10) << solved;
-                value = oss.str();
-            }
-            catch (std::invalid_argument const& e)
-            {
-                throw std::runtime_error("Cannot convert '"s + value_str + "' to Float; " + e.what());
-            }
-            catch (std::out_of_range const& e)
-            {
-                throw std::runtime_error("Value '"s + value_str + "' out of Float range; " + e.what());
-            }
-            break;
-        }
-        case Configurations::EFieldDataType::None:
-            [[fallthrough]];
-        default:
-            assert(false && "Encountered unknown field data type");
-            break;
+        else
+        {
+            std::string key{modify.field.begin(), modify.field.begin() + dot_it};
+            auto const entry_collection_name{collection_name + "_" + key};
+            auto collection = database->getCollection(entry_collection_name);
+
+            std::string dotted_key{key + '.'};
+
+            std::vector<Common::QueryData::Update::Modify> entry_modify{};
+            entry_modify.emplace_back(
+                Collections::removeSubstring(modify.field, dotted_key),
+                Collections::removeSubstring(modify.expression, dotted_key));
+
+            Collections::update(
+                json[key], collection->getConfig()->schema, entry_collection_name, entry_modify);
         }
     }
 }
@@ -200,7 +238,11 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
                 collection_entry_ptr.release()};
             object_file.close();
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr,
+                    m_collection_config->name,
+                    m_collection_config->schema,
+                    config.where))
             {
                 out.emplace_back(std::move(icollection_entry_ptr));
             }
@@ -251,7 +293,8 @@ void DocumentManager::deleteWhere(Common::QueryData::WhereClause const& where)
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr, m_collection_config->name, m_collection_config->schema, where))
             {
                 LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
                 wal_data.database =
@@ -298,7 +341,11 @@ void DocumentManager::update(Common::QueryData::Update const& config)
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr,
+                    m_collection_config->name,
+                    m_collection_config->schema,
+                    config.where))
             {
                 object_file.open(entry.path(), std::ios::out | std::ios::trunc);
                 if (object_file.is_open())
@@ -314,7 +361,10 @@ void DocumentManager::update(Common::QueryData::Update const& config)
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
 
                     Collections::update(
-                        collection_entry_ptr->data, m_collection_config->schema, config.modify);
+                        collection_entry_ptr->data,
+                        m_collection_config->schema,
+                        m_collection_config->name,
+                        config.modify);
                     object_file << collection_entry_ptr->data;
                     object_file.close();
                 }

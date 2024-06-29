@@ -9,3 +9,7 @@ insert into somedocument_join objects [
   { "str": "val2", "obj": { "field1": "val22", "field2": "2" } }
 ];
 select from structure somedocument_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];
+update structure somedocument_join where ( str == val2 ) modify [ obj.field1 => val33, obj.field2 => obj.field2 + 1 ];
+select from structure somedocument_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];
+update structure somedocument_join where ( obj.field1 == val33 ) modify [ obj.field1 => val44, obj.field2 => obj.field2 + 1 ];
+select from structure somedocument_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];

@@ -9,3 +9,5 @@ insert into sometable_join objects [
   { "str": "val2", "obj": { "field1": "val22", "field2": "2" } }
 ];
 select from structure sometable_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];
+update structure sometable_join where ( str == val2 ) modify [ obj.field1 => val33, obj.field2 => obj.field2 + 1 ];
+select from structure sometable_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];

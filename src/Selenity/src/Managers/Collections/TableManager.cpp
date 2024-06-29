@@ -397,7 +397,10 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
                 }
 
                 if (WhereClause::evaluate(
-                        icollection_entry_ptr, m_collection_config->schema, config.where))
+                        icollection_entry_ptr,
+                        m_collection_config->name,
+                        m_collection_config->schema,
+                        config.where))
                 {
                     out.emplace_back(std::move(icollection_entry_ptr));
                 }
@@ -451,7 +454,8 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
                 std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                     collection_entry_ptr.release()};
 
-                if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
+                if (WhereClause::evaluate(
+                        icollection_entry_ptr, m_collection_config->name, m_collection_config->schema, where))
                 {
                     LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
                     wal_data.database =
@@ -513,7 +517,10 @@ void TableManager::update(Common::QueryData::Update const& config)
                     collection_entry_ptr.release()};
 
                 if (WhereClause::evaluate(
-                        icollection_entry_ptr, m_collection_config->schema, config.where))
+                        icollection_entry_ptr,
+                        m_collection_config->name,
+                        m_collection_config->schema,
+                        config.where))
                 {
                     collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
                         icollection_entry_ptr.release()));
