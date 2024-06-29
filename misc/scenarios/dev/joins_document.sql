@@ -8,4 +8,4 @@ insert into somedocument_join objects [
   { "str": "val1", "obj": { "field1": "val11", "field2": "1" } }  
   { "str": "val2", "obj": { "field1": "val22", "field2": "2" } }
 ];
-select from structure somedocument_join where ( 1 == 1 ) fields [ str, obj ];
+select from structure somedocument_join where ( 1 == 1 ) fields [ str, obj, obj.field1, obj.field2 ];
