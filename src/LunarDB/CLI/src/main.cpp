@@ -333,12 +333,9 @@ int main(int argc, char const* argv[])
         LunarDB::CLI::EventHandlers::on_error(
             "System stopped loading, reason: LUNARDB_ROOT_PASSWORD env variable was not set or is "
             "empty.");
-        // TODO: uncomment
-        // return EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
     LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword(std::string(root_password));
-    // TODO: delete next line
-    LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword("root");
 
     // Setup input stream
     std::istream* input_stream_ptr{&std::cin};

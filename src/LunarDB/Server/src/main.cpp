@@ -9,10 +9,26 @@
 
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_LUNARDB_SRV)
 
+namespace LunarDB::Server {
+
+void handleCrashRecovery()
+{
+    if (LunarDB::BrightMoon::API::WriteAheadLogger::Instance().getRecoveryFlag() ==
+        LunarDB::BrightMoon::API::ERecoveryFlag::Recover)
+    {
+        LunarDB::BrightMoon::API::WriteAheadLogger::Instance().recover();
+    }
+}
+
+}; // namespace LunarDB::Server
+
 int main()
 {
     LunarDB::Selenity::API::SystemCatalog::Instance().loadConfigs();
     LunarDB::Selenity::API::SchemasCatalog::Instance().clearCache();
+    LunarDB::Selenity::API::SystemCatalog::Instance().setCurrentUser(LUNARDB_ROOT_USER);
+
+    LunarDB::Server::handleCrashRecovery();
 
     auto const address = boost::asio::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(8083);
@@ -78,6 +94,8 @@ int main()
             CLOG_ERROR(e.what());
         }
     }
+
+    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().onNaturalSystemExit();
 
     return EXIT_SUCCESS;
 }
