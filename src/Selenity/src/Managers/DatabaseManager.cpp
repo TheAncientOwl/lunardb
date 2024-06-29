@@ -1,6 +1,8 @@
 #include <algorithm>
 
+#include "LunarDB/Selenity/Managers/Configurations.hpp"
 #include "LunarDB/Selenity/Managers/DatabaseManager.hpp"
+#include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Selenity::API::Managers {
@@ -49,13 +51,33 @@ std::string_view DatabaseManager::getName() const
 void DatabaseManager::createCollection(
     std::string const& name,
     std::string const& schema_name,
-    Common::QueryData::Primitives::EStructureType type,
+    Common::QueryData::Primitives::EStructureType collection_type,
     std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
 {
     // TODO: WriteAheadLog
     if (m_catalog.name_to_config.contains(name))
     {
         throw std::runtime_error("Collection already exists");
+    }
+
+    std::vector<Common::QueryData::Create::Single::Binding> updated_bindings{bindings};
+
+    auto const& schema = SchemasCatalog::Instance().getSchema(schema_name);
+
+    for (auto const& field : schema.fields)
+    {
+        try
+        {
+            std::ignore = Managers::Configurations::FieldDataType::toLiteral(field.type);
+        }
+        catch (std::exception const& e)
+        {
+            auto new_collection_name{name + "_" + field.name};
+
+            createCollection(new_collection_name, field.type, collection_type, {});
+
+            updated_bindings.emplace_back(field.name, std::move(new_collection_name));
+        }
     }
 
     auto catalog_entry_ptr = m_catalog.name_to_config
@@ -65,9 +87,9 @@ void DatabaseManager::createCollection(
                                          name,
                                          getDataHomePath() / name,
                                          Common::CppExtensions::UniqueID::generate(),
-                                         type,
+                                         collection_type,
                                          schema_name,
-                                         bindings))
+                                         updated_bindings))
                                  .first->second;
     std::filesystem::create_directories(catalog_entry_ptr->home);
 
@@ -114,13 +136,23 @@ std::shared_ptr<Collections::AbstractManager> DatabaseManager::getCollection(std
     return manager_it->second;
 }
 
+std::shared_ptr<Collections::AbstractManager> DatabaseManager::getCollection(
+    Common::CppExtensions::UniqueID const& collection_uid)
+{
+    auto const manager_it = m_catalog.id_to_manager.find(collection_uid);
+
+    assert(manager_it != m_catalog.id_to_manager.end() && "Collection manager not found");
+
+    return manager_it->second;
+}
+
 void DatabaseManager::rebind(
     std::string const& collection_name,
     std::string const& field_name,
     std::string const& to_collection_name)
 {
     auto& collection_config{getCollection(collection_name)->getConfig()};
-    auto& bindings{collection_config->bindings};
+    auto& bindings{collection_config->schema.bindings};
     auto& schema{collection_config->schema};
 
     auto field_it =
@@ -138,20 +170,14 @@ void DatabaseManager::rebind(
         throw std::runtime_error("Cannot rebind non record ID field");
     }
 
-    auto binding_it =
-        std::find_if(bindings.begin(), bindings.end(), [&field_name](auto const& binding) {
-            return binding.field == field_name;
-        });
+    auto binding_it = bindings.find(field_name);
 
     auto const& to_collection_uid{getCollection(to_collection_name)->getUID()};
-    if (binding_it == bindings.end())
+    if (binding_it != bindings.end())
     {
-        std::ignore = bindings.emplace_back(field_name, to_collection_uid);
+        bindings.erase(binding_it);
     }
-    else
-    {
-        binding_it->collection_uid = to_collection_uid;
-    }
+    std::ignore = bindings.emplace(field_name, to_collection_uid);
 
     saveConfigs();
 }

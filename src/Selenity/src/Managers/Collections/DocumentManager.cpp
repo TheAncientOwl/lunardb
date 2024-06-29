@@ -8,6 +8,7 @@
 #include <stack>
 #include <string>
 
+#include "Common.hpp"
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
@@ -23,50 +24,9 @@ namespace LunarDB::Selenity::API::Managers::Collections {
 
 namespace {
 
-void fillRecurseJSON(
-    nlohmann::json& json,
-    Configurations::CollectionConfiguration::Schema& collection_schema,
-    Common::QueryData::Insert::Object const& object)
-{
-    // TODO: Check object structure with schema and add to schema where necessary
-    using Object = Common::QueryData::Insert::Object;
-
-    for (auto const& [key, value] : object.entries)
-    {
-        if (std::holds_alternative<std::string>(value))
-        {
-            json[key] = std::get<std::string>(value);
-        }
-        else if (std::holds_alternative<Object>(value))
-        {
-            fillRecurseJSON(json[key], collection_schema, std::get<Object>(value));
-        }
-        else if (std::holds_alternative<std::vector<std::string>>(value))
-        {
-            json[key] = std::get<std::vector<std::string>>(value);
-        }
-        else if (std::holds_alternative<std::vector<Object>>(value))
-        {
-            nlohmann::json array = nlohmann::json::array();
-
-            for (auto const& arr_object : std::get<std::vector<Object>>(value))
-            {
-                auto& arr_json_item = array.emplace_back();
-                fillRecurseJSON(arr_json_item, collection_schema, arr_object);
-            }
-
-            json[key] = std::move(array);
-        }
-        else
-        {
-            // TODO: Log error
-            assert(false && "Object writing failure, unknown variant alternative");
-        }
-    }
-}
-
 void insert(
     std::filesystem::path const& home,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Insert::Object const& object,
     std::shared_ptr<LunarDB::Selenity::API::Managers::Configurations::CollectionConfiguration> const& config)
@@ -76,7 +36,12 @@ void insert(
 
     nlohmann::json json{};
     json["_rid"] = rid_str;
-    fillRecurseJSON(json, collection_schema, object);
+    jsonify(
+        object,
+        json,
+        collection_name,
+        collection_schema,
+        Common::QueryData::Primitives::EStructureType::Collection);
     LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
     wal_data.database =
         LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
@@ -103,234 +68,123 @@ void insert(
     }
 }
 
-std::uint8_t precedence(char operation)
+// TODO: Find better approach
+std::string removeSubstring(std::string_view str, const std::string& toRemove)
 {
-    if (operation == '+' || operation == '-')
+    std::string out{str};
+    auto pos = out.find(toRemove);
+    while (pos != std::string::npos)
     {
-        return 1;
+        out.erase(pos, toRemove.length());
+        pos = out.find(toRemove);
     }
-    if (operation == '*' || operation == '/')
-    {
-        return 2;
-    }
-    return 0;
-}
-
-template <typename T>
-concept NumericType = requires() { std::is_same_v<T, int> || std::is_same_v<T, float>; };
-
-template <NumericType Numeric>
-Numeric applyOperation(Numeric lhs, Numeric rhs, char operation)
-{
-    switch (operation)
-    {
-    case '+':
-        return lhs + rhs;
-    case '-':
-        return lhs - rhs;
-    case '*':
-        return lhs * rhs;
-    case '/':
-        if (rhs == 0)
-        {
-            throw std::runtime_error("Divison by 0");
-        }
-        return lhs / rhs;
-    case '%':
-        if constexpr (std::is_same_v<Numeric, int>)
-        {
-            return lhs % rhs;
-        }
-        else
-        {
-            return std::fmod(lhs, rhs);
-        }
-        break;
-    default:
-        throw std::runtime_error("Invalid operation '"s + operation + "'");
-    }
-}
-
-template <NumericType Numeric>
-Numeric solveNumericExpression(std::string_view expression, std::string_view key, Numeric key_numeric)
-{
-    using namespace std::string_view_literals;
-    using namespace std::string_literals;
-
-    Moonlight::Implementation::QueryExtractor extractor{expression};
-    assert(!extractor.empty() && "Invalid update expression");
-
-    std::stack<Numeric> values{};
-    std::stack<char> operations{};
-
-    while (!extractor.empty())
-    {
-        auto const token = extractor.extractOne();
-
-        // Current token is an opening brace, push to operators stack
-        if (token.length() == 1 && token.front() == '(')
-        {
-            operations.push('(');
-        }
-        // Current token is the field that will be modified, push its numeric value to the stack
-        else if (token == key)
-        {
-            values.push(key_numeric);
-        }
-        // Current token is numeric, push to stack
-        else if (std::all_of(token.begin(), token.end(), [](char const c) { return std::isdigit(c); }))
-        {
-            if constexpr (std::is_same_v<Numeric, int>)
-            {
-                values.push(std::stoi(std::string(token)));
-            }
-            else
-            {
-                values.push(std::stof(std::string(token)));
-            }
-        }
-        // Current token is a closing brace, solve entire brace
-        else if (token.length() == 1 && token.front() == ')')
-        {
-            while (!operations.emplace() && operations.top() != '(')
-            {
-                auto const value2{values.top()};
-                values.pop();
-
-                auto const value1{values.top()};
-                values.pop();
-
-                auto const operation{operations.top()};
-                operations.pop();
-
-                values.push(applyOperation(value1, value2, operation));
-            }
-
-            // Pop opening brace
-            if (!operations.empty())
-            {
-                operations.pop();
-            }
-        }
-        // Current token is an operator
-        // TODO: enforce it to be an operator
-        else if (token.length() == 1)
-        {
-            // While top of 'operations' has same or greater precedence to current token, which is
-            // an operator, apply operator on top of 'operations' to top two elements in values stack
-            while (!operations.empty() && precedence(operations.top()) >= precedence(token.front()))
-            {
-                auto const value2{values.top()};
-                values.pop();
-
-                auto const value1{values.top()};
-                values.pop();
-
-                auto const operation{operations.top()};
-                operations.pop();
-
-                values.push(applyOperation(value1, value2, operation));
-            }
-
-            operations.push(token.front());
-        }
-    }
-
-    // Entire expression has been parsed, apply remaining operations to remaining values
-    while (!operations.empty())
-    {
-        auto const value2{values.top()};
-        values.pop();
-
-        auto const value1{values.top()};
-        values.pop();
-
-        auto const operation(operations.top());
-        operations.pop();
-
-        values.push(applyOperation(value1, value2, operation));
-    }
-
-    return values.top();
+    return out;
 }
 
 void update(
     nlohmann::json& json,
     Configurations::CollectionConfiguration::Schema const& schema,
+    std::string const& collection_name,
     std::vector<Common::QueryData::Update::Modify> const& modify_list)
 {
     using namespace std::string_literals;
 
+    auto database = LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+
     for (auto const& modify : modify_list)
     {
-        auto const& field{schema.getField(modify.field)};
-        switch (field->type)
+        if (auto dot_it = modify.field.find('.'); dot_it == std::string::npos)
         {
-        case Configurations::EFieldDataType::Rid:
-            throw std::runtime_error("Cannot set reserved _rid field");
-        case Configurations::EFieldDataType::DateTime:
-            // TODO: Provide implementation
-            throw std::runtime_error{
-                "[~/lunardb/src/Selenity/src/Managers/Collections/"
-                "DocumentManager.cpp:UpdateDateTime] Not implemented yet..."};
-        case Configurations::EFieldDataType::String:
-            json[modify.field] = modify.expression;
-            break;
-        case Configurations::EFieldDataType::Boolean:
-            if (modify.expression == "true" || modify.expression == "false")
+            auto const& field{schema.getField(modify.field)};
+            switch (field->type)
             {
+            case Configurations::EFieldDataType::Rid:
+                throw std::runtime_error("Cannot set reserved _rid field");
+            case Configurations::EFieldDataType::DateTime:
+                // TODO: Provide implementation
+                throw std::runtime_error{
+                    "[~/lunardb/src/Selenity/src/Managers/Collections/"
+                    "DocumentManager.cpp:UpdateDateTime] Not implemented yet..."};
+            case Configurations::EFieldDataType::String:
                 json[modify.field] = modify.expression;
+                break;
+            case Configurations::EFieldDataType::Boolean:
+                if (modify.expression == "true" || modify.expression == "false")
+                {
+                    json[modify.field] = modify.expression;
+                }
+                else
+                {
+                    throw std::runtime_error("Invalid boolean value '"s + modify.expression + "'");
+                }
+            case Configurations::EFieldDataType::Integer: {
+                auto& value{json[modify.field]};
+                auto const value_str{value.template get<std::string>()};
+                try
+                {
+                    auto const value_int{std::stoi(value_str)};
+                    auto const solved{Calculus::solveNumericExpression(
+                        modify.expression, modify.field, value_int)};
+                    value = std::to_string(solved);
+                }
+                catch (std::invalid_argument const& e)
+                {
+                    throw std::runtime_error(
+                        "Cannot convert '"s + value_str + "' to Integer; " + e.what());
+                }
+                catch (std::out_of_range const& e)
+                {
+                    throw std::runtime_error(
+                        "Value '"s + value_str + "' out of Integer range; " + e.what());
+                }
+                break;
             }
-            else
-            {
-                throw std::runtime_error("Invalid boolean value '"s + modify.expression + "'");
+            case Configurations::EFieldDataType::Float: {
+                auto& value{json[modify.field]};
+                auto const value_str{value.template get<std::string>()};
+                try
+                {
+                    auto const value_float{std::stof(value_str)};
+                    auto const solved{Calculus::solveNumericExpression(
+                        modify.expression, modify.field, value_float)};
+                    std::ostringstream oss{};
+                    oss << std::fixed << std::setprecision(10) << solved;
+                    value = oss.str();
+                }
+                catch (std::invalid_argument const& e)
+                {
+                    throw std::runtime_error(
+                        "Cannot convert '"s + value_str + "' to Float; " + e.what());
+                }
+                catch (std::out_of_range const& e)
+                {
+                    throw std::runtime_error(
+                        "Value '"s + value_str + "' out of Float range; " + e.what());
+                }
+                break;
             }
-        case Configurations::EFieldDataType::Integer: {
-            auto& value{json[modify.field]};
-            auto const value_str{value.template get<std::string>()};
-            try
-            {
-                auto const value_int{std::stoi(value_str)};
-                auto const solved{solveNumericExpression(modify.expression, modify.field, value_int)};
-                value = std::to_string(solved);
+            case Configurations::EFieldDataType::None:
+                [[fallthrough]];
+            default:
+                assert(false && "Encountered unknown field data type");
+                break;
             }
-            catch (std::invalid_argument const& e)
-            {
-                throw std::runtime_error("Cannot convert '"s + value_str + "' to Integer; " + e.what());
-            }
-            catch (std::out_of_range const& e)
-            {
-                throw std::runtime_error(
-                    "Value '"s + value_str + "' out of Integer range; " + e.what());
-            }
-            break;
         }
-        case Configurations::EFieldDataType::Float: {
-            auto& value{json[modify.field]};
-            auto const value_str{value.template get<std::string>()};
-            try
-            {
-                auto const value_float{std::stof(value_str)};
-                auto const solved{solveNumericExpression(modify.expression, modify.field, value_float)};
-                std::ostringstream oss{};
-                oss << std::fixed << std::setprecision(10) << solved;
-                value = oss.str();
-            }
-            catch (std::invalid_argument const& e)
-            {
-                throw std::runtime_error("Cannot convert '"s + value_str + "' to Float; " + e.what());
-            }
-            catch (std::out_of_range const& e)
-            {
-                throw std::runtime_error("Value '"s + value_str + "' out of Float range; " + e.what());
-            }
-            break;
-        }
-        case Configurations::EFieldDataType::None:
-            [[fallthrough]];
-        default:
-            assert(false && "Encountered unknown field data type");
-            break;
+        else
+        {
+            std::string key{modify.field.begin(), modify.field.begin() + dot_it};
+            auto const entry_collection_name{collection_name + "_" + key};
+            auto collection = database->getCollection(entry_collection_name);
+
+            std::string dotted_key{key + '.'};
+
+            std::vector<Common::QueryData::Update::Modify> entry_modify{};
+            entry_modify.emplace_back(
+                Collections::removeSubstring(modify.field, dotted_key),
+                Collections::removeSubstring(modify.expression, dotted_key));
+
+            Collections::update(
+                json[key], collection->getConfig()->schema, entry_collection_name, entry_modify);
         }
     }
 }
@@ -348,7 +202,12 @@ void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> cons
 
     for (auto const& object : objects)
     {
-        Collections::insert(documents_path, m_collection_config->schema, object, m_collection_config);
+        Collections::insert(
+            documents_path,
+            m_collection_config->name,
+            m_collection_config->schema,
+            object,
+            m_collection_config);
     }
 }
 
@@ -379,7 +238,11 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
                 collection_entry_ptr.release()};
             object_file.close();
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr,
+                    m_collection_config->name,
+                    m_collection_config->schema,
+                    config.where))
             {
                 out.emplace_back(std::move(icollection_entry_ptr));
             }
@@ -394,6 +257,11 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> DocumentManager:
 }
 
 nlohmann::json const& DocumentManager::CollectionEntry::getJSON() const
+{
+    return data;
+}
+
+nlohmann::json& DocumentManager::CollectionEntry::getJSON()
 {
     return data;
 }
@@ -425,7 +293,8 @@ void DocumentManager::deleteWhere(Common::QueryData::WhereClause const& where)
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr, m_collection_config->name, m_collection_config->schema, where))
             {
                 LunarDB::BrightMoon::API::Transactions::DeleteTransactionData wal_data{};
                 wal_data.database =
@@ -472,7 +341,11 @@ void DocumentManager::update(Common::QueryData::Update const& config)
             std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                 collection_entry_ptr.release()};
 
-            if (WhereClause::evaluate(icollection_entry_ptr, m_collection_config->schema, config.where))
+            if (WhereClause::evaluate(
+                    icollection_entry_ptr,
+                    m_collection_config->name,
+                    m_collection_config->schema,
+                    config.where))
             {
                 object_file.open(entry.path(), std::ios::out | std::ios::trunc);
                 if (object_file.is_open())
@@ -488,7 +361,10 @@ void DocumentManager::update(Common::QueryData::Update const& config)
                     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
 
                     Collections::update(
-                        collection_entry_ptr->data, m_collection_config->schema, config.modify);
+                        collection_entry_ptr->data,
+                        m_collection_config->schema,
+                        m_collection_config->name,
+                        config.modify);
                     object_file << collection_entry_ptr->data;
                     object_file.close();
                 }

@@ -48,6 +48,8 @@ public: // public API
     std::string_view getName() const;
 
     std::shared_ptr<Collections::AbstractManager> getCollection(std::string const& collection_name);
+    std::shared_ptr<Collections::AbstractManager> getCollection(
+        Common::CppExtensions::UniqueID const& collection_uid);
 
 public: // overrides
     std::filesystem::path getHomePath() const override;

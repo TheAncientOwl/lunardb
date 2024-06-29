@@ -3,6 +3,7 @@
 #include <variant>
 
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
+#include "LunarDB/Selenity/SystemCatalog.hpp"
 
 using namespace std::string_literals;
 
@@ -64,16 +65,20 @@ FieldData convert(std::string const& value, Configurations::EFieldDataType to_ty
     }
 }
 
+// TODO: Refactor execution paths
 std::pair<FieldData, FieldData> getLhsRhs(
     nlohmann::json const& json,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema const& schema,
     Common::QueryData::WhereClause::BinaryExpression const& binary_expression)
 {
     auto const json_end{json.end()};
+
     auto const contains_lhs = json.contains(binary_expression.lhs);
     auto const contains_rhs = json.contains(binary_expression.rhs);
 
-    auto const get_type_and_value_from = [&schema](auto const& key, auto const& json) {
+    auto const get_type_and_value_from = [&schema](auto const& key, auto const& json)
+        -> std::pair<LunarDB::Selenity::API::Managers::Configurations::EFieldDataType, std::string> {
         return std::make_pair(schema.getField(key)->type, json[key]);
     };
 
@@ -85,16 +90,112 @@ std::pair<FieldData, FieldData> getLhsRhs(
 
         return {convert(lhs_value, lhs_type), convert(rhs_value, rhs_type)};
     }
+
+    std::istringstream iss{binary_expression.lhs};
+
+    auto const contains_dotted =
+        [](std::istringstream& iss, auto const& json, auto&& contains_dotted) -> bool {
+        std::string token{};
+        if (std::getline(iss, token, '.'))
+        {
+            if (json.find(token) != json.end())
+            {
+                return contains_dotted(iss, json[token], contains_dotted);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    auto database = LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+    auto const get_dotted_type_and_value_from = [&database](
+                                                    std::istringstream& iss,
+                                                    std::string_view key,
+                                                    std::string const& collection_name,
+                                                    auto const& json,
+                                                    auto&& get_dotted_type_and_value_from)
+        -> std::pair<LunarDB::Selenity::API::Managers::Configurations::EFieldDataType, std::string> {
+        std::vector<std::string> path{};
+        std::string token{};
+        while (std::getline(iss, token, '.'))
+        {
+            path.emplace_back(std::move(token));
+        }
+        auto* final_json{&json};
+        std::ostringstream final_collection_name_oss{};
+        final_collection_name_oss << collection_name;
+        for (auto const index : std::ranges::iota_view{0u, path.size() - 1})
+        {
+            {
+                auto const final_collection_name{final_collection_name_oss.str()};
+            }
+
+            final_json = &(*final_json)[path[index]];
+            final_collection_name_oss << "_" << path[index];
+
+            {
+                auto const final_collection_name{final_collection_name_oss.str()};
+            }
+        }
+
+        auto const final_collection_name{final_collection_name_oss.str()};
+        auto collection = database->getCollection(final_collection_name);
+        return std::make_pair(
+            collection->getConfig()->schema.getField(path.back())->type, (*final_json)[path.back()]);
+    };
+
+    std::istringstream lhs_iss{binary_expression.lhs};
+    auto const contains_dotted_lhs = contains_dotted(lhs_iss, json, contains_dotted);
+
+    std::istringstream rhs_iss{binary_expression.rhs};
+    auto const contains_dotted_rhs = contains_dotted(rhs_iss, json, contains_dotted);
+
+    // obj.salary == obj.salary
+    if (contains_dotted_lhs && contains_dotted_rhs)
+    {
+        std::istringstream iss_lhs{binary_expression.lhs};
+        std::istringstream iss_rhs{binary_expression.rhs};
+
+        auto const& [lhs_type, lhs_value] = get_dotted_type_and_value_from(
+            iss_lhs, "", collection_name, json, get_dotted_type_and_value_from);
+        auto const& [rhs_type, rhs_value] = get_dotted_type_and_value_from(
+            iss_lhs, "", collection_name, json, get_dotted_type_and_value_from);
+
+        return {convert(lhs_value, lhs_type), convert(rhs_value, rhs_type)};
+    }
+
     // salary == 5000
-    else if (contains_lhs)
+    if (contains_lhs)
     {
         auto const& [lhs_type, lhs_value] = get_type_and_value_from(binary_expression.lhs, json);
         return {convert(lhs_value, lhs_type), convert(binary_expression.rhs, lhs_type)};
     }
+
+    // obj.salary == 5000
+    if (contains_dotted_lhs)
+    {
+        std::istringstream iss_lhs{binary_expression.lhs};
+        auto const& [lhs_type, lhs_value] = get_dotted_type_and_value_from(
+            iss_lhs, "", collection_name, json, get_dotted_type_and_value_from);
+        return {convert(lhs_value, lhs_type), convert(binary_expression.rhs, lhs_type)};
+    }
+
     // 5000 == salary
-    else if (contains_rhs)
+    if (contains_rhs)
     {
         auto const& [rhs_type, rhs_value] = get_type_and_value_from(binary_expression.rhs, json);
+        return {convert(binary_expression.lhs, rhs_type), convert(binary_expression.rhs, rhs_type)};
+    }
+
+    // 5000 == obj.salary
+    if (contains_dotted_rhs)
+    {
+        std::istringstream iss_rhs{binary_expression.rhs};
+        auto const& [rhs_type, rhs_value] = get_dotted_type_and_value_from(
+            iss_rhs, "", collection_name, json, get_dotted_type_and_value_from);
         return {convert(binary_expression.lhs, rhs_type), convert(binary_expression.rhs, rhs_type)};
     }
 
@@ -104,10 +205,11 @@ std::pair<FieldData, FieldData> getLhsRhs(
 
 bool evaluateBinaryExpression(
     nlohmann::json const& json_entry,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema const& schema,
     Common::QueryData::WhereClause::BinaryExpression const& binary_expression)
 {
-    auto const [lhs, rhs] = getLhsRhs(json_entry, schema, binary_expression);
+    auto const [lhs, rhs] = getLhsRhs(json_entry, collection_name, schema, binary_expression);
 
     switch (binary_expression.operation)
     {
@@ -161,6 +263,7 @@ bool evaluateBinaryExpression(
 
 bool evaluateBooleanExpression(
     nlohmann::json const& json_entry,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema const& schema,
     Common::QueryData::WhereClause::BooleanExpression const& boolean_expression)
 {
@@ -180,12 +283,12 @@ bool evaluateBooleanExpression(
     if (std::holds_alternative<WhereClause::BinaryExpression>(data[0]))
     {
         result = evaluateBinaryExpression(
-            json_entry, schema, std::get<WhereClause::BinaryExpression>(data[0]));
+            json_entry, collection_name, schema, std::get<WhereClause::BinaryExpression>(data[0]));
     }
     else
     {
         result = evaluateBooleanExpression(
-            json_entry, schema, std::get<WhereClause::BooleanExpression>(data[0]));
+            json_entry, collection_name, schema, std::get<WhereClause::BooleanExpression>(data[0]));
     }
 
     for (std::size_t index = 2; index < data.size(); index += 3)
@@ -206,12 +309,18 @@ bool evaluateBooleanExpression(
         if (std::holds_alternative<WhereClause::BinaryExpression>(expression))
         {
             boolean = evaluateBinaryExpression(
-                json_entry, schema, std::get<WhereClause::BinaryExpression>(data[index]));
+                json_entry,
+                collection_name,
+                schema,
+                std::get<WhereClause::BinaryExpression>(data[index]));
         }
         else
         {
             result = evaluateBooleanExpression(
-                json_entry, schema, std::get<WhereClause::BooleanExpression>(data[index]));
+                json_entry,
+                collection_name,
+                schema,
+                std::get<WhereClause::BooleanExpression>(data[index]));
         }
 
         switch (std::get<Common::QueryData::Primitives::EBooleanOperator>(boolean_operator))
@@ -236,10 +345,12 @@ bool evaluateBooleanExpression(
 
 bool evaluate(
     std::unique_ptr<AbstractManager::ICollectionEntry> const& entry,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema const& schema,
     Common::QueryData::WhereClause const& where_clause)
 {
-    return evaluateBooleanExpression(entry->getJSON(), schema, where_clause.expression);
+    return evaluateBooleanExpression(
+        entry->getJSON(), collection_name, schema, where_clause.expression);
 }
 
 } // namespace LunarDB::Selenity::API::Managers::Collections::WhereClause

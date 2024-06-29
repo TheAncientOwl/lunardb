@@ -73,7 +73,7 @@ auto const on_selection = [](auto selection, auto fields) {
     }
 
     // Print the header
-    std::cout << "|";
+    std::cout << "| ";
     for (auto const index : std::ranges::iota_view{0u, fields.size()})
     {
         std::cout << std::setw(column_widths[index]) << fields[index] << " | ";
@@ -81,7 +81,7 @@ auto const on_selection = [](auto selection, auto fields) {
     std::cout << '\n';
 
     // Print a separator line
-    std::cout << "|";
+    std::cout << "|-";
     for (auto const index : std::ranges::iota_view{0u, fields.size()})
     {
         for (auto const _ : std::ranges::iota_view{0u, column_widths[index] + (index == 0 ? 1 : 2)})
@@ -95,7 +95,7 @@ auto const on_selection = [](auto selection, auto fields) {
     // Print each row
     for (auto const& obj : jsonArray)
     {
-        std::cout << "|";
+        std::cout << "| ";
         for (auto const index : std::ranges::iota_view{0u, fields.size()})
         {
             if (obj.contains(fields[index]))
@@ -333,9 +333,12 @@ int main(int argc, char const* argv[])
         LunarDB::CLI::EventHandlers::on_error(
             "System stopped loading, reason: LUNARDB_ROOT_PASSWORD env variable was not set or is "
             "empty.");
-        return EXIT_FAILURE;
+        // TODO: uncomment
+        // return EXIT_FAILURE;
     }
     LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword(std::string(root_password));
+    // TODO: delete next line
+    LunarDB::Celestial::API::UsersCatalog::Instance().setRootPassword("root");
 
     // Setup input stream
     std::istream* input_stream_ptr{&std::cin};

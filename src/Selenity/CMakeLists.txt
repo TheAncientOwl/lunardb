@@ -26,6 +26,7 @@ add_lunar_library(
         src/SchemasCatalog.cpp
         src/SystemCatalog.cpp
         src/Managers/Collections/AbstractManager.cpp
+        src/Managers/Collections/Common.cpp
         src/Managers/Collections/DocumentManager.cpp
         src/Managers/Collections/EvaluateWhereClause.cpp
         src/Managers/Collections/TableManager.cpp

@@ -311,8 +311,6 @@ Common::CppExtensions::UniqueID UsersCatalog::getUserUID(std::string const& user
             Common::CppExtensions::StringUtils::stringify("User", username, "does not exist")};
     }
 
-    auto dummy = it->second.toString();
-
     return it->second;
 }
 

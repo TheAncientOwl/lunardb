@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <nlohmann/json.hpp>
 #include <ranges>
 #include <sstream>
@@ -83,7 +84,30 @@ void handleQuery(
 
                     for (auto const& field : query_fields)
                     {
-                        out[field] = obj_json[field];
+                        if (field.find('.') != std::string::npos)
+                        {
+                            std::istringstream iss{field};
+
+                            auto follow_path =
+                                [&iss](auto& json, auto&& follow_path) mutable -> std::string {
+                                std::string token{};
+
+                                auto dummy = json.dump();
+
+                                if (std::getline(iss, token, '.'))
+                                {
+                                    return follow_path(json[token], follow_path);
+                                }
+
+                                return json;
+                            };
+
+                            out[field] = follow_path(obj_json, follow_path);
+                        }
+                        else
+                        {
+                            out[field] = obj_json[field];
+                        }
                     }
 
                     return out;

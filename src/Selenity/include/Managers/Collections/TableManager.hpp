@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include "LunarDB/Selenity/Managers/Collections/AbstractManager.hpp"
 
 namespace LunarDB::Selenity::API::Managers::Collections {
@@ -14,6 +16,7 @@ public: // CollectionEntry
     {
     public:
         nlohmann::json const& getJSON() const override;
+        nlohmann::json& getJSON() override;
 
     private:
         nlohmann::json data{};
@@ -25,8 +28,12 @@ public: // public API
     std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> select(
         Common::QueryData::Select const& config) const override;
 
+    void selectEntry(std::string const& rid, nlohmann::json& out_json);
+
+    Common::CppExtensions::UniqueID insert(Common::QueryData::Insert::Object const& object);
     void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
     void update(Common::QueryData::Update const& config) override;
+    void overwrite(nlohmann::json& updated_json);
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
 
     void undoInsert(nlohmann::json json, bool is_last_call) override;
