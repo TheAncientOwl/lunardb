@@ -95,6 +95,7 @@ std::pair<FieldData, FieldData> getLhsRhs(
 
     auto const contains_dotted =
         [](std::istringstream& iss, auto const& json, auto&& contains_dotted) -> bool {
+        auto dummy{json.dump()};
         std::string token{};
         if (std::getline(iss, token, '.'))
         {

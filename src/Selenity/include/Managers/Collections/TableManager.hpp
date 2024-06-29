@@ -33,6 +33,7 @@ public: // public API
     Common::CppExtensions::UniqueID insert(Common::QueryData::Insert::Object const& object);
     void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
     void update(Common::QueryData::Update const& config) override;
+    void overwrite(nlohmann::json& updated_json);
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
 
     void undoInsert(nlohmann::json json, bool is_last_call) override;
