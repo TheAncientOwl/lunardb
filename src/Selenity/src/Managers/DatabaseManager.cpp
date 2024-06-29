@@ -120,7 +120,7 @@ void DatabaseManager::rebind(
     std::string const& to_collection_name)
 {
     auto& collection_config{getCollection(collection_name)->getConfig()};
-    auto& bindings{collection_config->bindings};
+    auto& bindings{collection_config->schema.bindings};
     auto& schema{collection_config->schema};
 
     auto field_it =
@@ -138,20 +138,14 @@ void DatabaseManager::rebind(
         throw std::runtime_error("Cannot rebind non record ID field");
     }
 
-    auto binding_it =
-        std::find_if(bindings.begin(), bindings.end(), [&field_name](auto const& binding) {
-            return binding.field == field_name;
-        });
+    auto binding_it = bindings.find(field_name);
 
     auto const& to_collection_uid{getCollection(to_collection_name)->getUID()};
-    if (binding_it == bindings.end())
+    if (binding_it != bindings.end())
     {
-        std::ignore = bindings.emplace_back(field_name, to_collection_uid);
+        bindings.erase(binding_it);
     }
-    else
-    {
-        binding_it->collection_uid = to_collection_uid;
-    }
+    std::ignore = bindings.emplace(field_name, to_collection_uid);
 
     saveConfigs();
 }

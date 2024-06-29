@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
 #include "LunarDB/Common/CppExtensions/DefinePrimitive.hpp"
@@ -46,7 +47,9 @@ struct CollectionConfiguration : public BaseManagerConfiguration
     struct Schema
     {
     public: // lifecycle
-        Schema(Common::QueryData::Schema const& schema);
+        Schema(
+            Common::QueryData::Schema const& schema,
+            std::vector<Common::QueryData::Create::Single::Binding> const& bindings);
 
         Schema() = default;
         ~Schema() = default;
@@ -76,24 +79,14 @@ struct CollectionConfiguration : public BaseManagerConfiguration
 
     public: // fields
         std::vector<Field> fields;
+        std::unordered_map<std::string, Common::CppExtensions::UniqueID> bindings; // field name -> collection uid
 
     private: // IO
-        LUNAR_ENABLE_BINARY_IO(fields);
-    };
-
-    struct Binding
-    {
-        std::string field;
-        Common::CppExtensions::UniqueID collection_uid;
-
-        bool operator==(Binding const&) const = default;
-
-        LUNAR_ENABLE_BINARY_IO(field, collection_uid);
+        LUNAR_ENABLE_BINARY_IO(fields, bindings);
     };
 
     ECollectionType collection_type;
     Schema schema;
-    std::vector<Binding> bindings;
 
     CollectionConfiguration(
         std::string name,
@@ -110,7 +103,7 @@ struct CollectionConfiguration : public BaseManagerConfiguration
     CollectionConfiguration(CollectionConfiguration&&) noexcept = default;
     CollectionConfiguration& operator=(CollectionConfiguration&&) noexcept = default;
 
-    LUNAR_ENABLE_BINARY_IO(name, home, uid, collection_type, schema, bindings);
+    LUNAR_ENABLE_BINARY_IO(name, home, uid, collection_type, schema);
 };
 
 struct ManagerNoConfiguration

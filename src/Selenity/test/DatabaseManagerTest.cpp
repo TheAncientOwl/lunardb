@@ -141,7 +141,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, collection)
     auto const& config{collection->getConfig()};
     auto const& config_copy{collection_copy->getConfig()};
 
-    EXPECT_EQ(config->bindings, config_copy->bindings);
+    EXPECT_EQ(config->schema.bindings, config_copy->schema.bindings);
     EXPECT_EQ(config->collection_type, config_copy->collection_type);
     EXPECT_EQ(config->home, config_copy->home);
     EXPECT_EQ(config->name, config_copy->name);
@@ -206,7 +206,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, table)
     auto const& config{collection->getConfig()};
     auto const& config_copy{collection_copy->getConfig()};
 
-    EXPECT_EQ(config->bindings, config_copy->bindings);
+    EXPECT_EQ(config->schema.bindings, config_copy->schema.bindings);
     EXPECT_EQ(config->collection_type, config_copy->collection_type);
     EXPECT_EQ(config->home, config_copy->home);
     EXPECT_EQ(config->name, config_copy->name);

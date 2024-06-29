@@ -63,7 +63,7 @@ TEST(Astral_CreateExecutorTest, create)
     auto const& collection{manager->getCollection(c_collection_name)};
     auto const& config{collection->getConfig()};
 
-    EXPECT_TRUE(config->bindings.empty());
+    EXPECT_TRUE(config->schema.bindings.empty());
     EXPECT_EQ(
         config->collection_type,
         Selenity::API::Managers::Configurations::CollectionConfiguration::ECollectionType::Document);

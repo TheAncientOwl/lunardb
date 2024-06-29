@@ -32,21 +32,21 @@ CollectionConfiguration::ECollectionType convert(Common::QueryData::Primitives::
     }
 }
 
-std::vector<CollectionConfiguration::Binding> convert(
-    std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
-{
-    std::vector<CollectionConfiguration::Binding> out{};
-    out.reserve(bindings.size());
+// std::vector<CollectionConfiguration::Binding> convert(
+//     std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
+// {
+//     std::vector<CollectionConfiguration::Binding> out{};
+//     out.reserve(bindings.size());
 
-    auto const database{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
+//     auto const database{Selenity::API::SystemCatalog::Instance().getDatabaseInUse()};
 
-    for (auto const& binding : bindings)
-    {
-        out.emplace_back(binding.field, database->getCollection(binding.table)->getUID());
-    }
+//     for (auto const& binding : bindings)
+//     {
+//         out.emplace_back(binding.field, database->getCollection(binding.table)->getUID());
+//     }
 
-    return out;
-}
+//     return out;
+// }
 
 CollectionConfiguration::CollectionConfiguration(
     std::string name,
@@ -57,8 +57,7 @@ CollectionConfiguration::CollectionConfiguration(
     std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
     : BaseManagerConfiguration{std::move(name), std::move(home), std::move(uid)}
     , collection_type{convert(type)}
-    , schema{SchemasCatalog::Instance().getSchema(schema_name)}
-    , bindings{convert(bindings)}
+    , schema{SchemasCatalog::Instance().getSchema(schema_name), bindings}
 {
 }
 
@@ -85,10 +84,36 @@ std::vector<CollectionConfiguration::Schema::Field> convert(
     return out;
 }
 
-CollectionConfiguration::Schema::Schema(Common::QueryData::Schema const& schema)
-    : fields{convert(schema.fields)}
+CollectionConfiguration::Schema::Schema(
+    Common::QueryData::Schema const& schema,
+    std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
 {
-    fields.emplace(fields.begin(), "_rid", EFieldDataType::Rid, false, false);
+    fields.reserve(schema.fields.size() + 1);
+    fields.emplace_back("_rid", EFieldDataType::Rid, false, false);
+    for (auto const& field : schema.fields)
+    {
+        EFieldDataType type{EFieldDataType::Rid};
+        try
+        {
+            auto const in_type{FieldDataType::toLiteral(field.type)};
+            type = in_type;
+        }
+        catch (std::exception const& e)
+        {
+        }
+
+        fields.emplace_back(field.name, type, field.nullable, field.array);
+    }
+
+    auto const& catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
+
+    this->bindings.reserve(bindings.size());
+    for (auto const binding : bindings)
+    {
+        // TODO: Create collection if it does not exist???? -> table only
+        this->bindings.emplace(
+            binding.field, catalog.getDatabaseInUse()->getCollection(binding.table)->getUID());
+    }
 }
 
 CollectionConfiguration::Schema::Fields::const_iterator CollectionConfiguration::Schema::getField(
