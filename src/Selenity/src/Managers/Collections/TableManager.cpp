@@ -412,7 +412,7 @@ std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> TableManager::se
                 std::vector<std::uint8_t> bson{};
                 Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
                 collection_entry_ptr->data = nlohmann::json::from_bson(bson);
-                if (collection_entry_ptr->data["_del"] == 1)
+                if (collection_entry_ptr->data["_del"] == "1")
                 {
                     continue;
                 }
@@ -489,6 +489,19 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
                 std::unique_ptr<AbstractManager::ICollectionEntry> icollection_entry_ptr{
                     collection_entry_ptr.release()};
 
+                auto database = Selenity::API::SystemCatalog::Instance().getDatabaseInUse();
+                auto& json = icollection_entry_ptr->getJSON();
+                std::unordered_map<std::string, std::string> rids{};
+                for (auto const& [field, collection_uid] : m_collection_config->schema.bindings)
+                {
+                    auto collection =
+                        std::reinterpret_pointer_cast<LunarDB::Selenity::API::Managers::Collections::TableManager>(
+                            database->getCollection(collection_uid));
+                    std::string rid{json[field]};
+                    collection->selectEntry(rid, json[field]);
+                    rids.emplace(field, std::move(rid));
+                }
+
                 if (WhereClause::evaluate(
                         icollection_entry_ptr, m_collection_config->name, m_collection_config->schema, where))
                 {
@@ -502,6 +515,10 @@ void TableManager::deleteWhere(Common::QueryData::WhereClause const& where)
                     collection_entry_ptr.reset(dynamic_cast<TableManager::CollectionEntry*>(
                         icollection_entry_ptr.release()));
                     collection_entry_ptr->data["_del"] = "1";
+                    for (auto const& [field, rid] : rids)
+                    {
+                        collection_entry_ptr->data[field] = rid;
+                    }
                     bson = nlohmann::json::to_bson(collection_entry_ptr->data);
 
                     auto const current_pos = table_file.tellg();
