@@ -123,6 +123,87 @@ TableManager::TableManager(std::shared_ptr<Configurations::CollectionConfigurati
 {
 }
 
+// TODO: Refactor duplicate code
+Common::CppExtensions::UniqueID TableManager::insert(Common::QueryData::Insert::Object const& object)
+{
+    auto const data_home_path{getDataHomePath()};
+    auto const table_file_path{data_home_path / "data.ldbtbl"};
+    auto const metadata_file_path{data_home_path / "metadata.ldb"};
+
+    if (!std::filesystem::exists(metadata_file_path))
+    {
+        std::ofstream metadata_file(metadata_file_path, std::ios::out | std::ios::binary);
+        LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, 0);
+        metadata_file.close();
+    }
+
+    std::ofstream table_file(table_file_path, std::ios::out | std::ios::app | std::ios::binary);
+
+    if (!table_file.is_open())
+    {
+        CLOG_ERROR("TableManager::insert(object): Could not open file", table_file_path);
+        throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+            "TableManager::insert(object): Could not open file", table_file_path)};
+    }
+
+    std::size_t entries_count{0};
+    {
+        std::ifstream metadata_file(metadata_file_path, std::ios::in | std::ios::binary);
+        if (!metadata_file.is_open())
+        {
+            CLOG_ERROR("TableManager::insert(object): Could not open file to read", metadata_file_path);
+            throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+                "TableManager::insert(object): Could not open file", metadata_file_path)};
+        }
+        LunarDB::Common::CppExtensions::BinaryIO::Deserializer::deserialize(
+            metadata_file, entries_count);
+    }
+
+    std::ofstream metadata_file(metadata_file_path, std::ios::out | std::ios::binary);
+
+    if (!metadata_file.is_open())
+    {
+        CLOG_ERROR("TableManager::insert(object): Could not open file to write", metadata_file_path);
+        throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+            "TableManager::insert(object): Could not open file to write", metadata_file_path)};
+    }
+
+    auto const rid{Common::CppExtensions::UniqueID::generate()};
+    auto const rid_str{rid.toString()};
+
+    nlohmann::json json{};
+    json["_rid"] = rid_str;
+    json["_del"] = "0";
+    jsonify(
+        object,
+        json,
+        m_collection_config->name,
+        m_collection_config->schema,
+        Common::QueryData::Primitives::EStructureType::Table);
+
+    LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
+    wal_data.database =
+        LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
+    wal_data.collection = m_collection_config->name;
+    wal_data.json = json.dump();
+    LunarDB::BrightMoon::API::WriteAheadLogger::Instance().log(wal_data);
+
+    auto bson{nlohmann::json::to_bson(json)};
+    LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(table_file, bson);
+
+    ++entries_count;
+    metadata_file.seekp(0, std::ios::beg);
+    LunarDB::Common::CppExtensions::BinaryIO::Serializer::serialize(metadata_file, entries_count);
+    metadata_file.flush();
+
+    table_file.flush();
+
+    metadata_file.close();
+    table_file.close();
+
+    return rid;
+}
+
 void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& objects)
 {
     auto const data_home_path{getDataHomePath()};
@@ -172,7 +253,12 @@ void TableManager::insert(std::vector<Common::QueryData::Insert::Object> const& 
         nlohmann::json json{};
         json["_rid"] = rid_str;
         json["_del"] = "0";
-        jsonify(object, json, m_collection_config->schema);
+        jsonify(
+            object,
+            json,
+            m_collection_config->name,
+            m_collection_config->schema,
+            Common::QueryData::Primitives::EStructureType::Table);
 
         LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
         wal_data.database =

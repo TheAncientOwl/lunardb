@@ -51,7 +51,7 @@ std::string_view DatabaseManager::getName() const
 void DatabaseManager::createCollection(
     std::string const& name,
     std::string const& schema_name,
-    Common::QueryData::Primitives::EStructureType type,
+    Common::QueryData::Primitives::EStructureType collection_type,
     std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
 {
     // TODO: WriteAheadLog
@@ -60,35 +60,23 @@ void DatabaseManager::createCollection(
         throw std::runtime_error("Collection already exists");
     }
 
-    auto* final_bindings{&bindings};
-    std::vector<Common::QueryData::Create::Single::Binding> updated_bindings{};
-    if (type == Common::QueryData::Primitives::EStructureType::Table)
+    std::vector<Common::QueryData::Create::Single::Binding> updated_bindings{bindings};
+
+    auto const& schema = SchemasCatalog::Instance().getSchema(schema_name);
+
+    for (auto const& field : schema.fields)
     {
-        auto const& schema = SchemasCatalog::Instance().getSchema(schema_name);
-
-        final_bindings = &updated_bindings;
-
-        updated_bindings.reserve(bindings.size());
-        for (auto const& binding : bindings)
+        try
         {
-            updated_bindings.emplace_back(binding);
+            std::ignore = Managers::Configurations::FieldDataType::toLiteral(field.type);
         }
-
-        for (auto const& field : schema.fields)
+        catch (std::exception const& e)
         {
-            try
-            {
-                std::ignore = Managers::Configurations::FieldDataType::toLiteral(field.type);
-            }
-            catch (std::exception const& e)
-            {
-                auto new_table_name{name + "_" + field.name};
+            auto new_collection_name{name + "_" + field.name};
 
-                createCollection(
-                    new_table_name, field.type, Common::QueryData::Primitives::EStructureType::Table, {});
+            createCollection(new_collection_name, field.type, collection_type, {});
 
-                updated_bindings.emplace_back(field.name, std::move(new_table_name));
-            }
+            updated_bindings.emplace_back(field.name, std::move(new_collection_name));
         }
     }
 
@@ -99,9 +87,9 @@ void DatabaseManager::createCollection(
                                          name,
                                          getDataHomePath() / name,
                                          Common::CppExtensions::UniqueID::generate(),
-                                         type,
+                                         collection_type,
                                          schema_name,
-                                         *final_bindings))
+                                         updated_bindings))
                                  .first->second;
     std::filesystem::create_directories(catalog_entry_ptr->home);
 

@@ -26,6 +26,7 @@ namespace {
 
 void insert(
     std::filesystem::path const& home,
+    std::string const& collection_name,
     Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Insert::Object const& object,
     std::shared_ptr<LunarDB::Selenity::API::Managers::Configurations::CollectionConfiguration> const& config)
@@ -35,7 +36,12 @@ void insert(
 
     nlohmann::json json{};
     json["_rid"] = rid_str;
-    jsonify(object, json, collection_schema);
+    jsonify(
+        object,
+        json,
+        collection_name,
+        collection_schema,
+        Common::QueryData::Primitives::EStructureType::Collection);
     LunarDB::BrightMoon::API::Transactions::InsertTransactionData wal_data{};
     wal_data.database =
         LunarDB::Selenity::API::SystemCatalog::Instance().getDatabaseInUse()->getName();
@@ -158,7 +164,12 @@ void DocumentManager::insert(std::vector<Common::QueryData::Insert::Object> cons
 
     for (auto const& object : objects)
     {
-        Collections::insert(documents_path, m_collection_config->schema, object, m_collection_config);
+        Collections::insert(
+            documents_path,
+            m_collection_config->name,
+            m_collection_config->schema,
+            object,
+            m_collection_config);
     }
 }
 

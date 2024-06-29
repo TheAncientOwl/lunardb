@@ -25,6 +25,7 @@ public: // public API
     std::vector<std::unique_ptr<AbstractManager::ICollectionEntry>> select(
         Common::QueryData::Select const& config) const override;
 
+    Common::CppExtensions::UniqueID insert(Common::QueryData::Insert::Object const& object);
     void insert(std::vector<Common::QueryData::Insert::Object> const& objects) override;
     void update(Common::QueryData::Update const& config) override;
     void deleteWhere(Common::QueryData::WhereClause const& where) override;
