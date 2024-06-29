@@ -1,6 +1,8 @@
 #include <algorithm>
 
+#include "LunarDB/Selenity/Managers/Configurations.hpp"
 #include "LunarDB/Selenity/Managers/DatabaseManager.hpp"
+#include "LunarDB/Selenity/SchemasCatalog.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 namespace LunarDB::Selenity::API::Managers {
@@ -58,6 +60,38 @@ void DatabaseManager::createCollection(
         throw std::runtime_error("Collection already exists");
     }
 
+    auto* final_bindings{&bindings};
+    std::vector<Common::QueryData::Create::Single::Binding> updated_bindings{};
+    if (type == Common::QueryData::Primitives::EStructureType::Table)
+    {
+        auto const& schema = SchemasCatalog::Instance().getSchema(schema_name);
+
+        final_bindings = &updated_bindings;
+
+        updated_bindings.reserve(bindings.size());
+        for (auto const& binding : bindings)
+        {
+            updated_bindings.emplace_back(binding);
+        }
+
+        for (auto const& field : schema.fields)
+        {
+            try
+            {
+                std::ignore = Managers::Configurations::FieldDataType::toLiteral(field.type);
+            }
+            catch (std::exception const& e)
+            {
+                auto new_table_name{name + "_" + field.name};
+
+                createCollection(
+                    new_table_name, field.type, Common::QueryData::Primitives::EStructureType::Table, {});
+
+                updated_bindings.emplace_back(field.name, std::move(new_table_name));
+            }
+        }
+    }
+
     auto catalog_entry_ptr = m_catalog.name_to_config
                                  .emplace(
                                      name,
@@ -67,7 +101,7 @@ void DatabaseManager::createCollection(
                                          Common::CppExtensions::UniqueID::generate(),
                                          type,
                                          schema_name,
-                                         bindings))
+                                         *final_bindings))
                                  .first->second;
     std::filesystem::create_directories(catalog_entry_ptr->home);
 
