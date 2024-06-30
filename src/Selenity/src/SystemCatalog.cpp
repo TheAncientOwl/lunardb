@@ -1,6 +1,10 @@
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <nlohmann/json.hpp>
+#include <random>
+#include <ranges>
+#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -172,6 +176,47 @@ void SystemCatalog::clearCurrentSelection()
     m_current_selection.clear();
 }
 
+std::string generateHexString(size_t length = 32)
+{
+    // Ensure length is even, as each byte is represented by two hexadecimal digits.
+    if (length % 2 != 0)
+    {
+        throw std::invalid_argument("Length must be an even number.");
+    }
+
+    // Create a random device and generator
+    std::random_device rd{};
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<int> distribution(0, 255);
+
+    std::ostringstream oss{};
+
+    for (auto const _ : std::ranges::iota_view{0u, static_cast<std::size_t>(length / 2)})
+    {
+        auto random_byte = distribution(generator);
+        oss << std::hex << std::setw(2) << std::setfill('0') << random_byte;
+    }
+
+    return oss.str();
+}
+
+std::string generateRandomDigitString(size_t length = 16)
+{
+    std::random_device rd{};
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<int> distribution(0, 9);
+
+    std::ostringstream oss{};
+
+    for (auto const _ : std::ranges::iota_view{0u, length})
+    {
+        auto random_digit = distribution(generator);
+        oss << random_digit;
+    }
+
+    return oss.str();
+}
+
 void SystemCatalog::loadSystemConfiguration()
 {
     auto const config_file_path{std::filesystem::current_path() / "lunardb.config.json"};
@@ -188,6 +233,8 @@ void SystemCatalog::loadSystemConfiguration()
         nlohmann::json config{};
 
         config["home_path"] = m_config.home_path;
+        config["encryption"]["key"] = generateRandomDigitString();
+        config["encryption"]["iv"] = generateHexString();
 
         std::ofstream config_file(config_file_path);
         if (config_file.is_open())
@@ -211,20 +258,45 @@ void SystemCatalog::loadSystemConfiguration()
             config_file >> config;
             config_file.close();
 
-            auto const get_value_if_existing =
-                [&config, &config_file_path](std::string_view key) -> std::string {
-                if (config.contains(key))
+            if (config.contains("home_path"))
+            {
+                m_config.home_path = std::string{config["home_path"]};
+            }
+            else
+            {
+                throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+                    "\"home_path\" key does not exist in ", config_file_path)};
+            }
+
+            if (config.contains("encryption"))
+            {
+                auto encryption = config["encryption"];
+
+                if (encryption.contains("key"))
                 {
-                    return config[key];
+                    m_config.encryption.key = std::string{encryption["key"]};
                 }
                 else
                 {
                     throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
-                        "\"", key, "\" key does not exist in ", config_file_path)};
+                        "\"encryption.key\" key does not exist in ", config_file_path)};
                 }
-            };
 
-            m_config.home_path = get_value_if_existing("home_path");
+                if (encryption.contains("iv"))
+                {
+                    m_config.encryption.iv = std::string{encryption["iv"]};
+                }
+                else
+                {
+                    throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+                        "\"encryption.iv\" key does not exist in ", config_file_path)};
+                }
+            }
+            else
+            {
+                throw std::runtime_error{Common::CppExtensions::StringUtils::stringify(
+                    "\"encryption\" key does not exist in ", config_file_path)};
+            }
         }
         else
         {
@@ -243,6 +315,11 @@ void SystemCatalog::setCurrentUser(std::string user)
 std::string const& SystemCatalog::getCurrentUser() const
 {
     return m_current_user;
+}
+
+SystemCatalog::Config const& SystemCatalog::getSystemConfiguration() const
+{
+    return m_config;
 }
 
 } // namespace LunarDB::Selenity::API

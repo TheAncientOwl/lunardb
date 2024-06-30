@@ -183,17 +183,16 @@ void UsersCatalog::saveUserToDisk(Configuration::User const& user) const
 
     std::ofstream user_file(getUserConfigurationFilePath(user.uid), std::ios::trunc | std::ios::binary);
 
-    // TODO: Fix cryptography
-    // auto const encrypted_name{Common::Cryptography::AES256::Instance().encrypt(
-    //     Common::Cryptography::AES256::ByteArray(user.name.begin(), user.name.end()))};
+    auto const encrypted_name{Common::Cryptography::AES256::Instance().encrypt(
+        Common::Cryptography::AES256::ByteArray(user.name.begin(), user.name.end()))};
 
-    // auto const encrypted_password{Common::Cryptography::AES256::Instance().encrypt(
-    //     Common::Cryptography::AES256::ByteArray(user.password.begin(), user.password.end()))};
+    auto const encrypted_password{Common::Cryptography::AES256::Instance().encrypt(
+        Common::Cryptography::AES256::ByteArray(user.password.begin(), user.password.end()))};
 
-    // Serializer::serialize(user_file, encrypted_name);
-    // Serializer::serialize(user_file, encrypted_password);
-    Serializer::serialize(user_file, user.name);
-    Serializer::serialize(user_file, user.password);
+    Serializer::serialize(user_file, encrypted_name);
+    Serializer::serialize(user_file, encrypted_password);
+    // Serializer::serialize(user_file, user.name);
+    // Serializer::serialize(user_file, user.password);
     Serializer::serialize(user_file, user.permissions);
     Serializer::serialize(user_file, user.uid);
 
@@ -208,22 +207,21 @@ Configuration::User UsersCatalog::loadUserFromDisk(std::filesystem::path const& 
 
     Configuration::User user{};
 
-    // TODO: Fix cryptography
-    // auto encrypted_username{Common::Cryptography::AES256::ByteArray{}};
-    // auto encrypted_password{Common::Cryptography::AES256::ByteArray{}};
+    auto encrypted_username{Common::Cryptography::AES256::ByteArray{}};
+    auto encrypted_password{Common::Cryptography::AES256::ByteArray{}};
 
-    // Deserializer::deserialize(user_file, encrypted_username);
-    // Deserializer::deserialize(user_file, encrypted_password);
-    Deserializer::deserialize(user_file, user.name);
-    Deserializer::deserialize(user_file, user.password);
+    Deserializer::deserialize(user_file, encrypted_username);
+    Deserializer::deserialize(user_file, encrypted_password);
+    // Deserializer::deserialize(user_file, user.name);
+    // Deserializer::deserialize(user_file, user.password);
     Deserializer::deserialize(user_file, user.permissions);
     Deserializer::deserialize(user_file, user.uid);
 
-    // auto const decrypted_username{Common::Cryptography::AES256::Instance().decrypt(encrypted_username)};
-    // user.name = std::string(decrypted_username.begin(), decrypted_username.end());
+    auto const decrypted_username{Common::Cryptography::AES256::Instance().decrypt(encrypted_username)};
+    user.name = std::string(decrypted_username.begin(), decrypted_username.end());
 
-    // auto const decrypted_password{Common::Cryptography::AES256::Instance().decrypt(encrypted_password)};
-    // user.password = std::string(decrypted_password.begin(), decrypted_password.end());
+    auto const decrypted_password{Common::Cryptography::AES256::Instance().decrypt(encrypted_password)};
+    user.password = std::string(decrypted_password.begin(), decrypted_password.end());
 
     user_file.close();
 
