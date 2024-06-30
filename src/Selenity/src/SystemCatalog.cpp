@@ -6,7 +6,10 @@
 
 #include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "LunarDB/Common/CppExtensions/Testing/LunarTestGuard.hpp"
+#include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
+
+LUNAR_DECLARE_LOGGER_MODULE(MODULE_SELENITY);
 
 // #define LUNAR_ENABLE_TESTING
 
@@ -194,7 +197,9 @@ void SystemCatalog::loadSystemConfiguration()
         }
         else
         {
-            // TODO: Log error
+            throw std::runtime_error{LunarDB::Common::CppExtensions::StringUtils::stringify(
+                "Could not open", config_file_path)};
+            CLOG_ERROR("SystemCatalog::loadSystemConfiguration(): Could not open", config_file_path);
         }
     }
     else
@@ -223,7 +228,9 @@ void SystemCatalog::loadSystemConfiguration()
         }
         else
         {
-            // TODO: Log error
+            throw std::runtime_error{LunarDB::Common::CppExtensions::StringUtils::stringify(
+                "Could not open", config_file_path)};
+            CLOG_ERROR("SystemCatalog::loadSystemConfiguration(): Could not open", config_file_path);
         }
     }
 }

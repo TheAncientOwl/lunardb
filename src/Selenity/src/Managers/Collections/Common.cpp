@@ -169,7 +169,6 @@ void jsonify(
     Configurations::CollectionConfiguration::Schema& collection_schema,
     Common::QueryData::Primitives::EStructureType const collection_type)
 {
-    // TODO: Add new field when jsonifying collections.
     switch (collection_type)
     {
     case Common::QueryData::Primitives::EStructureType::Table: {

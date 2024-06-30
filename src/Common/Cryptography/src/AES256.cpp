@@ -30,7 +30,6 @@ AES256::~AES256()
 void AES256::handleErrors()
 {
     ERR_print_errors_fp(stderr);
-    // TODO: Log critical error
 }
 
 AES256::ByteArray AES256::encrypt(ByteArray const& plaintext)
