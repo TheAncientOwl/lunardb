@@ -35,6 +35,8 @@ public: // public API
     ///
     ERecoveryFlag getRecoveryFlag() const;
 
+    void commit();
+
 private: // singleton
     LUNAR_SINGLETON_INIT(WriteAheadLogger);
 
@@ -51,7 +53,7 @@ private: // methods
 private: // fields
     std::ofstream m_log{};
     std::optional<std::filesystem::path> m_recovery_file_path{};
-    Common::CppExtensions::UniqueID m_current_transaction_uid{};
+    std::optional<Common::CppExtensions::UniqueID> m_current_transaction_uid{};
 };
 
 } // namespace LunarDB::BrightMoon::API

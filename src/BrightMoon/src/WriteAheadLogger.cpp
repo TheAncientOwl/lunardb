@@ -297,9 +297,9 @@ void WriteAheadLogger::openTransaction(LunarDB::Common::QueryData::Primitives::E
     }
 
     m_current_transaction_uid = Common::CppExtensions::UniqueID::generate();
-    CLOG_VERBOSE("::openTransaction():", m_current_transaction_uid.toString());
+    CLOG_VERBOSE("::openTransaction():", m_current_transaction_uid->toString());
     Transactions::OpenTransactionData data{};
-    data.uid = m_current_transaction_uid;
+    data.uid = *m_current_transaction_uid;
     log(data);
 }
 
@@ -310,10 +310,19 @@ void WriteAheadLogger::closeTransaction(LunarDB::Common::QueryData::Primitives::
         return;
     }
 
-    CLOG_VERBOSE("::closeTransaction():", m_current_transaction_uid.toString());
-    Transactions::CloseTransactionData data{};
-    data.uid = m_current_transaction_uid;
-    log(data);
+    commit();
+}
+
+void WriteAheadLogger::commit()
+{
+    if (m_current_transaction_uid.has_value())
+    {
+        CLOG_VERBOSE("::commit():", m_current_transaction_uid->toString());
+        Transactions::CloseTransactionData data{};
+        data.uid = *m_current_transaction_uid;
+        log(data);
+        m_current_transaction_uid = std::nullopt;
+    }
 }
 
 } // namespace LunarDB::BrightMoon::API
