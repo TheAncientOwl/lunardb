@@ -100,13 +100,21 @@ void DatabaseManager::createCollection(
     saveConfigs();
 }
 
-void DatabaseManager::dropCollection(std::string const& name)
+void DatabaseManager::dropCollection(std::string const& name, bool cascade)
 {
     // TODO: WriteAheadLog
     auto const catalog_entry_it{m_catalog.name_to_config.find(name)};
     if (catalog_entry_it == m_catalog.name_to_config.end())
     {
         throw std::runtime_error("Collection does not exist");
+    }
+
+    if (cascade)
+    {
+        for (auto const& [_, collection_uid] : catalog_entry_it->second->schema.bindings)
+        {
+            dropCollection(std::string{getCollection(collection_uid)->getName()}, true);
+        }
     }
 
     std::filesystem::remove_all(catalog_entry_it->second->home);

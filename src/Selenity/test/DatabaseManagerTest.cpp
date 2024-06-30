@@ -67,8 +67,8 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
             manager2.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
         },
         std::runtime_error);
-    ASSERT_NO_THROW({ manager2.dropCollection(c_collection_name); });
-    EXPECT_THROW({ manager2.dropCollection(c_collection_name); }, std::runtime_error);
+    ASSERT_NO_THROW({ manager2.dropCollection(c_collection_name, false); });
+    EXPECT_THROW({ manager2.dropCollection(c_collection_name, false); }, std::runtime_error);
 
     DatabaseManager manager3{database_config};
     EXPECT_EQ(manager1.getHomePath(), manager3.getHomePath());
@@ -78,7 +78,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, binary_io)
     EXPECT_THROW({ manager2.getCollection(c_collection_name); }, std::runtime_error);
     EXPECT_THROW({ manager2.getCollection("random"); }, std::runtime_error);
 
-    EXPECT_THROW({ manager3.dropCollection(c_collection_name); }, std::runtime_error);
+    EXPECT_THROW({ manager3.dropCollection(c_collection_name, false); }, std::runtime_error);
     ASSERT_NO_THROW({
         manager3.createCollection(c_collection_name, c_schema1_name, c_structure_type, c_bindings);
     });
