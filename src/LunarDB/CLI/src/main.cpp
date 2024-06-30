@@ -31,6 +31,8 @@ LUNAR_DECLARE_LOGGER_MODULE(MODULE_LUNARDB_SRV);
     LunarDB::Astral::API::QueryExecutorsManager::Instance().addExecutor( \
         LunarDB::Astral::Implementation::Type::makeExecutor())
 
+using namespace std::string_view_literals;
+
 namespace LunarDB::CLI {
 namespace EventHandlers {
 
@@ -373,6 +375,27 @@ int main(int argc, char const* argv[])
             continue;
         }
 
+        if (LunarDB::Common::CppExtensions::StringUtils::startsWithIgnoreCase(query, "exit"))
+        {
+            static auto constexpr c_options{"ynYN"sv};
+
+            std::string option{};
+            do
+            {
+                std::cout << ccolor::dark_gray << "[" << ccolor::gold << "Exit" << ccolor::dark_gray
+                          << "] " << ccolor::yellow
+                          << "Are you sure you want to exit? (y/n): " << std::flush;
+                std::getline(std::cin, option);
+            } while (c_options.find(option.front()) == std::string_view::npos);
+
+            if (option.front() == 'n' || option.front() == 'N')
+            {
+                continue;
+            }
+
+            break;
+        }
+
         if (input_stream_ptr == &input_file)
         {
             std::cout << query << std::endl;
@@ -403,6 +426,10 @@ int main(int argc, char const* argv[])
     }
 
     LunarDB::BrightMoon::API::WriteAheadLogger::Instance().onNaturalSystemExit();
+
+    std::cout << ccolor::dark_gray << "[" << ccolor::green << "LunarDB" << ccolor::dark_gray << "] "
+              << ccolor::lime << "Process ended gracefully.\n"
+              << std::endl;
 
     return EXIT_SUCCESS;
 }
