@@ -60,10 +60,8 @@ void update(
             case Configurations::EFieldDataType::Rid:
                 throw std::runtime_error("Cannot set reserved _rid field");
             case Configurations::EFieldDataType::DateTime:
-                // TODO: Provide implementation
-                throw std::runtime_error{
-                    "[~/lunardb/src/Selenity/src/Managers/Collections/"
-                    "TableManager.cpp:UpdateDateTime] Not implemented yet..."};
+                json[modify.field] = modify.expression;
+                break;
             case Configurations::EFieldDataType::String:
                 json[modify.field] = modify.expression;
                 break;

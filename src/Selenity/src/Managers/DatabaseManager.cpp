@@ -54,7 +54,6 @@ void DatabaseManager::createCollection(
     Common::QueryData::Primitives::EStructureType collection_type,
     std::vector<Common::QueryData::Create::Single::Binding> const& bindings)
 {
-    // TODO: WriteAheadLog
     if (m_catalog.name_to_config.contains(name))
     {
         throw std::runtime_error("Collection already exists");
@@ -102,7 +101,6 @@ void DatabaseManager::createCollection(
 
 void DatabaseManager::dropCollection(std::string const& name, bool cascade)
 {
-    // TODO: WriteAheadLog
     auto const catalog_entry_it{m_catalog.name_to_config.find(name)};
     if (catalog_entry_it == m_catalog.name_to_config.end())
     {

@@ -15,7 +15,7 @@
 
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_SELENITY);
 
-// #define LUNAR_ENABLE_TESTING
+#define LUNAR_ENABLE_TESTING
 
 namespace LunarDB::Selenity::API {
 
@@ -74,7 +74,6 @@ void SystemCatalog::loadConfiguration()
 
 void SystemCatalog::createDatabase(std::string const& name)
 {
-    // TODO: WriteAheadLog
     if (m_catalog.name_to_config.contains(name))
     {
         throw std::runtime_error("Database already exists");
@@ -98,7 +97,6 @@ void SystemCatalog::createDatabase(std::string const& name)
 
 void SystemCatalog::dropDatabase(std::string const& name)
 {
-    // TODO: WriteAheadLog
     auto const catalog_entry_it{m_catalog.name_to_config.find(name)};
     if (catalog_entry_it == m_catalog.name_to_config.end())
     {

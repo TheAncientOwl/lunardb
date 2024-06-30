@@ -25,10 +25,7 @@ Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, s
             "User with", std::move(username), "username already exists"));
     }
 
-    // 2. WriteAheadLog
-    // TODO: Provide implementation
-
-    // 3. Add user to internal data
+    // 2. Add user to internal data
     auto const new_id{Common::CppExtensions::UniqueID::generate()};
 
     std::ignore = m_name_to_uid.emplace(username, new_id);
@@ -37,7 +34,7 @@ Common::CppExtensions::UniqueID UsersCatalog::createUser(std::string username, s
 
     assert(map_result.second && "[Create User] Map insert failed");
 
-    // 4. Save user to disk
+    // 3. Save user to disk
     saveUserToDisk(map_result.first->second);
     saveUserNamesToDisk();
 
@@ -49,14 +46,11 @@ void UsersCatalog::removeUser(Common::CppExtensions::UniqueID const& user_uid)
     // 1. Get user data
     auto& user{getUserFromUID(user_uid)};
 
-    // 2. WriteAheadLog
-    // TODO: Provide implementation
-
-    // 3. Remove user from internal data
+    // 2. Remove user from internal data
     std::ignore = m_uid_to_config_cache.erase(user_uid);
     std::ignore = m_name_to_uid.erase(user.name);
 
-    // 4. Remove user from disk
+    // 3. Remove user from disk
     // ?MAYBE: Mark user for deletion?
     std::filesystem::remove(getUserConfigurationFilePath(user_uid));
     saveUserNamesToDisk();
@@ -67,13 +61,10 @@ void UsersCatalog::updatePassword(Common::CppExtensions::UniqueID const& user_ui
     // 1. Get user internal data
     auto& user{getUserFromUID(user_uid)};
 
-    // 2. WriteAheadLog
-    // TODO: Provide implementation
-
-    // 3. Update user internal data
+    // 2. Update user internal data
     user.password = std::move(new_password);
 
-    // 4. Save user to disk
+    // 3. Save user to disk
     saveUserToDisk(user);
 }
 
@@ -88,10 +79,7 @@ void UsersCatalog::updatePermission(
     // 1. Get user internal data
     auto& user{getUserFromUID(user_uid)};
 
-    // 2. WriteAheadLog
-    // TODO: Provide implementation
-
-    // 3. Update user internal data
+    // 2. Update user internal data
     switch (permission.update_type)
     {
     case Configuration::EPermissionUpdateType::Grant:
@@ -104,7 +92,7 @@ void UsersCatalog::updatePermission(
         break;
     }
 
-    // 4. Save user to disk
+    // 3. Save user to disk
     saveUserToDisk(user);
 }
 
@@ -177,8 +165,6 @@ std::filesystem::path UsersCatalog::getUserConfigurationFilePath(Common::CppExte
 
 void UsersCatalog::saveUserToDisk(Configuration::User const& user) const
 {
-    // TODO: WriteAheadLog
-
     namespace Serializer = Common::CppExtensions::BinaryIO::Serializer;
 
     std::ofstream user_file(getUserConfigurationFilePath(user.uid), std::ios::trunc | std::ios::binary);
