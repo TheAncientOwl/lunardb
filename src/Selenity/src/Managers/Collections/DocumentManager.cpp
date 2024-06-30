@@ -10,6 +10,7 @@
 
 #include "Common.hpp"
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
+#include "LunarDB/Common/CppExtensions/StringUtils.hpp"
 #include "LunarDB/Crescentum/Logger.hpp"
 #include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/DocumentManager.hpp"

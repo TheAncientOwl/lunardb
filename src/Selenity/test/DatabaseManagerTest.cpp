@@ -275,7 +275,7 @@ TEST(Selenity_SystemCatalog_DatabaseManagerTest, rebind)
     });
 
     // rebind
-    ASSERT_NO_THROW({ database->rebind(c_collection_name2, "field_1", c_collection_name); });
+    ASSERT_NO_THROW({ database->rebind(c_collection_name2, "field_1", c_collection_name, false); });
 }
 
 TEST(Selenity_SystemCatalog_DatabaseManagerTest, document_insert_select_truncate)

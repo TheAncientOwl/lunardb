@@ -34,7 +34,7 @@ std::string_view AbstractManager::getName() const
     return m_collection_config->name;
 }
 
-std::shared_ptr<Configurations::CollectionConfiguration> const& AbstractManager::getConfig() const
+std::shared_ptr<Configurations::CollectionConfiguration> AbstractManager::getConfig()
 {
     return m_collection_config;
 }

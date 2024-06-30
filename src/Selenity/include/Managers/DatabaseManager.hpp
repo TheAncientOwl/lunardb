@@ -42,7 +42,8 @@ public: // public API
     void rebind(
         std::string const& collection_name,
         std::string const& field_name,
-        std::string const& to_collection_name);
+        std::string const& to_collection_name,
+        bool clean);
 
     Common::CppExtensions::UniqueID const& getUID() const;
     std::string_view getName() const;
