@@ -18,6 +18,14 @@ using FieldData = std::variant<std::string, bool, int, float>;
 
 FieldData convert(std::string const& value, Configurations::EFieldDataType to_type)
 {
+    static std::regex s_between_rhs_regex{
+        ".*and.*", std::regex_constants::ECMAScript | std::regex_constants::icase};
+
+    if (std::regex_match(value, s_between_rhs_regex))
+    {
+        return value;
+    }
+
     switch (to_type)
     {
     case Configurations::EFieldDataType::Rid:
@@ -66,6 +74,53 @@ FieldData convert(std::string const& value, Configurations::EFieldDataType to_ty
         assert(false && "Trying to convert not supported field data type");
         break;
     }
+}
+
+FieldData sameTypeAs(FieldData const& source, std::string const& what)
+{
+    if (std::holds_alternative<bool>(source))
+    {
+        if (what == "true")
+        {
+            return true;
+        }
+        else if (what == "false")
+        {
+            return false;
+        }
+    }
+    else if (std::holds_alternative<int>(source))
+    {
+        try
+        {
+            return std::stoi(what);
+        }
+        catch (std::invalid_argument const& e)
+        {
+            throw std::runtime_error("Cannot convert '"s + what + "' to Integer; " + e.what());
+        }
+        catch (std::out_of_range const& e)
+        {
+            throw std::runtime_error("Value '"s + what + "' out of Integer range; " + e.what());
+        }
+    }
+    else if (std::holds_alternative<float>(source))
+    {
+        try
+        {
+            return std::stof(what);
+        }
+        catch (std::invalid_argument const& e)
+        {
+            throw std::runtime_error("Cannot convert '"s + what + "' to Float; " + e.what());
+        }
+        catch (std::out_of_range const& e)
+        {
+            throw std::runtime_error("Value '"s + what + "' out of Float range; " + e.what());
+        }
+    }
+
+    return what;
 }
 
 // TODO: Refactor execution paths
@@ -261,10 +316,18 @@ bool evaluateBinaryExpression(
                }) != s_search_list.end();
     }
     case Common::QueryData::Primitives::EBinaryOperator::Between: {
-        // TODO: Provide implementation
-        throw std::runtime_error{
-            "[~/lunardb/src/Selenity/src/Managers/Collections/"
-            "EvaluateWhereClause.cpp:Operator::Between] Not implemented yet..."};
+        if (!std::holds_alternative<std::string>(rhs))
+        {
+            throw std::runtime_error{"Right operand is not a string"};
+        }
+
+        auto const& rhs_str = std::get<std::string>(rhs);
+        std::string_view rhs_sv{rhs_str};
+        LunarDB::Moonlight::Implementation::QueryExtractor extractor{rhs_str};
+
+        auto const [low, and_kw, high] = extractor.extractTuple<3>();
+
+        return sameTypeAs(lhs, std::string{low}) <= lhs && lhs <= sameTypeAs(lhs, std::string{high});
     }
     case Common::QueryData::Primitives::EBinaryOperator::Like: {
         static std::string s_last_pattern_str{};
