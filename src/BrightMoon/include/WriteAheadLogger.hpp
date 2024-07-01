@@ -3,7 +3,9 @@
 #include <filesystem>
 #include <fstream>
 #include <optional>
+#include <stack>
 #include <string>
+#include <unordered_set>
 
 #include "LunarDB/BrightMoon/TransactionData.hpp"
 #include "LunarDB/Common/CppExtensions/DefinePrimitive.hpp"
@@ -36,6 +38,8 @@ public: // public API
     ERecoveryFlag getRecoveryFlag() const;
 
     void commit();
+    void savepoint(std::optional<std::string> const hash = std::nullopt);
+    void rollback(std::optional<std::string> const hash = std::nullopt);
 
 private: // singleton
     LUNAR_SINGLETON_INIT(WriteAheadLogger);
@@ -54,6 +58,10 @@ private: // fields
     std::ofstream m_log{};
     std::optional<std::filesystem::path> m_recovery_file_path{};
     std::optional<Common::CppExtensions::UniqueID> m_current_transaction_uid{};
+
+    std::stack<std::string> m_commit_savepoint_hashes{};
+    std::optional<std::string> m_last_commit_savepoint_hash{};
+    std::unordered_set<std::string> m_rollbacked_hashes{};
 };
 
 } // namespace LunarDB::BrightMoon::API

@@ -2,6 +2,7 @@
 #include <nlohmann/json.hpp>
 #include <queue>
 #include <sstream>
+#include <stack>
 
 #include "LunarDB/BrightMoon/WriteAheadLogger.hpp"
 #include "LunarDB/Common/CppExtensions/BinaryIO.hpp"
@@ -11,6 +12,8 @@
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
 LUNAR_DECLARE_LOGGER_MODULE(MODULE_BRIGHTMOON);
+
+using namespace std::string_view_literals;
 
 namespace LunarDB::BrightMoon::API {
 
@@ -27,15 +30,15 @@ bool isSupportedTransaction(LunarDB::Common::QueryData::Primitives::EQueryType c
 {
     using EQueryType = LunarDB::Common::QueryData::Primitives::EQueryType;
     static std::array<EQueryType, 9> const c_supported_transactions{
-        EQueryType::Migrate,
-        EQueryType::Truncate,
-        EQueryType::Rename,
+        // EQueryType::Migrate,
+        // EQueryType::Truncate,
+        // EQueryType::Rename,
         EQueryType::Insert,
         EQueryType::Update,
         EQueryType::Delete,
-        EQueryType::Commit,
-        EQueryType::Rollback,
-        EQueryType::SavePoint,
+        // EQueryType::Commit,
+        // EQueryType::Rollback,
+        // EQueryType::SavePoint,
     };
 
     return std::find(c_supported_transactions.begin(), c_supported_transactions.end(), type) !=
@@ -296,6 +299,9 @@ void WriteAheadLogger::openTransaction(LunarDB::Common::QueryData::Primitives::E
         return;
     }
 
+    m_last_commit_savepoint_hash = Common::CppExtensions::UniqueID::generate().toString();
+    savepoint(m_last_commit_savepoint_hash);
+
     m_current_transaction_uid = Common::CppExtensions::UniqueID::generate();
     CLOG_VERBOSE("::openTransaction():", m_current_transaction_uid->toString());
     Transactions::OpenTransactionData data{};
@@ -318,11 +324,285 @@ void WriteAheadLogger::commit()
     if (m_current_transaction_uid.has_value())
     {
         CLOG_VERBOSE("::commit():", m_current_transaction_uid->toString());
+        if (m_last_commit_savepoint_hash.has_value())
+        {
+            m_commit_savepoint_hashes.emplace(std::move(*m_last_commit_savepoint_hash));
+            m_last_commit_savepoint_hash = std::nullopt;
+        }
         Transactions::CloseTransactionData data{};
         data.uid = *m_current_transaction_uid;
         log(data);
         m_current_transaction_uid = std::nullopt;
     }
+}
+
+void WriteAheadLogger::savepoint(std::optional<std::string> const hash)
+{
+    Transactions::SavePointTransactionData data{};
+    data.hash = hash.has_value() ? std::move(*hash)
+                                 : LunarDB::Common::CppExtensions::UniqueID::generate().toString();
+    CLOG_VERBOSE("::savepoint():", data.hash);
+    log(data);
+}
+
+// TODO: Refactor
+void WriteAheadLogger::rollback(std::optional<std::string> const hash)
+{
+    CLOG_VERBOSE("::rollback()");
+    std::string rollback_hash{};
+    if (hash.has_value())
+    {
+        rollback_hash = std::move(*hash);
+    }
+    else if (!m_commit_savepoint_hashes.empty())
+    {
+        rollback_hash = std::move(m_commit_savepoint_hashes.top());
+        m_commit_savepoint_hashes.pop();
+    }
+    else
+    {
+        throw std::runtime_error{
+            "No commits left to be undone in this session. Try a specific hash"};
+    }
+    CLOG_VERBOSE("::rollback(): hash", rollback_hash);
+
+    // TODO: Update to support savepoints from all time;
+
+    m_log.flush();
+    m_log.close();
+
+    auto const c_home_path{getHomePath()};
+    auto const c_log_file_path{c_home_path / "wal.log"};
+    auto const c_rollback_file_path{c_home_path / "rollback.log"};
+    std::filesystem::copy(
+        c_log_file_path, c_rollback_file_path, std::filesystem::copy_options::overwrite_existing);
+
+    m_log.open(c_log_file_path, std::ios::binary | std::ios::app);
+
+    std::ifstream rollback_file{c_rollback_file_path, std::ios::binary};
+
+    std::string line{};
+    bool found_hash{false};
+
+    struct Table
+    {
+        char last_log_type{'-'};
+        std::size_t rollback_history_index{0};
+        std::vector<std::string> history{};
+        std::stack<std::size_t> insert_end_indices{};
+        std::stack<std::size_t> update_end_indices{};
+        std::stack<std::size_t> delete_end_indices{};
+    };
+
+    std::unordered_map<std::string, std::unordered_map<std::string, Table>> history_dictionary{};
+
+    static auto constexpr s_supported_operations{"IUD"sv};
+
+    while (std::getline(rollback_file, line))
+    {
+        if (found_hash && s_supported_operations.find(line.front()) != std::string_view::npos)
+        {
+            LunarDB::Moonlight::Implementation::QueryExtractor extractor{line};
+            auto const [type, database, table] = extractor.extractTuple<3>();
+
+            auto database_it = history_dictionary.find(std::string{type});
+            if (database_it == history_dictionary.end())
+            {
+                database_it =
+                    history_dictionary.emplace(database, std::unordered_map<std::string, Table>{}).first;
+            }
+
+            auto table_it = database_it->second.find(std::string{table});
+            if (table_it == database_it->second.end())
+            {
+                table_it = database_it->second.emplace(table, Table{}).first;
+            }
+
+            auto& data = table_it->second;
+
+            std::stack<std::size_t>* stack_ptr{nullptr};
+            bool supported_operation{false};
+            switch (line.front())
+            {
+            case 'I':
+                if (data.last_log_type != 'I')
+                {
+                    if (data.last_log_type == 'U')
+                    {
+                        stack_ptr = &data.update_end_indices;
+                    }
+                    else if (data.last_log_type == 'D')
+                    {
+                        stack_ptr = &data.delete_end_indices;
+                    }
+                    else if (data.last_log_type == '-')
+                    {
+                        stack_ptr = &data.insert_end_indices;
+                    }
+                }
+                supported_operation = true;
+                data.last_log_type = 'I';
+                break;
+            case 'U':
+                if (data.last_log_type != 'U')
+                {
+                    if (data.last_log_type == 'I')
+                    {
+                        stack_ptr = &data.insert_end_indices;
+                    }
+                    else if (data.last_log_type == 'D')
+                    {
+                        stack_ptr = &data.delete_end_indices;
+                    }
+                    else if (data.last_log_type == 'U')
+                    {
+                        stack_ptr = &data.update_end_indices;
+                    }
+                }
+                supported_operation = true;
+                data.last_log_type = 'U';
+                break;
+            case 'D':
+                if (data.last_log_type != 'D')
+                {
+                    if (data.last_log_type == 'I')
+                    {
+                        stack_ptr = &data.insert_end_indices;
+                    }
+                    else if (data.last_log_type == 'U')
+                    {
+                        stack_ptr = &data.update_end_indices;
+                    }
+                    else if (data.last_log_type == 'D')
+                    {
+                        stack_ptr = &data.delete_end_indices;
+                    }
+                }
+                supported_operation = true;
+                data.last_log_type = 'D';
+                break;
+            default:
+                break;
+            }
+
+            if (stack_ptr)
+            {
+                stack_ptr->push(data.rollback_history_index);
+            }
+
+            if (supported_operation)
+            {
+                CLOG_VERBOSE("::rollback(): operation", data.last_log_type);
+                data.history.emplace_back(std::move(line));
+                ++data.rollback_history_index;
+            }
+
+            continue;
+        }
+
+        std::string_view line_sv{line};
+        if (!line_sv.starts_with("SavePoint"))
+        {
+            continue;
+        }
+        line_sv.remove_prefix(10);
+        LunarDB::Common::CppExtensions::StringUtils::trim(line_sv);
+        if (line_sv == rollback_hash)
+        {
+            found_hash = true;
+        }
+        else if (m_rollbacked_hashes.contains(std::string{line_sv}))
+        {
+            history_dictionary.clear();
+        }
+    }
+
+    auto& system_catalog{LunarDB::Selenity::API::SystemCatalog::Instance()};
+
+    auto const current_database_name{system_catalog.getDatabaseInUse()->getName()};
+    for (auto& [database_name, tables] : history_dictionary)
+    {
+        system_catalog.useDatabase(database_name);
+        for (auto& [table_name, table] : tables)
+        {
+            if (table.history.empty())
+            {
+                return;
+            }
+
+            for (std::int64_t index = table.history.size() - 1; index >= 0; --index)
+            {
+                std::string const& log{table.history[index]};
+
+                if (log.starts_with("Insert"))
+                {
+                    LunarDB::Moonlight::Implementation::QueryExtractor extractor{log};
+                    auto const [insert_kw, database_name, collection_name, arrow_kw, json_kw] =
+                        extractor.extractTuple<5>();
+
+                    nlohmann::json json = nlohmann::json::parse(extractor.data());
+
+                    system_catalog.useDatabase(std::string(database_name));
+                    auto collection =
+                        system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
+
+                    if (!table.insert_end_indices.empty() && index == table.insert_end_indices.top())
+                    {
+                        table.insert_end_indices.pop();
+                        collection->undoInsert(json, true);
+                    }
+                    else
+                    {
+                        collection->undoInsert(json, false);
+                    }
+                }
+                else if (log.starts_with("Delete"))
+                {
+                    LunarDB::Moonlight::Implementation::QueryExtractor extractor{log};
+                    auto const [delete_kw, database_name, collection_name, arrow_kw, json_kw] =
+                        extractor.extractTuple<5>();
+
+                    nlohmann::json json = nlohmann::json::parse(extractor.data());
+
+                    system_catalog.useDatabase(std::string(database_name));
+                    auto collection =
+                        system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
+                    if (!table.delete_end_indices.empty() && index == table.delete_end_indices.top())
+                    {
+                        table.delete_end_indices.pop();
+                        collection->undoDelete(json, true);
+                    }
+                    else
+                    {
+                        collection->undoDelete(json, false);
+                    }
+                }
+                else if (log.starts_with("Update"))
+                {
+                    LunarDB::Moonlight::Implementation::QueryExtractor extractor{log};
+                    auto const [update_kw, database_name, collection_name, arrow_kw, json_kw] =
+                        extractor.extractTuple<5>();
+
+                    nlohmann::json json = nlohmann::json::parse(extractor.data());
+
+                    system_catalog.useDatabase(std::string(database_name));
+                    auto collection =
+                        system_catalog.getDatabaseInUse()->getCollection(std::string(collection_name));
+                    if (!table.update_end_indices.empty() && index == table.update_end_indices.top())
+                    {
+                        table.update_end_indices.pop();
+                        collection->undoUpdate(json, true);
+                    }
+                    else
+                    {
+                        collection->undoUpdate(json, false);
+                    }
+                }
+            }
+        }
+    }
+    system_catalog.useDatabase(std::string{current_database_name});
+    m_rollbacked_hashes.emplace(std::move(rollback_hash));
 }
 
 } // namespace LunarDB::BrightMoon::API

@@ -709,15 +709,17 @@ void TableManager::update(Common::QueryData::Update const& config)
 
 void TableManager::undoInsert(nlohmann::json json, bool is_last_call)
 {
-    CLOG_VERBOSE("TableManager::undoInsert(): begin");
+    CLOG_VERBOSE(
+        "TableManager::undoInsert(): table:", m_collection_config->name, "-> begin, is_last_call:", is_last_call);
 
     static std::unordered_set<std::string> s_inserted_rids{};
 
-    s_inserted_rids.emplace(json["_rid"]);
+    std::ignore = s_inserted_rids.emplace(json["_rid"]);
     if (!is_last_call)
     {
         return;
     }
+    CLOG_VERBOSE("TableManager::undoInsert(): last call, undo size:", s_inserted_rids.size());
 
     auto documents_path{getDataHomePath()};
     if (!std::filesystem::exists(documents_path) || !std::filesystem::is_directory(documents_path))
@@ -745,15 +747,17 @@ void TableManager::undoInsert(nlohmann::json json, bool is_last_call)
 
             for (auto const _ : std::ranges::iota_view{0u, entries_count})
             {
+                CLOG_VERBOSE(">>>>>");
                 std::vector<std::uint8_t> bson{};
                 Common::CppExtensions::BinaryIO::Deserializer::deserialize(table_file, bson);
                 auto json_entry = nlohmann::json::from_bson(bson);
+                CLOG_VERBOSE("TableManager::undoInsert(): index:", _, "json:", json_entry.dump());
 
                 if (auto const rid_it = s_inserted_rids.find(json_entry["_rid"]);
                     rid_it != s_inserted_rids.end())
                 {
                     auto const rid{*rid_it};
-                    CLOG_INFO("TableManager::undoInsert(): RID:", rid);
+                    CLOG_INFO("TableManager::undoInsert(): start RID:", rid);
                     json_entry["_del"] = "1";
                     bson = nlohmann::json::to_bson(json_entry);
 
@@ -768,23 +772,22 @@ void TableManager::undoInsert(nlohmann::json json, bool is_last_call)
 
                     undo_number++;
                     CLOG_INFO(
-                        "TableManager::undoInsert(): ",
+                        "TableManager::undoInsert(): end  RID:",
+                        rid,
+                        "->",
                         undo_number,
                         "out of",
                         undo_size,
                         "changes undone");
                     s_inserted_rids.erase(rid_it);
-
-                    CLOG_INFO("TableManager::undoInsert(): finished successfully RID:", rid);
                 }
+                CLOG_VERBOSE("<<<<");
             }
-            table_file.close();
         }
         else
         {
             CLOG_ERROR("TableManager::undoInsert(): Could not open data file", table_file_path);
         }
-        metadata_file.close();
     }
     else
     {
@@ -856,14 +859,14 @@ void TableManager::undoUpdate(nlohmann::json json, bool is_last_call)
 
                     undo_number++;
                     CLOG_INFO(
-                        "TableManager::undoUpdate(): ",
+                        "TableManager::undoInsert(): done RID:",
+                        rid,
+                        "->",
                         undo_number,
                         "out of",
                         undo_size,
                         "changes undone");
                     s_updated_rids.erase(rid_it);
-
-                    CLOG_INFO("TableManager::undoUpdate(): finished successfully RID:", rid);
                 }
             }
             table_file.close();
@@ -944,14 +947,14 @@ void TableManager::undoDelete(nlohmann::json json, bool is_last_call)
 
                     undo_number++;
                     CLOG_INFO(
-                        "TableManager::undoDelete(): ",
+                        "TableManager::undoInsert(): done RID:",
+                        rid,
+                        "->",
                         undo_number,
                         "out of",
                         undo_size,
                         "changes undone");
                     s_deleted_rids.erase(rid_it);
-
-                    CLOG_INFO("TableManager::undoDelete(): finished successfully RID:", rid);
                 }
             }
             table_file.close();
