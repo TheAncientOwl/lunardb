@@ -1,8 +1,10 @@
+#include <algorithm>
 #include <ranges>
 #include <regex>
 #include <string>
 #include <variant>
 
+#include "LunarDB/Moonlight/QueryExtractor.hpp"
 #include "LunarDB/Selenity/Managers/Collections/EvaluateWhereClause.hpp"
 #include "LunarDB/Selenity/SystemCatalog.hpp"
 
@@ -216,37 +218,53 @@ bool evaluateBinaryExpression(
     {
     case Common::QueryData::Primitives::EBinaryOperator::Equals: {
         return lhs == rhs;
-        break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::GreaterThan: {
         return lhs > rhs;
-        break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::GreaterThanEqualTo: {
         return lhs >= rhs;
-        break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::LessThan: {
         return lhs < rhs;
-        break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::LessThanEqualTo: {
         return lhs <= rhs;
-        break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::In: {
-        // TODO: Provide implementation
-        throw std::runtime_error{
-            "[~/lunardb/src/Selenity/src/Managers/Collections/"
-            "EvaluateWhereClause.cpp:EBinaryOperator::In] Not implemented yet..."};
-        break;
+        if (!std::holds_alternative<std::string>(rhs))
+        {
+            throw std::runtime_error{"Right operand is not a string"};
+        }
+
+        if (!std::holds_alternative<std::string>(lhs))
+        {
+            throw std::runtime_error{"Left  operand is not a string"};
+        }
+
+        auto const& lhs_str = std::get<std::string>(lhs);
+        auto const& rhs_str = std::get<std::string>(rhs);
+
+        static std::string s_last_list_string{};
+        static std::vector<std::string> s_search_list{};
+
+        if (s_last_list_string != lhs_str)
+        {
+            std::string_view rhs_sv{rhs_str};
+            LunarDB::Moonlight::Implementation::QueryExtractor extractor{rhs_str};
+            s_search_list = extractor.extractList<std::string>(
+                [](std::string_view sv) { return std::string{sv}; });
+        }
+
+        return std::find_if(s_search_list.begin(), s_search_list.end(), [&lhs_str](auto const& str) {
+                   return lhs_str == str;
+               }) != s_search_list.end();
     }
     case Common::QueryData::Primitives::EBinaryOperator::Between: {
         // TODO: Provide implementation
         throw std::runtime_error{
             "[~/lunardb/src/Selenity/src/Managers/Collections/"
-            "EvaluateWhereClause.cpp:EBinaryOperator::Between] Not implemented yet..."};
-        break;
+            "EvaluateWhereClause.cpp:Operator::Between] Not implemented yet..."};
     }
     case Common::QueryData::Primitives::EBinaryOperator::Like: {
         static std::string s_last_pattern_str{};

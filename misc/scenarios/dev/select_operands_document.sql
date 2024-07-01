@@ -14,3 +14,5 @@ select from structure somedocument where ( str like val.+ ) fields [ _rid, str, 
 select from structure somedocument where ( str like val.* ) fields [ _rid, str, obj, obj.field1, obj.field2 ];
 select from structure somedocument where ( str like \w* ) fields [ _rid, str, obj, obj.field1, obj.field2 ];
 select from structure somedocument where ( str like \w* and obj.field1 like val.1 ) fields [ _rid, str, obj, obj.field1, obj.field2 ];
+
+select from structure somedocument where ( str in [ val101, val202 ] ) fields [ _rid, str, obj, obj.field1, obj.field2 ];
