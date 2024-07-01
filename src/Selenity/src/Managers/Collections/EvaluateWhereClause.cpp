@@ -1,4 +1,5 @@
 #include <ranges>
+#include <regex>
 #include <string>
 #include <variant>
 
@@ -248,11 +249,29 @@ bool evaluateBinaryExpression(
         break;
     }
     case Common::QueryData::Primitives::EBinaryOperator::Like: {
-        // TODO: Provide implementation
-        throw std::runtime_error{
-            "[~/lunardb/src/Selenity/src/Managers/Collections/"
-            "EvaluateWhereClause.cpp:EBinaryOperator::Like] Not implemented yet..."};
-        break;
+        static std::string s_last_pattern_str{};
+        static std::regex s_regex{};
+
+        if (!std::holds_alternative<std::string>(rhs))
+        {
+            throw std::runtime_error{"Right operand is not a string"};
+        }
+
+        if (!std::holds_alternative<std::string>(lhs))
+        {
+            throw std::runtime_error{"Left  operand is not a string"};
+        }
+
+        auto const& lhs_str = std::get<std::string>(lhs);
+        auto const& rhs_str = std::get<std::string>(rhs);
+
+        if (s_last_pattern_str != rhs_str)
+        {
+            s_last_pattern_str = rhs_str;
+            s_regex = std::regex{s_last_pattern_str, std::regex_constants::ECMAScript};
+        }
+
+        return std::regex_match(lhs_str, s_regex);
     }
     case Common::QueryData::Primitives::EBinaryOperator::None:
     default:
